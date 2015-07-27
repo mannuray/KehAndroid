@@ -1,6 +1,6 @@
-package com.dubmania.dubsmania;
+package com.dubmania.dubsmania.main;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,11 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import com.dubmania.dubsmania.R;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -20,7 +18,6 @@ public class MainActivity extends ActionBarActivity
         DiscoverFragment.OnFragmentInteractionListener,
         VideoBoardFragment.OnFragmentInteractionListener,
         PagerFragment.OnFragmentInteractionListener,
-        AddVideoFragment.OnFragmentInteractionListener,
         MyDubsFragment.OnFragmentInteractionListener,
         SettingFragment.OnFragmentInteractionListener {
 
@@ -54,39 +51,22 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, getFragment(position + 1))
+                .replace(R.id.container, getFragment(position))
                 .commit();
     }
 
     Fragment getFragment(int position) {
         switch (position) {
-            case 1:
+            case 0:
                 return new PagerFragment();
-            case 2:
+            case 1:
                 return new AddVideoFragment();
-            case 3:
+            case 2:
                 return new MyDubsFragment();
-            case 4:
+            case 3:
                 return new SettingFragment();
             default:
                 return new PagerFragment();
-        }
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = "section one";
-                break;
-            case 2:
-                mTitle = "section two";
-                break;
-            case 3:
-                mTitle = "sectino three";
-                break;
-            case 4:
-                mTitle = "sectino fours";
-                break;
         }
     }
 
@@ -119,7 +99,9 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -133,16 +115,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
-
-    }
-
-    @Override
-    public void onAddVideoFragmentInteraction(Uri uri) {
 
     }
 
@@ -161,44 +133,8 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    @Override
+    public void onFragmentTrendingInteraction(String id) {
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
     }
-
 }

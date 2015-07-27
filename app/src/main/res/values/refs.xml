@@ -7,7 +7,7 @@
     For more on layout aliases, see:
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
-    <item name="fragment_item" type="layout">@layout/fragment_trending_list</item>
+    <item name="fragment_item" type="layout">@layout/fragment_trending</item>
 
     <!--
     Layout alias to replace the single-pane version of the layout with a
@@ -16,6 +16,6 @@
     For more on layout aliases, see:
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
-    <item name="fragment_item2" type="layout">@layout/fragment_item_list2</item>
+    <item name="fragment_item2" type="layout">@layout/fragment_discover</item>
 
 </resources>

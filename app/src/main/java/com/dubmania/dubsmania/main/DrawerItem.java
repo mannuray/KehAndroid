@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania;
+package com.dubmania.dubsmania.main;
 
 /**
  * Created by rat on 7/26/2015.

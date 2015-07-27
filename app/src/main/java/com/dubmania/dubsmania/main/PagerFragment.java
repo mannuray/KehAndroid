@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania;
+package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.dubmania.dubsmania.R;
 
 
 /**
