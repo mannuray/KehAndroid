@@ -24,6 +24,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.DrawerNavigationItemClickedEvent;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -206,25 +208,28 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
+        /*if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
-        }
+        }*/
+        BusProvider.getInstance().post(new DrawerNavigationItemClickedEvent(position));
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+        BusProvider.getInstance().register(this);
+        /*try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
+        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallbacks = null;
+        //mCallbacks = null;
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -287,6 +292,6 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int position);
+        //void onNavigationDrawerItemSelected(int position);
     }
 }

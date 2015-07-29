@@ -1,7 +1,6 @@
 package com.dubmania.dubsmania.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +11,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.DrawerNavigationItemClickedEvent;
+import com.squareup.otto.Subscribe;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        TrendingFragment.OnFragmentInteractionListener,
-        DiscoverFragment.OnFragmentInteractionListener,
-        VideoBoardFragment.OnFragmentInteractionListener,
-        PagerFragment.OnFragmentInteractionListener,
-        MyDubsFragment.OnFragmentInteractionListener,
-        SettingFragment.OnFragmentInteractionListener {
+        ///implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -47,12 +44,24 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    @Override public void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    /*@Override
+    public void onNavigationDrawerItemSelected(int position) {*/
+    @Subscribe
+    public void onDrawerNavigationClickedEvent(DrawerNavigationItemClickedEvent event) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, getFragment(position))
+                .replace(R.id.container, getFragment(event.position))
                 .commit();
     }
 
@@ -107,35 +116,5 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDiscoverFragmentInteraction(String id) {
-
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onPagerFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onSettingsFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onMyDubsFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onFragmentTrendingInteraction(String id) {
-
     }
 }
