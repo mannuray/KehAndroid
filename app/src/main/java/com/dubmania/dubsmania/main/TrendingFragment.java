@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.TextView;
-
 
 import com.dubmania.dubsmania.R;
+
 /**
  * A fragment representing a list of Items.
  * <p/>

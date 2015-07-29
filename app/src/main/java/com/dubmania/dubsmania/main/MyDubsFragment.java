@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.dubmania.dubsmania.R;
 
 
@@ -30,6 +31,10 @@ public class MyDubsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    public MyDubsFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -46,10 +51,6 @@ public class MyDubsFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public MyDubsFragment() {
-        // Required empty public constructor
     }
 
     @Override

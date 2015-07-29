@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.dubmania.dubsmania.R;
 
 
@@ -32,10 +33,14 @@ public class PagerFragment extends Fragment
 
     // TODO: Rename and change types of parameters
 
-    private OnFragmentInteractionListener mListener;
     PagerAdapter mPagerAdapter;
     ViewPager mViewPager;
+    private OnFragmentInteractionListener mListener;
 
+
+    public PagerFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -49,10 +54,6 @@ public class PagerFragment extends Fragment
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public PagerFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -137,7 +138,7 @@ public class PagerFragment extends Fragment
         @Override
         public android.support.v4.app.Fragment getItem(int i) {
 
-            switch ( i ) {
+            switch (i) {
                 case 0:
                     return new TrendingFragment();
                 case 1:

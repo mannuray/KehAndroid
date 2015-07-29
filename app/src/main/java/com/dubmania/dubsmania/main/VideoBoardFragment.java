@@ -30,6 +30,10 @@ public class VideoBoardFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    public VideoBoardFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -46,10 +50,6 @@ public class VideoBoardFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public VideoBoardFragment() {
-        // Required empty public constructor
     }
 
     @Override

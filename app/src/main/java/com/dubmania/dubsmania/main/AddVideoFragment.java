@@ -3,10 +3,11 @@ package com.dubmania.dubsmania.main;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
+
 import com.dubmania.dubsmania.R;
 
 
@@ -30,6 +31,10 @@ public class AddVideoFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    public AddVideoFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -46,10 +51,6 @@ public class AddVideoFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public AddVideoFragment() {
-        // Required empty public constructor
     }
 
     @Override

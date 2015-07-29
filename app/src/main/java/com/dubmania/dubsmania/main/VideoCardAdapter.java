@@ -14,18 +14,6 @@ import com.dubmania.dubsmania.R;
 public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.ViewHolder> {
     private String[] mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public VideoCardAdapter(String[] myDataset) {
         mDataset = myDataset;
@@ -34,7 +22,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
     // Create new views (invoked by the layout manager)
     @Override
     public VideoCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                          int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.video_card_layout, parent, false);
@@ -56,5 +44,18 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
     @Override
     public int getItemCount() {
         return mDataset.length;
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public TextView mTextView;
+
+        public ViewHolder(TextView v) {
+            super(v);
+            mTextView = v;
+        }
     }
 }
