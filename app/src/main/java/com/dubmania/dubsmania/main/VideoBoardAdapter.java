@@ -8,14 +8,16 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by rat on 7/28/2015.
  */
 public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.ViewHolder> {
-    private String[] mDataset;
+    private ArrayList<VideoBoardListItem> mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoBoardAdapter(String[] myDataset) {
+    public VideoBoardAdapter(ArrayList<VideoBoardListItem> myDataset) {
         mDataset = myDataset;
     }
 
@@ -25,7 +27,7 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
                                                            int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.video_card_layout, parent, false);
+                .inflate(R.layout.video_board_item_list_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder((TextView) v);
         return vh;
@@ -36,14 +38,14 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+        //holder.mTextView.setText(mDataset[position]);
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 
     // Provide a reference to the views for each data item
@@ -51,11 +53,14 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextView;
+        public TextView mVideoCardName;
+        public TextView mVideoCardUserName;
+
 
         public ViewHolder(TextView v) {
             super(v);
-            mTextView = v;
+            mVideoCardName = (TextView) v.findViewById(R.id.videoCardName);
+            mVideoCardUserName = (TextView) v.findViewById(R.id.videoCardUserName);
         }
     }
 }
