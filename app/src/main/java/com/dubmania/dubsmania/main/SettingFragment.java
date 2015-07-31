@@ -1,14 +1,17 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.signup.SignupActivity;
 
 public class SettingFragment extends Fragment {
     public SettingFragment() {
@@ -24,7 +27,16 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
+        Button next = (Button) rootView.findViewById(R.id.signup);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+        return rootView;
     }
 
     @Override
