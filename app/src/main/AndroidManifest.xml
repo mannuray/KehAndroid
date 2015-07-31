@@ -27,7 +27,8 @@
             android:label="@string/title_activity_create_dub"></activity>
         <activity
             android:name=".signup.SignupActivity"
-            android:label="@string/title_activity_signup"></activity>
+            android:label="Sign Up"></activity>
+        <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     </application>
 
 </manifest>
