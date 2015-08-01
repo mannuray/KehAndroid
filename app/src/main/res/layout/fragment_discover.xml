@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.dubmania.dubsmania.main.DiscoverFragment">
 
-    <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
         android:id="@+id/discover_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
