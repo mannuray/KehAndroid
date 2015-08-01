@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <!-- A CardView that contains a TextView -->
@@ -16,13 +17,13 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="?android:attr/listPreferredItemHeight"
-            android:padding="6dip">
 
-            <ImageButton
+            android:padding="6dip">
+            <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:id="@+id/video_board_icon"
+                android:id="@+id/my_video_thumbnail_image"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -30,15 +31,33 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:layout_toRightOf="@id/video_board_icon"
-                android:id="@+id/videoCardName" />
+                android:layout_toRightOf="@id/my_video_thumbnail_image"
+                android:id="@+id/my_video_name" />
 
             <TextView
-                android:id="@+id/videoCardUserName"
+                android:id="@+id/my_video_share"
                 android:layout_width="match_parent"
-                android:layout_below="@id/videoCardName"
+                android:layout_below="@id/my_video_name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_toRightOf="@id/video_board_icon"
+                android:layout_toRightOf="@id/my_video_thumbnail_image"
+                android:text="small Text"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/my_video_board_name"
+                android:layout_width="match_parent"
+                android:layout_below="@id/my_video_share"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_toRightOf="@id/my_video_thumbnail_image"
+                android:text="small Text"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/my_video_date_time"
+                android:layout_width="match_parent"
+                android:layout_below="@id/my_video_board_name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_toRightOf="@id/my_video_thumbnail_image"
                 android:text="small Text"
                 android:layout_height="match_parent" />
         </RelativeLayout>

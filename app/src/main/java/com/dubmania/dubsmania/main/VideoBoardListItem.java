@@ -19,7 +19,7 @@ public class VideoBoardListItem {
     }
 
     public String getUser() {
-        return user;
+        return "Uploaded by " + user;
     }
 
     public int getIcon() {

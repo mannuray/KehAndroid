@@ -12,19 +12,19 @@ import com.dubmania.dubsmania.R;
 import java.util.ArrayList;
 
 /**
- * Created by rat on 7/28/2015.
+ * Created by rat on 8/1/2015.
  */
-public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.ViewHolder> {
-    private ArrayList<VideoBoardListItem> mDataset;
+public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHolder> {
+    private ArrayList<MyVideoListItem> mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoBoardAdapter(ArrayList<VideoBoardListItem> myDataset) {
+    public MyVideoAdapter(ArrayList<MyVideoListItem> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public VideoBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public MyVideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                            int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
@@ -41,9 +41,9 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
         // - replace the contents of the view with that element
         //holder.mTextView.setText(mDataset[position]);
         holder.mImageIcon.setImageResource(mDataset.get(position).getIcon());
-        holder.mVideoCardName.setText(mDataset.get(position).getName());
-        holder.mVideoCardUserName.setText(mDataset.get(position).getUser());
-
+        holder.mVideoName.setText(mDataset.get(position).getmVideoName());
+        holder.mVideoBoardName.setText(mDataset.get(position).getmBoardName());
+        holder.mDateTime.setText(mDataset.get(position).getmDate().toString());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -57,15 +57,17 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mVideoCardName;
-        public TextView mVideoCardUserName;
+        public TextView mVideoName;
+        public TextView mVideoBoardName;
+        public TextView mDateTime;
         public ImageView mImageIcon;
 
         public ViewHolder(View v) {
             super(v);
-            mVideoCardName = (TextView) v.findViewById(R.id.videoCardName);
-            mVideoCardUserName = (TextView) v.findViewById(R.id.videoCardUserName);
-            mImageIcon = (ImageView) v.findViewById(R.id.video_board_icon);
+            mImageIcon = (ImageView) v.findViewById(R.id.my_video_thumbnail_image);
+            mVideoName = (TextView) v.findViewById(R.id.my_video_name);
+            mVideoBoardName = (TextView) v.findViewById(R.id.my_video_board_name);
+            mDateTime = (TextView) v.findViewById(R.id.my_video_date_time);
         }
     }
 }
