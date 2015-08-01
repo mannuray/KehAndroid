@@ -17,81 +17,11 @@
             android:id="@+id/add_video_board_button"
             android:layout_gravity="center_horizontal|top" />
 
-        <android.support.v7.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/video_board_my_videos"
-            android:layout_gravity="center"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/video_board_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            card_view:cardCornerRadius="4dp">
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip">
-
-                <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:id="@+id/video_board_my_videos_image"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="My Videos"
-                    android:layout_toRightOf="@id/video_board_my_videos_image"
-                    android:id="@+id/video_board_my_favorites_name" />
-
-                <TextView
-                    android:id="@+id/video_board_my_favorites_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_below="@id/video_board_my_favorites_name"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_toRightOf="@id/video_board_my_videos_image"
-                    android:text="@string/uploaded_by_me"
-                    android:layout_height="match_parent" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/video_board_favorites"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            card_view:cardCornerRadius="4dp">
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip">
-
-                <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:id="@+id/video_board_favourate_image"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Favorites"
-                    android:layout_toRightOf="@id/video_board_favourate_image"
-                    android:id="@+id/video_board_favourate" />
-
-                <TextView
-                    android:id="@+id/videoCardUserName"
-                    android:layout_width="match_parent"
-                    android:layout_below="@id/video_board_favourate"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_toRightOf="@id/video_board_favourate_image"
-                    android:text="@string/uploaded_by_me"
-                    android:layout_height="match_parent" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
     </LinearLayout>
 
 </FrameLayout>

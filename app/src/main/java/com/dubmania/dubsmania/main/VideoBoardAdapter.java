@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
@@ -29,7 +30,7 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.video_board_item_list_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder((TextView) v);
+        ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
@@ -39,6 +40,8 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         //holder.mTextView.setText(mDataset[position]);
+        holder.mVideoCardName.setText(mDataset.get(position).getName());
+        holder.mVideoCardUserName.setText(mDataset.get(position).getUser());
 
     }
 
@@ -55,12 +58,13 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<VideoBoardAdapter.Vi
         // each data item is just a string in this case
         public TextView mVideoCardName;
         public TextView mVideoCardUserName;
+        public ImageView mImageIcon;
 
-
-        public ViewHolder(TextView v) {
+        public ViewHolder(View v) {
             super(v);
             mVideoCardName = (TextView) v.findViewById(R.id.videoCardName);
             mVideoCardUserName = (TextView) v.findViewById(R.id.videoCardUserName);
+            mImageIcon = (ImageView) v.findViewById(R.id.video_board_icon);
         }
     }
 }

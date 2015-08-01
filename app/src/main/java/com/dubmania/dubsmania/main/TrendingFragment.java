@@ -1,18 +1,20 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -21,11 +23,15 @@ import com.dubmania.dubsmania.communicator.BusProvider;
  * with a GridView.
  * <p/>
  */
-public class TrendingFragment extends android.support.v4.app.Fragment implements AbsListView.OnItemClickListener {
+public class TrendingFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<VideoListItem> mVideoItemList;
+
+    // TO Do remove it after experimenth
+    private TypedArray navMenuIcons;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,9 +51,19 @@ public class TrendingFragment extends android.support.v4.app.Fragment implements
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_trending, container, false);
         final FragmentActivity c = getActivity();
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
         mLayoutManager = new LinearLayoutManager(c);
-        recyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);
+
+        mVideoItemList = new ArrayList<VideoListItem>(//Arrays.asList()
+
+        );
+        mAdapter = new VideoAdapter(mVideoItemList);
+        mRecyclerView.setAdapter(mAdapter);
+
 
         return view;
     }
@@ -62,10 +78,5 @@ public class TrendingFragment extends android.support.v4.app.Fragment implements
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 }

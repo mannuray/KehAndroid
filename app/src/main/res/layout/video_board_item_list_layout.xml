@@ -22,7 +22,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:id="@+id/videoCardImage"
+                android:id="@+id/video_board_icon"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:layout_toRightOf="@id/videoCardImage"
+                android:layout_toRightOf="@id/video_board_icon"
                 android:id="@+id/videoCardName" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_below="@id/videoCardName"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_toRightOf="@id/videoCardImage"
+                android:layout_toRightOf="@id/video_board_icon"
                 android:text="small Text"
                 android:layout_height="match_parent" />
         </RelativeLayout>
