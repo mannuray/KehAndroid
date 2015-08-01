@@ -42,7 +42,7 @@ public class MyDubsFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_my_dubs, container, false);
         final FragmentActivity c = getActivity();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.discover_recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
