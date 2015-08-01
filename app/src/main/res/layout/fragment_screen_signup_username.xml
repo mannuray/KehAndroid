@@ -4,18 +4,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<EditText
-    android:id="@+id/username"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Enter User Name"
-    android:padding="10dp"
-    android:textColor="#FFFFFF"
-    />
-<Button
- android:id="@+id/next"
- android:layout_width="fill_parent"
- android:layout_height="wrap_content"
- android:text="Next"/>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter User Name"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"/>
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Next"/>
  
  </LinearLayout>

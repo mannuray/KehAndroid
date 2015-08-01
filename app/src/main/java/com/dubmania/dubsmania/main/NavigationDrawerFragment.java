@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.communicator.DrawerNavigationItemClickedEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -107,16 +107,14 @@ public class NavigationDrawerFragment extends Fragment {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mDrawerListView.setAdapter(new ArrayAdapter<DrawerItem>(
+        mDrawerListView.setAdapter(new NavDrawerListAdapter(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new DrawerItem[]{
+                new ArrayList<DrawerItem>(Arrays.asList(
                         new DrawerItem(getString(R.string.create_dubs), navMenuIcons.getResourceId(0, -1)),
                         new DrawerItem(getString(R.string.add_video), navMenuIcons.getResourceId(1, -1)),
                         new DrawerItem(getString(R.string.my_dubs), navMenuIcons.getResourceId(2, -1)),
-                        new DrawerItem(getString(R.string.settings), navMenuIcons.getResourceId(3, -1)),
-                }));
+                        new DrawerItem(getString(R.string.settings), navMenuIcons.getResourceId(3, -1))
+                ))));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         navMenuIcons.recycle();
         return mDrawerListView;
@@ -208,28 +206,28 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        /*if (mCallbacks != null) {
+        if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
-        }*/
-        BusProvider.getInstance().post(new DrawerNavigationItemClickedEvent(position));
+        }
+        //BusProvider.getInstance().post(new DrawerNavigationItemClickedEvent(position));
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        BusProvider.getInstance().register(this);
-        /*try {
+        //BusProvider.getInstance().register(this);
+        try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }*/
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //mCallbacks = null;
-        BusProvider.getInstance().unregister(this);
+        mCallbacks = null;
+        //BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -292,6 +290,6 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        //void onNavigationDrawerItemSelected(int position);
+        void onNavigationDrawerItemSelected(int position);
     }
 }

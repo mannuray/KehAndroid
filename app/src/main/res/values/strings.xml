@@ -32,10 +32,29 @@
         <item>Discover</item>
         <item>Video Board</item>
     </array>
-    <string name="title_activity_search">SearchActivity</string>
+
+    <array name="pager_signup_titles">
+        <item>Email</item>
+        <item>User Name</item>
+        <item>Password</item>
+        <item>Date of Birth</item>
+        <item>Finish</item>
+    </array>
+
+    <string name="title_activity_search">Search</string>
+
+    <string name="title_activity_add_sound">AddSoundActivity</string>
+    <string name="title_activity_create_dub">Record Dub</string>
+    <string name="title_activity_signup">Sign Up</string>
+    <string name="title_activity_language">Languages</string>
+    <string name="title_activity_add_language">Add Language</string>
+
+    <string name="question_birthday">When\'s your birthday?</string>
+    <string name="quote_birthday">You must be at least 14 years to use \n DbusMania</string>
+    <string name="display_birthday"></string>
+    <string name="quote_confirmationn">By clicking next you are indicating that you have read and agreed to our Term of Service and Privacy Policy</string>
+    <string name="title_activity_my_account">MyAccountActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_add_sound">AddSoundActivity</string>
-    <string name="title_activity_create_dub">CreateDubActivity</string>
-    <string name="title_activity_signup">SignupActivity</string>
+
 </resources>

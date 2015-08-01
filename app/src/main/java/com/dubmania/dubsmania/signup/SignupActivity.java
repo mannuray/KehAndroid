@@ -64,8 +64,8 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
 	private class MyPagerAdapter extends FragmentPagerAdapter {
 
         TypedArray title = getResources()
-                .obtainTypedArray(R.array.pager_titles);
-        String titles[] = {title.getString(0), title.getString(1), title.getString(2)};
+                .obtainTypedArray(R.array.pager_signup_titles);
+        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -81,13 +81,17 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
                     return new UserNameFragment();
                 case 2:
                     return new PasswordFragment();
+                case 3:
+                    return new DobFragment();
+                case 4:
+                    return new FinishFragment();
             }
             return new EmailFragment();
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 5;
         }
 
         @Override

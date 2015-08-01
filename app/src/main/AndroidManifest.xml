@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dubmania.dubsmania">
+    package="com.dubmania.dubsmania" >
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,17 +18,31 @@
         </activity>
         <activity
             android:name=".main.SearchActivity"
-            android:label="@string/title_activity_search"></activity>
+            android:label="@string/title_activity_search" />
         <activity
             android:name=".addvideoboard.AddVideoActivity"
-            android:label="@string/title_activity_add_sound"></activity>
+            android:label="@string/title_activity_add_sound" />
         <activity
             android:name=".createdub.CreateDubActivity"
-            android:label="@string/title_activity_create_dub"></activity>
+            android:label="@string/title_activity_create_dub" />
         <activity
             android:name=".signup.SignupActivity"
-            android:label="Sign Up"></activity>
+            android:label="@string/title_activity_signup" />
+        <activity
+            android:name=".misc.LanguageActivity"
+            android:label="@string/title_activity_language" >
+        </activity>
+        <activity
+            android:name=".misc.AddLanguageActivity"
+            android:label="@string/title_activity_add_language" >
+        </activity>
+
         <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+        <activity
+            android:name=".misc.MyAccountActivity"
+            android:label="@string/title_activity_my_account" >
+        </activity>
     </application>
 
 </manifest>

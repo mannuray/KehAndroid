@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
@@ -27,15 +27,16 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
-        Button next = (Button) rootView.findViewById(R.id.signup);
-        next.setOnClickListener(new View.OnClickListener() {
+        View rootView =  inflater.inflate(R.layout.fragment_setting, container, false);
+        TextView mLogin = (TextView) rootView.findViewById(R.id.login_id);
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SignupActivity.class);
                 startActivity(intent);
             }
         });
+
         return rootView;
     }
 

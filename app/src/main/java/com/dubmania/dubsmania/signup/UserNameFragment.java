@@ -1,16 +1,12 @@
 package com.dubmania.dubsmania.signup;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 
@@ -28,7 +24,7 @@ public class UserNameFragment extends Fragment {
             mCallback = (OnButtonClickListner) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement OnButtonClickListner");
         }
     }
 		

@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dubmania.dubsmania.signup.DobFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/question_birthday" />
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/quote_birthday" />
+
+        <TextView android:layout_width="match_parent"
+            android:id="@+id/text_dob"
+            android:layout_height="wrap_content"
+            android:text="@string/display_birthday" />
+
+        <TextView android:layout_width="match_parent"
+            android:id="@+id/text_confirmation"
+            android:layout_height="wrap_content"
+            android:text="@string/quote_confirmationn" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Next"/>
+
+        <DatePicker
+            android:id="@+id/dob_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp" />
+    </LinearLayout>
+
+</FrameLayout>

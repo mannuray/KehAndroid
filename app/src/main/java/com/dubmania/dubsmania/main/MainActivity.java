@@ -1,6 +1,7 @@
 package com.dubmania.dubsmania.main;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,15 +10,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.communicator.DrawerNavigationItemClickedEvent;
-import com.squareup.otto.Subscribe;
+import com.dubmania.dubsmania.misc.LanguageActivity;
 
 public class MainActivity extends ActionBarActivity
-        ///implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -54,14 +55,12 @@ public class MainActivity extends ActionBarActivity
         BusProvider.getInstance().unregister(this);
     }
 
-    /*@Override
-    public void onNavigationDrawerItemSelected(int position) {*/
-    @Subscribe
-    public void onDrawerNavigationClickedEvent(DrawerNavigationItemClickedEvent event) {
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, getFragment(event.position))
+                .replace(R.id.container, getFragment(position))
                 .commit();
     }
 
@@ -98,7 +97,8 @@ public class MainActivity extends ActionBarActivity
             restoreActionBar();
             return true;
         }
-        return super.onCreateOptionsMenu(menu);
+        //return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
@@ -116,5 +116,38 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startBrowser(String uri) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(browserIntent);
+    }
+
+    public void ChangeLanguage(View v) {
+
+    }
+
+    public void feedback(View v) {
+        startBrowser("http://www.google.com");
+    }
+
+    public void libraries(View v) {
+        startBrowser("http://www.google.com");
+    }
+
+    public void termofuse(View v) {
+        startBrowser("http://www.google.com");
+    }
+
+    public void privacypolicy(View v) {
+        startBrowser("http://www.google.com");
+    }
+
+    public void pushNotification(View v) {
+
+    }
+    public void language(View v) {
+        Intent intent = new Intent(this, LanguageActivity.class);
+        startActivity(intent);
     }
 }
