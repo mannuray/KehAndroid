@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.Adapters.VideoAdapter;
+import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
@@ -31,6 +32,7 @@ public class TrendingFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
+    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
 
     // TO Do remove it after experimenth
     private TypedArray navMenuIcons;
