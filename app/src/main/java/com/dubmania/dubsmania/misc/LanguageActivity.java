@@ -1,7 +1,7 @@
 package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 
-public class LanguageActivity extends ActionBarActivity {
+public class LanguageActivity extends AppCompatActivity {
     ListView listView ;
 
     @Override

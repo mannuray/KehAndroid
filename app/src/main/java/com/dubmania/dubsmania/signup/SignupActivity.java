@@ -6,13 +6,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class SignupActivity extends ActionBarActivity implements OnButtonClickListner{
+public class SignupActivity extends AppCompatActivity implements OnButtonClickListner{
 
 	/**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -55,6 +55,20 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        int positon = mPager.getCurrentItem();
+        switch (positon) {
+            case 0:
+            case 4:
+                finish();
+                return;
+            default:
+                mPager.setCurrentItem(positon - 1);
+
+        }
     }
 	
 	public void onClickNextButton(int position) {

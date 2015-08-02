@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 import android.app.Activity;
 import android.content.Context;

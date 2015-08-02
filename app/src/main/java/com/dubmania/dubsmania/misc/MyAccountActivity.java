@@ -1,13 +1,13 @@
 package com.dubmania.dubsmania.misc;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class MyAccountActivity extends ActionBarActivity {
+public class MyAccountActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

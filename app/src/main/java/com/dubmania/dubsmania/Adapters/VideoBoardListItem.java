@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 /**
  * Created by rat on 7/30/2015.

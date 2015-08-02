@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.SearchActivity"
+            android:name=".misc.SearchActivity"
             android:label="@string/title_activity_search" />
         <activity
             android:name=".addvideoboard.AddVideoActivity"

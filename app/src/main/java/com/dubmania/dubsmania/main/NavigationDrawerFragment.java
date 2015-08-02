@@ -22,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dubmania.dubsmania.Adapters.DrawerItem;
+import com.dubmania.dubsmania.Adapters.NavDrawerListAdapter;
 import com.dubmania.dubsmania.R;
 
 import java.util.ArrayList;

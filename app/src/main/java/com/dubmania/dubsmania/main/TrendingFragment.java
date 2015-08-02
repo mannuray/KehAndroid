@@ -11,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
+import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
+import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -29,6 +33,7 @@ public class TrendingFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
+    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
 
     // TO Do remove it after experimenth
     private TypedArray navMenuIcons;
@@ -61,7 +66,13 @@ public class TrendingFragment extends Fragment {
         mVideoItemList = new ArrayList<VideoListItem>(//Arrays.asList()
 
         );
-        mAdapter = new VideoAdapter(mVideoItemList);
+
+        mVideoBoardItemList = new ArrayList<VideoBoardListItem>(Arrays.asList(
+                new VideoBoardListItem("My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
+                new VideoBoardListItem("My Favorites", "me", navMenuIcons.getResourceId(0, -1))
+        ));
+
+        mAdapter = new VideoAndBoardAdapter(mVideoItemList, mVideoBoardItemList, 4);
         mRecyclerView.setAdapter(mAdapter);
 
 

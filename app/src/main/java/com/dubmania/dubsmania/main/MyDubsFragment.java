@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dubmania.dubsmania.Adapters.MyVideoAdapter;
+import com.dubmania.dubsmania.Adapters.MyVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
 

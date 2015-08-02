@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 import java.sql.Time;
 import java.util.Date;

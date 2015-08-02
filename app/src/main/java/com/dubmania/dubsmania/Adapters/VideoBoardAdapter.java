@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

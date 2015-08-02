@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,20 +13,20 @@ import com.dubmania.dubsmania.R;
 import java.util.ArrayList;
 
 /**
- * Created by rat on 7/28/2015.
+ * Created by rat on 8/2/2015.
  */
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
+public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.ViewHolder> {
     private ArrayList<VideoListItem> mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoAdapter(ArrayList<VideoListItem> myDataset) {
+    public VideoSearchAdapter(ArrayList<VideoListItem> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public VideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+    public VideoSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                      int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.video_item_list_layout, parent, false);
