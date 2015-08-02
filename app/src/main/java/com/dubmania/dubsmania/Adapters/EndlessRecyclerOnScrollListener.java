@@ -3,10 +3,13 @@ package com.dubmania.dubsmania.Adapters;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.RecyclerViewScrollEndedEvent;
+
 /**
  * Created by rat on 8/2/2015.
  */
-public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
+public class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
     private int previousTotal = 0; // The total number of items in the dataset after the last load
@@ -39,15 +42,12 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         if (!loading && (totalItemCount - visibleItemCount)
                 <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
-
             // Do something
             current_page++;
-
-            onLoadMore(current_page);
+            int id = recyclerView.getId();
+            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(id, current_page));
 
             loading = true;
         }
     }
-
-    public abstract void onLoadMore(int current_page);
 }

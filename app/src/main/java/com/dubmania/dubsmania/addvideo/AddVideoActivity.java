@@ -1,23 +1,24 @@
-package com.dubmania.dubsmania.misc;
+package com.dubmania.dubsmania.addvideo;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class MyAccountActivity extends AppCompatActivity {
+public class AddVideoActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_account);
+        setContentView(R.layout.activity_add_video);
     }
 
-    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my_account, menu);
+        getMenuInflater().inflate(R.menu.menu_add_sound, menu);
         return true;
     }
 
@@ -34,5 +35,5 @@ public class MyAccountActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

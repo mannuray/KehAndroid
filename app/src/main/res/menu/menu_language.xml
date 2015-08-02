@@ -5,7 +5,8 @@
 
     <item android:id="@+id/add_lang"
         android:icon="@drawable/ic_add_lang"
-        android:title="add"/>
+        android:title="add"
+        app:showAsAction="always"/>
 
 </menu>
 

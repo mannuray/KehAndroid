@@ -11,14 +11,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.LanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -160,5 +167,18 @@ public class MainActivity extends ActionBarActivity
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
         VideoItemMenuDialog dialog = new VideoItemMenuDialog();
         dialog.show(getSupportFragmentManager(), "tag");
+    }
+
+    @Subscribe
+    public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
+        ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
+                new VideoListItem("heros", "mannu", false),
+                new VideoListItem("heros1", "mannu", false),
+                new VideoListItem("heros2", "mannu", false),
+                new VideoListItem("heros3", "prashant", false)
+        ));
+        BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
+        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
+
     }
 }

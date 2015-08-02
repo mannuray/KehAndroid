@@ -57,11 +57,12 @@
     <string name="title_activity_add_language">Add Language</string>
 
     <string name="question_birthday">When\'s your birthday?</string>
-    <string name="quote_birthday">You must be at least 14 years to use \n DbusMania</string>
+    <string name="quote_birthday">You must be at least 14 years to use DbusMania</string>
     <string name="display_birthday"></string>
     <string name="quote_confirmationn">By clicking next you are indicating that you have read and agreed to our Term of Service and Privacy Policy</string>
-    <string name="title_activity_my_account">MyAccountActivity</string>
+    <string name="title_activity_my_account">My Account</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_add_video_board">Add VideoBoard</string>
 
 </resources>

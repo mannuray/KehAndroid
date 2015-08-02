@@ -1,24 +1,23 @@
-package com.dubmania.dubsmania.addvideoboard;
+package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class AddVideoActivity extends ActionBarActivity {
+public class AddVideoBoardActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_video);
+        setContentView(R.layout.activity_add_video_board);
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_sound, menu);
+        getMenuInflater().inflate(R.menu.menu_add_video_board, menu);
         return true;
     }
 
@@ -35,5 +34,5 @@ public class AddVideoActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

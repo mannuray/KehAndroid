@@ -1,6 +1,7 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,11 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +46,14 @@ public class VideoBoardFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
         final FragmentActivity c = getActivity();
+        ImageButton mAddBoardButton = (ImageButton) view.findViewById(R.id.add_video_board_button);
+        mAddBoardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddVideoBoardActivity.class);
+                startActivity(intent);
+            }
+        });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
         mLayoutManager = new LinearLayoutManager(c);
         mRecyclerView.setLayoutManager(mLayoutManager);

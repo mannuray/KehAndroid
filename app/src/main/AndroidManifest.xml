@@ -22,7 +22,7 @@
             android:name=".misc.SearchActivity"
             android:label="@string/title_activity_search" />
         <activity
-            android:name=".addvideoboard.AddVideoActivity"
+            android:name=".addvideo.AddVideoActivity"
             android:label="@string/title_activity_add_sound" />
         <activity
             android:name=".createdub.CreateDubActivity"
@@ -41,6 +41,10 @@
         <activity
             android:name=".misc.MyAccountActivity"
             android:label="@string/title_activity_my_account" >
+        </activity>
+        <activity
+            android:name=".misc.AddVideoBoardActivity"
+            android:label="@string/title_activity_add_video_board" >
         </activity>
     </application>
 

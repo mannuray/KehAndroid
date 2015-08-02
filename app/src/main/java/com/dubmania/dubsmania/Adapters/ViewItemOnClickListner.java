@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.misc;
+package com.dubmania.dubsmania.Adapters;
 
 import android.view.View;
 

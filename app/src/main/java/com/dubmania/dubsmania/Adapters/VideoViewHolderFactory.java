@@ -3,7 +3,6 @@ package com.dubmania.dubsmania.Adapters;
 import android.support.v7.widget.RecyclerView;
 
 import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
-import com.dubmania.dubsmania.misc.ViewItemOnClickListner;
 
 /**
  * Created by rat on 8/2/2015.

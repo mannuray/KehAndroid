@@ -11,15 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
 import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.RecyclerViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -62,16 +63,11 @@ public class DiscoverFragment extends Fragment {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
-                new VideoListItem("heros", "mannu", false),
-                new VideoListItem("heros1", "mannu", false),
-                new VideoListItem("heros2", "mannu", false),
-                new VideoListItem("heros3", "prashant", false)
-        ));
-
-
+        mVideoItemList = new ArrayList<VideoListItem>();
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
+        BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(mRecyclerView.getId(), 0));
         return view;
 
     }

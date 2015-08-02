@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.MyVideoItemShareEvent;
-import com.dubmania.dubsmania.misc.ViewItemOnClickListner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

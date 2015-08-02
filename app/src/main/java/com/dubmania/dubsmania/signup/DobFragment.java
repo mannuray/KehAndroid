@@ -41,7 +41,7 @@ public class DobFragment extends Fragment {
                 R.layout.fragment_dob, container, false);
 
         TextView confirmation = (TextView) rootView.findViewById(R.id.text_confirmation);
-        Pattern termofService = Pattern.compile("Terms of Service");
+        Pattern termofService = Pattern.compile("Term of Service");
         Pattern privacyPolicy = Pattern.compile("Privacy Policy");
         Linkify.addLinks(confirmation, termofService, "http://www.google.ie/search?q=");
         Linkify.addLinks(confirmation, privacyPolicy, "http://www.google.ie/search?q=");
