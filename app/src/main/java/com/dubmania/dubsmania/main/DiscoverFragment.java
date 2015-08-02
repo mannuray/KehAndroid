@@ -72,7 +72,6 @@ public class DiscoverFragment extends Fragment {
 
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
-
         return view;
 
     }
@@ -90,7 +89,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     @Subscribe
-    public void AddTrendingBoardListEvent(AddDiscoverVideoItemListEvent event) {
+    public void onAddDiscoverVideoItemListEvent(AddDiscoverVideoItemListEvent event) {
         mVideoItemList.addAll(event.mVideoItemList);
         mAdapter.notifyDataSetChanged();
     }
