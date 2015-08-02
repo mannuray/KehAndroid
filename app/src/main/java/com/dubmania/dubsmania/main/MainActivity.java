@@ -15,6 +15,7 @@ import android.view.View;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
 import com.dubmania.dubsmania.misc.LanguageActivity;
+import com.dubmania.dubsmania.misc.SearchActivity;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

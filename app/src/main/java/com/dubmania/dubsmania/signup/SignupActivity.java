@@ -56,6 +56,18 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        int position = mPager.getCurrentItem();
+        switch (position) {
+            case 0:
+            case 4:
+                finish();
+            default:
+                mPager.setCurrentItem(position - 1);
+        }
+    }
 	
 	public void onClickNextButton(int position) {
 			mPager.setCurrentItem(position);
@@ -63,9 +75,9 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
 	}
 	private class MyPagerAdapter extends FragmentPagerAdapter {
 
-        TypedArray title = getResources()
-                .obtainTypedArray(R.array.pager_signup_titles);
-        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+            TypedArray title = getResources()
+                    .obtainTypedArray(R.array.pager_signup_titles);
+            String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);

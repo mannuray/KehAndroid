@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.misc.ViewItemOnClickListner;
 
 import java.util.ArrayList;
 
@@ -43,8 +45,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         holder.mVideoName.setText(mDataset.get(position).getName());
         holder.mVideoUserName.setText(mDataset.get(position).getUser());
         holder.mFavourite.setIsIndicator(mDataset.get(position).isFavourite());
+
+        holder.mMenuIcon.setOnClickListener(new ViewItemOnClickListner<VideoItemMenuEvent>(new VideoItemMenuEvent(position)));
         //holder.mVideoThumbnail.`(mDataset[position]);
-        //holder.mVideoThumbnail.setText(mDataset[position]);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -61,6 +64,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         public TextView mVideoName;
         public TextView mVideoUserName;
         public ImageView mVideoThumbnail;
+        public ImageView mMenuIcon;
         public RatingBar mFavourite;
 
         public ViewHolder(View v) {
@@ -68,6 +72,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             mVideoName = (TextView) v.findViewById(R.id.videoName);
             mVideoUserName = (TextView) v.findViewById(R.id.videoUserName);
             mVideoThumbnail = (ImageView) v.findViewById(R.id.videoThumbnailImage);
+            mVideoThumbnail.setImageResource(R.drawable.ic_video_play_button);
+            mMenuIcon = (ImageView) v.findViewById(R.id.video_menu_icon);
             mVideoThumbnail.setImageResource(R.drawable.ic_video_play_button);
             mFavourite = (RatingBar) v.findViewById(R.id.favourite);
 

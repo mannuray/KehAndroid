@@ -41,6 +41,13 @@
         <item>Finish</item>
     </array>
 
+    <array name="video_menu_item_list">
+        <item>Add to Videoboard</item>
+        <item>Share it</item>
+        <item>Report</item>
+        <item>Improve</item>
+    </array>
+
     <string name="title_activity_search">Search</string>
 
     <string name="title_activity_add_sound">AddSoundActivity</string>

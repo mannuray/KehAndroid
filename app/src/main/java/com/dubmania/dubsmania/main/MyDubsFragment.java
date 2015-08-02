@@ -11,10 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dubmania.dubsmania.Adapters.MyVideoAdapter;
+import com.dubmania.dubsmania.Adapters.MyVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.MyVideoItemShareEvent;
+import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.GregorianCalendar;
 
 
 public class MyDubsFragment extends Fragment {
@@ -49,8 +56,10 @@ public class MyDubsFragment extends Fragment {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mMyVideoItemList = new ArrayList<MyVideoListItem>(//Arrays.asList()
-        );
+        mMyVideoItemList = new ArrayList<MyVideoListItem>(Arrays.asList(
+                new MyVideoListItem(navMenuIcons.getResourceId(0, -1), "hotel calfornia is here", "rock",new GregorianCalendar(0,0,0,0,0,0))
+
+        ));
         mAdapter = new MyVideoAdapter(mMyVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -67,5 +76,11 @@ public class MyDubsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onMyVideoItemShareEvent(MyVideoItemShareEvent event) {
+        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.show(getFragmentManager(), "tag");
     }
 }
