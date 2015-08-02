@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.misc.ViewItemOnClickListner;
 
 import java.util.ArrayList;
 
@@ -67,6 +69,7 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
                 videoHolder.mVideoName.setText(mVideoList.get(position).getName());
                 videoHolder.mVideoUserName.setText(mVideoList.get(position).getUser());
                 videoHolder.mFavourite.setIsIndicator(mVideoList.get(position).isFavourite());
+                videoHolder.mMenuIcon.setOnClickListener(new ViewItemOnClickListner<VideoItemMenuEvent>(new VideoItemMenuEvent(position)));
                 return;
             case 1:
                 VideoBoardViewHolder videoBoardHolder = (VideoBoardViewHolder) holder;
@@ -91,6 +94,7 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
         public TextView mVideoName;
         public TextView mVideoUserName;
         public ImageView mVideoThumbnail;
+        public ImageView mMenuIcon;
         public RatingBar mFavourite;
 
         public VideoViewHolder(View v) {
@@ -99,6 +103,8 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
             mVideoUserName = (TextView) v.findViewById(R.id.videoUserName);
             mVideoThumbnail = (ImageView) v.findViewById(R.id.videoThumbnailImage);
             mVideoThumbnail.setImageResource(R.drawable.ic_video_play_button);
+            mMenuIcon = (ImageView) v.findViewById(R.id.video_menu_icon);
+            mMenuIcon.setImageResource(R.drawable.ic_video_play_button);
             mFavourite = (RatingBar) v.findViewById(R.id.favourite);
 
         }

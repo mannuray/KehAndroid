@@ -74,7 +74,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             mVideoThumbnail = (ImageView) v.findViewById(R.id.videoThumbnailImage);
             mVideoThumbnail.setImageResource(R.drawable.ic_video_play_button);
             mMenuIcon = (ImageView) v.findViewById(R.id.video_menu_icon);
-            mVideoThumbnail.setImageResource(R.drawable.ic_video_play_button);
+            mMenuIcon.setImageResource(R.drawable.ic_video_play_button);
             mFavourite = (RatingBar) v.findViewById(R.id.favourite);
 
         }

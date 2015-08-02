@@ -16,6 +16,9 @@ import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,5 +87,11 @@ public class TrendingFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
+        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.show(getFragmentManager(), "tag");
     }
 }
