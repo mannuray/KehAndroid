@@ -10,11 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
-import com.dubmania.dubsmania.Adapters.VideoSearchAdapter;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -56,10 +60,19 @@ public class SearchActivity extends AppCompatActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>(//Arrays.asList()
-
-        );
-        mAdapter = new VideoSearchAdapter(mVideoItemList);
+        mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
+                new VideoListItem("heros", "mannu", false),
+                new VideoListItem("heros1", "mannu", false),
+                new VideoListItem("heros2", "mannu", false),
+                new VideoListItem("heros3", "prashant", false)
+        ));
+        mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Subscribe
+    public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
+        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.show(getSupportFragmentManager(), "tag");
     }
 }

@@ -14,8 +14,11 @@ import android.view.View;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.LanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
+import com.squareup.otto.Subscribe;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -150,5 +153,12 @@ public class MainActivity extends ActionBarActivity
     public void language(View v) {
         Intent intent = new Intent(this, LanguageActivity.class);
         startActivity(intent);
+    }
+
+    //message  sscribed
+    @Subscribe
+    public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
+        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.show(getSupportFragmentManager(), "tag");
     }
 }

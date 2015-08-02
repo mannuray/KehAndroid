@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.dialogs;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.BusProvider;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by rat on 8/2/2015.
@@ -47,6 +54,14 @@ public class VideoItemMenuDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
+                        new VideoListItem("heros", "mannu", false),
+                        new VideoListItem("heros1", "mannu", false),
+                        new VideoListItem("heros2", "mannu", false),
+                        new VideoListItem("heros3", "prashant", false)
+                ));
+                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
+                Log.d("dubsmannu", "was heer");
             }
         });
 
