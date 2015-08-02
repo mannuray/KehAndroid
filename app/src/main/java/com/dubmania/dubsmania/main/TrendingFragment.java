@@ -11,21 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dubmania.dubsmania.Adapters.VideoAdapter;
+import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- */
 public class TrendingFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -62,10 +56,18 @@ public class TrendingFragment extends Fragment {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>(//Arrays.asList()
+        mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
+                new VideoListItem("heros", "mannu", false),
+                new VideoListItem("heros1", "mannu", false),
+                new VideoListItem("heros2", "mannu", false),
+                new VideoListItem("heros3", "prashant", false)
+        ));
 
-        );
-        mAdapter = new VideoAdapter(mVideoItemList);
+        mVideoBoardItemList = new ArrayList<VideoBoardListItem>(Arrays.asList(
+                new VideoBoardListItem("My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
+                new VideoBoardListItem("My Favorites", "me", navMenuIcons.getResourceId(0, -1))
+        ));
+        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList, 4);
         mRecyclerView.setAdapter(mAdapter);
 
 
