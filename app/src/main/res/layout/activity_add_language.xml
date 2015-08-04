@@ -15,16 +15,30 @@
         android:layout_height="wrap_content"
         android:text="pick a language to add" />
 
-    <NumberPicker
-        android:id="@+id/language_picker"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp" />
+        android:layout_gravity="center_horizontal">
 
+        <NumberPicker
+            android:id="@+id/language_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp" />
+
+        <NumberPicker
+            android:id="@+id/country_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp" />
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/add_languag"
+        android:id="@+id/add_language"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Start Now"/>

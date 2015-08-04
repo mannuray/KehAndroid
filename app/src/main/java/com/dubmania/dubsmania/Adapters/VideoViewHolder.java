@@ -18,6 +18,7 @@ public class VideoViewHolder extends RecyclerView.ViewHolder {
     public ImageView mVideoThumbnail;
     public ImageView mMenuIcon;
     public RatingBar mFavourite;
+    public View mInfoBoxLayout;
 
     public VideoViewHolder(View v) {
         super(v);
@@ -28,6 +29,7 @@ public class VideoViewHolder extends RecyclerView.ViewHolder {
         mMenuIcon = (ImageView) v.findViewById(R.id.video_menu_icon);
         mMenuIcon.setImageResource(R.drawable.ic_video_play_button);
         mFavourite = (RatingBar) v.findViewById(R.id.favourite);
+        mInfoBoxLayout = (View) v.findViewById(R.id.discover_info_box);
 
     }
 }

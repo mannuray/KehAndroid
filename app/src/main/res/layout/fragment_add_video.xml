@@ -1,13 +1,28 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.dubmania.dubsmania.main.AddVideoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:text="@string/add_video_method_question" />
 
-</FrameLayout>
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_margin="20dp"
+        android:id="@+id/add_video_record_button"
+        android:gravity="center_horizontal" />
+
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_margin="20dp"
+        android:id="@+id/add_video_import_button"
+        android:gravity="center_horizontal" />
+</LinearLayout>

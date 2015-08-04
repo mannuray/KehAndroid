@@ -20,6 +20,7 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:numColumns="auto_fit"
         android:id="@+id/add_video_board_gridView" />
 
     <Button
@@ -27,6 +28,5 @@
         android:layout_height="75dp"
         android:layout_margin="20dp"
         android:text="New Button"
-        android:id="@+id/add_video_board_add_button"
-        android:layout_gravity="center|bottom" />
+        android:id="@+id/add_video_board_add_button" />
 </LinearLayout>

@@ -2,12 +2,18 @@ package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.dubmania.dubsmania.R;
 
 public class AddLanguageActivity extends AppCompatActivity {
-    private NumberPicker picker;
+    private NumberPicker mLanguagePicker;
+    private NumberPicker mCountryPicker;
 
 
     @Override
@@ -16,13 +22,27 @@ public class AddLanguageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_language);
 
 
-        picker = (NumberPicker) findViewById(R.id.language_picker);
-        picker.setMinValue(0);
-        picker.setMaxValue(2);
-        picker.setDisplayedValues(new String[]{"Belgium", "France", "United Kingdom" } );
+        mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
+        mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
+        mLanguagePicker.setMinValue(0);
+        mLanguagePicker.setMaxValue(2);
+        mLanguagePicker.setDisplayedValues(new String[]{"Belgium", "France", "United Kingdom"});
+        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                mCountryPicker.setDisplayedValues(new String[]{"india", "nepal"});
+            }
+        });
+        Button start = (Button) findViewById(R.id.add_language);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TO DO
+            }
+        });
     }
 
-    /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -44,5 +64,5 @@ public class AddLanguageActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

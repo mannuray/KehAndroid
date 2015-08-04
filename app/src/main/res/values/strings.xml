@@ -9,8 +9,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- menu option strings -->
     <string name="action_search">Search</string>
-
+    <string name="action_add_language">Add Language</string>
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -21,6 +22,18 @@
 
     <!-- array of icons -->
     <array name="nav_drawer_icons">
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
+    </array>
+
+    <!-- array of icons -->
+    <array name="video_board_icons">
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/ic_drawer_t</item>
         <item>@drawable/ic_drawer_t</item>
         <item>@drawable/ic_drawer_t</item>
         <item>@drawable/ic_drawer_t</item>
@@ -48,21 +61,31 @@
         <item>Improve</item>
     </array>
 
+    <!-- Activity titles -->
     <string name="title_activity_search">Search</string>
-
     <string name="title_activity_add_sound">AddSoundActivity</string>
     <string name="title_activity_create_dub">Record Dub</string>
     <string name="title_activity_signup">Sign Up</string>
     <string name="title_activity_language">Languages</string>
     <string name="title_activity_add_language">Add Language</string>
+    <string name="title_activity_add_video_board">Add VideoBoard</string>
+    <string name="title_activity_my_account">My Account</string>
+    <string name="title_activity_record_video">RecordVideoActivity</string>
+    <string name="title_activity_import_video">ImportVideoActivity</string>
 
+    <!-- fragment signup dob strings -->
     <string name="question_birthday">When\'s your birthday?</string>
     <string name="quote_birthday">You must be at least 14 years to use DbusMania</string>
     <string name="display_birthday"></string>
     <string name="quote_confirmationn">By clicking next you are indicating that you have read and agreed to our Term of Service and Privacy Policy</string>
-    <string name="title_activity_my_account">My Account</string>
+
+    <!-- fragement add video strings -->
+    <string name="add_video_method_question">How would you like to add your video?</string>
+
+    <!-- activity import video strings -->
+    <string name="import_video_search_hint">Search</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_add_video_board">Add VideoBoard</string>
+
 
 </resources>

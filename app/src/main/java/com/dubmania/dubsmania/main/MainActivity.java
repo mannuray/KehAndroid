@@ -20,7 +20,7 @@ import com.dubmania.dubsmania.communicator.BusProvider;
 import com.dubmania.dubsmania.communicator.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
-import com.dubmania.dubsmania.misc.LanguageActivity;
+import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.squareup.otto.Subscribe;
 
@@ -85,6 +85,8 @@ public class MainActivity extends ActionBarActivity
                 return new MyDubsFragment();
             case 3:
                 return new SettingFragment();
+            case 4:
+                return new LanguageFragment();
             default:
                 return new PagerFragment();
         }
@@ -108,8 +110,7 @@ public class MainActivity extends ActionBarActivity
             restoreActionBar();
             return true;
         }
-        //return super.onCreateOptionsMenu(menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -118,15 +119,19 @@ public class MainActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
-            return true;
+        Intent intent;
+        switch(id) {
+            case R.id.action_search:
+                intent = new Intent(this, SearchActivity.class);
+                break;
+            case R.id.action_add_language:
+                intent = new Intent(this, AddLanguageActivity.class);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        startActivity(intent);
+        return true;
     }
 
     private void startBrowser(String uri) {
@@ -134,8 +139,8 @@ public class MainActivity extends ActionBarActivity
         startActivity(browserIntent);
     }
 
-    public void ChangeLanguage(View v) {
-
+    public void changeLanguage(View v) {
+        onNavigationDrawerItemSelected(4);
     }
 
     public void feedback(View v) {
@@ -156,10 +161,6 @@ public class MainActivity extends ActionBarActivity
 
     public void pushNotification(View v) {
 
-    }
-    public void language(View v) {
-        Intent intent = new Intent(this, LanguageActivity.class);
-        startActivity(intent);
     }
 
     //message  sscribed

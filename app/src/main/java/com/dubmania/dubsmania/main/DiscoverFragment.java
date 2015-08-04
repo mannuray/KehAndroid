@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
 import com.dubmania.dubsmania.Adapters.VideoAdapter;
@@ -37,6 +38,7 @@ public class DiscoverFragment extends Fragment {
 
     // TO Do remove it after experimenth
     private TypedArray navMenuIcons;
+    private ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,7 +69,9 @@ public class DiscoverFragment extends Fragment {
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
-        BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(mRecyclerView.getId(), 0));
+        spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
+        spinner.setVisibility(View.VISIBLE);
+
         return view;
 
     }
@@ -82,6 +86,14 @@ public class DiscoverFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(mRecyclerView.getId(), 0));
+        }
     }
 
     @Subscribe

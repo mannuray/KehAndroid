@@ -15,5 +15,6 @@ public class VideoViewHolderFactory {
         videoHolder.mFavourite.setIsIndicator(item.isFavourite());
 
         videoHolder.mMenuIcon.setOnClickListener(new ViewItemOnClickListner<VideoItemMenuEvent>(new VideoItemMenuEvent(position)));
+        videoHolder.mInfoBoxLayout.setOnClickListener(new ViewItemOnClickListner<VideoItemMenuEvent>(new VideoItemMenuEvent(position))); //
     }
 }
