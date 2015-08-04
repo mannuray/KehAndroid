@@ -86,6 +86,10 @@
     <string name="import_video_search_hint">Search</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="email_already_exist">That email is already associated with an account. Would you like to login instead ?</string>
+    <string name="email">Email</string>
 
 
 </resources>
