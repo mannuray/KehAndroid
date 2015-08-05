@@ -6,15 +6,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class SignupActivity extends ActionBarActivity implements OnButtonClickListner{
+import io.realm.Realm;
 
-	/**
+public class SignupActivity extends AppCompatActivity implements OnButtonClickListner {
+
+    /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
@@ -25,12 +27,15 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
      */
     private PagerAdapter mPagerAdapter;
 
+    private SignUpInfo signUpInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-		mPager = (ViewPager) findViewById(R.id.view_pager);
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mPager = (ViewPager) findViewById(R.id.view_pager);
+        signUpInfo = new SignUpInfo();
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), signUpInfo);
         mPager.setAdapter(mPagerAdapter);
     }
 
@@ -59,28 +64,44 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
 
     @Override
     public void onBackPressed() {
-        int position = mPager.getCurrentItem();
-        switch (position) {
+        int positon = mPager.getCurrentItem();
+        switch (positon) {
             case 0:
             case 4:
                 finish();
+                return;
             default:
-                mPager.setCurrentItem(position - 1);
+                mPager.setCurrentItem(positon - 1);
+
         }
     }
-	
-	public void onClickNextButton(int position) {
-			mPager.setCurrentItem(position);
-	
-	}
-	private class MyPagerAdapter extends FragmentPagerAdapter {
 
-            TypedArray title = getResources()
-                    .obtainTypedArray(R.array.pager_signup_titles);
-            String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+    public void onClickNextButton(int position) {
+        if (position == 4) {
+            Realm realm = Realm.getInstance(getApplicationContext());
+            realm.beginTransaction();
+            SignUpInfo signUp = realm.createObject(SignUpInfo.class);
+            signUp.setId("0");
+            signUp.setEmail(signUpInfo.getEmail());
+            signUp.setUserName(signUpInfo.getUserName());
+            signUp.setPassword(signUpInfo.getPassword());
+            signUp.setDob(signUpInfo.getDob());
+            realm.commitTransaction();
+        }
+        mPager.setCurrentItem(position);
+    }
 
-        public MyPagerAdapter(FragmentManager fm) {
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        TypedArray title = getResources()
+                .obtainTypedArray(R.array.pager_signup_titles);
+        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+        private SignUpInfo signUpInfo;
+        Bundle bundle = new Bundle();
+
+        public MyPagerAdapter(FragmentManager fm, SignUpInfo _info) {
             super(fm);
+            signUpInfo = _info;
         }
 
         @Override
@@ -88,13 +109,13 @@ public class SignupActivity extends ActionBarActivity implements OnButtonClickLi
 
             switch (i) {
                 case 0:
-                    return new EmailFragment();
+                    return new EmailFragment().setSignUpInfo(signUpInfo);
                 case 1:
-                    return new UserNameFragment();
+                    return new UserNameFragment().setSignUpInfo(signUpInfo);
                 case 2:
-                    return new PasswordFragment();
+                    return new PasswordFragment().setSignUpInfo(signUpInfo);
                 case 3:
-                    return new DobFragment();
+                    return new DobFragment().setSignUpInfo(signUpInfo);
                 case 4:
                     return new FinishFragment();
             }

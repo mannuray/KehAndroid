@@ -96,6 +96,10 @@
     <string name="share_alert_cancel">No thanks</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="email_already_exist">That email is already associated with an account. Would you like to login instead ?</string>
+    <string name="email">Email</string>
 
     <string name="title_activity_play_video">PlayVideoActivity</string>
     <string name="dummy_button">Dummy Button</string>

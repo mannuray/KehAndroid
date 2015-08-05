@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.restclient;
 
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -15,95 +16,30 @@ import org.json.JSONObject;
 public class RestClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
-
-    public static void get(String url, RequestParams params, final RequestListener listener) {
-        client.get(url, params, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                // called before request is started
-                //Some debugging code here
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
+    private static final String BASE_URL = "http://";
 
 
-        });
-    }
-    public static void get(String url, final RequestListener listener) {
-        client.get(url, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                // called before request is started
-                //Some debugging code here
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-
-
-        });
+    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(String url, RequestParams params, final RequestListener listener) {
-        client.post(url, params, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                // called before request is started
-                //Some debugging code here
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-        });
+    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(String url,final RequestListener listener) {
-        client.post(url, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                // called before request is started
-                //Some debugging code here
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                listener.onSuccess(statusCode, headers, response);
-            }
-        });
+    public static void put(String url, AsyncHttpResponseHandler responseHandler) {
+        client.put(null, getAbsoluteUrl(url), null, "application/json", responseHandler);
     }
 
+    public static void delete(String url, AsyncHttpResponseHandler responseHandler) {
+        client.delete(null, getAbsoluteUrl(url), responseHandler);
+    }
+
+    private static String getAbsoluteUrl(String relativeUrl) {
+        return BASE_URL + relativeUrl;
+    }
 
 }
+
 
 

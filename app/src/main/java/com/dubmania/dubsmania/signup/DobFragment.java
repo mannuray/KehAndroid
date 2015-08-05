@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class DobFragment extends Fragment {
 
     OnButtonClickListner mCallback;
+    SignUpInfo info;
     DatePicker picker;
     TextView DOB;
     Button next;
@@ -46,18 +47,19 @@ public class DobFragment extends Fragment {
         Linkify.addLinks(confirmation, termofService, "http://www.google.ie/search?q=");
         Linkify.addLinks(confirmation, privacyPolicy, "http://www.google.ie/search?q=");
 
-        picker = (DatePicker)rootView.findViewById(R.id.dob_picker);
+        picker = (DatePicker) rootView.findViewById(R.id.dob_picker);
         next = (Button) rootView.findViewById(R.id.next);
         DOB = (TextView) rootView.findViewById(R.id.text_dob);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                info.setDob(DOB.getText().toString());
                 mCallback.onClickNextButton(4);
             }
         });
 
-        picker.setOnClickListener(new View.OnClickListener(){
+        picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DOB.setText(getCurrentDate());
@@ -86,12 +88,17 @@ public class DobFragment extends Fragment {
         mCallback = null;
     }
 
-    public String getCurrentDate(){
-        StringBuilder builder=new StringBuilder();
-        builder.append((picker.getMonth() + 1)+"/");
-        builder.append(picker.getDayOfMonth()+"/");
+    public String getCurrentDate() {
+        StringBuilder builder = new StringBuilder();
+        builder.append((picker.getMonth() + 1) + "/");
+        builder.append(picker.getDayOfMonth() + "/");
         builder.append(picker.getYear());
         return builder.toString();
+    }
+
+    public DobFragment setSignUpInfo(SignUpInfo _info) {
+        info = _info;
+        return this;
     }
 }
 
