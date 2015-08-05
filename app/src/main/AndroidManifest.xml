@@ -12,52 +12,59 @@
         <activity
             android:name=".main.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".misc.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".addvideo.AddVideoActivity"
             android:label="@string/title_activity_add_sound"
-            android:parentActivityName=".main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".createdub.CreateDubActivity"
             android:label="@string/title_activity_create_dub"
-            android:parentActivityName=".main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".signup.SignupActivity"
             android:label="@string/title_activity_signup"
-            android:parentActivityName=".main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".misc.AddLanguageActivity"
             android:label="@string/title_activity_add_language"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.MyAccountActivity"
             android:label="@string/title_activity_my_account"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.AddVideoBoardActivity"
             android:label="@string/title_activity_add_video_board"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.RecordVideoActivity"
             android:label="@string/title_activity_record_video"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.ImportVideoActivity"
             android:label="@string/title_activity_import_video"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
+        </activity>
+        <activity
+            android:name=".misc.PlayVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_play_video"
+            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 

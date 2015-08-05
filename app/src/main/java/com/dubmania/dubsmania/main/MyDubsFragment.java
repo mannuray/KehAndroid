@@ -15,9 +15,6 @@ import com.dubmania.dubsmania.Adapters.MyVideoAdapter;
 import com.dubmania.dubsmania.Adapters.MyVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.communicator.MyVideoItemShareEvent;
-import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,11 +73,5 @@ public class MyDubsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
-    }
-
-    @Subscribe
-    public void onMyVideoItemShareEvent(MyVideoItemShareEvent event) {
-        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
-        dialog.show(getFragmentManager(), "tag");
     }
 }

@@ -3,7 +3,6 @@ package com.dubmania.dubsmania.dialogs;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,8 @@ public class VideoItemMenuDialog extends DialogFragment {
                         new VideoListItem("heros3", "prashant", false)
                 ));
                 BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
-                Log.d("dubsmannu", "was heer");
+                getDialog().dismiss();
+
             }
         });
 

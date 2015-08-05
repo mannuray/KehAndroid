@@ -74,27 +74,6 @@ public class PagerFragment extends Fragment {
 
         @Override
         public android.support.v4.app.Fragment getItem(int i) {
-
-            /*switch (i) {
-                case 0:
-                    return new TrendingFragment();
-                case 1:
-                    if(mDiscoverFragment != null){
-                        return mDiscoverFragment;
-                    }
-                    else {
-                        mDiscoverFragment = new DiscoverFragment();
-                        return mTrendingFragment;
-                    }
-                case 2:
-                    if(mVideoBoardFragment != null){
-                        return mVideoBoardFragment;
-                    }
-                    else {
-                        mVideoBoardFragment = new VideoBoardFragment();
-                        return mVideoBoardFragment;
-                    }
-            }*/
             switch (i) {
                 case 0:
                     return new TrendingFragment();

@@ -1,5 +1,6 @@
 package com.dubmania.dubsmania.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
@@ -40,6 +43,8 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private AlertDialog shareDialog;
+    private  String[] mMessengerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        mMessengerList = getResources()
+                .getStringArray(R.array.messenger_list);
+        shareDialog = getShareAlertDialog(mMessengerList);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -171,6 +179,11 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Subscribe
+    public void onMyVideoItemShareEvent(MyVideoItemShareEvent event) {
+        shareDialog.show();
+    }
+
+    @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
         ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
                 new VideoListItem("heros", "mannu", false),
@@ -181,5 +194,24 @@ public class MainActivity extends ActionBarActivity
         BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
 
+    }
+
+    // private functions
+    private AlertDialog getShareAlertDialog(String[] items) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.share_alert_tite);
+        //builder.setCancelable(true);
+        builder.setNegativeButton(R.string.share_alert_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shareDialog.dismiss();
+            }
+        });
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+            }
+        });
+        return builder.create();
     }
 }

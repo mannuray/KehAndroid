@@ -54,6 +54,12 @@
         <item>Finish</item>
     </array>
 
+    <array name="messenger_list">
+        <item>Messenger</item>
+        <item>Whatsapp</item>
+        <item>Gallery</item>
+    </array>
+
     <array name="video_menu_item_list">
         <item>Add to Videoboard</item>
         <item>Share it</item>
@@ -85,7 +91,15 @@
     <!-- activity import video strings -->
     <string name="import_video_search_hint">Search</string>
 
+    <!-- activiity main strings -->
+    <string name="share_alert_tite">Share your dub</string>
+    <string name="share_alert_cancel">No thanks</string>
+
     <string name="hello_world">Hello world!</string>
+
+    <string name="title_activity_play_video">PlayVideoActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>
