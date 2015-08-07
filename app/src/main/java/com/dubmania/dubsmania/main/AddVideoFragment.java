@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.misc.ImportVideoActivity;
 import com.dubmania.dubsmania.misc.RecordVideoActivity;
 

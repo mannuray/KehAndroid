@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 
 public class PagerFragment extends Fragment {
     PagerAdapter mPagerAdapter;

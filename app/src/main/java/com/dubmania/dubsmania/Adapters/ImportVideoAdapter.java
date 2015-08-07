@@ -11,7 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.ImportVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.ImportVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
         holder.mVideoName.setText(visibleObjects.get(position).mTitle);
         holder.mPath.setText(visibleObjects.get(position).mFilePath);
 
-        holder.mVideoName.setOnClickListener(new ViewItemOnClickListner<ImportVideoItemListEvent>(new ImportVideoItemListEvent(visibleObjects.get(position).mFilePath)));
+        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<ImportVideoItemListEvent>(new ImportVideoItemListEvent(visibleObjects.get(position).mFilePath)));
 
     }
 

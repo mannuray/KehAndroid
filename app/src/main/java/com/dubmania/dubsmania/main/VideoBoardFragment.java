@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
 
 import java.util.ArrayList;

@@ -8,6 +8,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
         <activity
             android:name=".main.MainActivity"
@@ -32,7 +35,7 @@
             android:label="@string/title_activity_create_dub"
             android:parentActivityName=".main.MainActivity" />
         <activity
-            android:name=".signup.SignupActivity"
+            android:name=".signupandlogin.SignupActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".main.MainActivity" />
         <activity
@@ -66,6 +69,10 @@
             android:label="@string/title_activity_play_video"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <application
+            android:name=".misc.DubsmaniaApplication" >
+        </application>
     </application>
+
 
 </manifest>

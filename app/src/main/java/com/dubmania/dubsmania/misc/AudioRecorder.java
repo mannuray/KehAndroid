@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +19,15 @@ import java.io.IOException;
 public class AudioRecorder {
     MediaRecorder recorder;
     File audiofile = null;
-    Activity activity;
+    Activity mActivity;
 
-    public AudioRecorder(Activity _activity) {
-        activity = _activity;
+    public AudioRecorder(Activity myActivity) {
+        mActivity = myActivity;
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        recorder.setOutputFile(audiofile.getAbsolutePath());
     }
 
     public void startRecording() throws IOException {
@@ -37,11 +41,6 @@ public class AudioRecorder {
             return;
         }
         //Creating MediaRecorder and specifying audio source, output format, encoder & output format
-        recorder = new MediaRecorder();
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(audiofile.getAbsolutePath());
         recorder.prepare();
         recorder.start();
     }
@@ -64,12 +63,12 @@ public class AudioRecorder {
         values.put(MediaStore.Audio.Media.DATA, audiofile.getAbsolutePath());
 
         //creating content resolver and storing it in the external content uri
-        ContentResolver contentResolver = activity.getContentResolver();
+        ContentResolver contentResolver = mActivity.getContentResolver();
         Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Uri newUri = contentResolver.insert(base, values);
 
         //sending broadcast message to scan the media file so that it can be available
-        activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
+        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
 
     }
 }

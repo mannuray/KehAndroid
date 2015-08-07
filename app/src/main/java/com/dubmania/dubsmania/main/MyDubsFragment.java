@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.dubmania.dubsmania.Adapters.MyVideoAdapter;
 import com.dubmania.dubsmania.Adapters.MyVideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

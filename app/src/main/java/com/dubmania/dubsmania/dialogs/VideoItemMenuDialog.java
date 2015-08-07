@@ -13,8 +13,8 @@ import android.widget.ListView;
 
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.AddDiscoverVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

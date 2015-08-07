@@ -15,7 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 
 /**
  * A fragment representing a list of Items.

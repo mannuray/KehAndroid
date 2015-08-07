@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.communicator.VideoItemMenuEvent;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.squareup.otto.Subscribe;
 

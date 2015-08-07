@@ -16,8 +16,8 @@ import android.widget.EditText;
 import com.dubmania.dubsmania.Adapters.ImportVideoAdapter;
 import com.dubmania.dubsmania.Adapters.ImportVideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.communicator.ImportVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.ImportVideoItemListEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

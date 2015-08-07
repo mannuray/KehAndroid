@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
 import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.BusProvider;
-import com.dubmania.dubsmania.events.OnVideoDownloadEvent;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.OnVideoDownloadEvent;
 import com.dubmania.dubsmania.misc.AudioRecorder;
-import com.dubmania.dubsmania.restclient.VideoDownloadClient;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloadClient;
 import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
 
 /**
  * Created by hardik.parekh on 8/3/2015.

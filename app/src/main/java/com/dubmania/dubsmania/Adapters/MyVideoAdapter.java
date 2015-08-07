@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.MyVideoItemShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHold
         holder.mVideoBoardName.setText(mDataset.get(position).getmBoardName());
         holder.mDateTime.setText(fmt.format(mDataset.get(position).getmDate().getTime()));
 
-        holder.mShare.setOnClickListener(new ViewItemOnClickListner<MyVideoItemShareEvent>(new MyVideoItemShareEvent(position)));
+        holder.mShare.setOnClickListener(new OnClickListnerEvent<MyVideoItemShareEvent>(new MyVideoItemShareEvent(position)));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
