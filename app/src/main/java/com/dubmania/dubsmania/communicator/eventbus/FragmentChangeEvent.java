@@ -3,10 +3,10 @@ package com.dubmania.dubsmania.communicator.eventbus;
 /**
  * Created by rat on 8/7/2015.
  */
-public class FragmentCallbackEvent {
+public class FragmentChangeEvent {
     private int position;
 
-    public FragmentCallbackEvent(int position) {
+    public FragmentChangeEvent(int position) {
         this.position = position;
     }
 

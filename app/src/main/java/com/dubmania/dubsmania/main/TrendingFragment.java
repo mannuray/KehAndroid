@@ -21,7 +21,6 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TrendingFragment extends Fragment {
 
@@ -59,18 +58,10 @@ public class TrendingFragment extends Fragment {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
-                new VideoListItem("heros", "mannu", false),
-                new VideoListItem("heros1", "mannu", false),
-                new VideoListItem("heros2", "mannu", false),
-                new VideoListItem("heros3", "prashant", false)
-        ));
+        mVideoItemList = new ArrayList<VideoListItem>();
 
-        mVideoBoardItemList = new ArrayList<VideoBoardListItem>(Arrays.asList(
-                new VideoBoardListItem("My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
-                new VideoBoardListItem("My Favorites", "me", navMenuIcons.getResourceId(0, -1))
-        ));
-        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList, 4);
+        mVideoBoardItemList = new ArrayList<VideoBoardListItem>();
+        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 
 

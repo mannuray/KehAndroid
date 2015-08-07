@@ -13,9 +13,9 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.FragmentCallbackEvent;
 import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetUsernameEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupFragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.squareup.otto.Subscribe;
 
@@ -32,7 +32,7 @@ public class UserNameFragment extends Fragment {
                 R.layout.fragment_screen_signup_username, container, false);
         next = (Button) rootView.findViewById(R.id.next);
         mUsername = (EditText) rootView.findViewById(R.id.username);
-        next.setOnClickListener(new OnClickListnerEvent<>(new FragmentCallbackEvent(2)));
+        next.setOnClickListener(new OnClickListnerEvent<>(new SignupFragmentChangeEvent(2)));
         mUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

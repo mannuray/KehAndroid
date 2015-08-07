@@ -35,7 +35,7 @@
             android:label="@string/title_activity_create_dub"
             android:parentActivityName=".main.MainActivity" />
         <activity
-            android:name=".signupandlogin.SignupActivity"
+            android:name=".signupandlogin.SignupAndLoginActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".main.MainActivity" />
         <activity

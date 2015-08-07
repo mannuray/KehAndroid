@@ -19,10 +19,10 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoAndBoardAdapter(ArrayList<VideoListItem> myVideoList, ArrayList<VideoBoardListItem> myVideoBoardList, int myNumberOfVedios) {
+    public VideoAndBoardAdapter(ArrayList<VideoListItem> myVideoList, ArrayList<VideoBoardListItem> myVideoBoardList) {
         mVideoList = myVideoList;
         mVideoBoardList = myVideoBoardList;
-        numberOfVedios = myNumberOfVedios;
+        numberOfVedios = mVideoList.size();
     }
 
     @Override

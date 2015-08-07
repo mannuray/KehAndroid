@@ -1,12 +1,9 @@
 package com.dubmania.dubsmania.signupandlogin;
 
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,9 +14,14 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.EmailCheckEvent;
 import com.dubmania.dubsmania.communicator.eventbus.EmailExistEvent;
-import com.dubmania.dubsmania.communicator.eventbus.FragmentCallbackEvent;
+import com.dubmania.dubsmania.communicator.eventbus.FragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.LoginEvent;
+import com.dubmania.dubsmania.communicator.eventbus.LoginFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.LoginSetEmailEvent;
+import com.dubmania.dubsmania.communicator.eventbus.PasswordResetEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetDobEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetUsernameEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupFragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SignupPasswordEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
@@ -31,26 +33,23 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupAndLoginActivity extends AppCompatActivity {
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
-    private ViewPager mPager;
     private SignUpInfo signUpInfo;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_signup);
-        mPager = (ViewPager) findViewById(R.id.view_pager);
+        mFragmentManager = getSupportFragmentManager();
         signUpInfo = new SignUpInfo();
-        /*
-      The pager adapter, which provides the pages to the view pager widget.
-     */
-        PagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        changeFragment(0);
     }
 
 
@@ -78,15 +77,12 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int positon = mPager.getCurrentItem();
-        switch (positon) {
-            case 0:
-            case 4:
-                finish();
-                return;
-            default:
-                mPager.setCurrentItem(positon - 1);
-
+        Fragment f = mFragmentManager.findFragmentById(R.id.container);
+        if (f instanceof PagerSignupFragment) {
+            BusProvider.getInstance().post(new SignupFragmentChangeEvent(-1));
+        }
+        else if (f instanceof PagerLoginFragment) {
+            BusProvider.getInstance().post(new LoginFragmentChangeEvent(-1));
         }
     }
 
@@ -100,13 +96,33 @@ public class SignupActivity extends AppCompatActivity {
         BusProvider.getInstance().unregister(this);
     }
 
+    public void changeFragment(int position) {
+        // update the main content by replacing fragments
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, getFragment(position))
+                .commit();
+    }
+
+    Fragment getFragment(int position) {
+
+        switch (position) {
+            case 0:
+                return new PagerSignupFragment();
+            case 1:
+                return new PagerLoginFragment();
+        }
+        return new EmailFragment();
+    }
+
     private AlertDialog getEmailExistDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // TO DO
-                // show loging fagment to user
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, getFragment(1))
+                        .commit();
+                BusProvider.getInstance().post(new LoginSetEmailEvent(signUpInfo.getEmail()));
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -122,46 +138,8 @@ public class SignupActivity extends AppCompatActivity {
         return builder.create();
     }
 
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        TypedArray title = getResources()
-                .obtainTypedArray(R.array.pager_signup_titles);
-        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int i) {
-
-            switch (i) {
-                case 0:
-                    return new EmailFragment();
-                case 1:
-                    return new UserNameFragment();
-                case 2:
-                    return new PasswordFragment();
-                case 3:
-                    return new DobFragment();
-                case 4:
-                    return new FinishFragment();
-            }
-            return new EmailFragment();
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
-        }
-    }
-
     /*@Subscribe
-    public void onFragmentCallbackEvent(FragmentCallbackEvent event) {
+    public void onFragmentCallbackEvent(FragmentChangeEvent event) {
         if (event.getPosition() == 4) {
             Realm realm = Realm.getInstance(getApplicationContext());
             realm.beginTransaction();
@@ -175,8 +153,14 @@ public class SignupActivity extends AppCompatActivity {
         }
     }*/
     @Subscribe
-    public void onFragmentCallbackEvent(FragmentCallbackEvent event) {
-        mPager.setCurrentItem(event.getPosition());
+    public void onFragmentChangeEvent(FragmentChangeEvent event) {
+        Fragment f = mFragmentManager.findFragmentById(R.id.container);
+        if (f instanceof PagerSignupFragment) {
+            finish();
+        }
+        else if (f instanceof PagerLoginFragment) {
+            changeFragment(0);
+        }
     }
 
     @Subscribe
@@ -189,11 +173,10 @@ public class SignupActivity extends AppCompatActivity {
                 try {
                     Toast.makeText(getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
                     JSONObject json = new JSONObject(new String(responseBody));
-                    if( !json.getBoolean("result")) {
+                    if (!json.getBoolean("result")) {
                         BusProvider.getInstance().post(new SetUsernameEvent(signUpInfo.getUserName()));
-                        mPager.setCurrentItem(1);
-                    }
-                    else {
+                        BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
+                    } else {
                         getEmailExistDialog().show();
                     }
                 } catch (JSONException e) {
@@ -203,7 +186,7 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                mPager.setCurrentItem(1);
+                //mPager.setCurrentItem(1);
             }
         });
     }
@@ -234,18 +217,18 @@ public class SignupActivity extends AppCompatActivity {
     @Subscribe
     public void onSignupPasswordEvent(SignupPasswordEvent event) {
         signUpInfo.setPassword(event.getPassword());
-        mPager.setCurrentItem(3);
+        BusProvider.getInstance().post(new SignupFragmentChangeEvent(3));
     }
 
     @Subscribe
     public void onSetDobEvent(SetDobEvent event) {
         signUpInfo.setDob(event.getDob());
-        mPager.setCurrentItem(4);
+        BusProvider.getInstance().post(new SignupFragmentChangeEvent(4));
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add("username", signUpInfo.getUserName());
         params.add("useremail", signUpInfo.getEmail());
-        params.add("password", signUpInfo.getPassword());
+        params.add("mPassword", signUpInfo.getPassword());
         params.add("dob", signUpInfo.getDob());
         DubsmaniaHttpClient.get("userservice/register", params, new AsyncHttpResponseHandler() {
             @Override
@@ -253,7 +236,7 @@ public class SignupActivity extends AppCompatActivity {
                 try {
                     Toast.makeText(getApplicationContext(), "user rister check event " + new String(responseBody), Toast.LENGTH_LONG).show();
                     JSONObject json = new JSONObject(new String(responseBody));
-                    if(!json.getBoolean("result")) {
+                    if (!json.getBoolean("result")) {
                         Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
                     }
 
@@ -270,4 +253,58 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Subscribe
+    public void onLoginEvent(LoginEvent event) {
+        Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
+        RequestParams params = new RequestParams();
+        params.add("useremail", signUpInfo.getEmail());
+        params.add("mPassword", signUpInfo.getPassword());
+        DubsmaniaHttpClient.get("userservice/login", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Toast.makeText(getApplicationContext(), "user login check event " + new String(responseBody), Toast.LENGTH_LONG).show();
+                    JSONObject json = new JSONObject(new String(responseBody));
+                    if (!json.getBoolean("result")) {
+                        Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onPasswordResetEvent(PasswordResetEvent event) {
+        DubsmaniaHttpClient.get("userservice/resetpassword", new RequestParams("useremail", event.getEmail()), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Toast.makeText(getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
+                    JSONObject json = new JSONObject(new String(responseBody));
+                    if (!json.getBoolean("result")) {
+                        Toast.makeText(getApplicationContext(), "Unable to reset password", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
+    }
+
+
 }
