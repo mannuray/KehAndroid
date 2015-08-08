@@ -21,12 +21,12 @@ import java.util.Map;
 
 public class VideoListDownloader {
     private Map<Long, VideoListItem> mVideoItemMap;
-    private VideoDownloaderCallback mCallback;
+    private VideoListDownloaderCallback mCallback;
     private Integer user;
     private int toProcess;
     private int proccessing;
 
-    public void downloadVideos(String url, RequestParams params,VideoDownloaderCallback mCallback, Integer user) {
+    public void downloadVideos(String url, RequestParams params,VideoListDownloaderCallback mCallback, Integer user) {
         this.mCallback = mCallback;
         this.user = user;
         mVideoItemMap = new HashMap<>();

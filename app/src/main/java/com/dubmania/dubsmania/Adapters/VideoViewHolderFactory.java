@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.CompoundButton;
 
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoFavriouteChangedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
@@ -20,8 +21,8 @@ public class VideoViewHolderFactory {
         videoHolder.mFavourite.setChecked(item.isFavourite());
         videoHolder.mVideoThumbnail.setImageBitmap(item.getThumbnail());
 
-        videoHolder.mMenuIcon.setOnClickListener(new OnClickListnerEvent<VideoItemMenuEvent>(new VideoItemMenuEvent(position)));
-        videoHolder.mInfoBoxLayout.setOnClickListener(new OnClickListnerEvent<VideoItemMenuEvent>(new VideoItemMenuEvent(position))); //
+        videoHolder.mMenuIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoItemMenuEvent(position)));
+        videoHolder.mInfoBoxLayout.setOnClickListener(new OnClickListnerEvent<>(new CreateDubEvent(item.getId()))); //
         videoHolder.mFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

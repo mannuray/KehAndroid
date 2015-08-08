@@ -20,11 +20,13 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
-import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
+import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
@@ -203,7 +205,7 @@ public class MainActivity extends ActionBarActivity
         params.add("start", String.valueOf(0));
         params.add("end", String.valueOf(4));
         params.add("region", "India");
-        mTrendingVideosDownloader.downloadVideos("searchservice/gettrendingvideos", params, new VideoDownloaderCallback() {
+        mTrendingVideosDownloader.downloadVideos("searchservice/gettrendingvideos", params, new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
@@ -216,7 +218,13 @@ public class MainActivity extends ActionBarActivity
         }, 1);
 
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
+    }
 
+    @Subscribe
+    public void onCreateDubEvent(CreateDubEvent event) {
+        Intent intent = new Intent(this, CreateDubActivity.class);
+        intent.putExtra("VIDEO_ID", event.getId());
+        startActivity(intent);
     }
 
     // private functions
