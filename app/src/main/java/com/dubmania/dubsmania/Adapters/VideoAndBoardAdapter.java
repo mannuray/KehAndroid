@@ -22,7 +22,7 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
     public VideoAndBoardAdapter(ArrayList<VideoListItem> myVideoList, ArrayList<VideoBoardListItem> myVideoBoardList) {
         mVideoList = myVideoList;
         mVideoBoardList = myVideoBoardList;
-        numberOfVedios = mVideoList.size();
+        numberOfVedios = 4;
     }
 
     @Override

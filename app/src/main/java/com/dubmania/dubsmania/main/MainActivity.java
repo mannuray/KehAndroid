@@ -18,13 +18,17 @@ import android.widget.Toast;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
+import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -43,13 +47,15 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private AlertDialog shareDialog;
-    private  String[] mMessengerList;
+    private String[] mMessengerList;
+    private VideoListDownloader mTrendingVideosDownloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mTrendingVideosDownloader = new VideoListDownloader();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -187,6 +193,28 @@ public class MainActivity extends ActionBarActivity
 
         ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>();
         BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
+        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Subscribe
+    public void onTrendingViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
+        RequestParams params = new RequestParams();
+        params.add("start", String.valueOf(0));
+        params.add("end", String.valueOf(4));
+        params.add("region", "India");
+        mTrendingVideosDownloader.downloadVideos("searchservice/gettrendingvideos", params, new VideoDownloaderCallback() {
+            @Override
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
+                BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
+            }
+
+            @Override
+            public void onVideosDownloadFailure() {
+
+            }
+        }, 1);
+
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
 
     }

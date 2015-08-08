@@ -1,7 +1,6 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -36,8 +35,6 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
 
-    // TO Do remove it after experimenth
-    private TypedArray navMenuIcons;
     private ProgressBar spinner;
 
     /**
@@ -62,8 +59,6 @@ public class DiscoverFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
 
         mVideoItemList = new ArrayList<VideoListItem>();
         mAdapter = new VideoAdapter(mVideoItemList);

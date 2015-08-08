@@ -11,13 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by rat on 8/2/2015.
@@ -53,13 +47,13 @@ public class VideoItemMenuDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
-                        new VideoListItem("heros", "mannu", false),
-                        new VideoListItem("heros1", "mannu", false),
-                        new VideoListItem("heros2", "mannu", false),
-                        new VideoListItem("heros3", "prashant", false)
+                /*ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
+                        new VideoListItem(id, "heros", "mannu", false),
+                        new VideoListItem(id, "heros1", "mannu", false),
+                        new VideoListItem(id, "heros2", "mannu", false),
+                        new VideoListItem(id, "heros3", "prashant", false)
                 ));
-                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
+                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));*/
                 getDialog().dismiss();
 
             }

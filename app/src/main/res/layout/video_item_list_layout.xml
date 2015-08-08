@@ -45,12 +45,13 @@
                     android:layout_height="match_parent" />
             </LinearLayout>
 
-            <RatingBar
+            <CheckBox
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/video_menu_icon"
-                android:id="@+id/favourite"
-                android:layout_gravity="right"/>
+                android:layout_gravity="right"
+                style="?android:attr/starStyle"
+                android:id="@+id/favourite" />
 
             <ImageView
                 android:layout_width="50dp"
@@ -61,5 +62,7 @@
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+
+
 
 </LinearLayout>

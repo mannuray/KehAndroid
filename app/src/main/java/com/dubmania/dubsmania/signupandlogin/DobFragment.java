@@ -67,9 +67,9 @@ public class DobFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusProvider.getInstance().post(new SetDobEvent(String.valueOf(picker.getDayOfMonth()) + "-" +
-                                                                String.valueOf(picker.getMonth()) + "-" +
-                                                                String.valueOf(picker.getYear())
+                BusProvider.getInstance().post(new SetDobEvent(String.valueOf(picker.getYear()) +
+                                                                String.valueOf(picker.getMonth()) +
+                                                                String.valueOf(picker.getDayOfMonth())
                 ));
             }
         });

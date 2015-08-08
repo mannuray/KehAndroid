@@ -1,17 +1,23 @@
 package com.dubmania.dubsmania.Adapters;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by rat on 7/29/2015.
  */
 public class VideoListItem {
+    private Long id;
     private String name;
     private String user;
+    private String desc;
     private boolean favourite;
+    private Bitmap thumbnail;
 
-    public VideoListItem(String name, String user, boolean favourite) {
+    public VideoListItem(Long id, String name, String user, String desc) {
+        this.id = id;
         this.name = name;
         this.user = user;
-        this.favourite = favourite;
+        this.desc = desc;
     }
 
     public String getName() {
@@ -22,7 +28,27 @@ public class VideoListItem {
         return user;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
     public boolean isFavourite() {
         return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

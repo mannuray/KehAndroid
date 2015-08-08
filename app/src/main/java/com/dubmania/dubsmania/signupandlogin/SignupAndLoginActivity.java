@@ -26,6 +26,7 @@ import com.dubmania.dubsmania.communicator.eventbus.SignupPasswordEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
@@ -167,13 +168,12 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onEmailCheckEvent(EmailCheckEvent event) {
         signUpInfo.setEmail(event.getEmail());
         signUpInfo.setUserName(event.getEmail().split("@")[0]);
-        DubsmaniaHttpClient.get("userservice/verifyUserEmail", new RequestParams("useremail", event.getEmail()), new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.get("userservice/verifyUserEmail", new RequestParams("useremail", event.getEmail()), new JsonHttpResponseHandler() {
+
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
-                    JSONObject json = new JSONObject(new String(responseBody));
-                    if (!json.getBoolean("result")) {
+                    if (!response.getBoolean("result")) {
                         BusProvider.getInstance().post(new SetUsernameEvent(signUpInfo.getUserName()));
                         BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
                     } else {
@@ -183,33 +183,22 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                //mPager.setCurrentItem(1);
-            }
         });
     }
 
     @Subscribe
     public void onSetUsernameEvent(SetUsernameEvent event) {
         signUpInfo.setUserName(event.getUsername());
-        DubsmaniaHttpClient.get("userservice/verifyUser", new RequestParams("username", event.getUsername()), new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.get("userservice/verifyUser", new RequestParams("username", event.getUsername()), new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "user name check event " + new String(responseBody), Toast.LENGTH_LONG).show();
-                    JSONObject json = new JSONObject(new String(responseBody));
-                    BusProvider.getInstance().post(new UserNameExistEvent(json.getBoolean("result")));
+                    Toast.makeText(getApplicationContext(), "user name check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    BusProvider.getInstance().post(new UserNameExistEvent(response.getBoolean("result")));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                //mPager.setCurrentItem(2);
             }
         });
     }
@@ -227,16 +216,15 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add("username", signUpInfo.getUserName());
-        params.add("useremail", signUpInfo.getEmail());
-        params.add("mPassword", signUpInfo.getPassword());
+        params.add("email", signUpInfo.getEmail());
+        params.add("password", signUpInfo.getPassword());
         params.add("dob", signUpInfo.getDob());
-        DubsmaniaHttpClient.get("userservice/register", params, new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.get("userservice/register", params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "user rister check event " + new String(responseBody), Toast.LENGTH_LONG).show();
-                    JSONObject json = new JSONObject(new String(responseBody));
-                    if (!json.getBoolean("result")) {
+                    Toast.makeText(getApplicationContext(), "user rister check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    if (!response.getBoolean("result")) {
                         Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
                     }
 
@@ -247,7 +235,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -260,13 +248,12 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.add("useremail", signUpInfo.getEmail());
         params.add("mPassword", signUpInfo.getPassword());
-        DubsmaniaHttpClient.get("userservice/login", params, new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.get("userservice/login", params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "user login check event " + new String(responseBody), Toast.LENGTH_LONG).show();
-                    JSONObject json = new JSONObject(new String(responseBody));
-                    if (!json.getBoolean("result")) {
+                    Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    if (!response.getBoolean("result")) {
                         Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -277,7 +264,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
             }
         });

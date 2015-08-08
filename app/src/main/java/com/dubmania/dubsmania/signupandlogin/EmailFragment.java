@@ -34,8 +34,7 @@ public class EmailFragment extends Fragment {
         try {
             Account[] accounts = AccountManager.get(getActivity()).getAccountsByType("com.google");
             for (Account account : accounts) {
-                //mEmail.setText(account.name);
-                mEmail.setText("ducetapa@example.com");
+                mEmail.setText(account.name);
                 break;
             }
         } catch (Exception exception) {

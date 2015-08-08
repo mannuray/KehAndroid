@@ -18,6 +18,7 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.AddTrendingBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -66,6 +67,14 @@ public class TrendingFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+        }
     }
 
     @Override

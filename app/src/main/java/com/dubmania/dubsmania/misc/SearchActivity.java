@@ -19,7 +19,6 @@ import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -61,12 +60,7 @@ public class SearchActivity extends AppCompatActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
-                new VideoListItem("heros", "mannu", false),
-                new VideoListItem("heros1", "mannu", false),
-                new VideoListItem("heros2", "mannu", false),
-                new VideoListItem("heros3", "prashant", false)
-        ));
+        mVideoItemList = new ArrayList<VideoListItem>();
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
     }
