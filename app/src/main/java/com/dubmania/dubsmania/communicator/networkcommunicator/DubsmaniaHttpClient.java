@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.communicator.networkcommunicator;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -10,10 +11,12 @@ import com.loopj.android.http.RequestParams;
  */
 public class DubsmaniaHttpClient {
     private static AsyncHttpClient mClient = new AsyncHttpClient();
-    //private static PersistentCookieStore mCookieStore = new PersistentCookieStore(DubsmaniaApplication.getContext());
-    //mClient.setCookieStore(mCookieStore);
 
     private static final String BASE_URL = "http://dubsmaniadataserver.appspot.com/dubsmaniadataserver/";
+
+    public static void setCookieStore(PersistentCookieStore cookieStore){
+        mClient.setCookieStore(cookieStore);
+    }
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         mClient.get(getAbsoluteUrl(url), params, responseHandler);

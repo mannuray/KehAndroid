@@ -11,15 +11,16 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.LoginSetEmailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.PasswordResetEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
 import com.squareup.otto.Subscribe;
 
 
 public class ResetPasswordFragment extends Fragment {
 
-    Button mLogin;
-    EditText mEmail;
+    private Button mLogin;
+    private EditText mEmail;
+    private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class ResetPasswordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reset_password, container, false);
         mLogin = (Button)view.findViewById(R.id.next);
         mEmail = (EditText) view.findViewById(R.id.login_email);
+        mEmail.setText(mStoreEmail);
         mLogin.setVisibility(View.INVISIBLE);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +58,7 @@ public class ResetPasswordFragment extends Fragment {
     }
 
     @Subscribe
-    public void onLoginSetEmailEvent(LoginSetEmailEvent event) {
-        mEmail.setText(event.getEmail());
+    public void onSignupInfoEvent(SignupInfoEvent event) {
+        mStoreEmail = event.getEmail();
     }
 }

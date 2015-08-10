@@ -30,6 +30,7 @@ public class TrendingFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
+    private boolean mVisibleFirstTime = true;
 
     // TO Do remove it after experimenth
     private TypedArray navMenuIcons;
@@ -72,8 +73,9 @@ public class TrendingFragment extends Fragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible) {
+        if (visible && mVisibleFirstTime) {
             BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+            mVisibleFirstTime = false;
         }
     }
 

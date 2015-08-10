@@ -23,13 +23,16 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
+import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
+import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
@@ -37,7 +40,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,12 +53,14 @@ public class MainActivity extends ActionBarActivity
     private AlertDialog shareDialog;
     private String[] mMessengerList;
     private VideoListDownloader mTrendingVideosDownloader;
-
+    private PersistentCookieStore myCookieStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myCookieStore = new PersistentCookieStore(this);
+        DubsmaniaHttpClient.setCookieStore(myCookieStore);
         mTrendingVideosDownloader = new VideoListDownloader();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -200,7 +204,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Subscribe
-    public void onTrendingViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
+    public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
         RequestParams params = new RequestParams();
         params.add("start", String.valueOf(0));
         params.add("end", String.valueOf(4));
@@ -215,7 +219,7 @@ public class MainActivity extends ActionBarActivity
             public void onVideosDownloadFailure() {
 
             }
-        }, 1);
+        }, 1, true);
 
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
     }

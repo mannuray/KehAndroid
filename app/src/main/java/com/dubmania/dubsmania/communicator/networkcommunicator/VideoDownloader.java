@@ -1,31 +1,23 @@
 package com.dubmania.dubsmania.communicator.networkcommunicator;
 
-import android.content.Context;
-
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by rat on 8/9/2015.
  */
 public class VideoDownloader {
-    File mVideo;
-    Context mContext;
+    File mVideoFile;
     VideoDownloaderCallback mCallback;
 
-    public VideoDownloader(Context context) {
-        mContext = context;
-    }
-
-    public void downloadVideo(String url, Long id, VideoDownloaderCallback mCallback) throws IOException {
+    public void downloadVideo(String url, Long id, File mFile, VideoDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        mVideo = File.createTempFile(id.toString(), "mp4", mContext.getCacheDir());
-        DubsmaniaHttpClient.get(url, new RequestParams("id", id.toString()), new VideoDataDownloaderHandler(mVideo));
+        mVideoFile = mFile;
+        DubsmaniaHttpClient.get(url, new RequestParams("id", id.toString()), new VideoDataDownloaderHandler(mVideoFile));
     }
 
     private class VideoDataDownloaderHandler extends FileAsyncHttpResponseHandler {

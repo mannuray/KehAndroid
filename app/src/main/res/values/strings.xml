@@ -118,5 +118,10 @@
     <string name="password_reset_message">Please enter the email of your Dubsmania account below</string>
     <string name="password_reset_button_text">Reset Password</string>
 
+    <!-- activity my account strings -->
+    <string name="my_account_message">you are loggend in as </string>
+    <string name="my_account_logout_button_text">Logout</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
 
 </resources>

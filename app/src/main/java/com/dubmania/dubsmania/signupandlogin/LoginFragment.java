@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.signupandlogin;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,18 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.LoginFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.LoginSetEmailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
 import com.squareup.otto.Subscribe;
 
 public class LoginFragment extends Fragment {
 
-    Button mLogin;
-    EditText mEmail;
-    EditText mPassword;
-    TextView mForgot;
+    private Button mLogin;
+    private EditText mEmail;
+    private EditText mPassword;
+    private TextView mForgot;
+    private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,21 +40,22 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         mLogin = (Button)view.findViewById(R.id.next);
         mEmail = (EditText) view.findViewById(R.id.login_email);
+        mEmail.setText(mStoreEmail);
         mPassword = (EditText) view.findViewById(R.id.login_password);
         mForgot = (TextView) view.findViewById(R.id.login_forgot_password);
         mPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPassword.getText().length() > 8)
+                if (mPassword.getText().length() >= 4)
                     mLogin.setVisibility(View.VISIBLE);
             }
         });
         mForgot.setOnClickListener(new OnClickListnerEvent<>(new LoginFragmentChangeEvent(1)));
-        mLogin.setVisibility(View.INVISIBLE);
+        //mLogin.setVisibility(View.INVISIBLE);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusProvider.getInstance().post(new LoginEvent(mEmail.getText().toString(), mPassword.getText().toString()));
+                BusProvider.getInstance().post(new LoginEvent(mEmail.getText().toString().split("@")[0], mPassword.getText().toString()));// TO DO change it login from email
             }
         });
         return view;
@@ -61,6 +65,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);
+        Log.d("otto event", "logint frgament crated");
     }
 
     @Override
@@ -70,7 +75,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Subscribe
-    public void onLoginSetEmailEvent(LoginSetEmailEvent event) {
-        mEmail.setText(event.getEmail());
+    public void onSignupInfoEvent(SignupInfoEvent event) {
+        mStoreEmail = event.getEmail();
     }
 }

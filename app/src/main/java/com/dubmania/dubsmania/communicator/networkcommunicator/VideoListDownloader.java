@@ -25,10 +25,12 @@ public class VideoListDownloader {
     private Integer user;
     private int toProcess;
     private int proccessing;
+    private boolean mProcessFav = false;
 
-    public void downloadVideos(String url, RequestParams params,VideoListDownloaderCallback mCallback, Integer user) {
+    public void downloadVideos(String url, RequestParams params,VideoListDownloaderCallback mCallback, Integer user, boolean fav) {
         this.mCallback = mCallback;
         this.user = user;
+        mProcessFav = fav;
         mVideoItemMap = new HashMap<>();
         DubsmaniaHttpClient.get(url, params, new VideoDataDownloaderHandler());
     }
@@ -83,7 +85,8 @@ public class VideoListDownloader {
                     Log.d("json error name", video.getString("name"));
                     mVideoItemMap.put(id, new VideoListItem(id, video.getString("name"), video.getString("user"), video.getString("desc")));
                 }
-                downloadVideosFav();
+                if(mProcessFav)
+                    downloadVideosFav();
                 downloadVideoIcons();
             } catch (JSONException e) {
                 e.printStackTrace();

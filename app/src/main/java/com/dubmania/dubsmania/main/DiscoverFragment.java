@@ -34,6 +34,7 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
+    private boolean mVisibleFirstTime = true;
 
     private ProgressBar spinner;
 
@@ -86,8 +87,9 @@ public class DiscoverFragment extends Fragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible) {
+        if (visible && mVisibleFirstTime) {
             BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(mRecyclerView.getId(), 0));
+            mVisibleFirstTime = false;
         }
     }
 

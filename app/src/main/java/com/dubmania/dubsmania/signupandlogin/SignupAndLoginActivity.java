@@ -1,11 +1,14 @@
 package com.dubmania.dubsmania.signupandlogin;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,17 +20,19 @@ import com.dubmania.dubsmania.communicator.eventbus.EmailExistEvent;
 import com.dubmania.dubsmania.communicator.eventbus.FragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.LoginFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.LoginSetEmailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.PasswordResetEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetDobEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetUsernameEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SignupFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SignupPasswordEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.misc.ConstantsStore;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
 import org.apache.http.Header;
@@ -120,10 +125,8 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, getFragment(1))
-                        .commit();
-                BusProvider.getInstance().post(new LoginSetEmailEvent(signUpInfo.getEmail()));
+                changeFragment(1);
+                Log.d("otto event", "seind set email evnte ");
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -246,8 +249,8 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onLoginEvent(LoginEvent event) {
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
-        params.add("useremail", signUpInfo.getEmail());
-        params.add("mPassword", signUpInfo.getPassword());
+        params.add("username", event.getEmail());
+        params.add("password", event.getPassword());
         DubsmaniaHttpClient.get("userservice/login", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
@@ -256,6 +259,14 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                     if (!response.getBoolean("result")) {
                         Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
                         return;
+                    }
+                    else {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        //editor.putString(ConstantsStore.USER_NAME_KEY, response.getString("username")); put after result modification
+                        //editor.putString(ConstantsStore.USER_EMAL_KEY, event.getEmail());
+                        editor.putBoolean(ConstantsStore.USER_LOGIN_KEY, true);
+                        editor.commit();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -293,5 +304,9 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         });
     }
 
+    @Produce
+    public SignupInfoEvent produceSignupInfo() {
+        return new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob());
+    }
 
 }

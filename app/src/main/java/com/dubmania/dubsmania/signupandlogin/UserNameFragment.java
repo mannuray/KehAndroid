@@ -16,6 +16,7 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SetUsernameEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SignupFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.squareup.otto.Subscribe;
 
@@ -23,7 +24,7 @@ public class UserNameFragment extends Fragment {
 
     private Button next;
     private EditText mUsername;
-    private boolean setUserNameFirst = true;
+    private String mUsernameStore;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,11 +62,8 @@ public class UserNameFragment extends Fragment {
     }
 
     @Subscribe
-    public void onSetUsernameEvent(SetUsernameEvent event) { // will laddcheckk username first time two rquee
-        if (setUserNameFirst) {
-            mUsername.setText(event.getUsername());
-            setUserNameFirst = false;
-        }
+    public void onSignupInfoEvent(SignupInfoEvent event) {
+        mUsernameStore = event.getUsername();
     }
 
     @Subscribe

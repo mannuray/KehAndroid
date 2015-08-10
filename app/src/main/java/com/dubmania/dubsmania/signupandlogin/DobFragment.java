@@ -1,6 +1,5 @@
 package com.dubmania.dubsmania.signupandlogin;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.util.Linkify;
@@ -74,17 +73,6 @@ public class DobFragment extends Fragment {
             }
         });
         return rootView;
-    }
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }
 
