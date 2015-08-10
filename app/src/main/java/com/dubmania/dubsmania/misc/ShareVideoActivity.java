@@ -1,24 +1,33 @@
 package com.dubmania.dubsmania.misc;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.dubmania.dubsmania.R;
 
-public class RecordVideoActivity extends ActionBarActivity {
+import java.io.File;
+
+public class ShareVideoActivity extends ActionBarActivity {
+
+    private File mVideoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_video);
+        setContentView(R.layout.activity_share_video);
+
+        Intent intent = getIntent();
+        mVideoFile = new File(intent.getStringExtra(ConstantsStore.SHARE_FILE_PATH));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_record_video, menu);
+        getMenuInflater().inflate(R.menu.menu_share_video, menu);
         return true;
     }
 
@@ -37,5 +46,18 @@ public class RecordVideoActivity extends ActionBarActivity {
         */
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void shareWhatsapp(View v) {
+
+    }
+
+    public void shareMessenger(View v) {
+
+    }
+
+    public void saveToGallery(View v) {
+        VideoSharer.saveInGallery(this, mVideoFile);
+        finish();
     }
 }

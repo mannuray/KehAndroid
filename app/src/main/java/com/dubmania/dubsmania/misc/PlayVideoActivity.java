@@ -1,228 +1,68 @@
 package com.dubmania.dubsmania.misc;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.misc.util.SystemUiHider;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
-public class PlayVideoActivity extends Activity {
+public class PlayVideoActivity extends AppCompatActivity {
 
-    private VideoView myVideoView;
-    private int position = 0;
-    private ProgressDialog progressDialog;
-    private MediaController mediaControls;
-    private String uri;
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * If set, will toggle the system UI visibility upon interaction. Otherwise,
-     * will show the system UI visibility upon interaction.
-     */
-    private static final boolean TOGGLE_ON_CLICK = true;
-
-    /**
-     * The flags to pass to {@link SystemUiHider#getInstance}.
-     */
-    private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-    /**
-     * The instance of the {@link SystemUiHider} for this activity.
-     */
-    private SystemUiHider mSystemUiHider;
+    private boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_play_video);
 
         Intent intent = getIntent();
-        uri = intent.getStringExtra("URI");
-
-
-        final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final View contentView = findViewById(R.id.fullscreen_content);
-
-        // Set up an instance of SystemUiHider to control the system UI for
-        // this activity.
-        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
-        mSystemUiHider.setup();
-        mSystemUiHider
-                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-                    // Cached values.
-                    int mControlsHeight;
-                    int mShortAnimTime;
-
-                    @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-                    public void onVisibilityChange(boolean visible) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-                            // If the ViewPropertyAnimator API is available
-                            // (Honeycomb MR2 and later), use it to animate the
-                            // in-layout UI controls at the bottom of the
-                            // screen.
-                            if (mControlsHeight == 0) {
-                                mControlsHeight = controlsView.getHeight();
-                            }
-                            if (mShortAnimTime == 0) {
-                                mShortAnimTime = getResources().getInteger(
-                                        android.R.integer.config_shortAnimTime);
-                            }
-                            controlsView.animate()
-                                    .translationY(visible ? 0 : mControlsHeight)
-                                    .setDuration(mShortAnimTime);
-                        } else {
-                            // If the ViewPropertyAnimator APIs aren't
-                            // available, simply show or hide the in-layout UI
-                            // controls.
-                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-                        }
-
-                        if (visible && AUTO_HIDE) {
-                            // Schedule a hide().
-                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                        }
-                    }
-                });
-
-        // Set up the user interaction to manually show or hide the system UI.
-        contentView.setOnClickListener(new View.OnClickListener() {
+        Uri mUri = Uri.parse(intent.getStringExtra(ConstantsStore.SHARE_FILE_PATH));
+        final VideoView mVideoView = (VideoView) findViewById(R.id.play_video_view);
+        mVideoView.setVideoURI(mUri);
+        mVideoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                if (TOGGLE_ON_CLICK) {
-                    mSystemUiHider.toggle();
-                } else {
-                    mSystemUiHider.show();
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!isPlaying) {
+                    mVideoView.start();
+                    isPlaying = true;
+                    Toast.makeText(getApplicationContext(),"stng llabbae ", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
-
-        if (mediaControls == null) {
-            mediaControls = new MediaController(this);
-        }
-
-        //initialize the VideoView
-        myVideoView = (VideoView) findViewById(R.id.fullscreen_content);
-
-        // create a progress bar while the video file is loading
-        progressDialog = new ProgressDialog(this);
-        // set a title for the progress bar
-        progressDialog.setTitle("JavaCodeGeeks Android Video View Example");
-        // set a message for the progress bar
-        progressDialog.setMessage("Loading...");
-        //set the progress bar not cancelable on users' touch
-        progressDialog.setCancelable(false);
-        // show the progress bar
-        progressDialog.show();
-
-        try {
-            //set the media controller in the VideoView
-            myVideoView.setMediaController(mediaControls);
-
-            //set the uri of the video to be played
-            myVideoView.setVideoURI(Uri.parse(uri));
-            myVideoView.start();
-            Log.e("Error", "Startingc video " + uri);
-
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        myVideoView.requestFocus();
-        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
-        myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                // close the progress bar and play the video
-                progressDialog.dismiss();
-                //if we have a position on savedInstanceState, the video playback should start from here
-                myVideoView.seekTo(position);
-                if (position == 0) {
-                    myVideoView.start();
-                } else {
-                    //if we come from a resumed activity, video playback will be paused
-                    myVideoView.pause();
+                else {
+                    mVideoView.pause();
+                    isPlaying = false;
                 }
+                return false;
             }
         });
 
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_play_video, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
-    };
 
-    Handler mHideHandler = new Handler();
-    Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mSystemUiHider.hide();
-        }
-    };
-
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+        return super.onOptionsItemSelected(item);
     }
 }

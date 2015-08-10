@@ -20,8 +20,6 @@ android {
 }
 
 dependencies {
-    
-
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-v13:22.2.1'
@@ -31,4 +29,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.loopj.android:android-async-http:1.4.8'
     compile 'io.realm:realm-android:0.72.0'
+    compile 'com.googlecode.mp4parser:isoparser:1.0.6'
 }

@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/create_dub_play_original"
-            android:text="Play orig"
+            android:text="Pl o"
             android:gravity="center_horizontal"
             android:onClick="onPlayVideoOrigClick"/>
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/create_dub_record"
-            android:text="record"
+            android:text="rec"
             android:gravity="center_horizontal"
             android:onClick="onRecordVideoClick"/>
 
@@ -50,9 +50,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/create_dub_play_recorded"
-            android:text="play recorded"
+            android:text="pl r"
             android:gravity="center_horizontal"
             android:onClick="onPlayVideoRecordedClick"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_dub_done"
+            android:text="dn"
+            android:gravity="center_horizontal"
+            android:onClick="onDoneClick"/>
 
     </LinearLayout>
 </RelativeLayout>

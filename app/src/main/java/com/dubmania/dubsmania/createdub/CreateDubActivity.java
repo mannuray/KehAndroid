@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,9 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.dubsmania.misc.AudioRecorder;
+import com.dubmania.dubsmania.misc.ConstantsStore;
+import com.dubmania.dubsmania.misc.ShareVideoActivity;
+import com.dubmania.dubsmania.misc.VideoPreparer;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +39,6 @@ public class CreateDubActivity extends AppCompatActivity {
     private Button mPlayVideoOringinal;
     private Button mRecord;
     private Button mPlayVideoRecorded;
-    private ProgressBar mProgressBar;
 
     private boolean isRecording = false;
     private boolean isRecordedAudiaAvailable = false;
@@ -53,12 +56,12 @@ public class CreateDubActivity extends AppCompatActivity {
         mRecord.setEnabled(false);
         mPlayVideoRecorded = (Button) findViewById(R.id.create_dub_play_recorded);
         mPlayVideoRecorded.setEnabled(false);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
 
         Intent intent = getIntent();
-        Long id = intent.getLongExtra("VIDEO_ID", new Long(0));
+        Long id = intent.getLongExtra(ConstantsStore.VIDEO_ID, Long.valueOf(0));
 
         try {
             mVideoFile = File.createTempFile(id.toString() + "_video", "mp4", getApplicationContext().getCacheDir());
@@ -68,7 +71,7 @@ public class CreateDubActivity extends AppCompatActivity {
         }
 
         VideoDownloader mVideoDownloader = new VideoDownloader();
-        mVideoDownloader.downloadVideo("searchservice/getvideo", id, mVideoFile, new VideoDownloaderCallback() {
+        mVideoDownloader.downloadVideo(ConstantsStore.DOWNLOAD_VIDEO_URL, id, mVideoFile, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
                 //mVideoFile = mFile;
@@ -144,12 +147,13 @@ public class CreateDubActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        /*
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
+        } */
 
         return super.onOptionsItemSelected(item);
     }
@@ -181,5 +185,22 @@ public class CreateDubActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onDoneClick(View v) {
+        VideoPreparer mPreparer = new VideoPreparer();
+        File outputDir  = new File(Environment.getExternalStoragePublicDirectory("dub"), Environment.DIRECTORY_MOVIES);
+        /*if (!outputDir.mkdirs()) {
+            Log.e("Error", "Directory not created");
+        }*/
+
+        File outputFile = new File(outputDir.getAbsolutePath(), "output.mp4");
+
+        mPreparer.prepareVideo(mAudioFile, mVideoFile, outputFile);
+
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(ConstantsStore.SHARE_FILE_PATH, outputFile.getAbsolutePath());
+        startActivity(intent);
     }
 }

@@ -28,5 +28,6 @@
         android:layout_height="75dp"
         android:layout_margin="20dp"
         android:text="New Button"
-        android:id="@+id/add_video_board_add_button" />
+        android:id="@+id/add_video_board_add_button"
+        android:onClick="addVideoBroard"/>
 </LinearLayout>

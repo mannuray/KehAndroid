@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
+import com.dubmania.dubsmania.misc.ConstantsStore;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -227,7 +231,7 @@ public class MainActivity extends ActionBarActivity
     @Subscribe
     public void onCreateDubEvent(CreateDubEvent event) {
         Intent intent = new Intent(this, CreateDubActivity.class);
-        intent.putExtra("VIDEO_ID", event.getId());
+        intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
         startActivity(intent);
     }
 

@@ -23,9 +23,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 public class ImportVideoActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
     private ImportVideoAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<ImportVideoListItem> mVideoItemList;
 
     Cursor cursor;
@@ -35,11 +33,10 @@ public class ImportVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_video);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.import_video_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.import_video_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mVideoItemList = new ArrayList<ImportVideoListItem>();
+        mVideoItemList = new ArrayList<>();
         populateVideo();
 
         mAdapter = new ImportVideoAdapter(mVideoItemList);
@@ -71,7 +68,7 @@ public class ImportVideoActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -86,14 +83,14 @@ public class ImportVideoActivity extends AppCompatActivity {
     }
 
     private void populateVideo() {
+        /*
         String[] thumbColumns = { MediaStore.Video.Thumbnails.DATA,
-                MediaStore.Video.Thumbnails.VIDEO_ID };
+                MediaStore.Video.Thumbnails.VIDEO_ID }; */
 
         String[] mediaColumns = { MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA, MediaStore.Video.Media.TITLE,
                 MediaStore.Video.Media.MIME_TYPE };
 
-        String thumbnail;
         cursor = managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 mediaColumns, null, null, null);
         if (cursor.moveToFirst()) {
@@ -109,7 +106,7 @@ public class ImportVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onImportVideoItemListEvent(ImportVideoItemListEvent event) {
         Intent intent = new Intent(this, PlayVideoActivity.class);
-        intent.putExtra("URI", event.getUri());
+        intent.putExtra(ConstantsStore.SHARE_FILE_PATH, event.getUri());
         startActivity(intent);
     }
 }
