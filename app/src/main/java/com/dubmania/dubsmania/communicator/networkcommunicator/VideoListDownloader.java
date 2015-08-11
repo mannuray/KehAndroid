@@ -29,6 +29,38 @@ public class VideoListDownloader {
     private int processing;
     private RequestParams mParams;
 
+    public void downloadTrendingVideos(String region, Integer start, Integer end, String user, VideoListDownloaderCallback callback){
+        RequestParams params = new RequestParams();
+        params.add(ConstantsStore.PARAM_REGION, region);
+        params.add(ConstantsStore.PARAM_START, String.valueOf(start));
+        params.add(ConstantsStore.PARAM_END, String.valueOf(end));
+        params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
+
+        downloadVideos(ConstantsStore.GET_TRENDING_VIDEOS_URL, params, callback);
+    }
+
+    public void downloadDiscoverVideos(Integer page, String user, VideoListDownloaderCallback callback) {
+        RequestParams params = new RequestParams();
+        params.add(ConstantsStore.PARAM_START, String.valueOf(page * 10));
+        params.add(ConstantsStore.PARAM_END, String.valueOf((page + 1) * 10));
+        params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
+
+        downloadVideos(ConstantsStore.URL_GET_DISCOVER_VIDEOS, params, callback);
+    }
+
+    public void downloadBoardVideo(Long id, String user, VideoListDownloaderCallback callback) {
+        RequestParams params = new RequestParams();
+        params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(id));
+        params.add(ConstantsStore.PARAM_USER, user); // change this param for current user
+
+        downloadVideos(ConstantsStore.URL_GET_BOARD_VIDEOS, params, callback);
+    }
+
+    public void searchVideos(String tag, VideoListDownloaderCallback callback) {
+        downloadVideos(ConstantsStore.URL_SEARCH_VIDEOS, new RequestParams(ConstantsStore.PARAM_TAGS, tag), callback);
+
+    }
+
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
         mVideoItemMap = new HashMap<>();

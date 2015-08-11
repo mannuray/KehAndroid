@@ -65,7 +65,7 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
                 VideoViewHolderFactory.bindViewHolder(mVideoList.get(position), holder, position);
                 return;
             case 1:
-                VideoBoardViewHolderFactory.bindViewHolder(mVideoBoardList.get(position - numberOfVedios), holder, position);
+                VideoBoardViewHolderFactory.bindViewHolder(mVideoBoardList.get(position - numberOfVedios), holder);
         }
     }
 

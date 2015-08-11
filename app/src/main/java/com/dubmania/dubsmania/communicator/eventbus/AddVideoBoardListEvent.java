@@ -2,15 +2,17 @@ package com.dubmania.dubsmania.communicator.eventbus;
 
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 
-import java.util.ArrayList;
-
 /**
  * Created by rat on 8/2/2015.
  */
 public class AddVideoBoardListEvent {
-    public ArrayList<VideoBoardListItem> mVideoItemList;
+    private VideoBoardListItem mVideoBoard;
 
-    public AddVideoBoardListEvent(ArrayList<VideoBoardListItem> mVideoItemList) {
-        this.mVideoItemList = mVideoItemList;
+    public AddVideoBoardListEvent(VideoBoardListItem mVideoBoard) {
+        this.mVideoBoard = mVideoBoard;
+    }
+
+    public VideoBoardListItem getVideoBoard() {
+        return mVideoBoard;
     }
 }

@@ -12,10 +12,7 @@ import android.widget.GridView;
 
 import com.dubmania.dubsmania.Adapters.ImageAdapter;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
-import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardCreator;
 
 import java.util.ArrayList;
 
@@ -74,9 +71,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     }
 
     public void addVideoBroard(View v) {
-        RequestParams params = new RequestParams();
-        params.add("boardname", mBoardName.getText().toString());
-        params.add("iconid", String.valueOf(mIconId));
-        DubsmaniaHttpClient.get(ConstantsStore.ADD_VIDEO_BOARD_URL, params, new JsonHttpResponseHandler());
+        new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId);
+        finish();
     }
 }

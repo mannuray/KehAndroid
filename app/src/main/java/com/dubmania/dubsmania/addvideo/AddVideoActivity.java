@@ -1,13 +1,13 @@
 package com.dubmania.dubsmania.addvideo;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 
-public class AddVideoActivity extends ActionBarActivity {
+public class AddVideoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class AddVideoActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_sound, menu);
+        getMenuInflater().inflate(R.menu.menu_add_video, menu);
         return true;
     }
 
@@ -27,13 +27,14 @@ public class AddVideoActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_add_video) {
+
             return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }

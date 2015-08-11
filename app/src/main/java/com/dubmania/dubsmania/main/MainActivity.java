@@ -15,18 +15,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.AddTrendingBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.VideoBoardClickedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoFavriouteChangedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardDownloaderCallback;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardsDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoFavoriteMarker;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
@@ -34,9 +39,9 @@ import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
+import com.dubmania.dubsmania.misc.VideoBoardActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.PersistentCookieStore;
-import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -186,7 +191,6 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    //message  sscribed
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
         VideoItemMenuDialog dialog = new VideoItemMenuDialog();
@@ -200,21 +204,25 @@ public class MainActivity extends ActionBarActivity
 
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
+        new VideoListDownloader().downloadDiscoverVideos(event.getCurrent_page(), "mannuk", new VideoListDownloaderCallback() {
+            @Override
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
+                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(videos));
+            }
 
-        ArrayList<VideoListItem> mVideoItemList = new ArrayList<>();
-        BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
+            @Override
+            public void onVideosDownloadFailure() {
+
+            }
+        });
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
 
     }
 
     @Subscribe
     public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
-        RequestParams params = new RequestParams();
-        params.add("start", String.valueOf(0));
-        params.add("end", String.valueOf(4));
-        params.add("region", "India");
-        params.add(ConstantsStore.PARAM_USER, "mannuk");// TO DO get user name
-        mTrendingVideosDownloader.downloadVideos(ConstantsStore.GET_TRENDING_VIDEOS_URL, params, new VideoListDownloaderCallback() {
+        // TO DO get user name
+        mTrendingVideosDownloader.downloadTrendingVideos("India", 0, 4, "mannuk", new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
@@ -222,6 +230,18 @@ public class MainActivity extends ActionBarActivity
 
             @Override
             public void onVideosDownloadFailure() {
+
+            }
+        });
+
+        new VideoBoardsDownloader().getTrendingVideo("India", 0, 15, new VideoBoardDownloaderCallback() {
+            @Override
+            public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
+                BusProvider.getInstance().post(new AddTrendingBoardListEvent(boards));
+            }
+
+            @Override
+            public void onVideosBoardsDownloadFailure() {
 
             }
         });
@@ -241,13 +261,25 @@ public class MainActivity extends ActionBarActivity
         new VideoFavoriteMarker().markVavrioute(event.getId(), event.ismFavrioute());
     }
 
+    @Subscribe
+    public void onVideoBoardClickedEvent(VideoBoardClickedEvent event) {
+        Intent intent = new Intent(this, VideoBoardActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_BOARD_ID, event.getId());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
+        startActivity(intent);
+    }
+
     // private functions
     private AlertDialog getShareAlertDialog(String[] items) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.share_alert_tite);
         //builder.setCancelable(true);
-        builder.setNegativeButton(R.string.share_alert_cancel, (dialog, which) -> {
-            shareDialog.dismiss();
+        builder.setNegativeButton(R.string.share_alert_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shareDialog.dismiss();
+            }
         });
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {

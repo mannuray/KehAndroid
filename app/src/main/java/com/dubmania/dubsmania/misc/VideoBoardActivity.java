@@ -21,7 +21,6 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
     private RecyclerView.Adapter mAdapter;
 
+    private Long mBoardId;
     private String mBoardName;
     private String mUserName;
 
@@ -43,8 +43,9 @@ public class VideoBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_board);
 
         Intent intent = getIntent();
+        mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, Long.valueOf(0));
         mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
-        mUserName = intent.getStringExtra(ConstantsStore.INTENT_USER_NAME);
+        mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME);
 
         spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
         spinner.setVisibility(View.VISIBLE);
@@ -92,12 +93,7 @@ public class VideoBoardActivity extends AppCompatActivity {
     }
 
     private void populateData() {
-        VideoListDownloader downloader = new VideoListDownloader();
-
-        RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_BOARD_NAME, mBoardName);
-        params.add(ConstantsStore.PARAM_USER, mUserName); // change this param for current user
-        downloader.downloadVideos(ConstantsStore.GET_BOARD_VIDEOS_URL, params, new VideoListDownloaderCallback() {
+        new VideoListDownloader().downloadBoardVideo(mBoardId, "mannuk", new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 mVideoItemList.addAll(videos);

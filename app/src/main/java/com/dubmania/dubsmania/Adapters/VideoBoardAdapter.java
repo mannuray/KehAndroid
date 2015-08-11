@@ -28,7 +28,8 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.video_board_item_list_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        VideoBoardViewHolder vh = new VideoBoardViewHolder(v);
+        VideoBoardViewHolder vh;
+        vh = new VideoBoardViewHolder(v);
         return vh;
     }
 
@@ -38,7 +39,7 @@ public class VideoBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         //holder.mTextView.setText(mDataset[position]);
-        VideoBoardViewHolderFactory.bindViewHolder(mDataset.get(position), holder, position);
+        VideoBoardViewHolderFactory.bindViewHolder(mDataset.get(position), holder);
 
     }
 

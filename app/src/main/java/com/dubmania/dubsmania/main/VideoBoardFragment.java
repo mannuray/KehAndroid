@@ -16,16 +16,16 @@ import android.widget.ImageButton;
 import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.eventbus.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class VideoBoardFragment extends Fragment {
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
 
     // TO Do remove it after experimenth
@@ -54,18 +54,17 @@ public class VideoBoardFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
-        mLayoutManager = new LinearLayoutManager(c);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
 
         // specify an adapter (see also next example)
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoBoardItemList = new ArrayList<VideoBoardListItem>(Arrays.asList(
-                new VideoBoardListItem("My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
-                new VideoBoardListItem("My Favorites", "me", navMenuIcons.getResourceId(0, -1))
-        ));
+        mVideoBoardItemList = new ArrayList<>((Arrays.asList(
+                new VideoBoardListItem(Long.valueOf(1), "My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
+                new VideoBoardListItem(Long.valueOf(2), "My Favorites", "me", navMenuIcons.getResourceId(0, -1))
+        )));
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -82,5 +81,11 @@ public class VideoBoardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
+        mVideoBoardItemList.add(event.getVideoBoard());
+        mAdapter.notifyDataSetChanged();
     }
 }

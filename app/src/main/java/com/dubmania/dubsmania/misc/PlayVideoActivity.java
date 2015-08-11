@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
@@ -33,7 +32,6 @@ public class PlayVideoActivity extends AppCompatActivity {
                 if (!isPlaying) {
                     mVideoView.start();
                     isPlaying = true;
-                    Toast.makeText(getApplicationContext(),"stng llabbae ", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mVideoView.pause();
@@ -60,7 +58,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
+            // code for share
             return true;
         }
 
