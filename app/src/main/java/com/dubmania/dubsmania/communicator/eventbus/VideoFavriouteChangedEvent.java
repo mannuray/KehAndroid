@@ -5,18 +5,18 @@ package com.dubmania.dubsmania.communicator.eventbus;
  */
 public class VideoFavriouteChangedEvent {
     private boolean mFavrioute;
-    private int position;
+    private Long mId;
 
-    public VideoFavriouteChangedEvent(boolean mFavrioute, int position) {
+    public VideoFavriouteChangedEvent(boolean mFavrioute, Long id) {
         this.mFavrioute = mFavrioute;
-        this.position = position;
+        this.mId = id;
     }
 
     public boolean ismFavrioute() {
         return mFavrioute;
     }
 
-    public int getPosition() {
-        return position;
+    public Long getId() {
+        return mId;
     }
 }

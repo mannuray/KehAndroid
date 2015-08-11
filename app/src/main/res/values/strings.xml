@@ -123,6 +123,7 @@
     <string name="my_account_logout_button_text">Logout</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_share_video">ShareVideoActivity</string>
+    <string name="title_activity_video_board">VideoBoardActivity</string>
 
 
 </resources>

@@ -49,7 +49,7 @@ public class LanguageFragment extends Fragment implements AbsListView.OnItemClic
         // TODO: Change Adapter to display your content
         setHasOptionsMenu(true);
         String[] values = new String[] { "English(USA)"}; // TO DO get it from real list
-        mAdapter = new ArrayAdapter<String>(getActivity(),
+        mAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
     }
 
@@ -60,7 +60,7 @@ public class LanguageFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -92,7 +92,6 @@ public class LanguageFragment extends Fragment implements AbsListView.OnItemClic
         /*if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }*/
     }
 

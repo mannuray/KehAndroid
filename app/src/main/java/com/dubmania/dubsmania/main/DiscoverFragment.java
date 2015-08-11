@@ -32,11 +32,9 @@ import java.util.ArrayList;
 public class DiscoverFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
-
-    private ProgressBar spinner;
+    ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,7 +59,7 @@ public class DiscoverFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
 
-        mVideoItemList = new ArrayList<VideoListItem>();
+        mVideoItemList = new ArrayList<>();
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
@@ -97,5 +95,6 @@ public class DiscoverFragment extends Fragment {
     public void onAddDiscoverVideoItemListEvent(AddDiscoverVideoItemListEvent event) {
         mVideoItemList.addAll(event.mVideoItemList);
         mAdapter.notifyDataSetChanged();
+        spinner.setVisibility(View.GONE);
     }
 }

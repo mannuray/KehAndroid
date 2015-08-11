@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.misc.ConstantsStore;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.misc.MyAccountActivity;
 import com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity;
 

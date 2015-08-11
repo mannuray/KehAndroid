@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.misc;
+package com.dubmania.dubsmania.utils;
 
 import android.util.Log;
 

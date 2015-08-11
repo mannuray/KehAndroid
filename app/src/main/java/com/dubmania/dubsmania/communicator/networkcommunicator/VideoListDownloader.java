@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.dubmania.dubsmania.Adapters.VideoListItem;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -22,16 +23,19 @@ import java.util.Map;
 public class VideoListDownloader {
     private Map<Long, VideoListItem> mVideoItemMap;
     private VideoListDownloaderCallback mCallback;
-    private Integer user;
-    private int toProcess;
-    private int proccessing;
-    private boolean mProcessFav = false;
 
-    public void downloadVideos(String url, RequestParams params,VideoListDownloaderCallback mCallback, Integer user, boolean fav) {
+    private boolean user = false;
+    private int toProcess;
+    private int processing;
+    private RequestParams mParams;
+
+    public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        this.user = user;
-        mProcessFav = fav;
         mVideoItemMap = new HashMap<>();
+        if(params.has("user")) {
+            user = true;
+            mParams = params;
+        }
         DubsmaniaHttpClient.get(url, params, new VideoDataDownloaderHandler());
     }
 
@@ -47,21 +51,21 @@ public class VideoListDownloader {
         entity.put("id", videos);
         DubsmaniaHttpClient.post("searchservice/getfav", new RequestParams("data", entity.toString()), new VideoDataDownloaderHandler());
         */
-        DubsmaniaHttpClient.get("searchservice/getfav", new RequestParams("user", "mannuk"), new VideoFavDownloader());
+        DubsmaniaHttpClient.get(ConstantsStore.GET_FAV_URL, mParams, new VideoFavDownloader());
     }
 
     private void downloadVideoIcons() {
         toProcess = mVideoItemMap.size();
         for (Map.Entry<Long, VideoListItem> entry : mVideoItemMap.entrySet())
         {
-            DubsmaniaHttpClient.get("searchservice/geticon", new RequestParams("id", entry.getKey().toString()), new VideoIconDownloader(entry.getKey()));
+            DubsmaniaHttpClient.get(ConstantsStore.GET_ICON_URL, new RequestParams("id", entry.getKey().toString()), new VideoIconDownloader(entry.getKey()));
         }
     }
 
     private void processedIcon() {
-        proccessing++;
-        if(toProcess == proccessing) {
-            ArrayList<VideoListItem> videos = new ArrayList<VideoListItem>();
+        processing++;
+        if(toProcess == processing) {
+            ArrayList<VideoListItem> videos = new ArrayList<>();
             for (Map.Entry<Long, VideoListItem> entry : mVideoItemMap.entrySet())
             {
                 videos.add(entry.getValue());
@@ -80,12 +84,12 @@ public class VideoListDownloader {
                 toProcess = videoList.length();
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject video = videoList.getJSONObject(i);
-                    Long id = new Long(video.getString("id"));
+                    Long id = Long.valueOf(video.getString("id"));
                     Log.d("json error id", id.toString());
                     Log.d("json error name", video.getString("name"));
                     mVideoItemMap.put(id, new VideoListItem(id, video.getString("name"), video.getString("user"), video.getString("desc")));
                 }
-                if(mProcessFav)
+                if(user)
                     downloadVideosFav();
                 downloadVideoIcons();
             } catch (JSONException e) {
@@ -102,7 +106,7 @@ public class VideoListDownloader {
                 JSONArray videoList = response.getJSONArray("video_fav_list");
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject video = videoList.getJSONObject(i);
-                    Long id = new Long(video.getString("id"));
+                    Long id = Long.valueOf(video.getString("id"));
                     Log.d("json error id fav", id.toString());
                     mVideoItemMap.get(id).setFavourite(true);
                 }

@@ -25,9 +25,7 @@ import java.util.ArrayList;
 
 public class TrendingFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<VideoListItem> mVideoItemList;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
@@ -53,16 +51,15 @@ public class TrendingFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_trending, container, false);
         final FragmentActivity c = getActivity();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
-        mLayoutManager = new LinearLayoutManager(c);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
 
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        mVideoItemList = new ArrayList<VideoListItem>();
+        mVideoItemList = new ArrayList<>();
 
-        mVideoBoardItemList = new ArrayList<VideoBoardListItem>();
+        mVideoBoardItemList = new ArrayList<>();
         mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 

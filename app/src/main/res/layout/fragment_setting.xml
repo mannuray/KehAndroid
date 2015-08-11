@@ -261,8 +261,7 @@
                     android:layout_height="40dp"
                     android:text="logout"
                     android:textColor="@android:color/holo_blue_dark"
-                    android:clickable="true"
-                    android:onClick="logout"/>
+                    android:clickable="true"/>
             </LinearLayout>
 
             <TextView
@@ -270,7 +269,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="1.2.4"
-                android:onClick="logout"
                 android:gravity="center_horizontal"/>
 
         </LinearLayout>

@@ -6,11 +6,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -52,7 +54,7 @@ public class MyAccountActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onLogoutClick() {
+    public void onLogoutClick(View v) {
         DubsmaniaHttpClient.get(ConstantsStore.USER_LOGOUT_URL, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {

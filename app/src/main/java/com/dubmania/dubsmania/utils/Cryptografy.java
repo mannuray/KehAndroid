@@ -1,6 +1,4 @@
-package com.dubmania.dubsmania.misc;
-
-import android.util.Log;
+package com.dubmania.dubsmania.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

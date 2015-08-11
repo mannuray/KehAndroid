@@ -18,10 +18,10 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
-import com.dubmania.dubsmania.misc.AudioRecorder;
-import com.dubmania.dubsmania.misc.ConstantsStore;
+import com.dubmania.dubsmania.utils.AudioRecorder;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.misc.ShareVideoActivity;
-import com.dubmania.dubsmania.misc.VideoPreparer;
+import com.dubmania.dubsmania.utils.VideoPreparer;
 
 import java.io.File;
 import java.io.IOException;

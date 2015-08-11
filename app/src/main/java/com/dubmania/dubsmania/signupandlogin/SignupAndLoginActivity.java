@@ -28,7 +28,7 @@ import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.SignupPasswordEvent;
 import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
-import com.dubmania.dubsmania.misc.ConstantsStore;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -146,7 +146,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
     /*@Subscribe
     public void onFragmentCallbackEvent(FragmentChangeEvent event) {
-        if (event.getPosition() == 4) {
+        if (event.getId() == 4) {
             Realm realm = Realm.getInstance(getApplicationContext());
             realm.beginTransaction();
             SignUpInfo signUp = realm.createObject(SignUpInfo.class);

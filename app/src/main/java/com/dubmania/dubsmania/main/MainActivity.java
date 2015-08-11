@@ -2,7 +2,6 @@ package com.dubmania.dubsmania.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,15 +24,17 @@ import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.VideoFavriouteChangedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoFavoriteMarker;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
-import com.dubmania.dubsmania.misc.ConstantsStore;
 import com.dubmania.dubsmania.misc.SearchActivity;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
@@ -55,21 +56,20 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private AlertDialog shareDialog;
-    private String[] mMessengerList;
     private VideoListDownloader mTrendingVideosDownloader;
-    private PersistentCookieStore myCookieStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myCookieStore = new PersistentCookieStore(this);
+        PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
         mTrendingVideosDownloader = new VideoListDownloader();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        mMessengerList = getResources()
+        String[] mMessengerList = getResources()
                 .getStringArray(R.array.messenger_list);
         shareDialog = getShareAlertDialog(mMessengerList);
 
@@ -201,7 +201,7 @@ public class MainActivity extends ActionBarActivity
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
 
-        ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>();
+        ArrayList<VideoListItem> mVideoItemList = new ArrayList<>();
         BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
 
@@ -213,7 +213,8 @@ public class MainActivity extends ActionBarActivity
         params.add("start", String.valueOf(0));
         params.add("end", String.valueOf(4));
         params.add("region", "India");
-        mTrendingVideosDownloader.downloadVideos("searchservice/gettrendingvideos", params, new VideoListDownloaderCallback() {
+        params.add(ConstantsStore.PARAM_USER, "mannuk");// TO DO get user name
+        mTrendingVideosDownloader.downloadVideos(ConstantsStore.GET_TRENDING_VIDEOS_URL, params, new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
@@ -223,7 +224,7 @@ public class MainActivity extends ActionBarActivity
             public void onVideosDownloadFailure() {
 
             }
-        }, 1, true);
+        });
 
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
     }
@@ -235,16 +236,18 @@ public class MainActivity extends ActionBarActivity
         startActivity(intent);
     }
 
+    @Subscribe
+    public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
+        new VideoFavoriteMarker().markVavrioute(event.getId(), event.ismFavrioute());
+    }
+
     // private functions
     private AlertDialog getShareAlertDialog(String[] items) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.share_alert_tite);
         //builder.setCancelable(true);
-        builder.setNegativeButton(R.string.share_alert_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                shareDialog.dismiss();
-            }
+        builder.setNegativeButton(R.string.share_alert_cancel, (dialog, which) -> {
+            shareDialog.dismiss();
         });
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
