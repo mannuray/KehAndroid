@@ -9,17 +9,18 @@ public class ConstantsStore {
     private final static String USER_SERVICE = "userservice/";
     private final static String SEARCH_SERVIEC = "searchservice/";
 
-    public final static String USER_NAME_KEY = "com.dubmania.dubsmania.username";
-    public final static String USER_EMAL_KEY = "com.dubmania.dubsmania.useremail";
-    public final static String USER_LOGIN_KEY = "com.dubmania.dubsmania.login";
+    public final static String SHARED_KEY_USER_NAME = "com.dubmania.dubsmania.username";
+    public final static String SHARED_KEY_USER_EMAIL = "com.dubmania.dubsmania.useremail";
+    public final static String SHARED_KEY_USER_LOGIN = "com.dubmania.dubsmania.login";
 
-    public final static String SHARE_FILE_PATH = "com.dubmania.dubsmania.share.uri";
+    public final static String INTENT_FILE_PATH = "com.dubmania.dubsmania.share.filepath";
     public final static String VIDEO_ID = "com.dubmania.dubsmania.video.id";
 
     public final static String INTENT_BOARD_NAME = "com.dubmania.dubsmania.board.name";
     public final static String INTENT_BOARD_ID = "com.dubmania.dubsmania.board.id";
     public final static String INTENT_BOARD_USER_NAME = "com.dubmania.dubsmania.board.username";
     public final static String INTENT_USER_NAME = "com.dubmania.dubsmania.username";
+    public final static String INTENT_VIDEO_ID = "com.dubmania.dubsmania.video.id";
     public final static String INTENT_VIDEO_TITLE = "com.dubmania.dubsmania.video.title";
 
     // URL's
@@ -39,8 +40,11 @@ public class ConstantsStore {
 
     // HTTP params
     public final static String PARAM_USER = "user";
+    public final static String PARAM_USER_NAME = "username";
+    public final static String PARAM_USER_EMAL = "useremail";
     public final static String PARAM_BOARD_NAME = "boardname";
-    public final static String PARAM_FAVORIT = "favorit";
+    public final static String PARAM_BOARD_LIST = "boardlist";
+    public final static String PARAM_FAVORIT = "favorite";
     public final static String PARAM_VIDEO_ID = "videoid";
     public final static String PARAM_BOARD_ID = "boardid";
     public final static String PARAM_ICON_ID = "iconid";

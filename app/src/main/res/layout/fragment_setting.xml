@@ -139,7 +139,7 @@
                     android:layout_height="40dp"
                     android:text="Support center"
                     android:clickable="true"
-                    android:onClick="feedback" />
+                    android:id="@+id/support_center" />
 
             </LinearLayout>
 
@@ -169,7 +169,7 @@
                     android:layout_height="40dp"
                     android:text="Libraries we use"
                     android:clickable="true"
-                    android:onClick="libraries" />
+                    android:id="@+id/libray_we_use"/>
             </LinearLayout>
             <View
                 android:layout_width="fill_parent"
@@ -185,7 +185,7 @@
                     android:layout_height="40dp"
                     android:text="Terms of Use"
                     android:clickable="true"
-                    android:onClick="termofuse" />
+                    android:id="@+id/term_of_use"/>
 
             </LinearLayout>
 
@@ -203,7 +203,7 @@
                     android:layout_height="40dp"
                     android:text="Privecy Policy"
                     android:clickable="true"
-                    android:onClick="privacypolicy" />
+                    android:id="@+id/privacy_policy"/>
             </LinearLayout>
 
             <LinearLayout
@@ -242,7 +242,7 @@
                     <TextView
                         android:id="@+id/push_notification_frequency"
                         android:layout_width="wrap_content"
-                        android:layout_below="@id/push_notification"
+                        android:layout_below="@+id/push_notification"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Daily"
                         android:layout_height="wrap_content"

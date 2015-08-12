@@ -1,35 +1,24 @@
-package com.dubmania.dubsmania.misc;
+package com.dubmania.dubsmania.addvideo;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.dubmania.dubsmania.utils.VideoSharer;
 
-import java.io.File;
-
-public class ShareVideoActivity extends ActionBarActivity {
-
-    private File mVideoFile;
+public class AddTagActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share_video);
-
-        Intent intent = getIntent();
-        mVideoFile = new File(intent.getStringExtra(ConstantsStore.INTENT_FILE_PATH));
+        setContentView(R.layout.activity_add_tag);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_share_video, menu);
+        getMenuInflater().inflate(R.menu.menu_add_tag, menu);
         return true;
     }
 
@@ -38,28 +27,13 @@ public class ShareVideoActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_next) {
             return true;
         }
-        */
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void shareWhatsapp(View v) {
-
-    }
-
-    public void shareMessenger(View v) {
-
-    }
-
-    public void saveToGallery(View v) {
-        new VideoSharer(this).saveInGallery(mVideoFile);
-        finish();
     }
 }

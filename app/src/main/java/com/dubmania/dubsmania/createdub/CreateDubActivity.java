@@ -214,7 +214,7 @@ public class CreateDubActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(ConstantsStore.SHARE_FILE_PATH, outputFile.getAbsolutePath());
+        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, outputFile.getAbsolutePath());
         startActivity(intent);
     }
 }

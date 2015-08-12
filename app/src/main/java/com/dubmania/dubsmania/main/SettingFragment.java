@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -59,6 +60,12 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        // set up text listners
+        rootView.findViewById(R.id.support_center).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        rootView.findViewById(R.id.privacy_policy).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+
         return rootView;
     }
 
@@ -76,25 +83,39 @@ public class SettingFragment extends Fragment {
 
     private void setLoginView() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        if(sharedPreferences.getBoolean(ConstantsStore.USER_LOGIN_KEY, false)) {
+        if(sharedPreferences.getBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, false)) {
             mLogin.setVisibility(View.GONE);
             mUsername.setVisibility(View.VISIBLE);
             //mUsernameText.setVisibility(View.VISIBLE);
-            mUsernameText.setText(sharedPreferences.getString(ConstantsStore.USER_NAME_KEY, ""));
+            mUsernameText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_NAME, ""));
             mEmail.setVisibility(View.VISIBLE);
             //mEmailText.setVisibility(View.VISIBLE);
-            mEmailText.setText(sharedPreferences.getString(ConstantsStore.USER_EMAL_KEY, ""));
+            mEmailText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_EMAIL, ""));
             mLogout.setVisibility(View.VISIBLE);
         }
         else {
             mLogin.setVisibility(View.VISIBLE);
             mUsername.setVisibility(View.GONE);
             //mUsernameText.setVisibility(View.INVISIBLE);
-            //mUsernameText.setText(sharedPreferences.getString(ConstantsStore.USER_NAME_KEY, ""));
+            //mUsernameText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_NAME, ""));
             mEmail.setVisibility(View.GONE);
             //mEmailText.setVisibility(View.INVISIBLE);
-            //mEmailText.setText(sharedPreferences.getString(ConstantsStore.USER_EMAL_KEY, ""));
+            //mEmailText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_EMAIL, ""));
             mLogout.setVisibility(View.GONE);
+        }
+    }
+
+    private class OnSettingClickListner implements View.OnClickListener {
+        private String uri;
+
+        private OnSettingClickListner(String uri) {
+            this.uri = uri;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(browserIntent);
         }
     }
 }

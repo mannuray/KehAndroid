@@ -107,7 +107,7 @@ public class ImportVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onImportVideoItemListEvent(ImportVideoItemListEvent event) {
         Intent intent = new Intent(this, PlayVideoActivity.class);
-        intent.putExtra(ConstantsStore.SHARE_FILE_PATH, event.getUri());
+        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getUri());
         startActivity(intent);
     }
 }

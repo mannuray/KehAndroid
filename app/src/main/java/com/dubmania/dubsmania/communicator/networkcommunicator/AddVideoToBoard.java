@@ -9,10 +9,10 @@ import com.loopj.android.http.RequestParams;
  */
 public class AddVideoToBoard {
 
-    public void addVideoToBoard(String boardName, Long id) {
+    public void addVideoToBoard(Long boardId, Long videoId) {
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_BOARD_NAME, boardName);
-        params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(id));
+        params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(boardId));
+        params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(videoId));
         DubsmaniaHttpClient.get(ConstantsStore.URL_ADD_VIDEO_TO_BOARD, params, new JsonHttpResponseHandler());
     }
 }

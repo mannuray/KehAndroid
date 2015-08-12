@@ -237,7 +237,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
     @Subscribe
     public void onLoginEvent(LoginEvent event) {
-        Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "user login check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add("username", event.getEmail());
         params.add("password", event.getPassword());
@@ -253,9 +253,9 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                     else {
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         AtomicReference<SharedPreferences.Editor> editor = new AtomicReference<>(sharedPreferences.edit());
-                        //editor.putString(ConstantsStore.USER_NAME_KEY, response.getString("username")); put after result modification
-                        //editor.putString(ConstantsStore.USER_EMAL_KEY, event.getEmail());
-                        editor.get().putBoolean(ConstantsStore.USER_LOGIN_KEY, true);
+                        editor.get().putString(ConstantsStore.SHARED_KEY_USER_NAME, response.getString(ConstantsStore.PARAM_USER_NAME));
+                        editor.get().putString(ConstantsStore.SHARED_KEY_USER_EMAIL, response.getString(ConstantsStore.PARAM_USER_EMAL));
+                        editor.get().putBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, true);
                         editor.get().apply();
                     }
                 } catch (JSONException e) {

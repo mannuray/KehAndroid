@@ -1,7 +1,6 @@
 package com.dubmania.dubsmania.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
+import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.AddTrendingBoardListEvent;
@@ -36,6 +36,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
+import com.dubmania.dubsmania.misc.PlayVideoActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.dubmania.dubsmania.misc.VideoBoardActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
@@ -136,9 +137,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
         switch(id) {
@@ -155,29 +153,8 @@ public class MainActivity extends ActionBarActivity
         return true;
     }
 
-    private void startBrowser(String uri) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        startActivity(browserIntent);
-    }
-
     public void changeLanguage(View v) {
         onNavigationDrawerItemSelected(4);
-    }
-
-    public void feedback(View v) {
-        startBrowser("http://www.google.com");
-    }
-
-    public void libraries(View v) {
-        startBrowser("http://www.google.com");
-    }
-
-    public void termofuse(View v) {
-        startBrowser("http://www.google.com");
-    }
-
-    public void privacypolicy(View v) {
-        startBrowser("http://www.google.com");
     }
 
     public void pushNotification(View v) {
@@ -187,6 +164,7 @@ public class MainActivity extends ActionBarActivity
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
         VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.mVideoId = event.getId();
         dialog.show(getSupportFragmentManager(), "tag");
     }
 
@@ -227,7 +205,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        new VideoBoardsDownloader().getTrendingVideo("India", 0, 15, new VideoBoardDownloaderCallback() {
+        new VideoBoardsDownloader(getApplicationContext()).getTrendingBoards("India", 0, 15, new VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 BusProvider.getInstance().post(new AddTrendingBoardListEvent(boards));
@@ -263,5 +241,10 @@ public class MainActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    // private functions
+    @Subscribe
+    public void onVideoPlayEvent(VideoPlayEvent event) {
+        Intent intent = new Intent(this, PlayVideoActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_BOARD_ID, event.getFilePath());
+        startActivity(intent);
+    }
 }

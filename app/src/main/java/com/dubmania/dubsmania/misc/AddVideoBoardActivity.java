@@ -27,14 +27,13 @@ public class AddVideoBoardActivity extends AppCompatActivity {
         mBoardName = (EditText) findViewById(R.id.add_video_board_name_edit);
         GridView mBoardIcon = (GridView) findViewById(R.id.add_video_board_gridView);
 
-        TypedArray navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
-        navMenuIcons.recycle();
-
+        TypedArray mBoardIcons = getResources()
+                .obtainTypedArray(R.array.video_board_icons);
         ArrayList<Integer> mThumbIds = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
-            mThumbIds.add(navMenuIcons.getResourceId(0, -1));
+        for(int i = 0; i < mBoardIcons.length(); i++) {
+            mThumbIds.add(mBoardIcons.getResourceId(i, -1));
         }
+        mBoardIcons.recycle();
 
         mBoardIcon.setAdapter(new ImageAdapter(getApplicationContext(), mThumbIds));
         mBoardIcon.setOnItemClickListener(new AdapterView.OnItemClickListener() {

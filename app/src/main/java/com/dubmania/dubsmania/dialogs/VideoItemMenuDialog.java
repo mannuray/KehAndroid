@@ -1,5 +1,6 @@
 package com.dubmania.dubsmania.dialogs;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,13 +13,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.misc.AddVideoToBoardActivity;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 
 /**
  * Created by rat on 8/2/2015.
  */
 public class VideoItemMenuDialog extends DialogFragment {
     //To Do pick it form string.xml
-    ListView mylist;
+    private ListView mylist;
+    public Long mVideoId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,18 +50,27 @@ public class VideoItemMenuDialog extends DialogFragment {
         mylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                /*ArrayList<VideoListItem> mVideoItemList = new ArrayList<VideoListItem>(Arrays.asList(
-                        new VideoListItem(id, "heros", "mannu", false),
-                        new VideoListItem(id, "heros1", "mannu", false),
-                        new VideoListItem(id, "heros2", "mannu", false),
-                        new VideoListItem(id, "heros3", "prashant", false)
-                ));
-                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(mVideoItemList));*/
                 getDialog().dismiss();
-
+                switch (position) {
+                    case 0:
+                        addVideoToBoard();
+                        break;
+                    case 1:
+                        // code for share
+                        break;
+                    case 3:
+                        // code for repart
+                        break;
+                    case 4:
+                        // code for improve
+                }
             }
         });
+    }
 
+    private void addVideoToBoard() {
+        Intent intent = new Intent(getActivity(), AddVideoToBoardActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_VIDEO_ID, mVideoId);
+        startActivity(intent);
     }
 }

@@ -10,21 +10,18 @@ import android.widget.TextView;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
 import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.OnTouchListnerEvent;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by rat on 8/1/2015.
  */
 public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHolder> {
     private ArrayList<MyVideoListItem> mDataset;
-    private SimpleDateFormat fmt;
 
     public MyVideoAdapter(ArrayList<MyVideoListItem> myDataset) {
         mDataset = myDataset;
-        fmt  = new SimpleDateFormat("dd/MM//yyyy  HH:mm", Locale.getDefault());
     }
 
     @Override
@@ -40,9 +37,10 @@ public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHold
         holder.mImageIcon.setImageBitmap(mDataset.get(position).getIcon());
         holder.mVideoName.setText(mDataset.get(position).getmVideoName());
         holder.mVideoBoardName.setText(mDataset.get(position).getmBoardName());
-        holder.mDateTime.setText(fmt.format(mDataset.get(position).getmDate()));
+        holder.mDateTime.setText(mDataset.get(position).getmDate());
 
         holder.mShare.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
+        holder.mImageIcon.setOnTouchListener(new OnTouchListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
     }
 
     @Override

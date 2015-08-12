@@ -23,7 +23,7 @@ public class PlayVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_video);
 
         Intent intent = getIntent();
-        Uri mUri = Uri.parse(intent.getStringExtra(ConstantsStore.SHARE_FILE_PATH));
+        Uri mUri = Uri.parse(intent.getStringExtra(ConstantsStore.INTENT_FILE_PATH));
         final VideoView mVideoView = (VideoView) findViewById(R.id.play_video_view);
         mVideoView.setVideoURI(mUri);
         mVideoView.setOnTouchListener(new View.OnTouchListener() {

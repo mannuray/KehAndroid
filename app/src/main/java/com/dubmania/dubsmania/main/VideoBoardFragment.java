@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,9 +27,6 @@ public class VideoBoardFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
 
-    // TO Do remove it after experimenth
-    private TypedArray navMenuIcons;
-
     public VideoBoardFragment() {
         // Required empty public constructor
     }
@@ -45,7 +41,6 @@ public class VideoBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
-        final FragmentActivity c = getActivity();
         ImageButton mAddBoardButton = (ImageButton) view.findViewById(R.id.add_video_board_button);
         mAddBoardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,16 +50,17 @@ public class VideoBoardFragment extends Fragment {
             }
         });
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // specify an adapter (see also next example)
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
+        TypedArray mBoardIcons = getResources()
+                .obtainTypedArray(R.array.video_board_icons);
 
         mVideoBoardItemList = new ArrayList<>((Arrays.asList(
-                new VideoBoardListItem(Long.valueOf(1), "My Sounds", "me", navMenuIcons.getResourceId(0, -1)),
-                new VideoBoardListItem(Long.valueOf(2), "My Favorites", "me", navMenuIcons.getResourceId(0, -1))
+                new VideoBoardListItem((long) 1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
+                new VideoBoardListItem((long) 2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
         )));
+        mBoardIcons.recycle();
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 

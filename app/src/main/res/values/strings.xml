@@ -30,14 +30,30 @@
 
     <!-- array of icons -->
     <array name="video_board_icons">
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
-        <item>@drawable/ic_drawer_t</item>
+        <item>@drawable/board_icon_1</item>
+        <item>@drawable/board_icon_2</item>
+        <item>@drawable/board_icon_3</item>
+        <item>@drawable/board_icon_4</item>
+        <item>@drawable/board_icon_5</item>
+        <item>@drawable/board_icon_6</item>
+        <item>@drawable/board_icon_7</item>
+        <item>@drawable/board_icon_8</item>
+        <item>@drawable/board_icon_9</item>
+        <item>@drawable/board_icon_10</item>
+        <item>@drawable/board_icon_11</item>
+        <item>@drawable/board_icon_12</item>
+        <item>@drawable/board_icon_13</item>
+        <item>@drawable/board_icon_14</item>
+        <item>@drawable/board_icon_15</item>
+        <item>@drawable/board_icon_16</item>
+        <item>@drawable/board_icon_17</item>
+        <item>@drawable/board_icon_18</item>
+        <item>@drawable/board_icon_19</item>
+        <item>@drawable/board_icon_20</item>
+        <item>@drawable/board_icon_21</item>
+        <item>@drawable/board_icon_22</item>
+        <item>@drawable/board_icon_23</item>
+        <item>@drawable/board_icon_24</item>
     </array>
 
     <array name="pager_titles">
@@ -127,6 +143,8 @@
 
     <!-- dialogs strings -->
     <string name="share_dub_title">Share your dub</string>
+    <string name="title_activity_add_video_to_board">AddVideoToBoardActivity</string>
+    <string name="title_activity_add_tag">AddTagActivity</string>
 
 
 </resources>

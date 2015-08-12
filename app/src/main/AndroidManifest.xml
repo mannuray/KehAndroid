@@ -78,7 +78,17 @@
         </activity>
         <activity
             android:name=".misc.VideoBoardActivity"
-            android:label="@string/title_activity_video_board" >
+            android:label="@string/title_activity_video_board"
+            android:parentActivityName=".main.MainActivity">
+        </activity>
+        <activity
+            android:name=".misc.AddVideoToBoardActivity"
+            android:label="@string/title_activity_add_video_to_board"
+            android:parentActivityName=".main.MainActivity">
+        </activity>
+        <activity
+            android:name=".addvideo.AddTagActivity"
+            android:label="@string/title_activity_add_tag">
         </activity>
     </application>
 

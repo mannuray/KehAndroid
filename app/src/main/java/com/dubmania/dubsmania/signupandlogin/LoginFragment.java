@@ -3,7 +3,6 @@ package com.dubmania.dubsmania.signupandlogin;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ public class LoginFragment extends Fragment {
     private Button mLogin;
     private EditText mEmail;
     private EditText mPassword;
-    private TextView mForgot;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
 
 
@@ -42,7 +40,7 @@ public class LoginFragment extends Fragment {
         mEmail = (EditText) view.findViewById(R.id.login_email);
         mEmail.setText(mStoreEmail);
         mPassword = (EditText) view.findViewById(R.id.login_password);
-        mForgot = (TextView) view.findViewById(R.id.login_forgot_password);
+        TextView mForgot = (TextView) view.findViewById(R.id.login_forgot_password);
         mPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +63,6 @@ public class LoginFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);
-        Log.d("otto event", "logint frgament crated");
     }
 
     @Override

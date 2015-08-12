@@ -63,9 +63,9 @@ public class MyAccountActivity extends AppCompatActivity {
                     if (response.getBoolean("result")) {
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(ConstantsStore.USER_NAME_KEY, ""); //put after result modification
-                        editor.putString(ConstantsStore.USER_EMAL_KEY, "");
-                        editor.putBoolean(ConstantsStore.USER_LOGIN_KEY, false);
+                        editor.putString(ConstantsStore.SHARED_KEY_USER_NAME, ""); //put after result modification
+                        editor.putString(ConstantsStore.SHARED_KEY_USER_EMAIL, "");
+                        editor.putBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, false);
                         editor.commit();
                         finish();
                     }

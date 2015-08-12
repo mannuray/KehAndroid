@@ -78,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
         VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.mVideoId = event.getId();
         dialog.show(getSupportFragmentManager(), "tag");
     }
 }
