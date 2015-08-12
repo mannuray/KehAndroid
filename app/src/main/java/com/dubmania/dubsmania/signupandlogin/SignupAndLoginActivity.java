@@ -39,6 +39,8 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class SignupAndLoginActivity extends AppCompatActivity {
 
     /**
@@ -143,21 +145,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
         return builder.create();
     }
-
-    /*@Subscribe
-    public void onFragmentCallbackEvent(FragmentChangeEvent event) {
-        if (event.getId() == 4) {
-            Realm realm = Realm.getInstance(getApplicationContext());
-            realm.beginTransaction();
-            SignUpInfo signUp = realm.createObject(SignUpInfo.class);
-            signUp.setId("0");
-            signUp.setEmail(signUpInfo.getEmail());
-            signUp.setUserName(signUpInfo.getUserName());
-            signUp.setPassword(signUpInfo.getPassword());
-            signUp.setDob(signUpInfo.getDob());
-            realm.commitTransaction();
-        }
-    }*/
+    
     @Subscribe
     public void onFragmentChangeEvent(FragmentChangeEvent event) {
         Fragment f = mFragmentManager.findFragmentById(R.id.container);
@@ -264,11 +252,11 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                     }
                     else {
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        AtomicReference<SharedPreferences.Editor> editor = new AtomicReference<>(sharedPreferences.edit());
                         //editor.putString(ConstantsStore.USER_NAME_KEY, response.getString("username")); put after result modification
                         //editor.putString(ConstantsStore.USER_EMAL_KEY, event.getEmail());
-                        editor.putBoolean(ConstantsStore.USER_LOGIN_KEY, true);
-                        editor.commit();
+                        editor.get().putBoolean(ConstantsStore.USER_LOGIN_KEY, true);
+                        editor.get().apply();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

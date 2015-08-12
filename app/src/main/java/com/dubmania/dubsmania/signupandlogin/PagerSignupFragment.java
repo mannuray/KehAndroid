@@ -21,8 +21,6 @@ import com.squareup.otto.Subscribe;
 public class PagerSignupFragment extends Fragment {
 
     private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +32,7 @@ public class PagerSignupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_signup_pager, container, false);
-        mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+        PagerAdapter mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.signup_view_pager);
         mPager.setAdapter(mPagerAdapter);
         return view;

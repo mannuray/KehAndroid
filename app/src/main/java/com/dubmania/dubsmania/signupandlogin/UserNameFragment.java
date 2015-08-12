@@ -23,7 +23,6 @@ import com.squareup.otto.Subscribe;
 public class UserNameFragment extends Fragment {
 
     private Button next;
-    private EditText mUsername;
     private String mUsernameStore;
 
     @Override
@@ -32,11 +31,13 @@ public class UserNameFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_username, container, false);
         next = (Button) rootView.findViewById(R.id.next);
-        mUsername = (EditText) rootView.findViewById(R.id.username);
+        EditText mUsername = (EditText) rootView.findViewById(R.id.username);
+        mUsername.setText(mUsernameStore);
         next.setOnClickListener(new OnClickListnerEvent<>(new SignupFragmentChangeEvent(2)));
         mUsername.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -44,7 +45,8 @@ public class UserNameFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
         return rootView;
     }

@@ -125,5 +125,8 @@
     <string name="title_activity_share_video">ShareVideoActivity</string>
     <string name="title_activity_video_board">VideoBoardActivity</string>
 
+    <!-- dialogs strings -->
+    <string name="share_dub_title">Share your dub</string>
+
 
 </resources>

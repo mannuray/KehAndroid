@@ -1,6 +1,5 @@
 package com.dubmania.dubsmania.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +39,7 @@ import com.dubmania.dubsmania.misc.AddLanguageActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.dubmania.dubsmania.misc.VideoBoardActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.VideoSharer;
 import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
 
@@ -48,8 +47,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -60,7 +57,6 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private AlertDialog shareDialog;
     private VideoListDownloader mTrendingVideosDownloader;
 
     @Override
@@ -74,9 +70,6 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        String[] mMessengerList = getResources()
-                .getStringArray(R.array.messenger_list);
-        shareDialog = getShareAlertDialog(mMessengerList);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -199,7 +192,7 @@ public class MainActivity extends ActionBarActivity
 
     @Subscribe
     public void onMyVideoItemShareEvent(MyVideoItemShareEvent event) {
-        shareDialog.show();
+        new VideoSharer(this).showAlertDialog(event.getFilePath());
     }
 
     @Subscribe
@@ -271,21 +264,4 @@ public class MainActivity extends ActionBarActivity
     }
 
     // private functions
-    private AlertDialog getShareAlertDialog(String[] items) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.share_alert_tite);
-        //builder.setCancelable(true);
-        builder.setNegativeButton(R.string.share_alert_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                shareDialog.dismiss();
-            }
-        });
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                // Do something with the selection
-            }
-        });
-        return builder.create();
-    }
 }

@@ -59,7 +59,7 @@ public class ShareVideoActivity extends ActionBarActivity {
     }
 
     public void saveToGallery(View v) {
-        VideoSharer.saveInGallery(this, mVideoFile);
+        new VideoSharer(this).saveInGallery(mVideoFile);
         finish();
     }
 }

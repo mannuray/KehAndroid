@@ -4,9 +4,13 @@ package com.dubmania.dubsmania.communicator.eventbus;
  * Created by rat on 8/2/2015.
  */
 public class MyVideoItemShareEvent {
-    public int position;
+    private String mFilePath;
 
-    public MyVideoItemShareEvent( int position ) {
-        this.position = position;
+    public MyVideoItemShareEvent(String mFilePath) {
+        this.mFilePath = mFilePath;
+    }
+
+    public String getFilePath() {
+        return mFilePath;
     }
 }

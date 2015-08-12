@@ -112,13 +112,11 @@ public class VideoListDownloader {
             try {
                 Log.d("json error", response.toString());
                 JSONArray videoList = response.getJSONArray("video_list");
-                Log.d("json error after", response.toString());
                 toProcess = videoList.length();
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject video = videoList.getJSONObject(i);
                     Long id = Long.valueOf(video.getString("id"));
                     Log.d("json error id", id.toString());
-                    Log.d("json error name", video.getString("name"));
                     mVideoItemMap.put(id, new VideoListItem(id, video.getString("name"), video.getString("user"), video.getString("desc")));
                 }
                 if(user)

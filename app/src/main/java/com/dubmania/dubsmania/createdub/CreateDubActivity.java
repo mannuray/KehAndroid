@@ -18,13 +18,18 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
+import com.dubmania.dubsmania.misc.ShareVideoActivity;
 import com.dubmania.dubsmania.utils.AudioRecorder;
 import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.dubmania.dubsmania.misc.ShareVideoActivity;
+import com.dubmania.dubsmania.utils.SavedDubsData;
 import com.dubmania.dubsmania.utils.VideoPreparer;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
+
+import io.realm.Realm;
 
 public class CreateDubActivity extends AppCompatActivity {
 
@@ -147,13 +152,14 @@ public class CreateDubActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_create_dub) {
+            done();
             return true;
-        } */
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -187,7 +193,7 @@ public class CreateDubActivity extends AppCompatActivity {
         }
     }
 
-    public void onDoneClick(View v) {
+    private void done() {
         VideoPreparer mPreparer = new VideoPreparer();
         File outputDir  = new File(Environment.getExternalStoragePublicDirectory("dub"), Environment.DIRECTORY_MOVIES);
         /*if (!outputDir.mkdirs()) {
@@ -195,8 +201,16 @@ public class CreateDubActivity extends AppCompatActivity {
         }*/
 
         File outputFile = new File(outputDir.getAbsolutePath(), "output.mp4");
-
         mPreparer.prepareVideo(mAudioFile, mVideoFile, outputFile);
+
+        Realm realm = Realm.getInstance(getApplicationContext());
+        realm.beginTransaction();
+        SavedDubsData dubsData = realm.createObject( SavedDubsData.class );
+        dubsData.setFilePath(outputFile.getAbsolutePath());
+        dubsData.setTitle("anything for now");
+        //SimpleDateFormat fmt  = new SimpleDateFormat("dd/MM//yyyy  HH:mm", Locale.getDefault());
+        dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
+        realm.commitTransaction();
 
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

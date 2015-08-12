@@ -1,10 +1,10 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,24 +15,17 @@ import com.dubmania.dubsmania.Adapters.MyVideoAdapter;
 import com.dubmania.dubsmania.Adapters.MyVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.utils.SavedDubsData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class MyDubsFragment extends Fragment {
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<MyVideoListItem> mMyVideoItemList;
-
-    // TO Do remove it after experimenth
-    private TypedArray navMenuIcons;
-
-    public MyDubsFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,20 +36,17 @@ public class MyDubsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_my_dubs, container, false);
-        final FragmentActivity c = getActivity();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(c);
-        mRecyclerView.setLayoutManager(layoutManager);
-        // specify an adapter (see also next example)
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mMyVideoItemList = new ArrayList<MyVideoListItem>(Arrays.asList(
-                new MyVideoListItem(navMenuIcons.getResourceId(0, -1), "hotel calfornia is here", "rock",new GregorianCalendar(0,0,0,0,0,0))
+        mMyVideoItemList = new ArrayList<>();
 
-        ));
+        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
+        RealmResults<SavedDubsData> dubs = realm.allObjects(SavedDubsData.class).where().findAll();
+        for(SavedDubsData dub: dubs) {
+            mMyVideoItemList.add(new MyVideoListItem(ThumbnailUtils.createVideoThumbnail(dub.getFilePath(), MediaStore.Video.Thumbnails.MICRO_KIND), dub.getTitle(), "boardName", dub.getFilePath(), dub.getCreationDate()));
+        }
         mAdapter = new MyVideoAdapter(mMyVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
 

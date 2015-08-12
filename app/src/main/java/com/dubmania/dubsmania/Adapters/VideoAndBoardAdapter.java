@@ -2,7 +2,6 @@ package com.dubmania.dubsmania.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
@@ -34,30 +33,19 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     // Create new views (invoked by the layout manager)
     @Override
-    public  RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                       int viewType) {
-        // create a new view
-        View v;
-
+    public  RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,  int viewType) {
         switch (viewType) {
             case 0:
-                v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.video_item_list_layout, parent, false);
-                // set the view's size, margins, paddings and layout parameters
-                VideoViewHolder vhv = new VideoViewHolder(v);
-                return vhv;
+                return new VideoViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.video_item_list_layout, parent, false));
             case 1:
-                v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.video_board_item_list_layout, parent, false);
-                // set the view's size, margins, paddings and layout parameters
-                VideoBoardViewHolder vhb = new VideoBoardViewHolder(v);
-                return vhb;
+                return new VideoBoardViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.video_board_item_list_layout, parent, false));
             default:
                 return null;
         }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch(getItemViewType(position)) {
@@ -69,7 +57,6 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return (mVideoList.size() + mVideoBoardList.size());

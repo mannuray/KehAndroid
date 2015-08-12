@@ -54,13 +54,5 @@
             android:gravity="center_horizontal"
             android:onClick="onPlayVideoRecordedClick"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_dub_done"
-            android:text="dn"
-            android:gravity="center_horizontal"
-            android:onClick="onDoneClick"/>
-
     </LinearLayout>
 </RelativeLayout>

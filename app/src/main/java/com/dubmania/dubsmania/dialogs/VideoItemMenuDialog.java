@@ -26,7 +26,6 @@ public class VideoItemMenuDialog extends DialogFragment {
         mylist = (ListView) rootView.findViewById(R.id.video_item_menu_diaglog_list);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        //getDialog().setTitle("Simple Dialog");
         return rootView;
     }
 
@@ -37,9 +36,10 @@ public class VideoItemMenuDialog extends DialogFragment {
         TypedArray title = getResources()
                 .obtainTypedArray(R.array.video_menu_item_list);
         String listitems[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+        title.recycle();
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, listitems);
 
         mylist.setAdapter(adapter);
