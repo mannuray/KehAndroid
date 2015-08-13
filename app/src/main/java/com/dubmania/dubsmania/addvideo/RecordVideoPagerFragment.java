@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.main;
+package com.dubmania.dubsmania.addvideo;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
@@ -9,17 +9,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 
-public class PagerFragment extends Fragment {
-    PagerAdapter mPagerAdapter;
-    ViewPager mViewPager;
+public class RecordVideoPagerFragment extends Fragment {
+
+    public RecordVideoPagerFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,11 @@ public class PagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(
-                R.layout.fragment_pager, container, false);
-        mPagerAdapter = new MyPagerAdapter(
-                getChildFragmentManager());
-        mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
-        mViewPager.setAdapter(mPagerAdapter);
-        return rootView;
+        View view = inflater.inflate(R.layout.fragment_record_video_pager, container, false);
+        PagerAdapter mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+        ViewPager mPager = (ViewPager) view.findViewById(R.id.viewPager);
+        mPager.setAdapter(mPagerAdapter);
+        return view;
     }
 
     @Override
@@ -51,35 +49,27 @@ public class PagerFragment extends Fragment {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_pager_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
         TypedArray title = getResources()
-                .obtainTypedArray(R.array.pager_titles);
-        String titles[] = {title.getString(0), title.getString(1), title.getString(2)};
-        //title.recycle();
-
+                .obtainTypedArray(R.array.pager_signup_titles);
+        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int i) {
+
             switch (i) {
                 case 0:
-                    return new TrendingFragment();
+                    return new RecordVideoFragment();
                 case 1:
-                    return new DiscoverFragment();
+                    return new AddTagFragment();
                 case 2:
-                    return new VideoBoardFragment();
+                    return new AddFinishFragment();
             }
-            return new TrendingFragment();
+            return new RecordVideoFragment();
         }
 
         @Override
@@ -93,5 +83,3 @@ public class PagerFragment extends Fragment {
         }
     }
 }
-
-

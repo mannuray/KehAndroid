@@ -57,16 +57,6 @@
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
-            android:name=".misc.RecordVideoActivity"
-            android:label="@string/title_activity_record_video"
-            android:parentActivityName=".main.MainActivity" >
-        </activity>
-        <activity
-            android:name=".misc.ImportVideoActivity"
-            android:label="@string/title_activity_import_video"
-            android:parentActivityName=".main.MainActivity" >
-        </activity>
-        <activity
             android:name=".misc.ShareVideoActivity"
             android:label="@string/title_activity_share_video"
             android:parentActivityName=".main.MainActivity" >
@@ -79,16 +69,12 @@
         <activity
             android:name=".misc.VideoBoardActivity"
             android:label="@string/title_activity_video_board"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.AddVideoToBoardActivity"
             android:label="@string/title_activity_add_video_to_board"
-            android:parentActivityName=".main.MainActivity">
-        </activity>
-        <activity
-            android:name=".addvideo.AddTagActivity"
-            android:label="@string/title_activity_add_tag">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
     </application>
 

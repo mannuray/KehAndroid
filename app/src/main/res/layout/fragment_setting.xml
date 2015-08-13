@@ -268,7 +268,6 @@
                 android:id="@+id/version_text"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="1.2.4"
                 android:gravity="center_horizontal"/>
 
         </LinearLayout>

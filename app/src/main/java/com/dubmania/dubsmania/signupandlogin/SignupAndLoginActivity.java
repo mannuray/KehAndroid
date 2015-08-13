@@ -2,10 +2,14 @@ package com.dubmania.dubsmania.signupandlogin;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -48,14 +52,17 @@ public class SignupAndLoginActivity extends AppCompatActivity {
      * and next wizard steps.
      */
     private SignUpInfo signUpInfo;
-    private FragmentManager mFragmentManager;
+    private ViewPager mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_signup);
-        mFragmentManager = getSupportFragmentManager();
+
+        PagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mPager = (ViewPager) findViewById(R.id.loginAndSignupViewPager);
+        mPager.setAdapter(mPagerAdapter);
         signUpInfo = new SignUpInfo();
         changeFragment(0);
     }
@@ -87,12 +94,13 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment f = mFragmentManager.findFragmentById(R.id.container);
-        if (f instanceof PagerSignupFragment) {
-            BusProvider.getInstance().post(new SignupFragmentChangeEvent(-1));
-        }
-        else if (f instanceof PagerLoginFragment) {
-            BusProvider.getInstance().post(new LoginFragmentChangeEvent(-1));
+        int position = mPager.getCurrentItem();
+        switch (position) {
+            case 0:
+                BusProvider.getInstance().post(new SignupFragmentChangeEvent(-1));
+                break;
+            case 1:
+                BusProvider.getInstance().post(new LoginFragmentChangeEvent(-1));
         }
     }
 
@@ -106,11 +114,40 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         BusProvider.getInstance().unregister(this);
     }
 
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        TypedArray title = getResources()
+                .obtainTypedArray(R.array.pager_signup_titles);
+        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int i) {
+
+            switch (i) {
+                case 0:
+                    return new PagerSignupFragment();
+                case 1:
+                    return new PagerLoginFragment();
+            }
+            return new PagerSignupFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+    }
+
     public void changeFragment(int position) {
-        // update the main content by replacing fragments
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, getFragment(position))
-                .commit();
+        mPager.setCurrentItem(position);
     }
 
     Fragment getFragment(int position) {
@@ -148,12 +185,12 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     
     @Subscribe
     public void onFragmentChangeEvent(FragmentChangeEvent event) {
-        Fragment f = mFragmentManager.findFragmentById(R.id.container);
-        if (f instanceof PagerSignupFragment) {
-            finish();
-        }
-        else if (f instanceof PagerLoginFragment) {
-            changeFragment(0);
+        int position = mPager.getCurrentItem();
+        switch (position) {
+            case 0:
+                finish();
+            case 1:
+                changeFragment(0);
         }
     }
 

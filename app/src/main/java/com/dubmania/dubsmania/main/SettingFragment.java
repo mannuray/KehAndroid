@@ -3,6 +3,8 @@ package com.dubmania.dubsmania.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,9 +16,9 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.misc.MyAccountActivity;
 import com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 
 public class SettingFragment extends Fragment {
 
@@ -36,6 +38,7 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         View rootView =  inflater.inflate(R.layout.fragment_setting, container, false);
         mLogin = (TextView) rootView.findViewById(R.id.login_signup);
         mUsername = rootView.findViewById(R.id.fragment_setting_username_view);
@@ -43,7 +46,6 @@ public class SettingFragment extends Fragment {
         mEmail = rootView.findViewById(R.id.fragment_setting_email_view);
         mEmailText = (TextView) rootView.findViewById(R.id.frament_setting_email_edit);
         mLogout = (TextView) rootView.findViewById(R.id.logout_text);
-        setLoginView();
 
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +62,27 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        try {
+            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            ((TextView) rootView.findViewById(R.id.version_text)).setText("version: " + pInfo.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         // set up text listners
         rootView.findViewById(R.id.support_center).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.privacy_policy).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        setLoginView();
 
         return rootView;
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        setLoginView();
     }
 
     @Override

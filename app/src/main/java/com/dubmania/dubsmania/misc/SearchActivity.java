@@ -1,5 +1,6 @@
 package com.dubmania.dubsmania.misc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +13,13 @@ import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
+import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -80,5 +84,12 @@ public class SearchActivity extends AppCompatActivity {
         VideoItemMenuDialog dialog = new VideoItemMenuDialog();
         dialog.mVideoId = event.getId();
         dialog.show(getSupportFragmentManager(), "tag");
+    }
+
+    @Subscribe
+    public void onCreateDubEvent(CreateDubEvent event) {
+        Intent intent = new Intent(this, CreateDubActivity.class);
+        intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
+        startActivity(intent);
     }
 }

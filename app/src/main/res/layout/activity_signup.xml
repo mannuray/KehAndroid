@@ -10,9 +10,10 @@
     android:orientation="vertical"
     tools:context="com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity" >
 
-    <FrameLayout
-        android:id="@+id/container"
+    <com.dubmania.dubsmania.signupandlogin.NonSwipeableViewPager
+        android:id="@+id/loginAndSignupViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
 </LinearLayout>

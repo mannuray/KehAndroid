@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.addvideo.AddVideoActivity;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.misc.ImportVideoActivity;
-import com.dubmania.dubsmania.misc.RecordVideoActivity;
+import com.dubmania.dubsmania.utils.ConstantsStore;
 
 
 public class AddVideoFragment extends Fragment {
@@ -36,16 +36,14 @@ public class AddVideoFragment extends Fragment {
         mRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RecordVideoActivity.class);
-                startActivity(intent);
+                startAddVideoActivity(ConstantsStore.INTENT_ADD_VIDEO_RECORD);
             }
         });
 
         mImporct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ImportVideoActivity.class);
-                startActivity(intent);
+                startAddVideoActivity(ConstantsStore.INTENT_ADD_VIDEO_IMPORT);
             }
         });
 
@@ -62,5 +60,11 @@ public class AddVideoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    private void startAddVideoActivity(int pager) {
+        Intent intent = new Intent(getActivity(), AddVideoActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_ADD_VIDEO_ACTION, pager);
+        startActivity(intent);
     }
 }

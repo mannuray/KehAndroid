@@ -50,10 +50,6 @@ public class EmailFragment extends Fragment {
         });
         return rootView;
     }
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-    }
 
     @Override
     public void onAttach(Activity activity) {

@@ -12,10 +12,12 @@ import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.VideoSharer;
 
 public class PlayVideoActivity extends AppCompatActivity {
 
     private boolean isPlaying = false;
+    private String mFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_video);
 
         Intent intent = getIntent();
-        Uri mUri = Uri.parse(intent.getStringExtra(ConstantsStore.INTENT_FILE_PATH));
+        mFilePath = intent.getStringExtra(ConstantsStore.INTENT_FILE_PATH);
+        Uri mUri = Uri.parse(mFilePath);
         final VideoView mVideoView = (VideoView) findViewById(R.id.play_video_view);
         mVideoView.setVideoURI(mUri);
         mVideoView.setOnTouchListener(new View.OnTouchListener() {
@@ -59,8 +62,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
-            // code for share
-            return true;
+            new VideoSharer(this).showAlertDialog(mFilePath);
         }
 
         return super.onOptionsItemSelected(item);

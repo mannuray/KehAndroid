@@ -145,6 +145,7 @@
     <string name="share_dub_title">Share your dub</string>
     <string name="title_activity_add_video_to_board">AddVideoToBoardActivity</string>
     <string name="title_activity_add_tag">AddTagActivity</string>
+    <string name="title_activity_add_video_finish">AddVideoFinishActivity</string>
 
 
 </resources>

@@ -1,16 +1,20 @@
-package com.dubmania.dubsmania.misc;
+package com.dubmania.dubsmania.addvideo;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.dubmania.dubsmania.Adapters.ImportVideoAdapter;
@@ -18,34 +22,44 @@ import com.dubmania.dubsmania.Adapters.ImportVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.ImportVideoItemListEvent;
+import com.dubmania.dubsmania.misc.PlayVideoActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
-public class ImportVideoActivity extends AppCompatActivity {
+public class SearchVideoFragment extends Fragment {
     private ImportVideoAdapter mAdapter;
     private ArrayList<ImportVideoListItem> mVideoItemList;
 
-    Cursor cursor;
+    public SearchVideoFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_import_video);
+        setHasOptionsMenu(true);
+    }
 
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.import_video_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_search_video, container, false);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mVideoItemList = new ArrayList<>();
         populateVideo();
 
         mAdapter = new ImportVideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
-        EditText search = (EditText) findViewById(R.id.import_video_seach_edit);
+        EditText search = (EditText) view.findViewById(R.id.searchEdit);
         search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -53,46 +67,31 @@ public class ImportVideoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
+
+        return view;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_import_video, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override public void onResume() {
-        super.onResume();
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         BusProvider.getInstance().register(this);
     }
 
-    @Override public void onPause() {
-        super.onPause();
+    @Override
+    public void onDetach() {
+        super.onDetach();
         BusProvider.getInstance().unregister(this);
     }
 
     private void populateVideo() {
-        /*
-        String[] thumbColumns = { MediaStore.Video.Thumbnails.DATA,
-                MediaStore.Video.Thumbnails.VIDEO_ID }; */
-
         String[] mediaColumns = { MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA, MediaStore.Video.Media.TITLE,
                 MediaStore.Video.Media.MIME_TYPE };
 
-        cursor = managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = getActivity().managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 mediaColumns, null, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -104,10 +103,17 @@ public class ImportVideoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_pager_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     @Subscribe
     public void onImportVideoItemListEvent(ImportVideoItemListEvent event) {
-        Intent intent = new Intent(this, PlayVideoActivity.class);
+        Intent intent = new Intent(getActivity().getApplicationContext(), PlayVideoActivity.class);
         intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getUri());
         startActivity(intent);
     }
+
 }
