@@ -30,16 +30,14 @@ public class ConstantsStore {
 
 
     // URL's
-    public final static String USER_LOGOUT_URL = "userservice/logout";
-
-    public final static String DOWNLOAD_VIDEO_URL = "searchservice/getvideo";
-    public final static String GET_TRENDING_VIDEOS_URL = "searchservice/gettrendingvideos";
+    public final static String URL_DOWNLOAD_VIDEO = SEARCH_SERVICE + "getvideo";
+    public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
     public final static String URL_MARK_FAVORIT = USER_SERVICE + "markfavorite";
     public final static String URL_ADD_VIDEO = USER_SERVICE + "addvideo";
     public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "searchvideo";
     public final static String URL_GET_BOARD_VIDEOS = SEARCH_SERVICE + "getboardvideos";
-    public final static String GET_ICON_URL = "searchservice/geticon";
+    public final static String URL_GET_ICON = "searchservice/geticon";
 
     public final static String URL_GET_BOARDS = USER_SERVICE + "getboards";
     public final static String URL_ADD_BOARD = USER_SERVICE + "addvedioboard";
@@ -47,12 +45,21 @@ public class ConstantsStore {
     public final static String URL_GET_TRENDING_BOARDS = SEARCH_SERVICE + "gettrendingboards";
 
     public final static String URL_GET_TAGS = SEARCH_SERVICE + "gettags";
-    public final static String GET_FAV_URL = "searchservice/getfav";
+    public final static String GET_FAV_URL = SEARCH_SERVICE + "getfav";
+
+    public final static String URL_LOGIN = USER_SERVICE + "login";
+    public final static String URL_USER_LOGOUT = USER_SERVICE + "logout";
+    public final static String URL_REGISTER = USER_SERVICE + "register";
+    public final static String URL_RESET_PASSWORD = USER_SERVICE + "resetpassword";
+    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyUser";
+    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "markfavorite";
 
     // HTTP params
     public final static String PARAM_USER = "user";
     public final static String PARAM_USER_NAME = "username";
     public final static String PARAM_USER_EMAL = "useremail";
+    public final static String PARAM_PASSWORD = "password";
+    public final static String PARAM_DOB = "dob";
 
     public final static String PARAM_BOARD_NAME = "name";
     public final static String PARAM_BOARD_LIST = "boardlist";
@@ -79,5 +86,7 @@ public class ConstantsStore {
     public final static int SHARE_APP_ID_MESSENGER = 0;
     public final static int SHARE_APP_ID_WHATSAPP = 1;
     public final static int SHARE_APP_ID_SAVE_GALLERY = 2;
+
+
 }
 

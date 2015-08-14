@@ -36,7 +36,7 @@ public class VideoListDownloader {
         params.add(ConstantsStore.PARAM_END, String.valueOf(end));
         params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
 
-        downloadVideos(ConstantsStore.GET_TRENDING_VIDEOS_URL, params, callback);
+        downloadVideos(ConstantsStore.URL_GET_TRENDING_VIDEOS, params, callback);
     }
 
     public void downloadDiscoverVideos(Integer page, String user, VideoListDownloaderCallback callback) {

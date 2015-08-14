@@ -54,7 +54,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     public void onLogoutClick(View v) {
-        DubsmaniaHttpClient.get(ConstantsStore.USER_LOGOUT_URL, new RequestParams(), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.get(ConstantsStore.URL_USER_LOGOUT, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {

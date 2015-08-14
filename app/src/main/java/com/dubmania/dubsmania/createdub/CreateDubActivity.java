@@ -38,6 +38,7 @@ public class CreateDubActivity extends AppCompatActivity {
 
     private File mVideoFile;
     private File mAudioFile;
+    private String mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +51,17 @@ public class CreateDubActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Long id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
+        mTitle = intent.getStringExtra(ConstantsStore.INTENT_VIDEO_TITLE);
 
         try {
-            mVideoFile = File.createTempFile(id.toString() + "_video", "mp4", getApplicationContext().getCacheDir());
-            mAudioFile = File.createTempFile(id.toString() + "_audio", "mp4", getApplicationContext().getCacheDir());
+            mVideoFile = File.createTempFile(id.toString() + "_video", ".mp4", getApplicationContext().getCacheDir());
+            mAudioFile = File.createTempFile(id.toString() + "_audio", ".mp4", getApplicationContext().getCacheDir());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         VideoDownloader mVideoDownloader = new VideoDownloader();
-        mVideoDownloader.downloadVideo(ConstantsStore.DOWNLOAD_VIDEO_URL, id, mVideoFile, new VideoDownloaderCallback() {
+        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, mVideoFile, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
                 BusProvider.getInstance().post(new SetRecordFilesEvent(mAudioFile, mVideoFile));
@@ -154,24 +156,31 @@ public class CreateDubActivity extends AppCompatActivity {
 
     private void done() {
         VideoPreparer mPreparer = new VideoPreparer();
-        File outputDir  = new File(Environment.getExternalStoragePublicDirectory("dub"), Environment.DIRECTORY_MOVIES);
-        /*if (!outputDir.mkdirs()) {
-            Log.e("Error", "Directory not created");
-        }*/
-
-        File outputFile = new File(outputDir.getAbsolutePath(), "output.mp4");
+        File outputFile = getOutputFile(mTitle);
         mPreparer.prepareVideo(mAudioFile, mVideoFile, outputFile);
 
         Realm realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();
         SavedDubsData dubsData = realm.createObject( SavedDubsData.class );
         dubsData.setFilePath(outputFile.getAbsolutePath());
-        dubsData.setTitle("anything for now");
+        dubsData.setTitle(mTitle);
         //SimpleDateFormat fmt  = new SimpleDateFormat("dd/MM//yyyy  HH:mm", Locale.getDefault());
         dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
         realm.commitTransaction();
 
         mPager.setCurrentItem(1);
+    }
+
+    private File getOutputFile(String mTitle) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES), mTitle + ".mp4");
+        int i = 1;
+        while (file.exists()) {
+            file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_MOVIES), mTitle + "(" + String.valueOf(i) + ").mp4");
+        }
+        return file;
     }
 
     @Subscribe
