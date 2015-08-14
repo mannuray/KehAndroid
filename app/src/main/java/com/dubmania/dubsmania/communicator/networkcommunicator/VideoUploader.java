@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 
+import com.dubmania.dubsmania.addvideo.Tag;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,16 +23,21 @@ import java.util.ArrayList;
  */
 public class VideoUploader {
 
-    public void addVideo(File mVideoFile, String title, String desc, ArrayList<String> tags) {
+    public void addVideo(String mFilePath, String title, String desc, ArrayList<Tag> tags) {
+        File mVideoFile = new File(mFilePath);
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mVideoFile.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] thumbnail = stream.toByteArray();
 
         JSONArray tagsArray = new JSONArray();
-        for (String tag: tags)
+        for (Tag tag: tags)
         {
-            tagsArray.put(tag);
+            try {
+                tagsArray.put(new JSONObject().put(ConstantsStore.PARAM_TAG_ID, tag.getId()).put(ConstantsStore.PARAM_TAG_NAME, tag.getTag()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         RequestParams params = new RequestParams();

@@ -1,18 +1,15 @@
 package com.dubmania.dubsmania.addvideo;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,10 +18,6 @@ import com.dubmania.dubsmania.Adapters.ImportVideoAdapter;
 import com.dubmania.dubsmania.Adapters.ImportVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.ImportVideoItemListEvent;
-import com.dubmania.dubsmania.misc.PlayVideoActivity;
-import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -102,18 +95,4 @@ public class SearchVideoFragment extends Fragment {
             cursor.close();
         }
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_pager_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Subscribe
-    public void onImportVideoItemListEvent(ImportVideoItemListEvent event) {
-        Intent intent = new Intent(getActivity().getApplicationContext(), PlayVideoActivity.class);
-        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getUri());
-        startActivity(intent);
-    }
-
 }

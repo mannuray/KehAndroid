@@ -12,7 +12,7 @@ import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.VideoBoardClickedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.AddVideoToBoard;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardsDownloader;

@@ -13,11 +13,11 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
-import com.dubmania.dubsmania.communicator.eventbus.SetUsernameEvent;
-import com.dubmania.dubsmania.communicator.eventbus.SignupFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
-import com.dubmania.dubsmania.communicator.eventbus.UserNameExistEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetUsernameEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.UserNameExistEvent;
 import com.squareup.otto.Subscribe;
 
 public class UserNameFragment extends Fragment {

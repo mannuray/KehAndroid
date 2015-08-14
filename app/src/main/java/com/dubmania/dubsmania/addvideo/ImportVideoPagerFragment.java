@@ -14,9 +14,12 @@ import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
+import com.squareup.otto.Subscribe;
 
 
 public class ImportVideoPagerFragment extends Fragment {
+    private ViewPager mPager;
 
     public ImportVideoPagerFragment() {
         // Required empty public constructor
@@ -34,7 +37,7 @@ public class ImportVideoPagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_import_video_pager, container, false);
         PagerAdapter mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-        ViewPager mPager = (ViewPager) view.findViewById(R.id.viewPager);
+        mPager = (ViewPager) view.findViewById(R.id.viewPager);
         mPager.setAdapter(mPagerAdapter);
         return view;
     }
@@ -67,8 +70,10 @@ public class ImportVideoPagerFragment extends Fragment {
                 case 0:
                     return new SearchVideoFragment();
                 case 1:
-                    return new AddTagFragment();
+                    return new EditVideoFragment();
                 case 2:
+                    return new AddTagFragment();
+                case 3:
                     return new AddFinishFragment();
             }
             return new SearchVideoFragment();
@@ -76,12 +81,25 @@ public class ImportVideoPagerFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             return titles[position];
         }
+    }
+
+    @Subscribe
+    public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
+        if (event.getPosition() == -1){
+            int position = mPager.getCurrentItem();
+            if (position == 0) {
+                getActivity().finish();
+            }
+            mPager.setCurrentItem(position - 1);
+            return;
+        }
+        mPager.setCurrentItem(event.getPosition());
     }
 }

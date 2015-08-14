@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.AddVideoBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
 import com.squareup.otto.Subscribe;

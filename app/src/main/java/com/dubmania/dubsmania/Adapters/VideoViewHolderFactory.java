@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.CompoundButton;
 
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
-import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
-import com.dubmania.dubsmania.communicator.eventbus.VideoFavriouteChangedEvent;
-import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
 
 /**
  * Created by rat on 8/2/2015.

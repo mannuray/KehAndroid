@@ -3,10 +3,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dubmania.dubsmania.addvideo.AddVideoActivity">
 
-    <item
-        android:id="@+id/action_add_video"
-        android:icon="@drawable/ic_add_lang"
-        android:title="@string/action_add_language"
-        app:showAsAction="always"/>
-
 </menu>

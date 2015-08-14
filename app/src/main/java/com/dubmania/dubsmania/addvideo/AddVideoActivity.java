@@ -8,14 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.misc.PlayVideoActivity;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddTagsEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoEditEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+
 public class AddVideoActivity extends AppCompatActivity {
+
+    private VideoInfo mVideoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,7 @@ public class AddVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         changeFragment(intent.getIntExtra(ConstantsStore.INTENT_ADD_VIDEO_ACTION, ConstantsStore.INTENT_ADD_VIDEO_RECORD));
+        mVideoInfo = new VideoInfo();
     }
 
     @Override
@@ -60,6 +69,11 @@ public class AddVideoActivity extends AppCompatActivity {
         BusProvider.getInstance().unregister(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(-1));
+    }
+
     private void changeFragment(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -67,7 +81,7 @@ public class AddVideoActivity extends AppCompatActivity {
                 .commit();
     }
 
-    Fragment getFragment(int position) {
+    private Fragment getFragment(int position) {
 
         switch (position) {
             case 0:
@@ -78,10 +92,73 @@ public class AddVideoActivity extends AppCompatActivity {
         return new RecordVideoPagerFragment();
     }
 
+    private class VideoInfo {
+        private String mFilePath;
+        private ArrayList<Tag> mTags;
+        private String mTitle;
+        private String mLanguage;
+
+        public String getFilePath() {
+            return mFilePath;
+        }
+
+        public void setFilePath(String mFilePath) {
+            this.mFilePath = mFilePath;
+        }
+
+        public ArrayList<Tag> getTags() {
+            return mTags;
+        }
+
+        public void setTags(ArrayList<Tag> mTags) {
+            this.mTags = mTags;
+        }
+
+        public String getTitle() {
+            return mTitle;
+        }
+
+        public void setTitle(String mTitle) {
+            this.mTitle = mTitle;
+        }
+
+        public String getLanguage() {
+            return mLanguage;
+        }
+
+        public void setLanguage(String mLanguage) {
+            this.mLanguage = mLanguage;
+        }
+    }
+
+    /*
+    @Produce
+    public AddVideoInfoEvent produceAddVideoInfo() {
+        return new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage());
+    }*/
+
     @Subscribe
-    public void onVideoPlayEvent(VideoPlayEvent event) {
-        Intent intent = new Intent(this, PlayVideoActivity.class);
-        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getFilePath());
-        startActivity(intent);
+    public void onSearchVideoItemListEvent(SearchVideoItemListEvent event) {
+        mVideoInfo.setFilePath(event.getFilePath());
+        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(1));
+    }
+
+    @Subscribe
+    public void onAddVideoEditEvent(AddVideoEditEvent event) {
+        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
+    }
+
+    @Subscribe
+    public void onAddTagsEvent(AddTagsEvent event) {
+        mVideoInfo.setTags(event.getTags());
+        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(3));
+    }
+
+    @Subscribe
+    public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
+        new VideoUploader().addVideo(mVideoInfo.mFilePath, mVideoInfo.getTitle(), "desc for now ", mVideoInfo.getTags());
+        // add code for finish :)
     }
 }

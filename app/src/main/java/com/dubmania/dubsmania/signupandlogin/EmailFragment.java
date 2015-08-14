@@ -15,8 +15,8 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.EmailCheckEvent;
-import com.dubmania.dubsmania.communicator.eventbus.EmailExistEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.EmailCheckEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.EmailExistEvent;
 import com.squareup.otto.Subscribe;
 
 public class EmailFragment extends Fragment {

@@ -14,18 +14,19 @@ import android.widget.Toast;
 
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
+import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.AddTrendingBoardListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.CreateDubEvent;
-import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
-import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
-import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
-import com.dubmania.dubsmania.communicator.eventbus.VideoBoardClickedEvent;
-import com.dubmania.dubsmania.communicator.eventbus.VideoFavriouteChangedEvent;
-import com.dubmania.dubsmania.communicator.eventbus.VideoItemMenuEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardsDownloader;
@@ -35,6 +36,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.misc.AddLanguageActivity;
+import com.dubmania.dubsmania.misc.PlayVideoActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.dubmania.dubsmania.misc.VideoBoardActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
@@ -236,6 +238,13 @@ public class MainActivity extends ActionBarActivity
         intent.putExtra(ConstantsStore.INTENT_BOARD_ID, event.getId());
         intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
+        startActivity(intent);
+    }
+
+    @Subscribe
+    public void onVideoPlayEvent(VideoPlayEvent event) {
+        Intent intent = new Intent(this, PlayVideoActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getFilePath());
         startActivity(intent);
     }
 }

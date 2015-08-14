@@ -1,31 +1,46 @@
 package com.dubmania.dubsmania.addvideo;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dubmania.dubsmania.Adapters.TagListAdapter;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddTagsEvent;
+import com.dubmania.dubsmania.communicator.networkcommunicator.TagsDownloader;
+import com.dubmania.dubsmania.communicator.networkcommunicator.TagsDownloaderCallback;
+
+import java.util.ArrayList;
 
 public class AddTagFragment extends Fragment implements AbsListView.OnItemClickListener {
-    private ListAdapter mAdapter;
-    private TextView mTags;
-    private String[] values;
+    private TagListAdapter mAdapter;
+    private TextView mTagsView;
+    private ArrayList<Tag> mTags;
+    private ArrayList<Tag> mAddedTags;
+    private TagsDownloader mTagsDownloader;
+    private ActionBar mActionBar;
+
     public AddTagFragment() {
         // Required empty public constructor
     }
@@ -37,29 +52,63 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mTagsDownloader = new TagsDownloader();
+        mTags = new ArrayList<>();
+        mAddedTags = new ArrayList<>();
+
         View view = inflater.inflate(R.layout.fragment_add_tag, container, false);
-        mTags = (TextView) view.findViewById(R.id.textView);
-        values = new String[] { "hello"}; // TO DO get it from real list
-        mAdapter = new ArrayAdapter<>(getActivity(),
-        android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        mTagsView = (TextView) view.findViewById(R.id.textView);
+        mAdapter = new TagListAdapter(getActivity().getApplicationContext(), mTags);
+        mActionBar = getActivity().getActionBar();
+        /*new ArrayAdapter<>(getActivity(),
+        android.R.layout.simple_list_item_1, android.R.id.text1, mTags);*/
 
         AbsListView mListView = (AbsListView) view.findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+        EditText search = (EditText) view.findViewById(R.id.editText);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTagsDownloader.downloadTags(s.toString(), new OnTextWatcherListener());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         return view;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TextView textview = new TextView(getActivity().getApplicationContext());
-        textview.setText(values[position]);
+        textview.setText(mTags.get(position).getTag());
         textview.setBackgroundResource(R.drawable.oval);
         textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_btn_check_material, 0);
         BitmapDrawable dd = (BitmapDrawable) getDrawableFromTExtView(textview);
-        mTags.setText(addSmily(dd));
+        mTagsView.setText(addSmily(dd));
+        mAddedTags.add(mTags.get(position));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add_tag, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if( id == R.id.action_add_tag_video) {
+            BusProvider.getInstance().post(new AddTagsEvent(mAddedTags));
+        }
+        return true;
     }
 
 
@@ -73,6 +122,20 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    private class OnTextWatcherListener extends TagsDownloaderCallback {
+
+        @Override
+        public void onTagsDownloadSuccess(ArrayList<Tag> tags) {
+            mTags = tags;
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onTagsDownloadFailure() {
+
+        }
     }
 
     private SpannableStringBuilder addSmily(Drawable dd) {
@@ -99,7 +162,6 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         Bitmap viewBmp = cacheBmp.copy(Bitmap.Config.ARGB_8888, true);
         view.destroyDrawingCache();
         return new BitmapDrawable(getResources(), viewBmp);
-
     }
 
 }

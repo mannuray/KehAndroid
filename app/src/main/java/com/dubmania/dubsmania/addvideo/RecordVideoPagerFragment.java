@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
+import com.squareup.otto.Subscribe;
 
 public class RecordVideoPagerFragment extends Fragment {
+    private ViewPager mPager;
 
     public RecordVideoPagerFragment() {
         // Required empty public constructor
@@ -33,7 +36,7 @@ public class RecordVideoPagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record_video_pager, container, false);
         PagerAdapter mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-        ViewPager mPager = (ViewPager) view.findViewById(R.id.viewPager);
+        mPager = (ViewPager) view.findViewById(R.id.viewPager);
         mPager.setAdapter(mPagerAdapter);
         return view;
     }
@@ -81,5 +84,18 @@ public class RecordVideoPagerFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return titles[position];
         }
+    }
+
+    @Subscribe
+    public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
+        if (event.getPosition() == -1){
+            int position = mPager.getCurrentItem();
+            if (position == 0) {
+                getActivity().finish();
+            }
+            mPager.setCurrentItem(position - 1);
+            return;
+        }
+        mPager.setCurrentItem(event.getPosition());
     }
 }

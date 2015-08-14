@@ -11,8 +11,8 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.PasswordResetEvent;
-import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.PasswordResetEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.squareup.otto.Subscribe;
 
 

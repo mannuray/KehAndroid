@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.MyVideoItemShareEvent;
-import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
-import com.dubmania.dubsmania.communicator.eventbus.OnTouchListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,7 @@ public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHold
         holder.mDateTime.setText(mDataset.get(position).getmDate());
 
         holder.mShare.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
-        holder.mImageIcon.setOnTouchListener(new OnTouchListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
+        holder.mImageIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
     }
 
     @Override

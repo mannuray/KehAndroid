@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dubmania.dubsmania.addvideo.AddTagActivity">
-    <item android:id="@+id/action_next"
+    <item android:id="@+id/action_add_tag_video"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_media_play"
         android:orderInCategory="100"

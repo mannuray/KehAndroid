@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.SetDobEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetDobEvent;
 
 import java.util.Calendar;
 import java.util.Date;

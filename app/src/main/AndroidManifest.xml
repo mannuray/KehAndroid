@@ -18,6 +18,8 @@
         <activity
             android:name=".main.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,52 +30,74 @@
         <activity
             android:name=".misc.SearchActivity"
             android:label="@string/title_activity_search"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".addvideo.AddVideoActivity"
             android:label="@string/title_activity_add_sound"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".createdub.CreateDubActivity"
             android:label="@string/title_activity_create_dub"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".signupandlogin.SignupAndLoginActivity"
             android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".misc.AddLanguageActivity"
             android:label="@string/title_activity_add_language"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.MyAccountActivity"
             android:label="@string/title_activity_my_account"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.AddVideoBoardActivity"
             android:label="@string/title_activity_add_video_board"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.ShareVideoActivity"
             android:label="@string/title_activity_share_video"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.PlayVideoActivity"
             android:label="@string/title_activity_play_video"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.VideoBoardActivity"
             android:label="@string/title_activity_video_board"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".misc.AddVideoToBoardActivity"
             android:label="@string/title_activity_add_video_to_board"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.MainActivity" >
         </activity>
     </application>

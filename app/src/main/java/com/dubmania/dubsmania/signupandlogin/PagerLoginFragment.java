@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.FragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.LoginFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.FragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
 import com.squareup.otto.Subscribe;
 
 public class PagerLoginFragment extends Fragment {

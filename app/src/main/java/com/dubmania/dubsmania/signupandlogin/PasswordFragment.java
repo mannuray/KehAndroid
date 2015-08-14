@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.SignupPasswordEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupPasswordEvent;
 
 public class PasswordFragment extends Fragment {
 

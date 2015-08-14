@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.LoginEvent;
-import com.dubmania.dubsmania.communicator.eventbus.LoginFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
-import com.dubmania.dubsmania.communicator.eventbus.SignupInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.squareup.otto.Subscribe;
 
 public class LoginFragment extends Fragment {

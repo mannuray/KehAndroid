@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.ImportVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.OnClickListnerEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 
 import java.util.ArrayList;
 
@@ -23,47 +23,37 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
     private ArrayList<ImportVideoListItem> allObjects;
     private ArrayList<ImportVideoListItem> visibleObjects;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public ImportVideoAdapter(ArrayList<ImportVideoListItem> myDataset) {
         allObjects = myDataset;
-        visibleObjects = new ArrayList<ImportVideoListItem>();
+        visibleObjects = new ArrayList<>();
         visibleObjects.addAll(allObjects);
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public ImportVideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.import_video_item_list_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+    public ImportVideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.import_video_item_list_layout, parent, false));
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(visibleObjects.get(position).mFilePath, MediaStore.Video.Thumbnails.MICRO_KIND);
         holder.mImageIcon.setImageBitmap(bitmap);
         holder.mVideoName.setText(visibleObjects.get(position).mTitle);
         holder.mPath.setText(visibleObjects.get(position).mFilePath);
 
-        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<ImportVideoItemListEvent>(new ImportVideoItemListEvent(visibleObjects.get(position).mFilePath)));
+        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mFilePath)));
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return visibleObjects.size();
     }
 
     public void flushFilter(){
-        visibleObjects = new ArrayList<ImportVideoListItem>();
+        visibleObjects = new ArrayList<>();
         visibleObjects.addAll(allObjects);
         notifyDataSetChanged();
     }

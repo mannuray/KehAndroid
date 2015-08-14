@@ -6,18 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.squareup.otto.Subscribe;
 
 
 public class AddFinishFragment extends Fragment {
     private EditText mVideoTitle;
-    private NumberPicker mLanguage;
-    private Button mAddVideo;
+    private String mVideoTitleString;
+    private String[] mLanguages;
+    private String mLanguage;
 
     public AddFinishFragment() {
         // Required empty public constructor
@@ -33,7 +35,29 @@ public class AddFinishFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_finish, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_finish, container, false);
+        mLanguages = new  String[]{"Belgium", "France", "United Kingdom"};
+        mVideoTitle = (EditText) view.findViewById(R.id.editText);
+        mVideoTitle.setText(mVideoTitleString);
+        NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
+        mLanguagePicker.setMinValue(0);
+        mLanguagePicker.setMaxValue(2);
+        mLanguagePicker.setDisplayedValues(mLanguages); // get real values
+        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                mLanguage = mLanguages[scrollState];
+            }
+        });
+
+        view.findViewById(R.id.addVideo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), mLanguage));
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -48,4 +72,8 @@ public class AddFinishFragment extends Fragment {
         BusProvider.getInstance().unregister(this);
     }
 
+    @Subscribe
+    public void onAddVideoInfoEvent(AddVideoInfoEvent event) {
+        mVideoTitleString = event.getTitle();
+    }
 }

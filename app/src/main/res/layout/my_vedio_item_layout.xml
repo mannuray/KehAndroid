@@ -4,9 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <!-- A CardView that contains a TextView -->
-
-
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
@@ -24,7 +21,8 @@
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/my_video_thumbnail_image"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"

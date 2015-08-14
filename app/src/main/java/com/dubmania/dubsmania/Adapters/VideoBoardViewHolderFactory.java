@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.VideoBoardClickedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 
 /**
  * Created by rat on 8/2/2015.

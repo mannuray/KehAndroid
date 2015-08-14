@@ -15,10 +15,10 @@ import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.AddTrendingBoardListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.AddTrendingVideoListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

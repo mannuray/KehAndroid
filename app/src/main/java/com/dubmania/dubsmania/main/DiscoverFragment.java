@@ -15,9 +15,9 @@ import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
 import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.RecyclerViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
