@@ -1,28 +1,28 @@
 package com.dubmania.dubsmania.createdub;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.createdubevent.CreateDubShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
-import com.dubmania.dubsmania.misc.ShareVideoActivity;
-import com.dubmania.dubsmania.utils.AudioRecorder;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SavedDubsData;
 import com.dubmania.dubsmania.utils.VideoPreparer;
+import com.dubmania.dubsmania.utils.VideoSharer;
+import com.squareup.otto.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,40 +33,23 @@ import io.realm.Realm;
 
 public class CreateDubActivity extends AppCompatActivity {
 
-    private VideoView mVideoView;
-    private AudioRecorder mAudioRecorder;
-    private MediaPlayer mAudioPlayer;
-    private MediaPlayer mVideoPlayer;
+    private ViewPager mPager;
+    PagerAdapter mPagerAdapter;
 
     private File mVideoFile;
     private File mAudioFile;
-
-    private Button mPlayVideoOringinal;
-    private Button mRecord;
-    private Button mPlayVideoRecorded;
-
-    private boolean isRecording = false;
-    private boolean isRecordedAudiaAvailable = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_dub);
 
-        //set up view
-        mPlayVideoOringinal = (Button) findViewById(R.id.create_dub_play_original);
-        mPlayVideoOringinal.setEnabled(false);
-        mRecord = (Button) findViewById(R.id.create_dub_record);
-        mRecord.setEnabled(false);
-        mPlayVideoRecorded = (Button) findViewById(R.id.create_dub_play_recorded);
-        mPlayVideoRecorded.setEnabled(false);
-        ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mPager = (ViewPager) findViewById(R.id.viewPager);
+        mPager.setAdapter(mPagerAdapter);
 
         Intent intent = getIntent();
-        Long id = intent.getLongExtra(ConstantsStore.VIDEO_ID, Long.valueOf(0));
+        Long id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
 
         try {
             mVideoFile = File.createTempFile(id.toString() + "_video", "mp4", getApplicationContext().getCacheDir());
@@ -79,17 +62,7 @@ public class CreateDubActivity extends AppCompatActivity {
         mVideoDownloader.downloadVideo(ConstantsStore.DOWNLOAD_VIDEO_URL, id, mVideoFile, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
-                //mVideoFile = mFile;
-                mPlayVideoOringinal.setEnabled(true);
-                mRecord.setEnabled(true);
-                //playVideo();
-                try {
-                    mVideoView.setVideoURI(Uri.parse(mVideoFile.getAbsolutePath()));
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                mVideoView.requestFocus();
+                BusProvider.getInstance().post(new SetRecordFilesEvent(mAudioFile, mVideoFile));
             }
 
             @Override
@@ -102,32 +75,6 @@ public class CreateDubActivity extends AppCompatActivity {
 
             }
         });
-
-        //set up video
-        mVideoView = (VideoView) findViewById(R.id.create_dub_video_view);
-        mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                if(isRecording) {
-                    mAudioRecorder.stopRecording();
-                    isRecording = false;
-                    mRecord.setEnabled(true);
-                    isRecordedAudiaAvailable = true;
-                    mPlayVideoRecorded.setEnabled(true);
-                }
-            }
-        });
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mRecord.setEnabled(true);
-                mVideoPlayer = mediaPlayer;
-            }
-        });
-
-        // set up audio
-        mAudioRecorder = new AudioRecorder();
-        mAudioPlayer = new MediaPlayer();
-
     }
 
     @Override public void onResume() {
@@ -138,6 +85,15 @@ public class CreateDubActivity extends AppCompatActivity {
     @Override public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        int position = mPager.getCurrentItem();
+        if (position == 0 || (position == mPagerAdapter.getCount() - 1)) {
+            finish();
+        }
+        mPager.setCurrentItem(position - 1);
     }
 
     @Override
@@ -164,32 +120,35 @@ public class CreateDubActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onPlayVideoOrigClick(View v) throws IOException {
-        isRecording = false;
-        mVideoView.start();
-    }
+    private class MyPagerAdapter extends FragmentPagerAdapter {
 
-    public void onRecordVideoClick(View v) {
-        isRecording = true;
-        mRecord.setEnabled(false);
-        try {
-            mVideoPlayer.setVolume(0f, 0f);
-            mAudioRecorder.startRecording(mAudioFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        TypedArray title = getResources()
+                .obtainTypedArray(R.array.pager_signup_titles);
+        String titles[] = {title.getString(0), title.getString(1), title.getString(2), title.getString(3)};
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
-        mVideoView.start();
-    }
 
-    public void onPlayVideoRecordedClick(View v) {
-        try {
-            mAudioPlayer.setDataSource(mAudioFile.getAbsolutePath());
-            mAudioPlayer.prepare();
-            mVideoPlayer.setVolume(0f, 0f);
-            mAudioPlayer.start();
-            mVideoView.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+        @Override
+        public android.support.v4.app.Fragment getItem(int i) {
+
+            switch (i) {
+                case 0:
+                    return new RecordDubFragment();
+                case 1:
+                    return new FinishDubFragment();
+            }
+            return new RecordDubFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
         }
     }
 
@@ -212,9 +171,19 @@ public class CreateDubActivity extends AppCompatActivity {
         dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
         realm.commitTransaction();
 
-        Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(ConstantsStore.INTENT_FILE_PATH, outputFile.getAbsolutePath());
-        startActivity(intent);
+        mPager.setCurrentItem(1);
+    }
+
+    @Subscribe
+    public void onCreateDubShareEvent(CreateDubShareEvent event) {
+        switch (event.getAppId()) {
+            case ConstantsStore.SHARE_APP_ID_MESSENGER:
+                break;
+            case ConstantsStore.SHARE_APP_ID_WHATSAPP:
+                break;
+            case ConstantsStore.SHARE_APP_ID_SAVE_GALLERY:
+                new VideoSharer(this).saveInGallery(mVideoFile);
+        }
+        finish();
     }
 }

@@ -35,7 +35,7 @@ public class ConstantsStore {
     public final static String DOWNLOAD_VIDEO_URL = "searchservice/getvideo";
     public final static String GET_TRENDING_VIDEOS_URL = "searchservice/gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
-    public final static String URL_MARK_FAVORIT = USER_SERVICE  + "markfavorite";
+    public final static String URL_MARK_FAVORIT = USER_SERVICE + "markfavorite";
     public final static String URL_ADD_VIDEO = USER_SERVICE + "addvideo";
     public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "searchvideo";
     public final static String URL_GET_BOARD_VIDEOS = SEARCH_SERVICE + "getboardvideos";
@@ -75,4 +75,9 @@ public class ConstantsStore {
     public final static String PARAM_START = "start";
     public final static String PARAM_END = "end";
     public final static String PARAM_REGION = "region";
+
+    public final static int SHARE_APP_ID_MESSENGER = 0;
+    public final static int SHARE_APP_ID_WHATSAPP = 1;
+    public final static int SHARE_APP_ID_SAVE_GALLERY = 2;
 }
+

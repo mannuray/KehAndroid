@@ -73,13 +73,6 @@
             android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
-            android:name=".misc.ShareVideoActivity"
-            android:label="@string/title_activity_share_video"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName=".main.MainActivity" >
-        </activity>
-        <activity
             android:name=".misc.PlayVideoActivity"
             android:label="@string/title_activity_play_video"
             android:screenOrientation="portrait"

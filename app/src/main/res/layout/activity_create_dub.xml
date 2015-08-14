@@ -8,51 +8,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.dubmania.dubsmania.createdub.CreateDubActivity">
 
-    <VideoView
-        android:id="@+id/create_dub_video_view"
+    <com.dubmania.dubsmania.signupandlogin.NonSwipeableViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_below="@+id/create_dub_video_view"
-        android:layout_centerVertical="true" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/progressBar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_dub_play_original"
-            android:text="Pl o"
-            android:gravity="center_horizontal"
-            android:onClick="onPlayVideoOrigClick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_dub_record"
-            android:text="rec"
-            android:gravity="center_horizontal"
-            android:onClick="onRecordVideoClick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_dub_play_recorded"
-            android:text="pl r"
-            android:gravity="center_horizontal"
-            android:onClick="onPlayVideoRecordedClick"/>
-
-    </LinearLayout>
 </RelativeLayout>
