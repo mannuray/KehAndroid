@@ -12,7 +12,6 @@ import android.widget.NumberPicker;
 import com.dubmania.dubsmania.R;
 
 public class AddLanguageActivity extends AppCompatActivity {
-    private NumberPicker mLanguagePicker;
     private NumberPicker mCountryPicker;
 
 
@@ -22,7 +21,7 @@ public class AddLanguageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_language);
 
 
-        mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
+        NumberPicker mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
         mLanguagePicker.setMinValue(0);
         mLanguagePicker.setMaxValue(2);

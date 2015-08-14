@@ -11,7 +11,7 @@ import com.dubmania.dubsmania.R;
 /**
  * Created by rat on 8/13/2015.
  */
-public class BubbleSpan extends DynamicDrawableSpan {
+class BubbleSpan extends DynamicDrawableSpan {
     private Context c;
 
     public BubbleSpan(Context context) {

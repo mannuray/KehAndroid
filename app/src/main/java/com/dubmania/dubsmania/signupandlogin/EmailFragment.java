@@ -33,7 +33,8 @@ public class EmailFragment extends Fragment {
         mEmail = (EditText) rootView.findViewById(R.id.email);
         try {
             Account[] accounts = AccountManager.get(getActivity()).getAccountsByType("com.google");
-            for (Account account : accounts) {
+            for (int i = 0, accountsLength = accounts.length; i < accountsLength; i++) {
+                Account account = accounts[i];
                 mEmail.setText(account.name);
                 break;
             }

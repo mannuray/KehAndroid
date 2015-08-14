@@ -63,7 +63,6 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private TypedArray navMenuIcons;
 
     public NavigationDrawerFragment() {
     }
@@ -105,7 +104,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        navMenuIcons = getResources()
+        TypedArray navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         mDrawerListView.setAdapter(new NavDrawerListAdapter(
@@ -258,10 +257,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     /**
@@ -282,7 +278,7 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */

@@ -1,7 +1,6 @@
 package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,9 +14,9 @@ import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
@@ -29,9 +28,6 @@ public class TrendingFragment extends Fragment {
     private ArrayList<VideoListItem> mVideoItemList;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
-
-    // TO Do remove it after experimenth
-    private TypedArray navMenuIcons;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,12 +50,9 @@ public class TrendingFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
 
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
-
         mVideoItemList = new ArrayList<>();
-
         mVideoBoardItemList = new ArrayList<>();
+
         mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 

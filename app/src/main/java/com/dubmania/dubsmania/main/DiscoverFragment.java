@@ -34,7 +34,7 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
-    ProgressBar spinner;
+    private ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

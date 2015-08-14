@@ -24,8 +24,6 @@ import io.realm.RealmResults;
 
 
 public class MyDubsFragment extends Fragment {
-    private RecyclerView.Adapter mAdapter;
-    private ArrayList<MyVideoListItem> mMyVideoItemList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,14 +38,14 @@ public class MyDubsFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mMyVideoItemList = new ArrayList<>();
+        ArrayList<MyVideoListItem> mMyVideoItemList = new ArrayList<>();
 
         Realm realm = Realm.getInstance(getActivity().getApplicationContext());
         RealmResults<SavedDubsData> dubs = realm.allObjects(SavedDubsData.class).where().findAll();
         for(SavedDubsData dub: dubs) {
             mMyVideoItemList.add(new MyVideoListItem(ThumbnailUtils.createVideoThumbnail(dub.getFilePath(), MediaStore.Video.Thumbnails.MICRO_KIND), dub.getTitle(), "boardName", dub.getFilePath(), dub.getCreationDate()));
         }
-        mAdapter = new MyVideoAdapter(mMyVideoItemList);
+        RecyclerView.Adapter mAdapter = new MyVideoAdapter(mMyVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

@@ -9,8 +9,8 @@ import java.io.IOException;
  * Created by hardik.parekh on 8/3/2015.
  */
 public class AudioRecorder {
-    MediaRecorder mRecorder;
-    File mAudiofile = null;
+    private MediaRecorder mRecorder;
+    private File mAudiofile = null;
 
     public AudioRecorder() {
     }

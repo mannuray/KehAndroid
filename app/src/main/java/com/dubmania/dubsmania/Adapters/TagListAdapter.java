@@ -17,12 +17,11 @@ import java.util.ArrayList;
  */
 public class TagListAdapter extends BaseAdapter {
 
-    private Context context;
     protected LayoutInflater layoutInflater;
     private ArrayList<Tag> mDataset;
 
     public TagListAdapter(Context aContext, ArrayList<Tag> aTable) {
-        context = aContext;
+        Context context = aContext;
         mDataset = aTable;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -45,9 +44,7 @@ public class TagListAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.tag_layout, parent, false);
         }
 
-        Tag lRow = mDataset.get(position);
         TextView lName = (TextView) view.findViewById(R.id.tagName);
-
         lName.setText(mDataset.get(position).getTag());
         return view;
     }

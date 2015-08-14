@@ -18,7 +18,6 @@ import com.squareup.otto.Subscribe;
 
 public class ResetPasswordFragment extends Fragment {
 
-    private Button mLogin;
     private EditText mEmail;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
 
@@ -32,7 +31,7 @@ public class ResetPasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reset_password, container, false);
-        mLogin = (Button)view.findViewById(R.id.next);
+        Button mLogin = (Button) view.findViewById(R.id.next);
         mEmail = (EditText) view.findViewById(R.id.login_email);
         mEmail.setText(mStoreEmail);
         mLogin.setVisibility(View.INVISIBLE);

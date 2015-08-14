@@ -19,8 +19,7 @@ public class FinishFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
+        return (ViewGroup) inflater.inflate(
                 R.layout.fragment_signup_finish, container, false);
-        return rootView;
     }
 }

@@ -30,9 +30,6 @@ public class VideoBoardActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
 
     private Long mBoardId;
-    private String mBoardName;
-    private String mUserName;
-
 
 
     ProgressBar spinner;
@@ -44,8 +41,8 @@ public class VideoBoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, Long.valueOf(0));
-        mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
-        mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME);
+        String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
+        String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME);
 
         spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
         spinner.setVisibility(View.VISIBLE);

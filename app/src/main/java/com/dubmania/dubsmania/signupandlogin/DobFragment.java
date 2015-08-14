@@ -21,9 +21,9 @@ import java.util.regex.Pattern;
 
 public class DobFragment extends Fragment {
 
-    DatePicker picker;
-    TextView DOB;
-    Button next;
+    private DatePicker picker;
+    private TextView DOB;
+    private Button next;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,6 @@ public class DobFragment extends Fragment {
         next.setVisibility(View.INVISIBLE);
         DOB = (TextView) rootView.findViewById(R.id.text_dob);
         picker = (DatePicker) rootView.findViewById(R.id.dob_picker);
-        final Date date = new Date();
         picker.setMaxDate(new Date().getTime());
         picker.init(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override

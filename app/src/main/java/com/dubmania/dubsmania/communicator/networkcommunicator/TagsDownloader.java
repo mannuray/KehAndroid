@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 public class TagsDownloader {
     private TagsDownloaderCallback callback;
-    private ArrayList<Tag> mTags;
 
     public void downloadTags(String mTag, TagsDownloaderCallback callback) {
         downloadTags(ConstantsStore.URL_GET_TAGS, new RequestParams(ConstantsStore.PARAM_TAG_NAME, mTag),callback);
@@ -35,7 +34,7 @@ public class TagsDownloader {
             try {
                 Log.d("json error", response.toString());
                 JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_TAGS);
-                mTags = new ArrayList<>();
+                ArrayList<Tag> mTags = new ArrayList<>();
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject tag = videoList.getJSONObject(i);
                     mTags.add(new Tag(tag.getLong(ConstantsStore.PARAM_TAG_ID), tag.getString(ConstantsStore.PARAM_TAG_NAME)));

@@ -20,13 +20,12 @@ import org.apache.http.Header;
 import org.json.JSONException;
 
 public class MyAccountActivity extends AppCompatActivity {
-    private Button mLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
-        mLogout = (Button) findViewById(R.id.my_account_logout_button);
+        Button mLogout = (Button) findViewById(R.id.my_account_logout_button);
     }
 
 
