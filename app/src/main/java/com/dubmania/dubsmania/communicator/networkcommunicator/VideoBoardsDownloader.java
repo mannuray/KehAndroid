@@ -60,7 +60,7 @@ public class VideoBoardsDownloader {
                 for( int i = 0; i < videoBoardList.length(); i++ ){
                     JSONObject board = videoBoardList.getJSONObject(i);
                     Long id = Long.valueOf(board.getString(ConstantsStore.PARAM_BOARD_ID));
-                    mBoardList.add(new VideoBoardListItem(id, board.getString("name"), board.getString("user"), mBoardIcons.getResourceId(board.getInt("iconid"), -1)));
+                    mBoardList.add(new VideoBoardListItem(id, board.getString(ConstantsStore.PARAM_BOARD_NAME), board.getString("user"), mBoardIcons.getResourceId(board.getInt("iconid"), -1)));
                 }
                 mBoardIcons.recycle();
                 mCallback.onVideoBoardsDownloadSuccess(mBoardList);

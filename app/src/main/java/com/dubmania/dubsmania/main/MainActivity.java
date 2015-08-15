@@ -16,14 +16,16 @@ import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
-import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.VideoBoardScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
@@ -40,6 +42,7 @@ import com.dubmania.dubsmania.misc.PlayVideoActivity;
 import com.dubmania.dubsmania.misc.SearchActivity;
 import com.dubmania.dubsmania.misc.VideoBoardActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.dubmania.dubsmania.utils.VideoSharer;
 import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
@@ -221,9 +224,29 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Subscribe
+    public void onVideoBoardScrollEndedEvent(VideoBoardScrollEndedEvent event) {
+        SessionManager manager = new SessionManager(getApplicationContext());
+        if(!manager.isLoggedIn())
+            return;
+
+        new VideoBoardsDownloader(getApplicationContext()).getUserBoards(manager.getUser(), new VideoBoardDownloaderCallback() {
+            @Override
+            public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
+                BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
+            }
+
+            @Override
+            public void onVideosBoardsDownloadFailure() {
+
+            }
+        });
+    }
+
+    @Subscribe
     public void onCreateDubEvent(CreateDubEvent event) {
         Intent intent = new Intent(this, CreateDubActivity.class);
         intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
+        intent.putExtra(ConstantsStore.INTENT_VIDEO_TITLE, event.getTitle());
         startActivity(intent);
     }
 

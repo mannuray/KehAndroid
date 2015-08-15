@@ -13,11 +13,12 @@ public class VideoListItem {
     private boolean favourite;
     private Bitmap thumbnail;
 
-    public VideoListItem(Long id, String name, String user, String desc) {
+    public VideoListItem(Long id, String name, String user, String desc, boolean favourite) {
         this.id = id;
         this.name = name;
         this.user = user;
         this.desc = desc;
+        this.favourite = favourite;
     }
 
     public String getName() {

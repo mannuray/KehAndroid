@@ -24,10 +24,8 @@ public class VideoListDownloader {
     private Map<Long, VideoListItem> mVideoItemMap;
     private VideoListDownloaderCallback mCallback;
 
-    private boolean user = false;
     private int toProcess;
     private int processing;
-    private RequestParams mParams;
 
     public void downloadTrendingVideos(String region, Integer start, Integer end, String user, VideoListDownloaderCallback callback){
         RequestParams params = new RequestParams();
@@ -36,7 +34,7 @@ public class VideoListDownloader {
         params.add(ConstantsStore.PARAM_END, String.valueOf(end));
         params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
 
-        downloadVideos(ConstantsStore.GET_TRENDING_VIDEOS_URL, params, callback);
+        downloadVideos(ConstantsStore.URL_GET_TRENDING_VIDEOS, params, callback);
     }
 
     public void downloadDiscoverVideos(Integer page, String user, VideoListDownloaderCallback callback) {
@@ -64,33 +62,14 @@ public class VideoListDownloader {
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
         mVideoItemMap = new HashMap<>();
-        if(params.has("user")) {
-            user = true;
-            mParams = params;
-        }
         DubsmaniaHttpClient.get(url, params, new VideoDataDownloaderHandler());
-    }
-
-    private void downloadVideosFav() throws JSONException {
-        /* do this later
-        JSONObject entity = new JSONObject();
-        JSONArray videos = new JSONArray();
-        for (Map.Entry<Integer, VideoListItem> entry : mVideoItemMap.entrySet())
-        {
-            videos.put(entry.getKey());
-        }
-
-        entity.put("id", videos);
-        DubsmaniaHttpClient.post("searchservice/getfav", new RequestParams("data", entity.toString()), new VideoDataDownloaderHandler());
-        */
-        DubsmaniaHttpClient.get(ConstantsStore.GET_FAV_URL, mParams, new VideoFavDownloader());
     }
 
     private void downloadVideoIcons() {
         toProcess = mVideoItemMap.size();
         for (Map.Entry<Long, VideoListItem> entry : mVideoItemMap.entrySet())
         {
-            DubsmaniaHttpClient.get(ConstantsStore.GET_ICON_URL, new RequestParams("id", entry.getKey().toString()), new VideoIconDownloader(entry.getKey()));
+            DubsmaniaHttpClient.get(ConstantsStore.URL_GET_ICON, new RequestParams("id", entry.getKey().toString()), new VideoIconDownloader(entry.getKey()));
         }
     }
 
@@ -111,35 +90,18 @@ public class VideoListDownloader {
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             try {
                 Log.d("json error", response.toString());
-                JSONArray videoList = response.getJSONArray("video_list");
+                JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_VIDEO_LIST);
                 toProcess = videoList.length();
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject video = videoList.getJSONObject(i);
-                    Long id = Long.valueOf(video.getString("id"));
+                    Long id = Long.valueOf(video.getString(ConstantsStore.PARAM_USER_ID));
                     Log.d("json error id", id.toString());
-                    mVideoItemMap.put(id, new VideoListItem(id, video.getString("name"), video.getString("user"), video.getString("desc")));
+                    mVideoItemMap.put(id, new VideoListItem(id, video.getString(ConstantsStore.PARAM_VIDEO_TITLE),
+                            video.getString(ConstantsStore.PARAM_USER),
+                            video.getString(ConstantsStore.PARAM_VIDEO_DESC),
+                            video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV)));
                 }
-                if(user)
-                    downloadVideosFav();
                 downloadVideoIcons();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private class VideoFavDownloader extends JsonHttpResponseHandler {
-        @Override
-        public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-            try {
-                Log.d("json error", response.toString());
-                JSONArray videoList = response.getJSONArray("video_fav_list");
-                for( int i = 0; i < videoList.length(); i++ ){
-                    JSONObject video = videoList.getJSONObject(i);
-                    Long id = Long.valueOf(video.getString("id"));
-                    Log.d("json error id fav", id.toString());
-                    mVideoItemMap.get(id).setFavourite(true);
-                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

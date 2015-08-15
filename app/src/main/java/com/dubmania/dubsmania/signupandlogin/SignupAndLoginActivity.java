@@ -1,10 +1,8 @@
 package com.dubmania.dubsmania.signupandlogin;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,6 +31,7 @@ import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupPa
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -42,8 +41,6 @@ import com.squareup.otto.Subscribe;
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SignupAndLoginActivity extends AppCompatActivity {
 
@@ -198,7 +195,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onEmailCheckEvent(EmailCheckEvent event) {
         signUpInfo.setEmail(event.getEmail());
         signUpInfo.setUserName(event.getEmail().split("@")[0]);
-        DubsmaniaHttpClient.get("userservice/verifyUserEmail", new RequestParams("useremail", event.getEmail()), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.get(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAL, event.getEmail()), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
@@ -219,7 +216,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onSetUsernameEvent(SetUsernameEvent event) {
         signUpInfo.setUserName(event.getUsername());
-        DubsmaniaHttpClient.get("userservice/verifyUser", new RequestParams("username", event.getUsername()), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.get(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER, event.getUsername()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
@@ -245,11 +242,11 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         BusProvider.getInstance().post(new SignupFragmentChangeEvent(4));
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
-        params.add("username", signUpInfo.getUserName());
-        params.add("email", signUpInfo.getEmail());
-        params.add("password", signUpInfo.getPassword());
-        params.add("dob", signUpInfo.getDob());
-        DubsmaniaHttpClient.get("userservice/register", params, new JsonHttpResponseHandler() {
+        params.add(ConstantsStore.PARAM_USER_NAME, signUpInfo.getUserName());
+        params.add(ConstantsStore.PARAM_USER_EMAL, signUpInfo.getEmail());
+        params.add(ConstantsStore.PARAM_PASSWORD, signUpInfo.getPassword());
+        params.add(ConstantsStore.PARAM_DOB, signUpInfo.getDob());
+        DubsmaniaHttpClient.get(ConstantsStore.URL_REGISTER, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
@@ -276,24 +273,20 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onLoginEvent(LoginEvent event) {
         Toast.makeText(getApplicationContext(), "user login check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
-        params.add("username", event.getEmail());
-        params.add("password", event.getPassword());
-        DubsmaniaHttpClient.get("userservice/login", params, new JsonHttpResponseHandler() {
+        params.add(ConstantsStore.PARAM_USER, event.getEmail());
+        params.add(ConstantsStore.PARAM_PASSWORD, event.getPassword());
+        DubsmaniaHttpClient.get(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    if (!response.getBoolean("result")) {
+                    if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
                         Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
                         return;
                     }
                     else {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        AtomicReference<SharedPreferences.Editor> editor = new AtomicReference<>(sharedPreferences.edit());
-                        editor.get().putString(ConstantsStore.SHARED_KEY_USER_NAME, response.getString(ConstantsStore.PARAM_USER_NAME));
-                        editor.get().putString(ConstantsStore.SHARED_KEY_USER_EMAIL, response.getString(ConstantsStore.PARAM_USER_EMAL));
-                        editor.get().putBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, true);
-                        editor.get().apply();
+                        new SessionManager(getApplicationContext()).createLoginSession(response.getString(ConstantsStore.PARAM_USER_NAME),
+                                response.getString(ConstantsStore.PARAM_USER_EMAL));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -310,7 +303,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
     @Subscribe
     public void onPasswordResetEvent(PasswordResetEvent event) {
-        DubsmaniaHttpClient.get("userservice/resetpassword", new RequestParams("useremail", event.getEmail()), new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.get(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAL, event.getEmail()), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {

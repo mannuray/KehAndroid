@@ -2,14 +2,14 @@ package com.dubmania.dubsmania.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,7 +18,7 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.misc.MyAccountActivity;
 import com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity;
-import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 
 public class SettingFragment extends Fragment {
 
@@ -74,9 +74,15 @@ public class SettingFragment extends Fragment {
         rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.privacy_policy).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        setLoginView();
+        //setLoginView();
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_empty, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -98,25 +104,20 @@ public class SettingFragment extends Fragment {
     }
 
     private void setLoginView() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        if(sharedPreferences.getBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, false)) {
+        SessionManager manager = new SessionManager(getActivity().getApplicationContext());
+        if(manager.isLoggedIn()) {
+            mUsernameText.setText(manager.getUser());
+            mEmailText.setText(manager.getUserEmail());
+
             mLogin.setVisibility(View.GONE);
             mUsername.setVisibility(View.VISIBLE);
-            //mUsernameText.setVisibility(View.VISIBLE);
-            mUsernameText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_NAME, ""));
             mEmail.setVisibility(View.VISIBLE);
-            //mEmailText.setVisibility(View.VISIBLE);
-            mEmailText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_EMAIL, ""));
             mLogout.setVisibility(View.VISIBLE);
         }
         else {
             mLogin.setVisibility(View.VISIBLE);
             mUsername.setVisibility(View.GONE);
-            //mUsernameText.setVisibility(View.INVISIBLE);
-            //mUsernameText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_NAME, ""));
             mEmail.setVisibility(View.GONE);
-            //mEmailText.setVisibility(View.INVISIBLE);
-            //mEmailText.setText(sharedPreferences.getString(ConstantsStore.SHARED_KEY_USER_EMAIL, ""));
             mLogout.setVisibility(View.GONE);
         }
     }
