@@ -8,30 +8,31 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetUsernameEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.UserNameExistEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.squareup.otto.Subscribe;
 
 public class UserNameFragment extends Fragment {
 
-    private Button next;
+    private TextView next;
     private String mUsernameStore;
+    EditText mUsername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_username, container, false);
-        next = (Button) rootView.findViewById(R.id.next);
-        EditText mUsername = (EditText) rootView.findViewById(R.id.username);
+        next = (TextView) rootView.findViewById(R.id.next);
+        mUsername = (EditText) rootView.findViewById(R.id.enter_username);
         mUsername.setText(mUsernameStore);
         next.setOnClickListener(new OnClickListnerEvent<>(new SignupFragmentChangeEvent(2)));
         mUsername.addTextChangedListener(new TextWatcher() {
@@ -66,6 +67,16 @@ public class UserNameFragment extends Fragment {
     @Subscribe
     public void onSignupInfoEvent(SignupInfoEvent event) {
         mUsernameStore = event.getUsername();
+        if(mUsername != null) {
+            mUsername.setText(mUsernameStore);
+        }
+    }
+
+    @Subscribe
+    public void onSetUsernameEvent(SetUsernameEvent event) {
+        if(mUsername != null) {
+            mUsername.setText(event.getUsername());
+        }
     }
 
     @Subscribe

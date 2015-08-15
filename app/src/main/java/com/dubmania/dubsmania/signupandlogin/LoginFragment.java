@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,13 +13,13 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.squareup.otto.Subscribe;
 
 public class LoginFragment extends Fragment {
 
-    private Button mLogin;
+    private TextView mLogin;
     private EditText mEmail;
     private EditText mPassword;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
@@ -36,7 +35,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        mLogin = (Button)view.findViewById(R.id.next);
+        mLogin = (TextView)view.findViewById(R.id.next);
         mEmail = (EditText) view.findViewById(R.id.login_email);
         mEmail.setText(mStoreEmail);
         mPassword = (EditText) view.findViewById(R.id.login_password);

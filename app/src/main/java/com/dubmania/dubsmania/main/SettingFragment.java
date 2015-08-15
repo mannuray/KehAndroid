@@ -54,6 +54,7 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

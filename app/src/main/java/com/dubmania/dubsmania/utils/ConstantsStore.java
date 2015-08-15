@@ -52,8 +52,8 @@ public class ConstantsStore {
     public final static String URL_USER_LOGOUT = USER_SERVICE + "logout";
     public final static String URL_REGISTER = USER_SERVICE + "register";
     public final static String URL_RESET_PASSWORD = USER_SERVICE + "resetpassword";
-    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyuser";
-    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyuseremail";
+    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyUser";
+    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyUserEmail";
 
     // HTTP params
     public final static String PARAM_USER = "user";

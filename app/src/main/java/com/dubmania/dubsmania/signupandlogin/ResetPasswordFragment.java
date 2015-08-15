@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -31,8 +31,8 @@ public class ResetPasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reset_password, container, false);
-        Button mLogin = (Button) view.findViewById(R.id.next);
-        mEmail = (EditText) view.findViewById(R.id.login_email);
+        TextView mLogin = (TextView) view.findViewById(R.id.next);
+        mEmail = (EditText) view.findViewById(R.id.email_id);
         mEmail.setText(mStoreEmail);
         mLogin.setVisibility(View.INVISIBLE);
         mLogin.setOnClickListener(new View.OnClickListener() {

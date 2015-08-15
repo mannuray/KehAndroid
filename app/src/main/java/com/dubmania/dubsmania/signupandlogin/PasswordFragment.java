@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -21,8 +21,8 @@ public class PasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_password, container, false);
-        Button next = (Button) rootView.findViewById(R.id.next);
-        mPassword = (EditText) rootView.findViewById(R.id.password);
+        TextView next = (TextView) rootView.findViewById(R.id.next);
+        mPassword = (EditText) rootView.findViewById(R.id.enter_password);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
