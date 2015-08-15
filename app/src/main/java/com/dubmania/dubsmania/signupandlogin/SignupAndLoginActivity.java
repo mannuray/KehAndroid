@@ -280,7 +280,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    if (!response.getBoolean("result")) {
+                    if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
                         Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
                         return;
                     }

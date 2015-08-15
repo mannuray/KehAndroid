@@ -45,15 +45,22 @@ public class SessionManager {
     }
 
     public String getUser() {
-        return mSharedPreferences.getString(KEY_NAME, null);
+        if(isLoggedIn())
+            return mSharedPreferences.getString(KEY_NAME, null);
+        else
+            return "";
     }
 
     public String getUserEmail() {
-        return mSharedPreferences.getString(KEY_EMAIL, null);
+
+        if(isLoggedIn())
+            return mSharedPreferences.getString(KEY_EMAIL, null);
+        else
+            return "";
     }
 
     public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
         user.put(KEY_NAME, mSharedPreferences.getString(KEY_NAME, null));
         user.put(KEY_EMAIL, mSharedPreferences.getString(KEY_EMAIL, null));
         return user;
@@ -72,6 +79,7 @@ public class SessionManager {
         new AlertDialog.Builder(mContext)
             .setTitle(R.string.register_dialog_title)
             .setMessage(R.string.register_dialog_text)
+            .setCancelable(false)
             .setPositiveButton(R.string.register_dialog_register, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(mContext, SignupAndLoginActivity.class);

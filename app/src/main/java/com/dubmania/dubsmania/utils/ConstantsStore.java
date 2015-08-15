@@ -33,6 +33,7 @@ public class ConstantsStore {
     public final static String URL_DOWNLOAD_VIDEO = SEARCH_SERVICE + "getvideo";
     public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
+    public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
     public final static String URL_MARK_FAVORIT = USER_SERVICE + "markfavorite";
     public final static String URL_ADD_VIDEO = USER_SERVICE + "addvideo";
     public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "searchvideo";
@@ -51,19 +52,21 @@ public class ConstantsStore {
     public final static String URL_USER_LOGOUT = USER_SERVICE + "logout";
     public final static String URL_REGISTER = USER_SERVICE + "register";
     public final static String URL_RESET_PASSWORD = USER_SERVICE + "resetpassword";
-    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyUser";
-    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "markfavorite";
+    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyuser";
+    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyuseremail";
 
     // HTTP params
     public final static String PARAM_USER = "user";
+    public final static String PARAM_USER_ID = "id";
     public final static String PARAM_USER_NAME = "username";
     public final static String PARAM_USER_EMAL = "useremail";
     public final static String PARAM_PASSWORD = "password";
     public final static String PARAM_DOB = "dob";
 
-    public final static String PARAM_BOARD_NAME = "name";
-    public final static String PARAM_BOARD_LIST = "boardlist";
-    public final static String PARAM_BOARD_ID = "boardid";
+    public final static String PARAM_BOARD_NAME = "board_name";
+    public final static String PARAM_BOARD_LIST = "board_list";
+    public final static String PARAM_BOARD_ID = "board_id";
+    public final static String PARAM_BOARD_ICON = "board_icon_id";
 
 
     public final static String PARAM_FAVORIT = "favorite";
@@ -71,6 +74,8 @@ public class ConstantsStore {
     public final static String PARAM_VIDEO_TITLE = "videotitle";
     public final static String PARAM_VIDEO_FILE = "video";
     public final static String PARAM_VIDEO_DESC = "desc";
+    public final static String PARAM_VIDEO_FAV = "fav";
+    public final static String PARAM_VIDEO_LIST = "video_list";
 
     public final static String PARAM_TAGS = "tags";
     public final static String PARAM_TAG_ID = "id";
@@ -82,6 +87,7 @@ public class ConstantsStore {
     public final static String PARAM_START = "start";
     public final static String PARAM_END = "end";
     public final static String PARAM_REGION = "region";
+    public final static String PARAM_RESULT = "result";
 
     public final static int SHARE_APP_ID_MESSENGER = 0;
     public final static int SHARE_APP_ID_WHATSAPP = 1;

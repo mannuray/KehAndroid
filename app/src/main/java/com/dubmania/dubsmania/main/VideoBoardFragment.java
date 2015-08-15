@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -17,6 +19,7 @@ import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
 import com.squareup.otto.Subscribe;
 
@@ -26,6 +29,7 @@ import java.util.Arrays;
 public class VideoBoardFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
+    private boolean mVisibleFirstTime = true;
 
     public VideoBoardFragment() {
         // Required empty public constructor
@@ -68,6 +72,21 @@ public class VideoBoardFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_empty, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible && mVisibleFirstTime) {
+            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+            mVisibleFirstTime = false;
+        }
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);
@@ -81,7 +100,7 @@ public class VideoBoardFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
-        mVideoBoardItemList.add(event.getVideoBoard());
+        mVideoBoardItemList.addAll(event.getVideoBoard());
         mAdapter.notifyDataSetChanged();
     }
 }

@@ -21,6 +21,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -40,9 +41,9 @@ public class VideoBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_board);
 
         Intent intent = getIntent();
-        mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, Long.valueOf(0));
-        String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
-        String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME);
+        mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, (long) 0);
+        String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME); // set it in action bar
+        String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME); // set it in action bar
 
         spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
         spinner.setVisibility(View.VISIBLE);
@@ -90,7 +91,8 @@ public class VideoBoardActivity extends AppCompatActivity {
     }
 
     private void populateData() {
-        new VideoListDownloader().downloadBoardVideo(mBoardId, "mannuk", new VideoListDownloaderCallback() {
+
+        new VideoListDownloader().downloadBoardVideo(mBoardId, new SessionManager(getApplicationContext()).getUser(), new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 mVideoItemList.addAll(videos);
