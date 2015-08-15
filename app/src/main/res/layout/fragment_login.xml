@@ -1,55 +1,90 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dubmania.dubsmania.signupandlogin.LoginFragment">
+    android:orientation="vertical" >
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/login_welcome"
-        android:id="@+id/login_welcome"
-        android:layout_gravity="center|top" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/login_message"
-        android:id="@+id/login_message"
-        android:layout_gravity="center|top" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/login_email"
-        android:layout_gravity="center|top|" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="@string/login_password_hint"
-        android:id="@+id/login_password"
-        android:layout_gravity="center" />
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/login_button_text"
-        android:id="@+id/login_forgot_password"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:layout_height="0dp"
+        android:layout_weight="9">
 
-    <Button
+        <ImageView
+            android:id="@+id/mail_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/common_signin_btn_icon_focus_light"/>
+
+        <TextView
+            android:id="@+id/whats_your_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/mail_logo"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:text="What's your email?"/>
+
+        <TextView
+            android:id="@+id/expose_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/whats_your_email"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:text="we will not expose your email address to other \n users on Dubsmash "/>
+
+
+        <EditText
+            android:id="@+id/email_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expose_msg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:drawableRight="@drawable/abc_ic_clear_mtrl_alpha"/>
+
+        <TextView
+            android:id="@+id/already_registered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:textColor="@color/primaryColorDark"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Already have an account ? Login"
+            android:layout_below="@+id/email_id"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login_button_text"
-        android:id="@+id/next"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:layout_height="0dp"
+        android:layout_below="@id/your_email"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/primaryColorDark">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textSize="22sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
