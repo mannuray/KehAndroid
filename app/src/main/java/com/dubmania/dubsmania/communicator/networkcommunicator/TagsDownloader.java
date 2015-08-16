@@ -33,10 +33,10 @@ public class TagsDownloader {
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             try {
                 Log.d("json error", response.toString());
-                JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_TAGS);
+                JSONArray tagList = response.getJSONArray(ConstantsStore.PARAM_TAGS);
                 ArrayList<Tag> mTags = new ArrayList<>();
-                for( int i = 0; i < videoList.length(); i++ ){
-                    JSONObject tag = videoList.getJSONObject(i);
+                for( int i = 0; i < tagList.length(); i++ ){
+                    JSONObject tag = tagList.getJSONObject(i);
                     mTags.add(new Tag(tag.getLong(ConstantsStore.PARAM_TAG_ID), tag.getString(ConstantsStore.PARAM_TAG_NAME)));
                 }
                 callback.onTagsDownloadSuccess(mTags);

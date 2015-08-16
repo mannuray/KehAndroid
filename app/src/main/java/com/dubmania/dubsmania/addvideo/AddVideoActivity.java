@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -158,7 +159,8 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
-        new VideoUploader().addVideo(mVideoInfo.mFilePath, mVideoInfo.getTitle(), "desc for now ", mVideoInfo.getTags());
+        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), "desc for now ", mVideoInfo.getTags());
         // add code for finish :)
+        Toast.makeText(getApplicationContext(), " add video finish", Toast.LENGTH_LONG).show();
     }
 }

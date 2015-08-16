@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -226,8 +227,10 @@ public class MainActivity extends ActionBarActivity
     @Subscribe
     public void onVideoBoardScrollEndedEvent(VideoBoardScrollEndedEvent event) {
         SessionManager manager = new SessionManager(getApplicationContext());
-        if(!manager.isLoggedIn())
+        if(!manager.isLoggedIn()) {
+            Log.d("Board ,", "not logged in");
             return;
+        }
 
         new VideoBoardsDownloader(getApplicationContext()).getUserBoards(manager.getUser(), new VideoBoardDownloaderCallback() {
             @Override

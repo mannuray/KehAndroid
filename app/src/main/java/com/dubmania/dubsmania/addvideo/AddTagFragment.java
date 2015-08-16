@@ -1,6 +1,5 @@
 package com.dubmania.dubsmania.addvideo;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,6 +12,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +39,6 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     private ArrayList<Tag> mTags;
     private ArrayList<Tag> mAddedTags;
     private TagsDownloader mTagsDownloader;
-    private ActionBar mActionBar;
 
     public AddTagFragment() {
         // Required empty public constructor
@@ -55,12 +54,13 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTagsDownloader = new TagsDownloader();
         mTags = new ArrayList<>();
+        mTags.add(new Tag((long)123, "hello"));
+        mTags.add(new Tag((long)123, "tu hi"));
         mAddedTags = new ArrayList<>();
 
         View view = inflater.inflate(R.layout.fragment_add_tag, container, false);
         mTagsView = (TextView) view.findViewById(R.id.textView);
         mAdapter = new TagListAdapter(getActivity().getApplicationContext(), mTags);
-        mActionBar = getActivity().getActionBar();
         /*new ArrayAdapter<>(getActivity(),
         android.R.layout.simple_list_item_1, android.R.id.text1, mTags);*/
 
@@ -92,7 +92,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         textview.setBackgroundResource(R.drawable.oval);
         textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_btn_check_material, 0);
         BitmapDrawable dd = (BitmapDrawable) getDrawableFromTExtView(textview);
-        mTagsView.setText(addSmily(dd));
+        mTagsView.append(addSmily(dd));
         mAddedTags.add(mTags.get(position));
     }
 
@@ -130,6 +130,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         public void onTagsDownloadSuccess(ArrayList<Tag> tags) {
             mTags = tags;
             mAdapter.notifyDataSetChanged();
+            Log.d("dataset ", "change notified ");
         }
 
         @Override

@@ -17,7 +17,6 @@ import com.squareup.otto.Subscribe;
 
 public class AddFinishFragment extends Fragment {
     private EditText mVideoTitle;
-    private String mVideoTitleString;
     private String[] mLanguages;
     private String mLanguage;
 
@@ -38,7 +37,6 @@ public class AddFinishFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_finish, container, false);
         mLanguages = new  String[]{"Belgium", "France", "United Kingdom"};
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
-        mVideoTitle.setText(mVideoTitleString);
         NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
         mLanguagePicker.setMinValue(0);
         mLanguagePicker.setMaxValue(2);
@@ -74,6 +72,6 @@ public class AddFinishFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoInfoEvent(AddVideoInfoEvent event) {
-        mVideoTitleString = event.getTitle();
+        mVideoTitle.setText(event.getTitle());
     }
 }

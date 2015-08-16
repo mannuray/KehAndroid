@@ -13,9 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -29,6 +31,7 @@ public class VideoUploader {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] thumbnail = stream.toByteArray();
+        InputStream myInputStream = new ByteArrayInputStream(thumbnail);
 
         JSONArray tagsArray = new JSONArray();
         for (Tag tag: tags)
@@ -44,7 +47,7 @@ public class VideoUploader {
         try {
             params.put(ConstantsStore.PARAM_VIDEO_TITLE, title);
             params.put(ConstantsStore.PARAM_VIDEO_DESC, desc);
-            params.put(ConstantsStore.PARAM_ICON_FILE, thumbnail);
+            params.put(ConstantsStore.PARAM_ICON_FILE, myInputStream, "thumbnail.png");
             params.put(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile);
             params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
         } catch(FileNotFoundException ignored) {}

@@ -13,7 +13,7 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
-import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.squareup.otto.Subscribe;
 
@@ -71,7 +71,9 @@ public class LoginFragment extends Fragment {
     }
 
     @Subscribe
-    public void onSignupInfoEvent(SignupInfoEvent event) {
+    public void onLoginSetEmailEvent(LoginSetEmailEvent event) {
         mStoreEmail = event.getEmail();
+        mEmail.setText(mStoreEmail);
+
     }
 }

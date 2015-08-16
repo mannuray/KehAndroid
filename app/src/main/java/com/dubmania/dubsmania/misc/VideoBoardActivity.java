@@ -16,10 +16,12 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoFavoriteMarker;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
+import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
@@ -97,6 +99,7 @@ public class VideoBoardActivity extends AppCompatActivity {
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 mVideoItemList.addAll(videos);
                 mAdapter.notifyDataSetChanged();
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
@@ -116,5 +119,12 @@ public class VideoBoardActivity extends AppCompatActivity {
     @Subscribe
     public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
         new VideoFavoriteMarker().markVavrioute(event.getId(), event.ismFavrioute());
+    }
+
+    @Subscribe
+    public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
+        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
+        dialog.mVideoId = event.getId();
+        dialog.show(getSupportFragmentManager(), "tag");
     }
 }

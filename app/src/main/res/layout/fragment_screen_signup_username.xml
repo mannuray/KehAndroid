@@ -36,7 +36,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
-            android:text="Your username should contain only letters .\n numbers,: and - "/>
+            android:text="Your username should contain only letters, numbers, : and - "/>
 
 
         <EditText

@@ -17,9 +17,9 @@ import android.widget.ImageButton;
 import com.dubmania.dubsmania.Adapters.VideoBoardAdapter;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.VideoBoardScrollEndedEvent;
 import com.dubmania.dubsmania.misc.AddVideoBoardActivity;
 import com.squareup.otto.Subscribe;
 
@@ -77,11 +77,21 @@ public class VideoBoardFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /*
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+            BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
+            mVisibleFirstTime = false;
+        }
+    }*/
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && mVisibleFirstTime) {
+            BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
             mVisibleFirstTime = false;
         }
     }

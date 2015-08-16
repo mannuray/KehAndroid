@@ -22,6 +22,7 @@ import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.EmailExi
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.FragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.PasswordResetEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetDobEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetUsernameEvent;
@@ -163,6 +164,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                BusProvider.getInstance().post(new LoginSetEmailEvent(signUpInfo.getUserName())); // change this when login becom based no email
                 changeFragment(1);
                 Log.d("otto event", "seind set email evnte ");
             }
@@ -194,16 +196,16 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onEmailCheckEvent(EmailCheckEvent event) {
         signUpInfo.setEmail(event.getEmail());
-        signUpInfo.setUserName(event.getEmail().split("@")[0]);
         DubsmaniaHttpClient.get(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAL, event.getEmail()), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
                     if (!response.getBoolean("result")) {
-                        BusProvider.getInstance().post(new SetUsernameEvent(signUpInfo.getUserName()));
+                        BusProvider.getInstance().post(new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob()));
                         BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
                     } else {
+                        signUpInfo.setUserName(response.getString(ConstantsStore.PARAM_USER_NAME));
                         getEmailExistDialog().show();
                     }
                 } catch (JSONException e) {
@@ -273,7 +275,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onLoginEvent(LoginEvent event) {
         Toast.makeText(getApplicationContext(), "user login check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_USER, event.getEmail());
+        params.add(ConstantsStore.PARAM_USER_NAME, event.getEmail());
         params.add(ConstantsStore.PARAM_PASSWORD, event.getPassword());
         DubsmaniaHttpClient.get(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
             @Override

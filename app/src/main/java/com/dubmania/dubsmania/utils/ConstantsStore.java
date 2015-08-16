@@ -40,7 +40,7 @@ public class ConstantsStore {
     public final static String URL_GET_BOARD_VIDEOS = SEARCH_SERVICE + "getboardvideos";
     public final static String URL_GET_ICON = "searchservice/geticon";
 
-    public final static String URL_GET_BOARDS = USER_SERVICE + "getboards";
+    public final static String URL_GET_BOARDS = USER_SERVICE + "getuserboards";
     public final static String URL_ADD_BOARD = USER_SERVICE + "addvedioboard";
     public final static String URL_ADD_VIDEO_TO_BOARD = USER_SERVICE + "addvideotoboard";
     public final static String URL_GET_TRENDING_BOARDS = SEARCH_SERVICE + "gettrendingboards";
@@ -52,8 +52,8 @@ public class ConstantsStore {
     public final static String URL_USER_LOGOUT = USER_SERVICE + "logout";
     public final static String URL_REGISTER = USER_SERVICE + "register";
     public final static String URL_RESET_PASSWORD = USER_SERVICE + "resetpassword";
-    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyUser";
-    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyUserEmail";
+    public final static String URL_VERIFY_USER = USER_SERVICE + "verifyuser";
+    public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyuseremail";
 
     // HTTP params
     public final static String PARAM_USER = "user";
@@ -70,8 +70,8 @@ public class ConstantsStore {
 
 
     public final static String PARAM_FAVORIT = "favorite";
-    public final static String PARAM_VIDEO_ID = "videoid";
-    public final static String PARAM_VIDEO_TITLE = "videotitle";
+    public final static String PARAM_VIDEO_ID = "video_id";
+    public final static String PARAM_VIDEO_TITLE = "title";
     public final static String PARAM_VIDEO_FILE = "video";
     public final static String PARAM_VIDEO_DESC = "desc";
     public final static String PARAM_VIDEO_FAV = "fav";
@@ -81,7 +81,7 @@ public class ConstantsStore {
     public final static String PARAM_TAG_ID = "id";
     public final static String PARAM_TAG_NAME = "tagname";
 
-    public final static String PARAM_ICON_ID = "icon";
+    public final static String PARAM_ICON_ID = "icon_id";
     public final static String PARAM_ICON_FILE = "icon";
 
     public final static String PARAM_START = "start";

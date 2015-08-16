@@ -34,7 +34,7 @@ public class VideoBoardsDownloader {
     }
 
     public void getUserBoards(String user, VideoBoardDownloaderCallback callback) {
-        getVideoBoards(ConstantsStore.URL_GET_TRENDING_BOARDS, new RequestParams(ConstantsStore.PARAM_USER, user), callback);
+        getVideoBoards(ConstantsStore.URL_GET_BOARDS, new RequestParams(ConstantsStore.PARAM_USER, user), callback);
     }
 
     public void getTrendingBoards(String mRegion, Integer start, Integer end, VideoBoardDownloaderCallback callback) {
@@ -60,7 +60,9 @@ public class VideoBoardsDownloader {
                 for( int i = 0; i < videoBoardList.length(); i++ ){
                     JSONObject board = videoBoardList.getJSONObject(i);
                     Long id = Long.valueOf(board.getString(ConstantsStore.PARAM_BOARD_ID));
-                    mBoardList.add(new VideoBoardListItem(id, board.getString(ConstantsStore.PARAM_BOARD_NAME), board.getString("user"), mBoardIcons.getResourceId(board.getInt("iconid"), -1)));
+                    mBoardList.add(new VideoBoardListItem(id, board.getString(ConstantsStore.PARAM_BOARD_NAME),
+                            board.getString(ConstantsStore.PARAM_USER_NAME),
+                            mBoardIcons.getResourceId(board.getInt(ConstantsStore.PARAM_BOARD_ICON), -1)));
                 }
                 mBoardIcons.recycle();
                 mCallback.onVideoBoardsDownloadSuccess(mBoardList);

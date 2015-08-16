@@ -73,13 +73,6 @@ public class UserNameFragment extends Fragment {
     }
 
     @Subscribe
-    public void onSetUsernameEvent(SetUsernameEvent event) {
-        if(mUsername != null) {
-            mUsername.setText(event.getUsername());
-        }
-    }
-
-    @Subscribe
     public void onUserNameExistEvent(UserNameExistEvent event) {
         if(event.isUserNameExist())
             next.setVisibility(View.INVISIBLE);
