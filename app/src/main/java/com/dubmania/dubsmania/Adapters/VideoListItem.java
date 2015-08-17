@@ -9,16 +9,15 @@ public class VideoListItem {
     private Long id;
     private String name;
     private String user;
-    private String desc;
     private boolean favourite;
     private Bitmap thumbnail;
 
-    public VideoListItem(Long id, String name, String user, String desc, boolean favourite) {
+    public VideoListItem(Long id, String name, String user, boolean favourite, Bitmap thumbnail) {
         this.id = id;
         this.name = name;
         this.user = user;
-        this.desc = desc;
         this.favourite = favourite;
+        this.thumbnail = thumbnail;
     }
 
     public String getName() {
@@ -33,23 +32,11 @@ public class VideoListItem {
         return id;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
     public boolean isFavourite() {
         return favourite;
     }
 
-    public void setFavourite(boolean favourite) {
-        this.favourite = favourite;
-    }
-
     public Bitmap getThumbnail() {
         return thumbnail;
-    }
-
-    public void setThumbnail(Bitmap thumbnail) {
-        this.thumbnail = thumbnail;
     }
 }

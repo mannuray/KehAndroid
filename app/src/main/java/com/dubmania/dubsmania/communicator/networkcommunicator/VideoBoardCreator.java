@@ -16,7 +16,7 @@ public class VideoBoardCreator {
     public void addVideoBoard(String boardName, int iconId) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_NAME, boardName);
-        params.add(ConstantsStore.PARAM_ICON_ID, String.valueOf(iconId));
+        params.add(ConstantsStore.PARAM_BOARD_ICON, String.valueOf(iconId));
         DubsmaniaHttpClient.get(ConstantsStore.URL_ADD_BOARD, params, new JsonHttpResponseHandler(){
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {

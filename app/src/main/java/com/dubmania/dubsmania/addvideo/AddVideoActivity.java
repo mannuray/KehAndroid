@@ -17,6 +17,7 @@ import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoEditEv
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.squareup.otto.Subscribe;
 
@@ -159,8 +160,17 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
-        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), "desc for now ", mVideoInfo.getTags());
-        // add code for finish :)
+        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), mVideoInfo.getTags(), new VideoUploaderCallback() {
+            @Override
+            public void onVideosUploadSuccess() {
+                finish();
+            }
+
+            @Override
+            public void onVideosUploadFailure() {
+
+            }
+        });
         Toast.makeText(getApplicationContext(), " add video finish", Toast.LENGTH_LONG).show();
     }
 }

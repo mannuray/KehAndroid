@@ -7,25 +7,18 @@ import android.util.Log;
 
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VideoListDownloader {
-    private Map<Long, VideoListItem> mVideoItemMap;
     private VideoListDownloaderCallback mCallback;
-
-    private int toProcess;
-    private int processing;
 
     public void downloadTrendingVideos(String region, Integer start, Integer end, String user, VideoListDownloaderCallback callback){
         RequestParams params = new RequestParams();
@@ -61,28 +54,7 @@ public class VideoListDownloader {
 
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        mVideoItemMap = new HashMap<>();
         DubsmaniaHttpClient.get(url, params, new VideoDataDownloaderHandler());
-    }
-
-    private void downloadVideoIcons() {
-        toProcess = mVideoItemMap.size();
-        for (Map.Entry<Long, VideoListItem> entry : mVideoItemMap.entrySet())
-        {
-            DubsmaniaHttpClient.get(ConstantsStore.URL_GET_ICON, new RequestParams("id", entry.getKey().toString()), new VideoIconDownloader(entry.getKey()));
-        }
-    }
-
-    private void processedIcon() {
-        processing++;
-        if(toProcess == processing) {
-            ArrayList<VideoListItem> videos = new ArrayList<>();
-            for (Map.Entry<Long, VideoListItem> entry : mVideoItemMap.entrySet())
-            {
-                videos.add(entry.getValue());
-            }
-            mCallback.onVideosDownloadSuccess(videos);
-        }
     }
 
     private class VideoDataDownloaderHandler extends JsonHttpResponseHandler {
@@ -91,40 +63,21 @@ public class VideoListDownloader {
             try {
                 Log.d("json error", response.toString());
                 JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_VIDEO_LIST);
-                toProcess = videoList.length();
+                ArrayList <VideoListItem> mVideoItemList = new ArrayList<>();
                 for( int i = 0; i < videoList.length(); i++ ){
                     JSONObject video = videoList.getJSONObject(i);
-                    Long id = Long.valueOf(video.getString(ConstantsStore.PARAM_USER_ID));
-                    Log.d("json error id", id.toString());
-                    mVideoItemMap.put(id, new VideoListItem(id, video.getString(ConstantsStore.PARAM_VIDEO_TITLE),
+                    String thumbnailString = video.getString(ConstantsStore.PARAM_VIDEO_THUMBNAIL);
+                    byte[] thumbnailByte = Base64.decode(thumbnailString, 0);
+                    Bitmap thumbnail = BitmapFactory.decodeByteArray(thumbnailByte, 0, thumbnailByte.length);
+                    mVideoItemList.add(new VideoListItem(Long.valueOf(video.getString(ConstantsStore.PARAM_USER_ID)),
+                            video.getString(ConstantsStore.PARAM_VIDEO_TITLE),
                             video.getString(ConstantsStore.PARAM_USER),
-                            video.getString(ConstantsStore.PARAM_VIDEO_DESC),
-                            video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV)));
+                            video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV), thumbnail));
                 }
-                downloadVideoIcons();
+                mCallback.onVideosDownloadSuccess(mVideoItemList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private class VideoIconDownloader extends AsyncHttpResponseHandler {
-
-        private Long mId;
-        public VideoIconDownloader(Long id) {
-            mId = id;
-        }
-
-        @Override
-        public void  onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] response) {
-            Bitmap thumbnail = BitmapFactory.decodeByteArray(response, 0, response.length);
-            Log.d("json array icon", mId.toString());
-            mVideoItemMap.get(mId).setThumbnail(thumbnail);
-            processedIcon();
-        }
-
-        @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
         }
     }
 }

@@ -6,6 +6,7 @@ import android.provider.MediaStore;
 
 import com.dubmania.dubsmania.addvideo.Tag;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -24,14 +25,19 @@ import java.util.ArrayList;
  * Created by rat on 8/11/2015.
  */
 public class VideoUploader {
+    VideoUploaderCallback mCallback;
 
-    public void addVideo(String mFilePath, String title, String desc, ArrayList<Tag> tags) {
+    public void addVideo(String mFilePath, String title, ArrayList<Tag> tags, VideoUploaderCallback callback) {
         File mVideoFile = new File(mFilePath);
+        mCallback = callback;
+
+        // encode image to byte array
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mVideoFile.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] thumbnail = stream.toByteArray();
-        InputStream myInputStream = new ByteArrayInputStream(thumbnail);
+        String imageEncoded = Base64.encodeToString(thumbnail, Base64.DEFAULT);
+        InputStream myInputStream = new ByteArrayInputStream(imageEncoded.getBytes());
 
         JSONArray tagsArray = new JSONArray();
         for (Tag tag: tags)
@@ -46,8 +52,7 @@ public class VideoUploader {
         RequestParams params = new RequestParams();
         try {
             params.put(ConstantsStore.PARAM_VIDEO_TITLE, title);
-            params.put(ConstantsStore.PARAM_VIDEO_DESC, desc);
-            params.put(ConstantsStore.PARAM_ICON_FILE, myInputStream, "thumbnail.png");
+            params.put(ConstantsStore.PARAM_VIDEO_THUMBNAIL, myInputStream, "thumbnail.png");
             params.put(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile);
             params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
         } catch(FileNotFoundException ignored) {}
@@ -55,7 +60,7 @@ public class VideoUploader {
         DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-
+                mCallback.onVideosUploadSuccess();
             }
         });
     }

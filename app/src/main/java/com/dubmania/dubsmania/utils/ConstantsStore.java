@@ -71,18 +71,15 @@ public class ConstantsStore {
 
     public final static String PARAM_FAVORIT = "favorite";
     public final static String PARAM_VIDEO_ID = "video_id";
-    public final static String PARAM_VIDEO_TITLE = "title";
+    public final static String PARAM_VIDEO_TITLE = "video_title";
     public final static String PARAM_VIDEO_FILE = "video";
-    public final static String PARAM_VIDEO_DESC = "desc";
     public final static String PARAM_VIDEO_FAV = "fav";
+    public final static String PARAM_VIDEO_THUMBNAIL = "thumbnail";
     public final static String PARAM_VIDEO_LIST = "video_list";
 
     public final static String PARAM_TAGS = "tags";
     public final static String PARAM_TAG_ID = "id";
     public final static String PARAM_TAG_NAME = "tagname";
-
-    public final static String PARAM_ICON_ID = "icon_id";
-    public final static String PARAM_ICON_FILE = "icon";
 
     public final static String PARAM_START = "start";
     public final static String PARAM_END = "end";
