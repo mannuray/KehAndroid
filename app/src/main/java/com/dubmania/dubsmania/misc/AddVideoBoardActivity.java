@@ -1,5 +1,7 @@
 package com.dubmania.dubsmania.misc;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.GridView;
 import com.dubmania.dubsmania.Adapters.ImageAdapter;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardCreator;
+import com.dubmania.dubsmania.utils.SessionManager;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,17 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_video_board);
+        new SessionManager(this).checkLogin(new SessionManager.LoginListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure() {
+                finish();
+            }
+        });
         mBoardName = (EditText) findViewById(R.id.add_video_board_name_edit);
         GridView mBoardIcon = (GridView) findViewById(R.id.add_video_board_gridView);
 
@@ -44,6 +58,12 @@ public class AddVideoBoardActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+            finish();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

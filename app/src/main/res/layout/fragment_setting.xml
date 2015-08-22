@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
@@ -39,47 +40,62 @@
             android:textSize="12sp">
         </TextView>
 
-        <TextView
-            android:id="@+id/fragment_setting_username_view"
-            android:layout_width="wrap_content"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/login_box"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:text="Username"
-            android:textColor="@android:color/secondary_text_dark"
-            android:textSize="12sp">
-        </TextView>
+            android:layout_width="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/frament_setting_username_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:textColor="@android:color/secondary_text_dark"
-            android:textSize="12sp">
-        </TextView>
+            <TextView
+                android:id="@+id/fragment_setting_username_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:text="Username"
+                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="12sp">
+            </TextView>
 
-        <TextView
-            android:id="@+id/fragment_setting_email_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:text="Email"
-            android:textColor="@android:color/secondary_text_dark"
-            android:textSize="12sp">
-        </TextView>
+            <TextView
+                android:id="@+id/frament_setting_username_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="12sp">
+            </TextView>
 
-        <TextView
-            android:id="@+id/frament_setting_email_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:textColor="@android:color/secondary_text_dark"
-            android:textSize="12sp">
-        </TextView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/fragment_setting_email_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:text="Email"
+                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="12sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/frament_setting_email_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="12sp">
+            </TextView>]
+        </LinearLayout>
 
 
 
@@ -96,6 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
@@ -106,7 +123,9 @@
             android:layout_marginTop="15dp"
             android:text="Change languages"
             android:textColor="@android:color/secondary_text_dark"
-            android:textSize="12sp">
+            android:textSize="12sp"
+            android:clickable="true"
+            android:onClick="changeLanguage">
 
         </TextView>
 
@@ -152,6 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
@@ -169,6 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
@@ -186,6 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
@@ -203,6 +225,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
@@ -221,17 +244,35 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pushBox"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
-            android:text="Push notifications \n Daily"
+            android:text="Push notifications"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/settingPushNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="Daily"
+            android:textColor="@android:color/secondary_text_dark"
+            android:textSize="12sp"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -264,8 +305,7 @@
             android:id="@+id/version_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center_vertical" />
     </LinearLayout>
-
-
 </ScrollView>

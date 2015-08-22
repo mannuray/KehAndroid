@@ -19,7 +19,7 @@ import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
@@ -212,7 +212,7 @@ public class MainActivity extends ActionBarActivity
         new VideoBoardsDownloader(getApplicationContext()).getTrendingBoards("India", 0, 15, new VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
-                BusProvider.getInstance().post(new AddTrendingBoardListEvent(boards));
+                BusProvider.getInstance().post(new AddDiscoverBoardListEvent(boards));
             }
 
             @Override
@@ -226,7 +226,7 @@ public class MainActivity extends ActionBarActivity
 
     @Subscribe
     public void onVideoBoardScrollEndedEvent(VideoBoardScrollEndedEvent event) {
-        SessionManager manager = new SessionManager(getApplicationContext());
+        SessionManager manager = new SessionManager(this);
         if(!manager.isLoggedIn()) {
             Log.d("Board ,", "not logged in");
             return;

@@ -22,12 +22,12 @@ import com.dubmania.dubsmania.utils.SessionManager;
 
 public class SettingFragment extends Fragment {
 
+    private View mLoginInfo;
     private TextView mLogin;
-    private View mUsername;
-    private View mEmail;
-    private TextView mUsernameText;
-    private TextView mEmailText;
+    private TextView mUsername;
+    private TextView mEmail;
     private TextView mLogout;
+    private TextView mPushStatus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +41,10 @@ public class SettingFragment extends Fragment {
         setHasOptionsMenu(true);
         View rootView =  inflater.inflate(R.layout.fragment_setting, container, false);
         mLogin = (TextView) rootView.findViewById(R.id.login_signup);
-        mUsername = rootView.findViewById(R.id.fragment_setting_username_view);
-        mUsernameText = (TextView) rootView.findViewById(R.id.frament_setting_username_edit);
-        mEmail = rootView.findViewById(R.id.fragment_setting_email_view);
-        mEmailText = (TextView) rootView.findViewById(R.id.frament_setting_email_edit);
+        mLoginInfo = rootView.findViewById(R.id.login_box);
+        mUsername = (TextView) rootView.findViewById(R.id.frament_setting_username_edit);
+        mEmail = (TextView) rootView.findViewById(R.id.frament_setting_email_edit);
+        mPushStatus = (TextView) rootView.findViewById(R.id.settingPushNotification);
         mLogout = (TextView) rootView.findViewById(R.id.logout_text);
 
         mLogin.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,13 @@ public class SettingFragment extends Fragment {
         rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.privacy_policy).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        //setLoginView();
+        rootView.findViewById(R.id.pushBox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // show list dialog box
+            }
+        });
+        setLoginView();
 
         return rootView;
     }
@@ -87,9 +93,9 @@ public class SettingFragment extends Fragment {
     }
 
     @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        setLoginView();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) { setLoginView(); }
     }
 
     @Override
@@ -105,20 +111,18 @@ public class SettingFragment extends Fragment {
     }
 
     private void setLoginView() {
-        SessionManager manager = new SessionManager(getActivity().getApplicationContext());
+        SessionManager manager = new SessionManager(getActivity());
         if(manager.isLoggedIn()) {
-            mUsernameText.setText(manager.getUser());
-            mEmailText.setText(manager.getUserEmail());
+            mUsername.setText(manager.getUser());
+            mEmail.setText(manager.getUserEmail());
 
             mLogin.setVisibility(View.GONE);
-            mUsername.setVisibility(View.VISIBLE);
-            mEmail.setVisibility(View.VISIBLE);
+            mLoginInfo.setVisibility(View.VISIBLE);
             mLogout.setVisibility(View.VISIBLE);
         }
         else {
             mLogin.setVisibility(View.VISIBLE);
-            mUsername.setVisibility(View.GONE);
-            mEmail.setVisibility(View.GONE);
+            mLoginInfo.setVisibility(View.GONE);
             mLogout.setVisibility(View.GONE);
         }
     }

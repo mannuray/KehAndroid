@@ -7,12 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -24,8 +25,10 @@ public class MyAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SessionManager sessionManager = new SessionManager(this);
         setContentView(R.layout.activity_my_account);
-        Button mLogout = (Button) findViewById(R.id.my_account_logout_button);
+        TextView myAccountText = (TextView) findViewById(R.id.myAccountText);
+        myAccountText.setText(String.format(getString(R.string.my_account_text), sessionManager.getUser(), sessionManager.getUserEmail()));
     }
 
 
@@ -68,18 +71,15 @@ public class MyAccountActivity extends AppCompatActivity {
                         editor.commit();
                         finish();
                     }
-                    Toast.makeText(getApplicationContext(), "Unable to logout user", Toast.LENGTH_LONG).show();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                Toast.makeText(getApplicationContext(), "Unable to logout user", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 Toast.makeText(getApplicationContext(), "Unable to logout user", Toast.LENGTH_LONG).show();
-                finish();
             }
         });
     }

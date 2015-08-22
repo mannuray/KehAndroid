@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
-import com.dubmania.dubsmania.Adapters.VideoAdapter;
+import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
+import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
@@ -33,6 +35,7 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
+    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
     private ProgressBar spinner;
 
@@ -60,7 +63,9 @@ public class DiscoverFragment extends Fragment {
         // specify an adapter (see also next example)
 
         mVideoItemList = new ArrayList<>();
-        mAdapter = new VideoAdapter(mVideoItemList);
+        mVideoBoardItemList = new ArrayList<>();
+
+        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
         spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
@@ -86,7 +91,7 @@ public class DiscoverFragment extends Fragment {
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(mRecyclerView.getId(), 0));
+            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(0, 0));
             mVisibleFirstTime = false;
         }
     }
@@ -96,5 +101,11 @@ public class DiscoverFragment extends Fragment {
         mVideoItemList.addAll(event.mVideoItemList);
         mAdapter.notifyDataSetChanged();
         spinner.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onAddTrendingBoardListEvent(AddDiscoverBoardListEvent event) {
+        mVideoBoardItemList.addAll(event.mVideoBoardItemList);
+        mAdapter.notifyDataSetChanged();
     }
 }

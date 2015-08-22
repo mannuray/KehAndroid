@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -21,7 +21,7 @@ import com.squareup.otto.Subscribe;
 
 public class EmailFragment extends Fragment {
 
-    TextView next;
+    Button next;
     EditText mEmail;
     ProgressDialog progressDialog;
 
@@ -42,7 +42,7 @@ public class EmailFragment extends Fragment {
             Log.i("Exception", "Exception:" + exception);
         }
 
-        next = (TextView) rootView.findViewById(R.id.next);
+        next = (Button) rootView.findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +66,7 @@ public class EmailFragment extends Fragment {
 
     @Subscribe
     public void onEmailExistEvent(EmailExistEvent event) {
-        // TO DO reset, i.e. stop progress bar
+        mEmail.setText("");
+        // stop progerss bar
     }
 }

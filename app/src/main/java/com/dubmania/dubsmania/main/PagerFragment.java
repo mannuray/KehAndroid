@@ -73,9 +73,9 @@ public class PagerFragment extends Fragment {
         public android.support.v4.app.Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return new TrendingFragment();
-                case 1:
                     return new DiscoverFragment();
+                case 1:
+                    return new TrendingFragment();
                 case 2:
                     return new VideoBoardFragment();
             }

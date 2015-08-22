@@ -10,12 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
-import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
+import com.dubmania.dubsmania.Adapters.VideoAdapter;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
@@ -26,7 +24,6 @@ public class TrendingFragment extends Fragment {
 
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
-    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
 
     /**
@@ -51,9 +48,8 @@ public class TrendingFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
 
         mVideoItemList = new ArrayList<>();
-        mVideoBoardItemList = new ArrayList<>();
 
-        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
+        mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -84,12 +80,6 @@ public class TrendingFragment extends Fragment {
     @Subscribe
     public void onAddTrendingVideoListEvent(AddTrendingVideoListEvent event) {
         mVideoItemList.addAll(event.mVideoItemList);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Subscribe
-    public void onAddTrendingBoardListEvent(AddTrendingBoardListEvent event) {
-        mVideoBoardItemList.addAll(event.mVideoBoardItemList);
         mAdapter.notifyDataSetChanged();
     }
 }

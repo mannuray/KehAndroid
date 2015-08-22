@@ -9,14 +9,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center|top"
-        android:text="@string/add_video_method_question" />
+        android:text="@string/my_account_text"
+        android:id="@+id/myAccountText" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="75dp"
-        android:layout_margin="20dp"
+        android:text="@string/my_account_button_text"
         android:id="@+id/my_account_logout_button"
         android:gravity="center_horizontal"
-        android:onClick="onLogoutClick"/>
+        android:onClick="onLogoutClick"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/myAccountText"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

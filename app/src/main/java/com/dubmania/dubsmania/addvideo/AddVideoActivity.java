@@ -1,5 +1,6 @@
 package com.dubmania.dubsmania.addvideo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoIte
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -31,10 +33,28 @@ public class AddVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_video);
+        new SessionManager(this).checkLogin(new SessionManager.LoginListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure() {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         changeFragment(intent.getIntExtra(ConstantsStore.INTENT_ADD_VIDEO_ACTION, ConstantsStore.INTENT_ADD_VIDEO_RECORD));
         mVideoInfo = new VideoInfo();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+            finish();
+        }
     }
 
     @Override
@@ -168,9 +188,9 @@ public class AddVideoActivity extends AppCompatActivity {
 
             @Override
             public void onVideosUploadFailure() {
-
+                Toast.makeText(getApplicationContext(), " unable to add video", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
-        Toast.makeText(getApplicationContext(), " add video finish", Toast.LENGTH_LONG).show();
     }
 }

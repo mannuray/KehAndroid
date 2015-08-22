@@ -1,5 +1,6 @@
 package com.dubmania.dubsmania.signupandlogin;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -181,6 +182,11 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
         return builder.create();
     }
+
+    private void setLoginResult(int action) {
+        this.setResult(action);
+        this.finish();
+    }
     
     @Subscribe
     public void onFragmentChangeEvent(FragmentChangeEvent event) {
@@ -202,8 +208,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
                     if (!response.getBoolean("result")) {
-                        BusProvider.getInstance().post(new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob()));
-                        BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
+                        changeFragment();
                     } else {
                         signUpInfo.setUserName(response.getString(ConstantsStore.PARAM_USER_NAME));
                         getEmailExistDialog().show();
@@ -211,6 +216,16 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                changeFragment();
+            }
+
+            private void changeFragment() {
+                BusProvider.getInstance().post(new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob()));
+                BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
             }
         });
     }
@@ -228,6 +243,11 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+
             }
         });
     }
@@ -253,20 +273,28 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user rister check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    if (!response.getBoolean("result")) {
+                    int responseCode = response.getInt("result");
+                    if (responseCode == ConstantsStore.PARAM_SUCCESS) {
                         Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
+                        setLoginResult(Activity.RESULT_OK);
+                    }
+                    else if (responseCode == ConstantsStore.PARAM_REGISTER_USER_EXIST) {
+                        Toast.makeText(getApplicationContext(), "user name taken", Toast.LENGTH_LONG).show();
+                        BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
+                    }
+                    else if (responseCode == ConstantsStore.PARAM_REGISTER_EMAIL_EXIST) {
+                        Toast.makeText(getApplicationContext(), "email name taken", Toast.LENGTH_LONG).show();
+                        BusProvider.getInstance().post(new SignupFragmentChangeEvent(0));
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                finish();
             }
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
-                finish();
             }
         });
     }
@@ -283,17 +311,16 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                 try {
                     Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
                     if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
-                        Toast.makeText(getApplicationContext(), "Unable to register login", Toast.LENGTH_LONG).show();
-                        return;
+                        Toast.makeText(getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
                     }
                     else {
-                        new SessionManager(getApplicationContext()).createLoginSession(response.getString(ConstantsStore.PARAM_USER_NAME),
+                        new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getString(ConstantsStore.PARAM_USER_NAME),
                                 response.getString(ConstantsStore.PARAM_USER_EMAL));
+                        setLoginResult(Activity.RESULT_OK);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                finish();
             }
 
             @Override
@@ -317,7 +344,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                finish();
+                setLoginResult(Activity.RESULT_CANCELED);
             }
 
             @Override
@@ -330,5 +357,4 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public SignupInfoEvent produceSignupInfo() {
         return new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob());
     }
-
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 /**
  * Created by rat on 8/2/2015.
  */
-public class AddTrendingBoardListEvent {
+public class AddDiscoverBoardListEvent {
     public ArrayList<VideoBoardListItem> mVideoBoardItemList;
 
-    public AddTrendingBoardListEvent(ArrayList<VideoBoardListItem> mVideoItemList) {
+    public AddDiscoverBoardListEvent(ArrayList<VideoBoardListItem> mVideoItemList) {
         this.mVideoBoardItemList = mVideoItemList;
     }
 }

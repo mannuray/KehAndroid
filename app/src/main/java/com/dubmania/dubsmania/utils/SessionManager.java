@@ -1,6 +1,6 @@
 package com.dubmania.dubsmania.utils;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +17,8 @@ import java.util.HashMap;
 public class SessionManager {
     SharedPreferences mSharedPreferences;
     SharedPreferences.Editor mEditor;
-    Context mContext;
+    Activity mActivity;
+    private LoginListener mLoginListener;
 
     int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "dubsmaniaPref";
@@ -25,9 +26,9 @@ public class SessionManager {
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
 
-    public SessionManager(Context context){
-        this.mContext = context;
-        mSharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+    public SessionManager(Activity activity){
+        this.mActivity = activity;
+        mSharedPreferences = mActivity.getApplicationContext().getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         mEditor = mSharedPreferences.edit();
     }
 
@@ -38,7 +39,8 @@ public class SessionManager {
         mEditor.commit();
     }
 
-    public void checkLogin(){
+    public void checkLogin(LoginListener listener){
+        mLoginListener = listener;
         if(!this.isLoggedIn()){
             displayRegisterDialog();
         }
@@ -76,24 +78,29 @@ public class SessionManager {
     }
 
     private void displayRegisterDialog() {
-        new AlertDialog.Builder(mContext)
+        new AlertDialog.Builder(mActivity)
             .setTitle(R.string.register_dialog_title)
             .setMessage(R.string.register_dialog_text)
             .setCancelable(false)
             .setPositiveButton(R.string.register_dialog_register, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(mContext, SignupAndLoginActivity.class);
+                    Intent intent = new Intent(mActivity, SignupAndLoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intent);
+                    mActivity.startActivityForResult(intent, 1);
                 }
             })
             .setNegativeButton(R.string.register_dialog_cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    // do nothing
+                    mLoginListener.onFailure();
                 }
             })
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
+    }
+
+    public static abstract class LoginListener {
+        public abstract void onSuccess();
+        public abstract void onFailure();
     }
 }

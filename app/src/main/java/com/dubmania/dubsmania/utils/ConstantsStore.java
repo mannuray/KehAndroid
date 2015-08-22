@@ -86,6 +86,11 @@ public class ConstantsStore {
     public final static String PARAM_REGION = "region";
     public final static String PARAM_RESULT = "result";
 
+    public final static int PARAM_FAILUERE = 0;
+    public final static int PARAM_SUCCESS = 1;
+    public final static int PARAM_REGISTER_USER_EXIST = 1;
+    public final static int PARAM_REGISTER_EMAIL_EXIST = 2;
+
     public final static int SHARE_APP_ID_MESSENGER = 0;
     public final static int SHARE_APP_ID_WHATSAPP = 1;
     public final static int SHARE_APP_ID_SAVE_GALLERY = 2;

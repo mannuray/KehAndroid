@@ -57,8 +57,8 @@
     </array>
 
     <array name="pager_titles">
-        <item>Trending</item>
         <item>Discover</item>
+        <item>Trending</item>
         <item>Video Board</item>
     </array>
 
@@ -152,6 +152,10 @@
     <string name="register_dialog_text">Create a free account to create your own video</string>
     <string name="register_dialog_register">Register</string>
     <string name="register_dialog_cancel">Cancel</string>
+
+    <!-- my account actinvity string -->
+    <string name="my_account_text">Loggend in as %1$s\n(%2$s)</string>
+    <string name="my_account_button_text">Logout</string>
 
 
 </resources>
