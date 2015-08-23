@@ -12,8 +12,10 @@ import org.json.JSONException;
  * Created by rat on 8/11/2015.
  */
 public class VideoBoardCreator {
+    private VideoBoardCreaterCallback mCallback;
 
-    public void addVideoBoard(String boardName, int iconId) {
+    public void addVideoBoard(String boardName, int iconId, VideoBoardCreaterCallback callback) {
+        mCallback = callback;
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_NAME, boardName);
         params.add(ConstantsStore.PARAM_BOARD_ICON, String.valueOf(iconId));
@@ -24,11 +26,17 @@ public class VideoBoardCreator {
                     Log.d("json error", response.toString());
                     if (!response.getBoolean("result")) {
                         Log.d("got it ", String.valueOf(statusCode));
+                        mCallback.onVideoBoardsCreaterSuccess();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                mCallback.onVideosBoardsCreaterFailure();
             }
         });
     }

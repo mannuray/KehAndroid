@@ -28,7 +28,7 @@ public class VideoDownloader {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-
+            mCallback.onVideosDownloadFailure();
         }
 
         @Override

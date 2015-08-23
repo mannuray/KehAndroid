@@ -83,6 +83,12 @@
         <item>Improve</item>
     </array>
 
+    <!-- popup menu item string -->
+    <string name="add_video_to_board">Add to Videoboard</string>
+    <string name="share_it">Share it</string>
+    <string name="report_it">Report it</string>
+    <string name="improve">Improve</string>
+
     <!-- Activity titles -->
     <string name="title_activity_search">Search</string>
     <string name="title_activity_add_sound">AddSoundActivity</string>

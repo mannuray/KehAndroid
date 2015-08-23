@@ -75,7 +75,9 @@ public class ConstantsStore {
     public final static String PARAM_VIDEO_FILE = "video";
     public final static String PARAM_VIDEO_FAV = "fav";
     public final static String PARAM_VIDEO_THUMBNAIL = "thumbnail";
+    public final static String PARAM_VIDEO_COUNTRY = "country";
     public final static String PARAM_VIDEO_LIST = "video_list";
+    public final static String PARAM_VIDEO_UPLOAD_URL = "upload_url";
 
     public final static String PARAM_TAGS = "tags";
     public final static String PARAM_TAG_ID = "id";

@@ -1,8 +1,6 @@
 package com.dubmania.dubsmania.misc;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +12,10 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
-import org.json.JSONException;
 
 public class MyAccountActivity extends AppCompatActivity {
 
@@ -57,28 +54,15 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     public void onLogoutClick(View v) {
-        DubsmaniaHttpClient.get(ConstantsStore.URL_USER_LOGOUT, new RequestParams(), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.get(ConstantsStore.URL_USER_LOGOUT, new RequestParams(), new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-                try {
-                    Toast.makeText(getApplicationContext(), "user logout " + response.toString(), Toast.LENGTH_LONG).show();
-                    if (response.getBoolean("result")) {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(ConstantsStore.SHARED_KEY_USER_NAME, ""); //put after result modification
-                        editor.putString(ConstantsStore.SHARED_KEY_USER_EMAIL, "");
-                        editor.putBoolean(ConstantsStore.SHARED_KEY_USER_LOGIN, false);
-                        editor.commit();
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(getApplicationContext(), "Unable to logout user", Toast.LENGTH_LONG).show();
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                new SessionManager(MyAccountActivity.this).logoutUser();
+                finish();
             }
 
             @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Toast.makeText(getApplicationContext(), "Unable to logout user", Toast.LENGTH_LONG).show();
             }
         });

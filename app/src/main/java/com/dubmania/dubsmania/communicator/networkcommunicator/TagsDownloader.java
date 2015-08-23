@@ -17,14 +17,14 @@ import java.util.ArrayList;
  * Created by rat on 8/14/2015.
  */
 public class TagsDownloader {
-    private TagsDownloaderCallback callback;
+    private TagsDownloaderCallback mCallback;
 
     public void downloadTags(String mTag, TagsDownloaderCallback callback) {
         downloadTags(ConstantsStore.URL_GET_TAGS, new RequestParams(ConstantsStore.PARAM_TAG_NAME, mTag),callback);
     }
 
     public void downloadTags(String mUrl, RequestParams params, TagsDownloaderCallback callback) {
-        this.callback = callback;
+        this.mCallback = callback;
         DubsmaniaHttpClient.post(mUrl, params, new TagsDownloaderHandler());
     }
 
@@ -39,10 +39,15 @@ public class TagsDownloader {
                     JSONObject tag = tagList.getJSONObject(i);
                     mTags.add(new Tag(tag.getLong(ConstantsStore.PARAM_TAG_ID), tag.getString(ConstantsStore.PARAM_TAG_NAME)));
                 }
-                callback.onTagsDownloadSuccess(mTags);
+                mCallback.onTagsDownloadSuccess(mTags);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            mCallback.onTagsDownloadFailure();
         }
     }
 }

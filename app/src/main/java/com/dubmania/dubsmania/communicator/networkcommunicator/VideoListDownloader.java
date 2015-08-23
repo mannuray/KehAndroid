@@ -79,6 +79,11 @@ public class VideoListDownloader {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            mCallback.onVideosDownloadFailure();
+        }
     }
 }
 

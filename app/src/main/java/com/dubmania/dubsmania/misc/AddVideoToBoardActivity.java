@@ -14,9 +14,11 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.AddVideoToBoard;
+import com.dubmania.dubsmania.communicator.networkcommunicator.AddVideoToBoardCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardsDownloader;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -76,11 +78,22 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoBoardClickedEvent(VideoBoardClickedEvent event) {
-        new AddVideoToBoard().addVideoToBoard(event.getId(), mVideoId);
+        new AddVideoToBoard().addVideoToBoard(event.getId(), mVideoId, new AddVideoToBoardCallback() {
+            @Override
+            public void onAddVideoToBoardSuccess() {
+                finish();
+            }
+
+            @Override
+            public void onAddVideoToBoardFailure() {
+                // show toast
+            }
+        });
     }
 
     private void populateData() {
-        new VideoBoardsDownloader(getApplicationContext()).getUserBoards("manuk", new VideoBoardDownloaderCallback() {
+        String user = new SessionManager(this).getUser();
+        new VideoBoardsDownloader(getApplicationContext()).getUserBoards(user, new VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 mVideoBoardItemList.addAll(boards);
@@ -89,7 +102,7 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
 
             @Override
             public void onVideosBoardsDownloadFailure() {
-
+                // do nothing
             }
         });
 

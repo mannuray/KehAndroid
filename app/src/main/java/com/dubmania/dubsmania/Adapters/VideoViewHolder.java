@@ -26,7 +26,6 @@ public class VideoViewHolder extends RecyclerView.ViewHolder {
         mVideoUserName = (TextView) v.findViewById(R.id.videoUserName);
         mVideoThumbnail = (ImageView) v.findViewById(R.id.videoThumbnailImage);
         mMenuIcon = (ImageView) v.findViewById(R.id.video_menu_icon);
-        mMenuIcon.setImageResource(R.drawable.ic_video_play_button);
         mFavourite = (CheckBox) v.findViewById(R.id.favourite);
         mInfoBoxLayout = v.findViewById(R.id.discover_info_box);
 

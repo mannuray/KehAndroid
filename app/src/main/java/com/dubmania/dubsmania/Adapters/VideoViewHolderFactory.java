@@ -21,7 +21,7 @@ public class VideoViewHolderFactory {
         videoHolder.mFavourite.setChecked(item.isFavourite());
         videoHolder.mVideoThumbnail.setImageBitmap(item.getThumbnail());
 
-        videoHolder.mMenuIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoItemMenuEvent(item.getId())));
+        videoHolder.mMenuIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoItemMenuEvent(item.getId(), videoHolder.mMenuIcon)));
         videoHolder.mInfoBoxLayout.setOnClickListener(new OnClickListnerEvent<>(new CreateDubEvent(item.getId(), item.getName()))); //
         videoHolder.mFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

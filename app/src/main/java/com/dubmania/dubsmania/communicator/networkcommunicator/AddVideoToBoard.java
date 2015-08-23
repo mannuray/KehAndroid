@@ -11,7 +11,10 @@ import com.loopj.android.http.RequestParams;
  */
 public class AddVideoToBoard {
 
-    public void addVideoToBoard(Long boardId, Long videoId) {
+    private AddVideoToBoardCallback mCallback;
+
+    public void addVideoToBoard(Long boardId, Long videoId, AddVideoToBoardCallback callback) {
+        mCallback = callback;
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(boardId));
         params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(videoId));
@@ -19,6 +22,12 @@ public class AddVideoToBoard {
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 Log.d("json error", "add to video to board " + response.toString());
+                mCallback.onAddVideoToBoardSuccess();
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                mCallback.onAddVideoToBoardFailure();
             }
         });
     }

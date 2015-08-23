@@ -25,10 +25,10 @@ import java.util.ArrayList;
  * Created by rat on 8/11/2015.
  */
 public class VideoUploader {
-    VideoUploaderCallback mCallback;
+    private VideoUploaderCallback mCallback;
 
-    public void addVideo(String mFilePath, String title, ArrayList<Tag> tags, VideoUploaderCallback callback) {
-        File mVideoFile = new File(mFilePath);
+    public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, String country, VideoUploaderCallback callback) {
+        final File mVideoFile = new File(mFilePath);
         mCallback = callback;
 
         // encode image to byte array
@@ -55,13 +55,38 @@ public class VideoUploader {
             params.put(ConstantsStore.PARAM_VIDEO_THUMBNAIL, myInputStream, "thumbnail.png");
             params.put(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile);
             params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
+            params.put(ConstantsStore.PARAM_VIDEO_COUNTRY, country);
         } catch(FileNotFoundException ignored) {}
 
         DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-                mCallback.onVideosUploadSuccess();
+                try {
+                    String uploadURL = response.getString(ConstantsStore.PARAM_VIDEO_UPLOAD_URL);
+                    DubsmaniaHttpClient.post(uploadURL, new RequestParams(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile), new VideoUploadHandler());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                mCallback.onVideosUploadFailure();
             }
         });
+    }
+
+    private class VideoUploadHandler extends JsonHttpResponseHandler {
+        @Override
+        public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+            mCallback.onVideosUploadSuccess();
+        }
+
+        @Override
+        public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            // add code to remove upload failue see how it can be handled
+            mCallback.onVideosUploadFailure();
+        }
     }
 }

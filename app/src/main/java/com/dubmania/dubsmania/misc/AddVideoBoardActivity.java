@@ -14,6 +14,7 @@ import android.widget.GridView;
 
 import com.dubmania.dubsmania.Adapters.ImageAdapter;
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardCreaterCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardCreator;
 import com.dubmania.dubsmania.utils.SessionManager;
 
@@ -90,7 +91,16 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     }
 
     public void addVideoBroard(View v) {
-        new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId);
-        finish();
+        new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
+            @Override
+            public void onVideoBoardsCreaterSuccess() {
+                finish();
+            }
+
+            @Override
+            public void onVideosBoardsCreaterFailure() {
+                //
+            }
+        });
     }
 }

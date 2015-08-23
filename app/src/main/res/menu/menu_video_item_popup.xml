@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_add_video_to_board"
+        android:title="@string/add_video_to_board"/>
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/share_it"/>
+    <item
+        android:id="@+id/action_report"
+        android:title="@string/report_it"/>
+    <item
+        android:id="@+id/action_improve"
+        android:title="@string/improve"/>
+</menu>

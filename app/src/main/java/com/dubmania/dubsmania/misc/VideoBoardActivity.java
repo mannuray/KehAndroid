@@ -21,7 +21,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoFavoriteMark
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
-import com.dubmania.dubsmania.dialogs.VideoItemMenuDialog;
+import com.dubmania.dubsmania.dialogs.VideoItemPopupMenu;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
@@ -123,8 +123,6 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        VideoItemMenuDialog dialog = new VideoItemMenuDialog();
-        dialog.mVideoId = event.getId();
-        dialog.show(getSupportFragmentManager(), "tag");
+        new VideoItemPopupMenu(this, event.getId(), event.getView()).show();
     }
 }
