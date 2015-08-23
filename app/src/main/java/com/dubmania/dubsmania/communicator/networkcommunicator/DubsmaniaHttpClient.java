@@ -25,6 +25,10 @@ public class DubsmaniaHttpClient {
         mClient.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    public static void postAbsolute(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        mClient.post(url, params, responseHandler);
+    }
+
     private static String getAbsoluteUrl(String relativeUrl) {
         return ConstantsStore.BASE_URL + relativeUrl;
     }

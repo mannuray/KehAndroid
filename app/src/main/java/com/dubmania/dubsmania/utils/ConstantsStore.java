@@ -36,7 +36,7 @@ public class ConstantsStore {
     public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
     public final static String URL_MARK_FAVORIT = USER_SERVICE + "markfavorite";
     public final static String URL_ADD_VIDEO = USER_SERVICE + "addvideo";
-    public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "searchvideo";
+    public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "seachbytag";
     public final static String URL_GET_BOARD_VIDEOS = SEARCH_SERVICE + "getboardvideos";
     public final static String URL_GET_ICON = "searchservice/geticon";
 

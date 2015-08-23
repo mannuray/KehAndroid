@@ -18,8 +18,8 @@ import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
@@ -177,28 +177,10 @@ public class MainActivity extends ActionBarActivity
 
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
-        new VideoListDownloader().downloadDiscoverVideos(event.getCurrent_page(), "mannuk", new VideoListDownloaderCallback() {
+        new VideoListDownloader().downloadDiscoverVideos(event.getCurrent_page(), new SessionManager(this).getUser(), new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(videos));
-            }
-
-            @Override
-            public void onVideosDownloadFailure() {
-
-            }
-        });
-        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Subscribe
-    public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
-        // TO DO get user name
-        mTrendingVideosDownloader.downloadTrendingVideos("India", 0, 4, "mannuk", new VideoListDownloaderCallback() {
-            @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
-                BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
             }
 
             @Override
@@ -219,6 +201,24 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
+        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Subscribe
+    public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
+        // TO DO get user name
+        mTrendingVideosDownloader.downloadTrendingVideos("India", 0, 4, new SessionManager(this).getUser(), new VideoListDownloaderCallback() {
+            @Override
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
+                BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
+            }
+
+            @Override
+            public void onVideosDownloadFailure() {
+
+            }
+        });
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
     }
 

@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.communicator.networkcommunicator;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.dubmania.dubsmania.addvideo.Tag;
 import com.dubmania.dubsmania.utils.ConstantsStore;
@@ -10,6 +11,7 @@ import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,28 +52,33 @@ public class VideoUploader {
         }
 
         RequestParams params = new RequestParams();
-        try {
-            params.put(ConstantsStore.PARAM_VIDEO_TITLE, title);
-            params.put(ConstantsStore.PARAM_VIDEO_THUMBNAIL, myInputStream, "thumbnail.png");
-            params.put(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile);
-            params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
-            params.put(ConstantsStore.PARAM_VIDEO_COUNTRY, country);
-        } catch(FileNotFoundException ignored) {}
+        params.put(ConstantsStore.PARAM_VIDEO_TITLE, title);
+        params.put(ConstantsStore.PARAM_VIDEO_THUMBNAIL, myInputStream, "thumbnail.png");
+        params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
+        params.put(ConstantsStore.PARAM_VIDEO_COUNTRY, country);
 
+        Log.i("URL", "ule is " + ConstantsStore.URL_ADD_VIDEO);
         DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
             @Override
-            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
                     String uploadURL = response.getString(ConstantsStore.PARAM_VIDEO_UPLOAD_URL);
-                    DubsmaniaHttpClient.post(uploadURL, new RequestParams(ConstantsStore.PARAM_VIDEO_FILE, mVideoFile), new VideoUploadHandler());
+                    Log.i("URL", "upload ule is " + uploadURL);
+                    RequestParams requestParams = new RequestParams();
+                    requestParams.put("file", mVideoFile);
+                    requestParams.setForceMultipartEntityContentType(true);
+                    DubsmaniaHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler());
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                Log.i("URL", "upload failed first");
                 mCallback.onVideosUploadFailure();
             }
         });
@@ -81,12 +88,20 @@ public class VideoUploader {
         @Override
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             mCallback.onVideosUploadSuccess();
+            Log.i("URL", "file upload suceeded");
         }
 
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
             // add code to remove upload failue see how it can be handled
             mCallback.onVideosUploadFailure();
+            Log.i("URL", "file upload failed");
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+            Log.i("URL", " status code is " + String.valueOf(statusCode) + " respos " + response);
+
         }
     }
 }

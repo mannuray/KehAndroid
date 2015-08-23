@@ -180,7 +180,7 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
-        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), mVideoInfo.getTags(), new VideoUploaderCallback() {
+        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
             @Override
             public void onVideosUploadSuccess() {
                 finish();
@@ -189,7 +189,6 @@ public class AddVideoActivity extends AppCompatActivity {
             @Override
             public void onVideosUploadFailure() {
                 Toast.makeText(getApplicationContext(), " unable to add video", Toast.LENGTH_LONG).show();
-                finish();
             }
         });
     }
