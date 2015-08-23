@@ -20,6 +20,7 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownload
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemPopupMenu;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
         mSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                new VideoListDownloader().searchVideos(mSearch.getText().toString(), new VideoListDownloaderCallback() {
+                new VideoListDownloader().searchVideos(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoListDownloaderCallback() {
                     @Override
                     public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                         mVideoItemList.addAll(videos);

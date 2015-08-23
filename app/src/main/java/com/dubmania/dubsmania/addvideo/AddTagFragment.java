@@ -11,12 +11,15 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -39,6 +42,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     private ArrayList<Tag> mTags;
     private ArrayList<Tag> mAddedTags;
     private TagsDownloader mTagsDownloader;
+    private MenuItem next;
 
     public AddTagFragment() {
         // Required empty public constructor
@@ -54,15 +58,13 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTagsDownloader = new TagsDownloader();
         mTags = new ArrayList<>();
-        mTags.add(new Tag((long)123, "hello"));
-        mTags.add(new Tag((long)123, "tu hi"));
         mAddedTags = new ArrayList<>();
 
         View view = inflater.inflate(R.layout.fragment_add_tag, container, false);
         mTagsView = (TextView) view.findViewById(R.id.textView);
+        //mTagsView.setClickable(true);
+        mTagsView.setMovementMethod(LinkMovementMethod.getInstance());
         mAdapter = new TagListAdapter(getActivity().getApplicationContext(), mTags);
-        /*new ArrayAdapter<>(getActivity(),
-        android.R.layout.simple_list_item_1, android.R.id.text1, mTags);*/
 
         AbsListView mListView = (AbsListView) view.findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
@@ -87,19 +89,39 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView textview = new TextView(getActivity().getApplicationContext());
+        TextView textview = new TextView(getActivity());
         textview.setText(mTags.get(position).getTag());
         textview.setBackgroundResource(R.drawable.oval);
-        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_btn_check_material, 0);
-        BitmapDrawable dd = (BitmapDrawable) getDrawableFromTExtView(textview);
+        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_ic_clear_mtrl_alpha, 0);
+        textview.setClickable(true);
+        // for x icon on right
+        textview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("Click", "Clicked on back button");
+                if (event.getAction() == MotionEvent.ACTION_UP && event.getX() < dpToPx(getActivity(), 19)) {
+                    Log.i("Click", "Clicked on back button");
+                }
+                return true;
+            }
+        });
+
+        BitmapDrawable dd = (BitmapDrawable) getDrawableFromTextView(textview);
         mTagsView.append(addSmily(dd));
         mAddedTags.add(mTags.get(position));
+        if( mAddedTags.size() >= 3) {
+            next.setEnabled(true);
+            next.setVisible(true);
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add_tag, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        next = menu.getItem(0);
+        next.setEnabled(false);
+        next.setVisible(false);
     }
 
     @Override
@@ -128,15 +150,21 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
         @Override
         public void onTagsDownloadSuccess(ArrayList<Tag> tags) {
-            mTags = tags;
+            mTags.clear();
+            mTags.addAll(tags);
             mAdapter.notifyDataSetChanged();
-            Log.d("dataset ", "change notified ");
         }
 
         @Override
         public void onTagsDownloadFailure() {
-
+            // show toast
         }
+    }
+
+    public int dpToPx(Activity activity, int dp) {
+        DisplayMetrics displayMetrics = activity.getApplicationContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 
     private SpannableStringBuilder addSmily(Drawable dd) {
@@ -148,7 +176,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         return builder;
     }
 
-    private Object getDrawableFromTExtView(View view) {
+    private Object getDrawableFromTextView(View view) {
 
         int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(spec, spec);

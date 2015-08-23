@@ -314,7 +314,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
                     }
                     else {
-                        new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getString(ConstantsStore.PARAM_USER_NAME),
+                        new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),
                                 response.getString(ConstantsStore.PARAM_USER_EMAL));
                         setLoginResult(Activity.RESULT_OK);
                     }

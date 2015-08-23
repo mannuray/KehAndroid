@@ -47,7 +47,7 @@ public class VideoListDownloader {
         downloadVideos(ConstantsStore.URL_GET_BOARD_VIDEOS, params, callback);
     }
 
-    public void searchVideos(String tag, VideoListDownloaderCallback callback) {
+    public void searchVideos(String tag, Long user, VideoListDownloaderCallback callback) {
         downloadVideos(ConstantsStore.URL_SEARCH_VIDEOS, new RequestParams(ConstantsStore.PARAM_TAGS, tag), callback);
 
     }

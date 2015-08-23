@@ -23,6 +23,7 @@ public class SessionManager {
     int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "dubsmaniaPref";
     private static final String IS_LOGIN = "IsLoggedIn";
+    private static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
 
@@ -32,8 +33,9 @@ public class SessionManager {
         mEditor = mSharedPreferences.edit();
     }
 
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(Long id, String name, String email){
         mEditor.putBoolean(IS_LOGIN, true);
+        mEditor.putLong(KEY_ID, id);
         mEditor.putString(KEY_NAME, name);
         mEditor.putString(KEY_EMAIL, email);
         mEditor.commit();
@@ -44,6 +46,13 @@ public class SessionManager {
         if(!this.isLoggedIn()){
             displayRegisterDialog();
         }
+    }
+
+    public Long getId() {
+        if(isLoggedIn())
+            return mSharedPreferences.getLong(KEY_ID, 0);
+        else
+            return Long.valueOf(0);
     }
 
     public String getUser() {

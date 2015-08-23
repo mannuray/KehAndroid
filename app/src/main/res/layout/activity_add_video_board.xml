@@ -15,14 +15,18 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:columnWidth="60dp"
         android:numColumns="auto_fit"
-        android:id="@+id/add_video_board_gridView" />
+        android:id="@+id/add_video_board_gridView"
+        android:layout_above="@+id/add_video_board_add_button"
+        android:layout_below="@+id/add_video_board_name_edit" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="75dp"
-        android:layout_margin="20dp"
         android:text="New Button"
         android:id="@+id/add_video_board_add_button"
-        android:onClick="addVideoBroard"/>
+        android:onClick="addVideoBroard"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
