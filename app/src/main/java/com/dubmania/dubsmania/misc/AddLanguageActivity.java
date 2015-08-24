@@ -11,8 +11,13 @@ import android.widget.NumberPicker;
 
 import com.dubmania.dubsmania.R;
 
+import java.util.ArrayList;
+
 public class AddLanguageActivity extends AppCompatActivity {
     private NumberPicker mCountryPicker;
+    private LanguageData mLanguageData;
+    private int mLanguagePosition;
+    private int mCountryPosition;
 
 
     @Override
@@ -21,22 +26,34 @@ public class AddLanguageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_language);
 
 
-        NumberPicker mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
+        final NumberPicker mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
+
         mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(2);
-        mLanguagePicker.setDisplayedValues(new String[]{"Belgium", "France", "United Kingdom"});
+        mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize());
+        mLanguagePicker.setDisplayedValues(mLanguageData.getLanguages());
         mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
             @Override
             public void onScrollStateChange(NumberPicker view, int scrollState) {
-                mCountryPicker.setDisplayedValues(new String[]{"india", "nepal"});
+                mLanguagePosition = scrollState;
+                mCountryPicker.setDisplayedValues(null);
+                mCountryPicker.setMinValue(0);
+                mLanguagePicker.setMaxValue(mLanguageData.getCountriesSize(scrollState));
+                mCountryPicker.setDisplayedValues(mLanguageData.getContries(scrollState));
+                mCountryPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChange(NumberPicker view, int scrollState) {
+                        mCountryPosition = scrollState;
+                    }
+                });
             }
         });
         Button start = (Button) findViewById(R.id.add_language);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO
+                // TO DO decide what to do based on country and language
+                // add to data store and finish
             }
         });
     }
@@ -65,5 +82,88 @@ public class AddLanguageActivity extends AppCompatActivity {
         */
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class LanguageData {
+
+        ArrayList<Language> mLanguages;
+
+        public void LanguageData() {
+            mLanguages = new ArrayList<>();
+        }
+
+        public String[] getLanguages() {
+            String[] languages = new String[mLanguages.size()];
+            for(int i = 0; i < mLanguages.size(); i++) {
+                languages[i] = mLanguages.get(i).getLanguage();
+            }
+            return languages;
+        }
+
+        public String[] getContries(int pos) {
+            return mLanguages.get(pos).getContries();
+        }
+
+        public int getLanguageSize() {
+            return mLanguages.size();
+        }
+
+        public int getCountriesSize(int pos) {
+            return mLanguages.get(pos).getCountriesSize();
+        }
+
+        public class Language {
+            private Long id;
+            private String mLanguage;
+            private ArrayList<Country> mCountries;
+
+            public Language(Long id, String mLanguage) {
+                this.id = id;
+                this.mLanguage = mLanguage;
+                mCountries = new ArrayList<>();
+            }
+
+            public Long getId() {
+                return id;
+            }
+
+            public String getLanguage() {
+                return mLanguage;
+            }
+
+            public void addCountry(Country country) {
+                mCountries.add(country);
+            }
+
+            public String[] getContries() {
+                String[] countries = new String[mCountries.size()];
+                for(int i = 0; i < mCountries.size(); i++) {
+                    countries[i] = mCountries.get(i).getCountry();
+                }
+                return countries;
+            }
+
+            public int getCountriesSize() {
+                return mCountries.size();
+            }
+        }
+
+        public class Country {
+            private Long id;
+            private String mCountry;
+
+            public Country(Long id, String mCountry) {
+                this.id = id;
+                this.mCountry = mCountry;
+            }
+
+            public Long getId() {
+                return id;
+            }
+
+            public String getCountry() {
+                return mCountry;
+            }
+        }
     }
 }

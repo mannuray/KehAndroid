@@ -11,14 +11,22 @@ import android.widget.NumberPicker;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.dubsmania.utils.LanguageStore;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class AddFinishFragment extends Fragment {
     private EditText mVideoTitle;
     private String[] mLanguages;
     private String mLanguage;
+    RealmResults<LanguageStore> mRealmResults;
 
     public AddFinishFragment() {
         // Required empty public constructor
@@ -35,12 +43,20 @@ public class AddFinishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_finish, container, false);
-        mLanguages = new  String[]{"Belgium", "France", "United Kingdom"};
+
+        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
+        mRealmResults = realm.allObjects(LanguageStore.class).where().equalTo("supported", true).findAll();
+        ArrayList<String> languages = new ArrayList<>();
+        for(LanguageStore language: mRealmResults) {
+            languages.add(language.getLanguage());
+        }
+
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
         NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
         mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(2);
-        mLanguagePicker.setDisplayedValues(mLanguages); // get real values
+        mLanguagePicker.setMaxValue(mRealmResults.size());
+        mLanguages = languages.toArray(new String[mRealmResults.size()]);
+        mLanguagePicker.setDisplayedValues(mLanguages);
         mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
             @Override
             public void onScrollStateChange(NumberPicker view, int scrollState) {
@@ -51,7 +67,14 @@ public class AddFinishFragment extends Fragment {
         view.findViewById(R.id.addVideo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), mLanguage));
+                Long id = (long) 0;
+                for(LanguageStore language: mRealmResults) {
+                    if(language.getLanguage().equals(mLanguage)){
+                        id = language.getId();
+                        break;
+                    }
+                }
+                BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), id));
             }
         });
 

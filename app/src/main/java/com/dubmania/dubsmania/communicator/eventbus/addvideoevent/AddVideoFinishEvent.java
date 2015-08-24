@@ -1,13 +1,13 @@
-package com.dubmania.dubsmania.addvideo;
+package com.dubmania.dubsmania.communicator.eventbus.addvideoevent;
 
 /**
  * Created by rat on 8/14/2015.
  */
 public class AddVideoFinishEvent {
     private String mTitle;
-    private String mLanguage;
+    private Long mLanguage;
 
-    public AddVideoFinishEvent(String title, String language) {
+    public AddVideoFinishEvent(String title, Long language) {
         mTitle = title;
         mLanguage = language;
     }
@@ -16,7 +16,7 @@ public class AddVideoFinishEvent {
         return mTitle;
     }
 
-    public String getLanguage() {
+    public Long getLanguage() {
         return mLanguage;
     }
 }

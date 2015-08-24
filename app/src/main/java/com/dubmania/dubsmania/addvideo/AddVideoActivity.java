@@ -15,6 +15,7 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddTagsEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoEditEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;

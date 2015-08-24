@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class VideoUploader {
     private VideoUploaderCallback mCallback;
 
-    public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, String country, VideoUploaderCallback callback) {
+    public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, Long country, VideoUploaderCallback callback) {
         final File mVideoFile = new File(mFilePath);
         mCallback = callback;
 
