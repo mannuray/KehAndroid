@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,11 +11,20 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.dubmania.dubsmania.R;
+import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class AddLanguageActivity extends AppCompatActivity {
     private NumberPicker mCountryPicker;
+    NumberPicker mLanguagePicker;
     private LanguageData mLanguageData;
     private int mLanguagePosition;
     private int mCountryPosition;
@@ -26,28 +36,9 @@ public class AddLanguageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_language);
 
 
-        final NumberPicker mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
+        mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
 
-        mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize());
-        mLanguagePicker.setDisplayedValues(mLanguageData.getLanguages());
-        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker view, int scrollState) {
-                mLanguagePosition = scrollState;
-                mCountryPicker.setDisplayedValues(null);
-                mCountryPicker.setMinValue(0);
-                mLanguagePicker.setMaxValue(mLanguageData.getCountriesSize(scrollState));
-                mCountryPicker.setDisplayedValues(mLanguageData.getContries(scrollState));
-                mCountryPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChange(NumberPicker view, int scrollState) {
-                        mCountryPosition = scrollState;
-                    }
-                });
-            }
-        });
         Button start = (Button) findViewById(R.id.add_language);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +47,8 @@ public class AddLanguageActivity extends AppCompatActivity {
                 // add to data store and finish
             }
         });
+
+        populateData();
     }
 
 
@@ -84,11 +77,64 @@ public class AddLanguageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class LanguageData {
+    private void setData() {
+        mLanguagePicker.setMinValue(0);
+        mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize());
+        mLanguagePicker.setDisplayedValues(mLanguageData.getLanguages());
+        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                mLanguagePosition = scrollState;
+                mCountryPicker.setDisplayedValues(null);
+                mCountryPicker.setMinValue(0);
+                mLanguagePicker.setMaxValue(mLanguageData.getCountriesSize(scrollState));
+                mCountryPicker.setDisplayedValues(mLanguageData.getContries(scrollState));
+                mCountryPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChange(NumberPicker view, int scrollState) {
+                        mCountryPosition = scrollState;
+                    }
+                });
+            }
+        });
+    }
+
+    private void populateData() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_GET_LANGUAGES, new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+                try {
+                    Log.d("json error", response.toString());
+                    mLanguageData = new LanguageData();
+                    JSONArray languageList = response.getJSONArray(ConstantsStore.PARAM_LANGUAGE_LIST);
+                    for( int i = 0; i < languageList.length(); i++ ){
+                        JSONObject language = languageList.getJSONObject(i);
+                        LanguageData.Language l = new LanguageData.Language(language.getLong(ConstantsStore.PARAM_LANGUAGE_ID), ConstantsStore.PARAM_LANGUAGE_TEXT);
+                        JSONArray countryList = response.getJSONArray(ConstantsStore.PARAM_COUNTRY_LIST);
+                        for( int j = 0; j < languageList.length(); j++ ) {
+                            JSONObject country = countryList.getJSONObject(i);
+                            l.addCountry(new LanguageData.Country(country.getLong(ConstantsStore.PARAM_COUNTRY_ID), ConstantsStore.PARAM_COUNTRY_TEXT));
+                        }
+                    }
+
+                    setData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                // show layout for retry
+            }
+        });
+    }
+
+    private static class LanguageData {
 
         ArrayList<Language> mLanguages;
 
-        public void LanguageData() {
+        public LanguageData() {
             mLanguages = new ArrayList<>();
         }
 
@@ -112,7 +158,7 @@ public class AddLanguageActivity extends AppCompatActivity {
             return mLanguages.get(pos).getCountriesSize();
         }
 
-        public class Language {
+        public static class Language {
             private Long id;
             private String mLanguage;
             private ArrayList<Country> mCountries;
@@ -148,7 +194,7 @@ public class AddLanguageActivity extends AppCompatActivity {
             }
         }
 
-        public class Country {
+        public static class Country {
             private Long id;
             private String mCountry;
 

@@ -55,6 +55,8 @@ public class ConstantsStore {
     public final static String URL_VERIFY_USER = USER_SERVICE + "verifyuser";
     public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyuseremail";
 
+    public final static String URL_GET_LANGUAGES = SEARCH_SERVICE + "getlanguages";
+
     // HTTP params
     public final static String PARAM_USER = "user";
     public final static String PARAM_USER_ID = "id";
@@ -87,6 +89,13 @@ public class ConstantsStore {
     public final static String PARAM_END = "end";
     public final static String PARAM_REGION = "region";
     public final static String PARAM_RESULT = "result";
+
+    public final static String PARAM_LANGUAGE_ID = "id";
+    public final static String PARAM_LANGUAGE_TEXT = "language";
+    public final static String PARAM_LANGUAGE_LIST = "language_list";
+    public final static String PARAM_COUNTRY_ID = "id";
+    public final static String PARAM_COUNTRY_TEXT = "country";
+    public final static String PARAM_COUNTRY_LIST = "country_list";
 
     public final static int PARAM_FAILUERE = 0;
     public final static int PARAM_SUCCESS = 1;
