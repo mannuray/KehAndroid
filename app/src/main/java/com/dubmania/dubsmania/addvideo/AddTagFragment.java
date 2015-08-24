@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -12,14 +11,13 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -89,30 +87,20 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView textview = new TextView(getActivity());
-        textview.setText(mTags.get(position).getTag());
-        textview.setBackgroundResource(R.drawable.oval);
-        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_ic_clear_mtrl_alpha, 0);
-        textview.setClickable(true);
-        // for x icon on right
-        textview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.i("Click", "Clicked on back button");
-                if (event.getAction() == MotionEvent.ACTION_UP && event.getX() < dpToPx(getActivity(), 19)) {
-                    Log.i("Click", "Clicked on back button");
-                }
-                return true;
+        String sTag = mTags.get(position).getTag();
+        for(Tag mTag: mAddedTags) {
+            if(mTag.getTag().equals(sTag)) {
+                // TO DO show toast as tag is already added
+                return;
             }
-        });
+        }
 
-        BitmapDrawable dd = (BitmapDrawable) getDrawableFromTextView(textview);
-        mTagsView.append(addSmily(dd));
         mAddedTags.add(mTags.get(position));
         if( mAddedTags.size() >= 3) {
             next.setEnabled(true);
             next.setVisible(true);
         }
+        addTag(mTags.get(position));
     }
 
     @Override
@@ -161,17 +149,58 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         }
     }
 
-    public int dpToPx(Activity activity, int dp) {
-        DisplayMetrics displayMetrics = activity.getApplicationContext().getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
+    private void addTag(Tag mTag) {
+        TextView textview = new TextView(getActivity());
+        textview.setText(mTag.getTag());
+        textview.setBackgroundResource(R.drawable.oval);
+        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_ic_clear_mtrl_alpha, 0);
+
+        BitmapDrawable dd = (BitmapDrawable) getDrawableFromTextView(textview);
+        mTagsView.append(addSpanText(mTag.getTag(), dd));
+        mTagsView.append(" ");
     }
 
-    private SpannableStringBuilder addSmily(Drawable dd) {
-        dd.setBounds(0, 0, dd.getIntrinsicWidth(), dd.getIntrinsicHeight());
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(":-)");
-        builder.setSpan(new ImageSpan(dd), builder.length() - ":-)".length(), builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void deleteTag(String sTag) {
+        Tag tTag = null;
+        boolean found = false;
+        for(Tag mTag: mAddedTags) {
+            if(mTag.getTag().equals(sTag)) {
+                tTag = mTag;
+                found = true;
+                break;
+            }
+        }
+
+        if(found) {
+            mAddedTags.remove(tTag);
+            if( mAddedTags.size() < 3) {
+                next.setEnabled(false);
+                next.setVisible(false);
+            }
+            mTagsView.setText("");
+            for(Tag mTag: mAddedTags) {
+                addTag(mTag);
+            }
+        }
+    }
+
+    private SpannableStringBuilder addSpanText(final String ss, BitmapDrawable bd) {
+        bd.setBounds(0, 0, bd.getIntrinsicWidth(), bd.getIntrinsicHeight());
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(ss);
+        builder.setSpan(new ImageSpan(bd), builder.length() - ss.length(),
+                builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTagsView.setMovementMethod(LinkMovementMethod.getInstance());
+        ClickableSpan clickSpan = new ClickableSpan() {
+            private String mSs = ss;
+            @Override
+            public void onClick(View view) {
+                deleteTag(mSs);
+                Log.i("Span", "clicked ");
+            }
+        };
+        builder.setSpan(clickSpan, builder.length() - ss.length(),
+                builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return builder;
     }
