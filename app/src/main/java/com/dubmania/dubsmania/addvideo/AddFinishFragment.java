@@ -18,7 +18,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -43,19 +42,25 @@ public class AddFinishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_finish, container, false);
-
-        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
-        mRealmResults = realm.allObjects(LanguageStore.class).where().equalTo("supported", true).findAll();
         ArrayList<String> languages = new ArrayList<>();
+
+/*        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
+        mRealmResults = realm.allObjects(LanguageStore.class).where().equalTo("supported", true).findAll();
         for(LanguageStore language: mRealmResults) {
             languages.add(language.getLanguage());
-        }
+        } */
+        // this is test data till we dant have data for langages
+        languages.add("India");
+        languages.add("Nepal");
+        languages.add("Bangladesh");
+        languages.add("Sri Lanka");
+
 
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
         NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
         mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(mRealmResults.size());
-        mLanguages = languages.toArray(new String[mRealmResults.size()]);
+        mLanguagePicker.setMaxValue(3); // mRealmResults.size());
+        mLanguages = languages.toArray(new String[4]); //mRealmResults.size()]);
         mLanguagePicker.setDisplayedValues(mLanguages);
         mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
             @Override
@@ -68,12 +73,12 @@ public class AddFinishFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Long id = (long) 0;
-                for(LanguageStore language: mRealmResults) {
+               /* for(LanguageStore language: mRealmResults) {
                     if(language.getLanguage().equals(mLanguage)){
                         id = language.getId();
                         break;
                     }
-                }
+                }*/
                 BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), id));
             }
         });

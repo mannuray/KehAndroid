@@ -6,16 +6,16 @@ import io.realm.RealmObject;
  * Created by rat on 8/24/2015.
  */
 public class LanguageStore extends RealmObject {
-    private Long id;
+    private long id;
     private String language;
     private boolean supported;
     private boolean installed;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

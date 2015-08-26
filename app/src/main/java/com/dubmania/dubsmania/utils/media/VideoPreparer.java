@@ -1,4 +1,4 @@
-package com.dubmania.dubsmania.utils;
+package com.dubmania.dubsmania.utils.media;
 
 import android.util.Log;
 
@@ -20,8 +20,6 @@ import java.util.List;
  * Created by rat on 8/10/2015.
  */
 public class VideoPreparer {
-    //private File mVideoFile;
-    //private File mAudioFile;
 
     public VideoPreparer() {
 
@@ -40,7 +38,7 @@ public class VideoPreparer {
                 video.addTrack(new AppendTrack(audioTrack, audioTrack));
             }
 
-            //don't need the original track
+            //don't need the original track, see how it can be removed
             for (Track videoTrack : videoTracks) {
                 video.addTrack(new AppendTrack(videoTrack, videoTrack));
             }

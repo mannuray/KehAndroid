@@ -15,13 +15,14 @@ import android.view.MenuItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.createdubevent.CreateDubShareEvent;
+import com.dubmania.dubsmania.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.dubsmania.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SavedDubsData;
-import com.dubmania.dubsmania.utils.VideoPreparer;
 import com.dubmania.dubsmania.utils.VideoSharer;
+import com.dubmania.dubsmania.utils.media.VideoPreparer;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -37,7 +38,6 @@ public class CreateDubActivity extends AppCompatActivity {
     PagerAdapter mPagerAdapter;
 
     private File mVideoFile;
-    private File mAudioFile;
     private String mTitle;
 
     @Override
@@ -55,7 +55,6 @@ public class CreateDubActivity extends AppCompatActivity {
 
         try {
             mVideoFile = File.createTempFile(id.toString() + "_video", ".mp4", getApplicationContext().getCacheDir());
-            mAudioFile = File.createTempFile(id.toString() + "_audio", ".mp4", getApplicationContext().getCacheDir());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,7 +63,7 @@ public class CreateDubActivity extends AppCompatActivity {
         mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, mVideoFile, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
-                BusProvider.getInstance().post(new SetRecordFilesEvent(mAudioFile, mVideoFile));
+                BusProvider.getInstance().post(new SetRecordFilesEvent(mVideoFile));
             }
 
             @Override
@@ -110,14 +109,14 @@ public class CreateDubActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
+        /*
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_create_dub) {
             done();
             return true;
-        }
+        } */
 
         return super.onOptionsItemSelected(item);
     }
@@ -154,23 +153,6 @@ public class CreateDubActivity extends AppCompatActivity {
         }
     }
 
-    private void done() {
-        VideoPreparer mPreparer = new VideoPreparer();
-        File outputFile = getOutputFile(mTitle);
-        mPreparer.prepareVideo(mAudioFile, mVideoFile, outputFile);
-
-        Realm realm = Realm.getInstance(getApplicationContext());
-        realm.beginTransaction();
-        SavedDubsData dubsData = realm.createObject( SavedDubsData.class );
-        dubsData.setFilePath(outputFile.getAbsolutePath());
-        dubsData.setTitle(mTitle);
-        //SimpleDateFormat fmt  = new SimpleDateFormat("dd/MM//yyyy  HH:mm", Locale.getDefault());
-        dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
-        realm.commitTransaction();
-
-        mPager.setCurrentItem(1);
-    }
-
     private File getOutputFile(String mTitle) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
@@ -194,5 +176,24 @@ public class CreateDubActivity extends AppCompatActivity {
                 new VideoSharer(this).saveInGallery(mVideoFile);
         }
         finish();
+    }
+
+    @Subscribe
+    public void onRecordingDoneEvent(RecordingDoneEvent event) {
+        //prepare viedo
+        VideoPreparer mPreparer = new VideoPreparer();
+        File outputFile = getOutputFile(mTitle);
+        // prepare the audio file
+        mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, outputFile);
+
+        Realm realm = Realm.getInstance(getApplicationContext());
+        realm.beginTransaction();
+        SavedDubsData dubsData = realm.createObject( SavedDubsData.class );
+        dubsData.setFilePath(outputFile.getAbsolutePath());
+        dubsData.setTitle(mTitle);
+        dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
+        realm.commitTransaction();
+
+        mPager.setCurrentItem(1);
     }
 }

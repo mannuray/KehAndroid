@@ -81,6 +81,12 @@ public class VideoUploader {
                 Log.i("URL", "upload failed first");
                 mCallback.onVideosUploadFailure();
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                Log.i("URL", " status code is " + String.valueOf(statusCode) + " respos " + response);
+
+            }
         });
     }
 

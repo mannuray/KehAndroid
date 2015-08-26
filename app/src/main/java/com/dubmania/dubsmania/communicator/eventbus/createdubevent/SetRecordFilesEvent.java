@@ -6,16 +6,10 @@ import java.io.File;
  * Created by rat on 8/14/2015.
  */
 public class SetRecordFilesEvent {
-    private File mAudioFile;
     private File mVideoFile;
 
-    public SetRecordFilesEvent(File audioFile, File videoFile) {
-        mAudioFile = audioFile;
+    public SetRecordFilesEvent(File videoFile) {
         mVideoFile = videoFile;
-    }
-
-    public File getAudioFile() {
-        return mAudioFile;
     }
 
     public File getVideoFile() {
