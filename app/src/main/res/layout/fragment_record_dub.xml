@@ -16,34 +16,9 @@
         android:layout_below="@+id/videoView"
         android:layout_centerVertical="true" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <com.dubmania.dubsmania.utils.media.CreateDubMediaControl
+        android:id="@+id/mediaControl"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/progressBar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/playOriginal"
-            android:text="Pl o"
-            android:gravity="center_horizontal"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recordDub"
-            android:text="rec"
-            android:gravity="center_horizontal"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/playRecorded"
-            android:text="pl r"
-            android:gravity="center_horizontal"/>
-    </LinearLayout>
+        android:layout_below="@+id/videoView"/>
 </RelativeLayout>

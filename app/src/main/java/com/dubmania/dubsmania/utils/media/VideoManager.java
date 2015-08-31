@@ -15,7 +15,7 @@ public class VideoManager {
     private VideoView mVideoView;
     private MediaPlayer mVideoPlayer;
 
-    public VideoManager(VideoView mVideoView, final OnCompletionCallback mCallback) {
+    public VideoManager(VideoView mVideoView) {
         this.mVideoView = mVideoView;
 
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -23,7 +23,9 @@ public class VideoManager {
                 mVideoPlayer = mediaPlayer;
             }
         });
+    }
 
+    public void setOnCompletionListener(final OnCompletionCallback mCallback) {
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {

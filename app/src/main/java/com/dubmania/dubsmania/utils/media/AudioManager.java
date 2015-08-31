@@ -145,6 +145,7 @@ public class AudioManager {
                     mCallback.onComplete();
                 return;
             }
+            mAudioPlayer.reset();
             mAudioPlayer.setDataSource(mAudioFlileList.get(mPlayingPosition).getAudioFile().getAbsolutePath());
             mAudioPlayer.prepare();
             mAudioPlayer.start();

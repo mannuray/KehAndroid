@@ -3,14 +3,12 @@ package com.dubmania.dubsmania.createdub;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 
@@ -19,24 +17,18 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.dubsmania.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.dubsmania.utils.media.AudioManager;
+import com.dubmania.dubsmania.utils.media.CreateDubMediaControl;
 import com.dubmania.dubsmania.utils.media.VideoManager;
 import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
 
 
 public class RecordDubFragment extends Fragment {
 
-    private Button mPlayVideoOringinal;
-    private Button mRecord;
-    private Button mPlayVideoRecorded;
+    private CreateDubMediaControl mMediaControl;
     private ProgressBar mProgressBar;
 
     private AudioManager mAudioManager;
     private VideoManager mVideoManager;
-
-    enum State {playingOriginal, playingRecorded, recording, pause }
-    State mState = State.pause;
 
     public RecordDubFragment() {
         // Required empty public constructor
@@ -53,86 +45,15 @@ public class RecordDubFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record_dub, container, false);
+        mMediaControl = (CreateDubMediaControl) view.findViewById(R.id.mediaControl);
+        mMediaControl.setAnchorView(view);
         mAudioManager = new AudioManager(getActivity().getApplicationContext(), new AudioManager.OnCompletionCallback() {
             @Override
             public void onComplete() {
                 mVideoManager.pause();
             }
         });
-        mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView), new VideoManager.OnCompletionCallback(){
-
-            @Override
-            public void onComplete() {
-                if(mState == State.recording) {
-                    mPlayVideoRecorded.setEnabled(true);
-                    try {
-                        mAudioManager.pause();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                mState = State.pause;
-            }
-        });
-        mPlayVideoOringinal = (Button) view.findViewById(R.id.playOriginal);
-        mPlayVideoOringinal.setEnabled(false);
-        mPlayVideoOringinal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mState == State.recording) {
-                    try {
-                        mAudioManager.pause();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                mVideoManager.start(false);
-                mState = State.playingOriginal;
-            }
-        });
-
-        mRecord = (Button) view.findViewById(R.id.recordDub);
-        mRecord.setEnabled(false);
-        mRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mState != State.pause)
-                    return;
-                long time = mAudioManager.getCurrentTime();
-                Log.i("time ","is " + time );
-                Log.i("time ", "int " + String.valueOf((int)time));
-                mVideoManager.setPos((int) mAudioManager.getCurrentTime());
-                mVideoManager.start(true);
-                try {
-                    mAudioManager.record();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mState = State.recording;
-
-            }
-        });
-        mPlayVideoRecorded = (Button) view.findViewById(R.id.playRecorded);
-        mPlayVideoRecorded.setEnabled(false);
-        mPlayVideoRecorded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mState == State.recording) {
-                    try {
-                        mAudioManager.pause();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(mState == State.playingOriginal) {
-                    mVideoManager.pause();
-                }
-                mVideoManager.setPos((int) mAudioManager.getCurrentTime());
-                mVideoManager.start(true);
-                mAudioManager.play();
-            }
-        });
+        mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         return view;
@@ -177,8 +98,7 @@ public class RecordDubFragment extends Fragment {
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
         mVideoManager.setVideoFilePath(event.getVideoFile());
         mAudioManager.setRecordDuration(mVideoManager.getDuration());
+        mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
         mProgressBar.setVisibility(View.GONE);
-        mPlayVideoOringinal.setEnabled(true);
-        mRecord.setEnabled(true);
     }
 }
