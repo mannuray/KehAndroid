@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.createdub;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,7 @@ public class RecordDubFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hasOptionsMenu();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -52,14 +53,23 @@ public class RecordDubFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record_dub, container, false);
-        mAudioManager = new AudioManager(getActivity().getApplicationContext());
+        mAudioManager = new AudioManager(getActivity().getApplicationContext(), new AudioManager.OnCompletionCallback() {
+            @Override
+            public void onComplete() {
+                mVideoManager.pause();
+            }
+        });
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView), new VideoManager.OnCompletionCallback(){
 
             @Override
             public void onComplete() {
                 if(mState == State.recording) {
                     mPlayVideoRecorded.setEnabled(true);
-                    mAudioManager.pause();
+                    try {
+                        mAudioManager.pause();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 mState = State.pause;
             }
@@ -70,7 +80,11 @@ public class RecordDubFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(mState == State.recording) {
-                    mAudioManager.pause();
+                    try {
+                        mAudioManager.pause();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 mVideoManager.start(false);
                 mState = State.playingOriginal;
@@ -82,10 +96,12 @@ public class RecordDubFragment extends Fragment {
         mRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mState == State.playingOriginal) {
-                    mVideoManager.setPos(mAudioManager.getCurrentTime());
-                }
-
+                if(mState != State.pause)
+                    return;
+                long time = mAudioManager.getCurrentTime();
+                Log.i("time ","is " + time );
+                Log.i("time ", "int " + String.valueOf((int)time));
+                mVideoManager.setPos((int) mAudioManager.getCurrentTime());
                 mVideoManager.start(true);
                 try {
                     mAudioManager.record();
@@ -102,13 +118,17 @@ public class RecordDubFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(mState == State.recording) {
-                    mAudioManager.pause();
+                    try {
+                        mAudioManager.pause();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if(mState == State.playingOriginal) {
                     mVideoManager.pause();
                 }
-                mVideoManager.setPos(mAudioManager.getCurrentTime());
+                mVideoManager.setPos((int) mAudioManager.getCurrentTime());
                 mVideoManager.start(true);
                 mAudioManager.play();
             }

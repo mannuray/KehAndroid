@@ -27,16 +27,19 @@ public class AudioManager {
 
     private ArrayList<Audio> mAudioFlileList;
     private MediaPlayer mAudioPlayer;
-    private int mCurrentPos = 0;
+    private int mRecordingPosition = 0;
+    private int mPlayingPosition = 0;
     private long mCurrentTime = 0;
-    private long mRecordDuration; // chech to see if we have complete voice record
+    private long mRecordDuration; // check to see if we have complete voice record
     private AudioRecorder mAudioRecorder;
     private Context mContext;
+    private OnCompletionCallback mCallback = null;
 
     enum State {recording, playing, pause}
     State mState = State.pause;
 
-    public AudioManager(Context mContext) {
+    public AudioManager(Context mContext, OnCompletionCallback mCallback) {
+        this.mCallback = mCallback;
         this.mContext = mContext;
         mAudioFlileList = new ArrayList<>();
         mAudioRecorder = new AudioRecorder();
@@ -51,26 +54,29 @@ public class AudioManager {
 
     public void record() throws IOException {
 
-        if(mCurrentPos < mAudioFlileList.size()) {
+        if(mRecordingPosition < mAudioFlileList.size()) {
             // remove all previos records
-            for(int i = mAudioFlileList.size() - 1; i > mCurrentPos; i--) {
-                mCurrentTime -= mAudioFlileList.get(i).getAudioLength();
-                mAudioFlileList.remove(i);
+            if(mRecordingPosition == 0) {
+                mAudioFlileList.clear();
+            }
+            else {
+                for (int i = mAudioFlileList.size() - 1; i > mRecordingPosition; i--) {
+                    mCurrentTime -= mAudioFlileList.get(i).getDuration();
+                    mAudioFlileList.remove(i);
+                }
             }
         }
         File audioFile = getRandomFileName();
-        mAudioFlileList.add(new Audio(audioFile, mCurrentTime));
         mAudioRecorder.startRecording(audioFile);
         mState = State.recording;
     }
 
-    public void pause(){
+    public void pause() throws IOException {
         if(mState == State.recording) {
-            mAudioRecorder.stopRecording();
-            long duration = mAudioRecorder.getDuration();
-            mAudioFlileList.get(mCurrentPos).setAudioLength(duration);
-            mCurrentTime += duration;
-            mCurrentPos++;
+            Audio audio = new Audio(mAudioRecorder.stopRecording(), mCurrentTime);
+            mCurrentTime += audio.getDuration();
+            mAudioFlileList.add(audio);
+            mRecordingPosition++;
         }
         else if (mState == State.playing) {
             mAudioPlayer.pause();
@@ -79,20 +85,22 @@ public class AudioManager {
     }
 
     public void setPrevPos() {
-        if(mCurrentPos < 0)
+        if(mRecordingPosition < 0)
             return;
-        mCurrentPos--;
-        mCurrentTime = mAudioFlileList.get(mCurrentPos).getStartTime();
+        mRecordingPosition--;
+        mCurrentTime = mAudioFlileList.get(mRecordingPosition).getStartTime();
     }
 
     public void setNextPos() {
-        if(mCurrentPos > mAudioFlileList.size())
+        if(mRecordingPosition > mAudioFlileList.size())
             return;
-        mCurrentPos++;
-        mCurrentTime = mAudioFlileList.get(mCurrentPos).getStartTime();
+        mRecordingPosition++;
+        mCurrentTime = mAudioFlileList.get(mRecordingPosition).getStartTime();
     }
 
     public void play() {
+        if(mState != State.pause)
+            return;
         mAudioPlayer.start();
         mState = State.playing;
     }
@@ -100,16 +108,10 @@ public class AudioManager {
     public File prepareAudio() {
         if(mAudioFlileList.isEmpty())
             return null;
-
-        List<Track> audioTracks = new LinkedList<Track>();
+        List<Track> audioTracks = new LinkedList<>();
         for(Audio audio: mAudioFlileList) {
-            try {
-                Movie clip = MovieCreator.build(audio.getAudioFile().getAbsolutePath());
-                Track t = clip.getTracks().get(0);
-                audioTracks.add(t);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Track t = audio.getTrack();
+            audioTracks.add(t);
         }
 
         Movie audio = new Movie();
@@ -136,15 +138,17 @@ public class AudioManager {
 
     private void changeTrack() {
         try {
-            if(mCurrentPos > mAudioFlileList.size()) {
-                mCurrentPos = 0; // code for calling compleation callback if set
+            if(mPlayingPosition >= mAudioFlileList.size()) {
+                mPlayingPosition = 0; // code for calling compleation callback if set
                 mState = State.pause;
+                if(mCallback != null)
+                    mCallback.onComplete();
                 return;
             }
-            mAudioPlayer.setDataSource(mAudioFlileList.get(mCurrentPos).getAudioFile().getAbsolutePath());
+            mAudioPlayer.setDataSource(mAudioFlileList.get(mPlayingPosition).getAudioFile().getAbsolutePath());
             mAudioPlayer.prepare();
             mAudioPlayer.start();
-            mCurrentPos++;
+            mPlayingPosition++;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,29 +161,34 @@ public class AudioManager {
 
 
     public static class Audio {
-        private File mAudioFile;
-        private long mAudioLength;
         private long mStartTime;
+        private File mAudioFile;
+        private Track mTrack;
 
-        public Audio(File mAudioFile, long mStartTime) {
+        public Audio(File mAudioFile, long mStartTime) throws IOException {
             this.mAudioFile = mAudioFile;
             this.mStartTime = mStartTime;
+            mTrack = MovieCreator.build(mAudioFile.getAbsolutePath()).getTracks().get(0);
+        }
+
+        public Track getTrack() {
+            return mTrack;
         }
 
         public File getAudioFile() {
             return mAudioFile;
         }
 
-        public long getAudioLength() {
-            return mAudioLength;
-        }
-
-        public void setAudioLength(long mAudioLength) {
-            this.mAudioLength = mAudioLength;
-        }
-
         public long getStartTime() {
             return mStartTime;
         }
+
+        public long getDuration() {
+            return mTrack.getDuration();
+        }
+    }
+
+    public static abstract class OnCompletionCallback {
+        public abstract void onComplete();
     }
 }

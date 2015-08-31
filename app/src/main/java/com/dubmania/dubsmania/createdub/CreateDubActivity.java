@@ -38,6 +38,7 @@ public class CreateDubActivity extends AppCompatActivity {
     PagerAdapter mPagerAdapter;
 
     private File mVideoFile;
+    private File mOutputFile;
     private String mTitle;
 
     @Override
@@ -100,7 +101,7 @@ public class CreateDubActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_dub, menu);
+        getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
 
@@ -155,12 +156,19 @@ public class CreateDubActivity extends AppCompatActivity {
 
     private File getOutputFile(String mTitle) {
         // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES), mTitle + ".mp4");
+        if(!Environment.getExternalStorageDirectory().exists()) {
+            Environment.getExternalStorageDirectory().mkdir();
+        }
+        /*File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES), mTitle + ".mp4");*/
+
+        File file = new File("/storage/sdcard0/dub/Movies", mTitle + ".mp4");
         int i = 1;
         while (file.exists()) {
-            file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_MOVIES), mTitle + "(" + String.valueOf(i) + ").mp4");
+            /*file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_MOVIES), mTitle + "(" + String.valueOf(i) + ").mp4");*/
+            file = new File("/storage/sdcard0/dub/Movies", mTitle + "(" + String.valueOf(i) + ").mp4");
+            i++;
         }
         return file;
     }
@@ -173,7 +181,7 @@ public class CreateDubActivity extends AppCompatActivity {
             case ConstantsStore.SHARE_APP_ID_WHATSAPP:
                 break;
             case ConstantsStore.SHARE_APP_ID_SAVE_GALLERY:
-                new VideoSharer(this).saveInGallery(mVideoFile);
+                new VideoSharer(this).saveInGallery(mOutputFile);
         }
         finish();
     }
@@ -182,14 +190,14 @@ public class CreateDubActivity extends AppCompatActivity {
     public void onRecordingDoneEvent(RecordingDoneEvent event) {
         //prepare viedo
         VideoPreparer mPreparer = new VideoPreparer();
-        File outputFile = getOutputFile(mTitle);
+        mOutputFile = getOutputFile(mTitle);
         // prepare the audio file
-        mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, outputFile);
+        mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, mOutputFile);
 
         Realm realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();
         SavedDubsData dubsData = realm.createObject( SavedDubsData.class );
-        dubsData.setFilePath(outputFile.getAbsolutePath());
+        dubsData.setFilePath(mOutputFile.getAbsolutePath());
         dubsData.setTitle(mTitle);
         dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
         realm.commitTransaction();

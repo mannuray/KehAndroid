@@ -10,12 +10,13 @@ import java.io.IOException;
  */
 public class AudioRecorder {
     private MediaRecorder mRecorder;
-    private boolean recordedFileAvailable = false;
+    private File mAudioFile;
 
     public AudioRecorder() {
     }
 
     public void startRecording(File mAudiofile) throws IOException {
+        this.mAudioFile = mAudiofile;
         mRecorder = new MediaRecorder();
         mRecorder.reset();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -26,16 +27,9 @@ public class AudioRecorder {
         mRecorder.start();
     }
 
-    public void stopRecording() {
+    public File stopRecording() {
         mRecorder.stop();
         mRecorder.release();
-        recordedFileAvailable = true;
-    }
-
-    public long getDuration() {
-        if(recordedFileAvailable) {
-
-        }
-        return 0; // write code to get filed duraiton
+        return mAudioFile;
     }
 }

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.dubmania.dubsmania.R;
 
@@ -23,6 +24,7 @@ public class VideoSharer {
 
     public void saveInGallery(File mFile) {
         //sending broadcast message to scan the media file so that it can be available
+        Log.i("prepare", "file is " + mFile.getAbsolutePath());
         mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mFile)));
     }
 

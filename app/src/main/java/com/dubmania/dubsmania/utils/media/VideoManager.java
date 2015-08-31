@@ -64,10 +64,10 @@ public class VideoManager {
         mVideoView.start();
     }
 
-    public void setPos(long pos) {
+    public void setPos(int pos) {
         if(mVideoFile == null)
             return;
-        mVideoView.seekTo(0);
+        mVideoView.seekTo(pos);
     }
 
     public long getDuration() {

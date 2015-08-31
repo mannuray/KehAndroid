@@ -35,12 +35,12 @@ public class VideoPreparer {
             List<Track> audioTracks = audio.getTracks();
 
             for (Track audioTrack : audioTracks) {
-                video.addTrack(new AppendTrack(audioTrack, audioTrack));
+                video.addTrack(new AppendTrack(audioTrack));
             }
 
-            //don't need the original track, see how it can be removed
             for (Track videoTrack : videoTracks) {
-                video.addTrack(new AppendTrack(videoTrack, videoTrack));
+                if(videoTrack.getHandler().equals("vide"))
+                    video.addTrack(new AppendTrack(videoTrack));
             }
 
 
