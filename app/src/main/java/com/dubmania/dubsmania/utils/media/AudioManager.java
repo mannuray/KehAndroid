@@ -112,7 +112,7 @@ public class AudioManager {
     }
 
     public void setNextPos() {
-        if(mRecordingPosition > mAudioFlileList.size())
+        if(mRecordingPosition >= mAudioFlileList.size())
             return;
         mRecordingPosition++;
         setPlayingPos(++mPlayingPosition);
