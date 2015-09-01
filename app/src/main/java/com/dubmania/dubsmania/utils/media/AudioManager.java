@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by rat on 8/25/2015.
@@ -29,8 +30,9 @@ public class AudioManager {
     private MediaPlayer mAudioPlayer;
     private int mRecordingPosition = 0;
     private int mPlayingPosition = 0;
-    private long mCurrentTime = 0;
-    private long mRecordDuration; // check to see if we have complete voice record
+    private boolean isRecordingAvailable = false;
+    private boolean isPlayRecordingIntilized = false;
+    //private long mCurrentTime = 0;
     private AudioRecorder mAudioRecorder;
     private Context mContext;
     private OnCompletionCallback mCallback = null;
@@ -38,8 +40,7 @@ public class AudioManager {
     enum State {recording, playing, pause}
     State mState = State.pause;
 
-    public AudioManager(Context mContext, OnCompletionCallback mCallback) {
-        this.mCallback = mCallback;
+    public AudioManager(Context mContext) {
         this.mContext = mContext;
         mAudioFlileList = new ArrayList<>();
         mAudioRecorder = new AudioRecorder();
@@ -52,16 +53,21 @@ public class AudioManager {
         });
     }
 
+    public void setOnCompletionListener(OnCompletionCallback mCallback) {
+        this.mCallback = mCallback;
+    }
+
     public void record() throws IOException {
 
         if(mRecordingPosition < mAudioFlileList.size()) {
             // remove all previos records
             if(mRecordingPosition == 0) {
                 mAudioFlileList.clear();
+                isRecordingAvailable = false;
+                isPlayRecordingIntilized = false;
             }
             else {
                 for (int i = mAudioFlileList.size() - 1; i > mRecordingPosition; i--) {
-                    mCurrentTime -= mAudioFlileList.get(i).getDuration();
                     mAudioFlileList.remove(i);
                 }
             }
@@ -73,36 +79,84 @@ public class AudioManager {
 
     public void pause() throws IOException {
         if(mState == State.recording) {
-            Audio audio = new Audio(mAudioRecorder.stopRecording(), mCurrentTime);
-            mCurrentTime += audio.getDuration();
+            Audio audio;
+            if(mAudioFlileList.size() <= 0 )
+                audio = new Audio(mAudioRecorder.stopRecording(), 0);
+            else
+                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
             mAudioFlileList.add(audio);
             mRecordingPosition++;
         }
         else if (mState == State.playing) {
             mAudioPlayer.pause();
         }
+        isRecordingAvailable = true;
         mState = State.pause;
+    }
+
+    public void setPlayingPos(int pos) {
+        if(!(pos < 0 || pos >= mAudioFlileList.size())) {
+            mPlayingPosition = pos;
+            isPlayRecordingIntilized = false;
+        }
     }
 
     public void setPrevPos() {
         if(mRecordingPosition < 0)
             return;
         mRecordingPosition--;
-        mCurrentTime = mAudioFlileList.get(mRecordingPosition).getStartTime();
+        setPlayingPos(--mPlayingPosition);
     }
 
     public void setNextPos() {
         if(mRecordingPosition > mAudioFlileList.size())
             return;
         mRecordingPosition++;
-        mCurrentTime = mAudioFlileList.get(mRecordingPosition).getStartTime();
+        setPlayingPos(++mPlayingPosition);
+
     }
 
     public void play() {
         if(mState != State.pause)
             return;
-        mAudioPlayer.start();
-        mState = State.playing;
+        try {
+            if(initializePlayRecording()) {
+                mAudioPlayer.start();
+                mState = State.playing;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean initializePlayRecording() throws IOException {
+        if(!isRecordingAvailable)
+            return false;
+        if(isPlayRecordingIntilized)
+            return true;
+        mAudioPlayer.reset();
+        mAudioPlayer.setDataSource(mAudioFlileList.get(mPlayingPosition).getAudioFile().getAbsolutePath());
+        mAudioPlayer.prepare();
+        isPlayRecordingIntilized = true;
+        return true;
+    }
+
+    private void changeTrack() {
+        try {
+            if(mPlayingPosition >= mAudioFlileList.size()) {
+                mPlayingPosition = 0; // code for calling compleation callback if set
+                isPlayRecordingIntilized = false;
+                mState = State.pause;
+                if(mCallback != null)
+                    mCallback.onComplete();
+                return;
+            }
+            initializePlayRecording();
+            mAudioPlayer.start();
+            mPlayingPosition++;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public File prepareAudio() {
@@ -128,36 +182,15 @@ public class AudioManager {
         }
     }
 
-    public void setRecordDuration(long mRecordDuration) {
-        this.mRecordDuration = mRecordDuration;
-    }
-
     public long getCurrentTime() {
-        return mCurrentTime;
-    }
-
-    private void changeTrack() {
-        try {
-            if(mPlayingPosition >= mAudioFlileList.size()) {
-                mPlayingPosition = 0; // code for calling compleation callback if set
-                mState = State.pause;
-                if(mCallback != null)
-                    mCallback.onComplete();
-                return;
-            }
-            mAudioPlayer.reset();
-            mAudioPlayer.setDataSource(mAudioFlileList.get(mPlayingPosition).getAudioFile().getAbsolutePath());
-            mAudioPlayer.prepare();
-            mAudioPlayer.start();
-            mPlayingPosition++;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if(mAudioFlileList.size() <= 0)
+            return 0;
+        return mAudioFlileList.get(mRecordingPosition - 1).getStartTime();
     }
 
     private File getRandomFileName() throws IOException {
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy_hhmmss_SSS");
-        return File.createTempFile(String.format("Audio_File_%s", sdf.format(new Date())), "mp4", mContext.getCacheDir());
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy_hhmmss_SSS", Locale.getDefault());
+        return File.createTempFile(String.format("Audio_File_%s", sdf.format(new Date())), ".mp4", mContext.getCacheDir());
     }
 
 

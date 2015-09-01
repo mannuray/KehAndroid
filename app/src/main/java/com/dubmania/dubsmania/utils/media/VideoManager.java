@@ -72,7 +72,7 @@ public class VideoManager {
         mVideoView.seekTo(pos);
     }
 
-    public long getDuration() {
+    public int getDuration() {
         if(mVideoFile == null)
             return 0;
         return mVideoView.getDuration();

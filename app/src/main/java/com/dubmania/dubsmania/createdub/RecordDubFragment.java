@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.createdub;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,12 +48,7 @@ public class RecordDubFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_record_dub, container, false);
         mMediaControl = (CreateDubMediaControl) view.findViewById(R.id.mediaControl);
         mMediaControl.setAnchorView(view);
-        mAudioManager = new AudioManager(getActivity().getApplicationContext(), new AudioManager.OnCompletionCallback() {
-            @Override
-            public void onComplete() {
-                mVideoManager.pause();
-            }
-        });
+        mAudioManager = new AudioManager(getActivity().getApplicationContext());
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -97,7 +93,7 @@ public class RecordDubFragment extends Fragment {
     @Subscribe
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
         mVideoManager.setVideoFilePath(event.getVideoFile());
-        mAudioManager.setRecordDuration(mVideoManager.getDuration());
+        Log.i("prepare", " duraita form manag " + mVideoManager.getDuration());
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
         mProgressBar.setVisibility(View.GONE);
     }
