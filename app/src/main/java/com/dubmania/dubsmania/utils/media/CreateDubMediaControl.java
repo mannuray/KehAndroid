@@ -2,7 +2,6 @@ package com.dubmania.dubsmania.utils.media;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,7 @@ public class CreateDubMediaControl extends LinearLayout {
         this.mAudioManager = mAudioManager;
         this.mVideoManager = mVideoManager;
         this.mVideoManager.setOnCompletionListener(mCompletion);
-        this.mAudioManager.setOnCompletionListener(mAudioCompletionListner);
+        this.mAudioManager.setOnCompletionListener(mAudioCompletionListner, mTrackChangeListner);
     }
 
     public void setAnchorView(View view) {
@@ -113,29 +112,21 @@ public class CreateDubMediaControl extends LinearLayout {
             else if(mState == State.recording) {
                 mRecord.setImageResource(R.drawable.record);
                 try {
-                    mAudioManager.pause();
+                    mAudioManager.pause(mVideoManager.getPos());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                mPlayOriginal.setEnabled(true);
-                mPrevious.setEnabled(true);
-                mRecord.setEnabled(true);
-                mNext.setEnabled(true);
             }
             else if(mState == State.playingRecorded) {
                 mPlayRecorded.setImageResource(R.drawable.play);
                 try {
-                    mAudioManager.pause();
+                    mAudioManager.pause(mVideoManager.getPos());
                     mAudioManager.setPlayingPos(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                mPlayOriginal.setEnabled(true);
-                mPrevious.setEnabled(true);
-                mRecord.setEnabled(true);
-                mNext.setEnabled(true);
             }
+            enableAllButton();
             mState = State.initial;
         }
     };
@@ -152,12 +143,21 @@ public class CreateDubMediaControl extends LinearLayout {
             mVideoManager.pause(); // due to synchronization issue
             mAudioManager.setPlayingPos(0);
 
-            mPlayOriginal.setEnabled(true);
-            mPrevious.setEnabled(true);
-            mRecord.setEnabled(true);
-            mNext.setEnabled(true);
-
+            enableAllButton();
             mState = State.initial;
+        }
+    };
+
+    private AudioManager.OnTrackChangeCallback mTrackChangeListner = new AudioManager.OnTrackChangeCallback() {
+
+        @Override
+        public void onTrackChangeStart() {
+            mVideoManager.pause();
+        }
+
+        @Override
+        public void onTrackChangeCompleted() {
+            mVideoManager.play(true);
         }
     };
 
@@ -206,17 +206,13 @@ public class CreateDubMediaControl extends LinearLayout {
             if(mState == State.playingRecorded) {
                 mPlayRecorded.setImageResource(R.drawable.play);
                 try {
-                    mAudioManager.pause();
+                    mVideoManager.pause();
+                    mAudioManager.pause(mVideoManager.getPos());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                mVideoManager.pause();
 
-                mPlayOriginal.setEnabled(true);
-                mPrevious.setEnabled(true);
-                mRecord.setEnabled(true);
-                mNext.setEnabled(true);
-
+                enableAllButton();
                 mState = State.pausePlayRecording;
                 return;
             }
@@ -224,16 +220,11 @@ public class CreateDubMediaControl extends LinearLayout {
             if(mState == State.pausePlayOriginal || mState == State.pauseRecording || mState == State.initial) {
                 mVideoManager.setPos(0);
                 mAudioManager.setPlayingPos(0);
-                Log.i("audio test", "in play oringinal state ");
             }
 
             mPlayRecorded.setImageResource(R.drawable.pause);
 
-            mPlayOriginal.setEnabled(false);
-            mPrevious.setEnabled(false);
-            mRecord.setEnabled(false);
-            mNext.setEnabled(false);
-
+            disableAllBut(mPlayRecorded);
             mState = State.playingRecorded;
             mAudioManager.play();
             mVideoManager.play(true);
@@ -250,33 +241,23 @@ public class CreateDubMediaControl extends LinearLayout {
             if(mState == State.recording) {
                 mRecord.setImageResource(R.drawable.record);
                 try {
-                    mAudioManager.pause();
+                    mVideoManager.pause();
+                    mAudioManager.pause(mVideoManager.getPos());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                mVideoManager.pause();
 
-                mPlayOriginal.setEnabled(true);
-                mPrevious.setEnabled(true);
-                mRecord.setEnabled(true);
-                mNext.setEnabled(true);
-
+                enableAllButton();
                 mState = State.pauseRecording;
                 return;
             }
 
-            if(mState == State.pausePlayOriginal|| mState == State.pausePlayRecording) {
-                long position = mAudioManager.getCurrentTime();
-                mVideoManager.setPos((int) position);
-            }
+            long position = mAudioManager.getCurrentTime();
+            mVideoManager.setPos((int) position);
 
             mRecord.setImageResource(R.drawable.pause);
 
-            mPlayOriginal.setEnabled(false);
-            mPrevious.setEnabled(false);
-            mRecord.setEnabled(false);
-            mNext.setEnabled(false);
-
+            disableAllBut(mRecord);
             mState = State.recording;
             mVideoManager.play(true);
             try {
@@ -286,6 +267,24 @@ public class CreateDubMediaControl extends LinearLayout {
             }
         }
     };
+
+    private void enableAllButton() {
+        mPlayOriginal.setEnabled(true);
+        mPrevious.setEnabled(true);
+        mPlayRecorded.setEnabled(true);
+        mRecord.setEnabled(true);
+        mNext.setEnabled(true);
+    }
+
+    private void disableAllBut(ImageButton button) {
+        mPlayOriginal.setEnabled(false);
+        mPrevious.setEnabled(false);
+        mPlayRecorded.setEnabled(false);
+        mRecord.setEnabled(false);
+        mNext.setEnabled(false);
+
+        button.setEnabled(true);
+    }
 
     private View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {

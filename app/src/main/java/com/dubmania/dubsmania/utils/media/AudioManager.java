@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.utils.media;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
@@ -36,6 +37,7 @@ public class AudioManager {
     private AudioRecorder mAudioRecorder;
     private Context mContext;
     private OnCompletionCallback mCallback = null;
+    private OnTrackChangeCallback mTrackCallback = null;
 
     enum State {recording, playing, pause}
     State mState = State.pause;
@@ -53,8 +55,9 @@ public class AudioManager {
         });
     }
 
-    public void setOnCompletionListener(OnCompletionCallback mCallback) {
+    public void setOnCompletionListener(OnCompletionCallback mCallback, OnTrackChangeCallback mTrackCallback) {
         this.mCallback = mCallback;
+        this.mTrackCallback = mTrackCallback;
     }
 
     public void record() throws IOException {
@@ -77,20 +80,20 @@ public class AudioManager {
         mState = State.recording;
     }
 
-    public void pause() throws IOException {
+    public void pause(int pos) throws IOException {
         if(mState == State.recording) {
             Audio audio;
             if(mAudioFlileList.size() <= 0 )
-                audio = new Audio(mAudioRecorder.stopRecording(), 0);
+                audio = new Audio(mAudioRecorder.stopRecording(), 0, pos);
             else
-                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
+                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition-1).getEndTime(), pos);
             mAudioFlileList.add(audio);
             mRecordingPosition++;
+            isRecordingAvailable = true;
         }
         else if (mState == State.playing) {
             mAudioPlayer.pause();
         }
-        isRecordingAvailable = true;
         mState = State.pause;
     }
 
@@ -142,10 +145,14 @@ public class AudioManager {
     }
 
     private void changeTrack() {
+        if(mTrackCallback != null)
+            mTrackCallback.onTrackChangeStart();
         try {
+            mPlayingPosition++;
+            isPlayRecordingIntilized = false;
             if(mPlayingPosition >= mAudioFlileList.size()) {
-                mPlayingPosition = 0; // code for calling compleation callback if set
-                isPlayRecordingIntilized = false;
+                Log.i("Test Record", " ok playing positino greater");
+                mPlayingPosition = 0;
                 mState = State.pause;
                 if(mCallback != null)
                     mCallback.onComplete();
@@ -153,10 +160,11 @@ public class AudioManager {
             }
             initializePlayRecording();
             mAudioPlayer.start();
-            mPlayingPosition++;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(mTrackCallback != null)
+            mTrackCallback.onTrackChangeCompleted();
     }
 
     public File prepareAudio() {
@@ -185,7 +193,8 @@ public class AudioManager {
     public long getCurrentTime() {
         if(mAudioFlileList.size() <= 0)
             return 0;
-        return mAudioFlileList.get(mRecordingPosition - 1).getStartTime();
+        Log.i("Record Test", "mRecord position " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition - 1).getStartTime() + mAudioFlileList.get(mRecordingPosition - 1).getDuration());
+        return mAudioFlileList.get(mRecordingPosition - 1).getEndTime();
     }
 
     private File getRandomFileName() throws IOException {
@@ -196,12 +205,14 @@ public class AudioManager {
 
     public static class Audio {
         private long mStartTime;
+        private long mEndTime;
         private File mAudioFile;
         private Track mTrack;
 
-        public Audio(File mAudioFile, long mStartTime) throws IOException {
+        public Audio(File mAudioFile, long mStartTime, long mEndTime) throws IOException {
             this.mAudioFile = mAudioFile;
             this.mStartTime = mStartTime;
+            this.mEndTime = mEndTime;
             mTrack = MovieCreator.build(mAudioFile.getAbsolutePath()).getTracks().get(0);
         }
 
@@ -217,12 +228,20 @@ public class AudioManager {
             return mStartTime;
         }
 
+        public long getEndTime() { return  mEndTime; }
+
         public long getDuration() {
-            return mTrack.getDuration();
+            return mEndTime - mStartTime;
+            //return mTrack.getDuration()/10;
         }
     }
 
     public static abstract class OnCompletionCallback {
         public abstract void onComplete();
+    }
+
+    public static abstract class OnTrackChangeCallback {
+        public abstract void onTrackChangeStart();
+        public abstract void onTrackChangeCompleted();
     }
 }

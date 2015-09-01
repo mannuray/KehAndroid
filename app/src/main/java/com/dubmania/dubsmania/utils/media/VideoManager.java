@@ -58,6 +58,11 @@ public class VideoManager {
         mVideoView.pause();
     }
 
+    // for test see if we may neeed it further on too
+    public int getPos() {
+        return  mVideoPlayer.getCurrentPosition();
+    }
+
     public void start(boolean mute) {
         if(mVideoFile == null)
             return;

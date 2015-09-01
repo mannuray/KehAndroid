@@ -113,6 +113,7 @@ public class VideoBoardActivity extends AppCompatActivity {
     public void onCreateDubEvent(CreateDubEvent event) {
         Intent intent = new Intent(this, CreateDubActivity.class);
         intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
+        intent.putExtra(ConstantsStore.INTENT_VIDEO_TITLE, event.getTitle());
         startActivity(intent);
     }
 
