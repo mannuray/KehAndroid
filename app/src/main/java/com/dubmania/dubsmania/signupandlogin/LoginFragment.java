@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment {
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusProvider.getInstance().post(new LoginEvent(mEmail.getText().toString().split("@")[0], mPassword.getText().toString()));// TO DO change it login from email
+                BusProvider.getInstance().post(new LoginEvent(mEmail.getText().toString(), mPassword.getText().toString()));// TO DO change it login from email
             }
         });
         return view;

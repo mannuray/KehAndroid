@@ -20,9 +20,12 @@ import com.dubmania.dubsmania.communicator.eventbus.createdubevent.SetRecordFile
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.DubsApplication;
 import com.dubmania.dubsmania.utils.SavedDubsData;
 import com.dubmania.dubsmania.utils.VideoSharer;
 import com.dubmania.dubsmania.utils.media.VideoPreparer;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -36,6 +39,7 @@ public class CreateDubActivity extends AppCompatActivity {
 
     private ViewPager mPager;
     PagerAdapter mPagerAdapter;
+    Long id;
 
     private File mVideoFile;
     private File mOutputFile;
@@ -51,7 +55,7 @@ public class CreateDubActivity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
 
         Intent intent = getIntent();
-        Long id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
+        id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
         mTitle = intent.getStringExtra(ConstantsStore.INTENT_VIDEO_TITLE);
 
         try {
@@ -201,6 +205,15 @@ public class CreateDubActivity extends AppCompatActivity {
         dubsData.setTitle(mTitle);
         dubsData.setCreationDate(DateFormat.getDateTimeInstance().format(new Date()));
         realm.commitTransaction();
+
+        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
+                .setCategory("Video")
+                .setAction("CreateDub")
+                .setLabel(String.valueOf(id));
+
+        DubsApplication application = (DubsApplication) getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.send(builder.build());
 
         mPager.setCurrentItem(1);
     }

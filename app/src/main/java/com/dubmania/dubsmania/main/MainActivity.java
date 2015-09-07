@@ -50,8 +50,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
-
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -71,7 +69,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Realm.deleteRealmFile(getApplicationContext());
+        //Realm.deleteRealmFile(getApplicationContext());
 
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);

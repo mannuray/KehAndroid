@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -37,7 +36,6 @@ import com.dubmania.dubsmania.utils.SessionManager;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
 import org.apache.http.Header;
@@ -149,25 +147,13 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         mPager.setCurrentItem(position);
     }
 
-    Fragment getFragment(int position) {
-
-        switch (position) {
-            case 0:
-                return new PagerSignupFragment();
-            case 1:
-                return new PagerLoginFragment();
-        }
-        return new EmailFragment();
-    }
-
     private AlertDialog getEmailExistDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                BusProvider.getInstance().post(new LoginSetEmailEvent(signUpInfo.getUserName())); // change this when login becom based no email
+                BusProvider.getInstance().post(new LoginSetEmailEvent(signUpInfo.getEmail()));
                 changeFragment(1);
-                Log.d("otto event", "seind set email evnte ");
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -202,12 +188,15 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onEmailCheckEvent(EmailCheckEvent event) {
         signUpInfo.setEmail(event.getEmail());
-        DubsmaniaHttpClient.get(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAL, event.getEmail()), new JsonHttpResponseHandler() {
+        signUpInfo.setUserName(event.getEmail().split("@")[0]);
+        BusProvider.getInstance().post(this.signUpInfo);
+        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, event.getEmail()), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
-                    if (!response.getBoolean("result")) {
+                    Log.i("Server res", response.toString());
+                    if (response.getBoolean("result")) {
                         changeFragment();
                     } else {
                         signUpInfo.setUserName(response.getString(ConstantsStore.PARAM_USER_NAME));
@@ -233,12 +222,12 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onSetUsernameEvent(SetUsernameEvent event) {
         signUpInfo.setUserName(event.getUsername());
-        DubsmaniaHttpClient.get(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER, event.getUsername()), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER, event.getUsername()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user name check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    BusProvider.getInstance().post(new UserNameExistEvent(response.getBoolean("result")));
+                    BusProvider.getInstance().post(new UserNameExistEvent(!response.getBoolean("result")));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -265,24 +254,23 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_USER_NAME, signUpInfo.getUserName());
-        params.add(ConstantsStore.PARAM_USER_EMAL, signUpInfo.getEmail());
+        params.add(ConstantsStore.PARAM_USER_EMAIL, signUpInfo.getEmail());
         params.add(ConstantsStore.PARAM_PASSWORD, signUpInfo.getPassword());
         params.add(ConstantsStore.PARAM_DOB, signUpInfo.getDob());
-        DubsmaniaHttpClient.get(ConstantsStore.URL_REGISTER, params, new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_REGISTER, params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
+            public void onSuccess(int statusCode, @SuppressWarnings("deprecation") Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user rister check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    int responseCode = response.getInt("result");
-                    if (responseCode == ConstantsStore.PARAM_SUCCESS) {
-                        Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
+                    if (response.getBoolean("result")) {
+                        Toast.makeText(getApplicationContext(), "User registered", Toast.LENGTH_LONG).show();
+                        new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),
+                                response.getString(ConstantsStore.PARAM_USER_EMAIL));
                         setLoginResult(Activity.RESULT_OK);
-                    }
-                    else if (responseCode == ConstantsStore.PARAM_REGISTER_USER_EXIST) {
+                    } else if (response.getString("error").equals("user_name")) {
                         Toast.makeText(getApplicationContext(), "user name taken", Toast.LENGTH_LONG).show();
                         BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
-                    }
-                    else if (responseCode == ConstantsStore.PARAM_REGISTER_EMAIL_EXIST) {
+                    } else if (response.getString("error").equals("user_email")) {
                         Toast.makeText(getApplicationContext(), "email name taken", Toast.LENGTH_LONG).show();
                         BusProvider.getInstance().post(new SignupFragmentChangeEvent(0));
                     }
@@ -303,19 +291,18 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     public void onLoginEvent(LoginEvent event) {
         Toast.makeText(getApplicationContext(), "user login check event :" , Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_USER_NAME, event.getEmail());
+        params.add(ConstantsStore.PARAM_USER_EMAIL, event.getEmail());
         params.add(ConstantsStore.PARAM_PASSWORD, event.getPassword());
-        DubsmaniaHttpClient.get(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
                     Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
                     if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
                         Toast.makeText(getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    } else {
                         new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),
-                                response.getString(ConstantsStore.PARAM_USER_EMAL));
+                                response.getString(ConstantsStore.PARAM_USER_EMAIL));
                         setLoginResult(Activity.RESULT_OK);
                     }
                 } catch (JSONException e) {
@@ -325,14 +312,14 @@ public class SignupAndLoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-                Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to Login user", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     @Subscribe
     public void onPasswordResetEvent(PasswordResetEvent event) {
-        DubsmaniaHttpClient.get(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAL, event.getEmail()), new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, event.getEmail()), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -351,10 +338,5 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             }
         });
-    }
-
-    @Produce
-    public SignupInfoEvent produceSignupInfo() {
-        return new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob());
     }
 }

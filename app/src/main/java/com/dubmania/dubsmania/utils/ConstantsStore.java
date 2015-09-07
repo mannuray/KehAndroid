@@ -5,7 +5,9 @@ package com.dubmania.dubsmania.utils;
  */
 public class ConstantsStore {
 
-    public static final String BASE_URL = "http://dubsmaniadataserver.appspot.com/dubsmaniadataserver/";
+    //public static final String BASE_URL = "http://dubsmaniadataserver.appspot.com/dubsmaniadataserver/";
+    public static final String BASE_URL = "http://kehbackend.appspot.com/";
+
     private final static String USER_SERVICE = "userservice/";
     private final static String SEARCH_SERVICE = "searchservice/";
 
@@ -30,6 +32,7 @@ public class ConstantsStore {
 
 
     // URL's
+    /*
     public final static String URL_DOWNLOAD_VIDEO = SEARCH_SERVICE + "getvideo";
     public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
@@ -55,13 +58,44 @@ public class ConstantsStore {
     public final static String URL_VERIFY_USER = USER_SERVICE + "verifyuser";
     public final static String URL_VERIFY_EMAIL = USER_SERVICE + "verifyuseremail";
 
+    public final static String URL_GET_LANGUAGES = SEARCH_SERVICE + "getlanguages"; */
+
+    private final static String ACCOUNT = "account/";
+    private final static String VIDEO = "video/";
+    private final static String BOARD = "board/";
+
+    public final static String URL_ADD_VIDEO = VIDEO + "add";
+    public final static String URL_DOWNLOAD_VIDEO = VIDEO + "download";
+    public final static String URL_MARK_FAVORIT = VIDEO + "favorite";
+    public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
+    public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "seachbytag";
+
+    public final static String URL_GET_BOARDS =         BOARD + "get";
+    public final static String URL_ADD_BOARD =          BOARD + "add";
+    public final static String URL_ADD_VIDEO_TO_BOARD = BOARD + "addvideo";
+    public final static String URL_GET_BOARD_VIDEOS =    BOARD + "getvideos";
+
+    public final static String URL_GET_TRENDING_BOARDS = BOARD + "gettrendingboards";
+    public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
+    public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
+
+    public final static String URL_GET_TAGS = SEARCH_SERVICE + "gettags";
+
+    public final static String URL_LOGIN =           ACCOUNT + "login";
+    public final static String URL_USER_LOGOUT =     ACCOUNT + "logout";
+    public final static String URL_REGISTER =        ACCOUNT + "signup";
+    public final static String URL_RESET_PASSWORD =  ACCOUNT + "forgot";
+    public final static String URL_VERIFY_USER =     ACCOUNT + "verify/user";
+    public final static String URL_VERIFY_EMAIL =    ACCOUNT + "verify/email";
+
     public final static String URL_GET_LANGUAGES = SEARCH_SERVICE + "getlanguages";
+
 
     // HTTP params
     public final static String PARAM_USER = "user";
     public final static String PARAM_USER_ID = "id";
-    public final static String PARAM_USER_NAME = "username";
-    public final static String PARAM_USER_EMAL = "useremail";
+    public final static String PARAM_USER_NAME = "user_name";
+    public final static String PARAM_USER_EMAIL = "user_email";
     public final static String PARAM_PASSWORD = "password";
     public final static String PARAM_DOB = "dob";
 

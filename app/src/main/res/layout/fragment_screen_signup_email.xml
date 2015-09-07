@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="we will not expose your email address to other \n users on Dubsmash "
+            android:text="we will not expose your email address to other users on Dubsmash "
             android:layout_below="@+id/mail_logo"
             android:layout_centerHorizontal="true" />
 
