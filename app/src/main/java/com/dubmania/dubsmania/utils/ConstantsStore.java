@@ -99,10 +99,10 @@ public class ConstantsStore {
     public final static String PARAM_PASSWORD = "password";
     public final static String PARAM_DOB = "dob";
 
-    public final static String PARAM_BOARD_NAME = "board_name";
+    public final static String PARAM_BOARD_NAME = "name";
     public final static String PARAM_BOARD_LIST = "board_list";
-    public final static String PARAM_BOARD_ID = "board_id";
-    public final static String PARAM_BOARD_ICON = "board_icon_id";
+    public final static String PARAM_BOARD_ID = "id";
+    public final static String PARAM_BOARD_ICON = "icon";
 
 
     public final static String PARAM_FAVORIT = "favorite";

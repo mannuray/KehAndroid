@@ -30,21 +30,11 @@ public class VideoBoardsDownloader {
 
     public void getVideoBoards(String url, RequestParams params, VideoBoardDownloaderCallback callback) {
         mCallback = callback;
-        DubsmaniaHttpClient.get(url, params, new VideoBoardDownloaderHandler());
+        DubsmaniaHttpClient.post(url, params, new VideoBoardDownloaderHandler());
     }
 
     public void getUserBoards(String user, VideoBoardDownloaderCallback callback) {
         getVideoBoards(ConstantsStore.URL_GET_BOARDS, new RequestParams(ConstantsStore.PARAM_USER, user), callback);
-    }
-
-    public void getTrendingBoards(String mRegion, Integer start, Integer end, VideoBoardDownloaderCallback callback) {
-        mCallback = callback;
-        RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_REGION, mRegion);
-        params.add(ConstantsStore.PARAM_START, String.valueOf(start));
-        params.add(ConstantsStore.PARAM_END, String.valueOf(end));
-
-        getVideoBoards(ConstantsStore.URL_GET_TRENDING_BOARDS, params, callback);
     }
 
     private class VideoBoardDownloaderHandler extends JsonHttpResponseHandler {

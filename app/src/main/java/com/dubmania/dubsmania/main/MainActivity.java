@@ -18,7 +18,6 @@ import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
@@ -187,18 +186,6 @@ public class MainActivity extends ActionBarActivity
 
             @Override
             public void onVideosDownloadFailure() {
-
-            }
-        });
-
-        new VideoBoardsDownloader(getApplicationContext()).getTrendingBoards("India", 0, 15, new VideoBoardDownloaderCallback() {
-            @Override
-            public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
-                BusProvider.getInstance().post(new AddDiscoverBoardListEvent(boards));
-            }
-
-            @Override
-            public void onVideosBoardsDownloadFailure() {
 
             }
         });
