@@ -17,7 +17,7 @@ public class VideoDownloader {
     public void downloadVideo(String url, Long id, File mFile, VideoDownloaderCallback mCallback) {
         this.mCallback = mCallback;
         mVideoFile = mFile;
-        DubsmaniaHttpClient.get(url, new RequestParams("id", id.toString()), new VideoDataDownloaderHandler(mVideoFile));
+        DubsmaniaHttpClient.post(url, new RequestParams("id", id.toString()), new VideoDataDownloaderHandler(mVideoFile));
     }
 
     private class VideoDataDownloaderHandler extends FileAsyncHttpResponseHandler {

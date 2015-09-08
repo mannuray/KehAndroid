@@ -61,8 +61,8 @@ public class VideoBoardFragment extends Fragment {
                 .obtainTypedArray(R.array.video_board_icons);
 
         mVideoBoardItemList = new ArrayList<>((Arrays.asList(
-                new VideoBoardListItem((long) 1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
-                new VideoBoardListItem((long) 2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
+                new VideoBoardListItem((long) -1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
+                new VideoBoardListItem((long) -2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
         )));
         mBoardIcons.recycle();
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList);

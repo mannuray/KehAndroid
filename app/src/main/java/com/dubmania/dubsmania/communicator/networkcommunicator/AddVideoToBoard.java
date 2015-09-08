@@ -16,9 +16,9 @@ public class AddVideoToBoard {
     public void addVideoToBoard(Long boardId, Long videoId, AddVideoToBoardCallback callback) {
         mCallback = callback;
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(boardId));
-        params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(videoId));
-        DubsmaniaHttpClient.get(ConstantsStore.URL_ADD_VIDEO_TO_BOARD, params, new JsonHttpResponseHandler() {
+        params.add(ConstantsStore.PARAM_BOARD, String.valueOf(boardId));
+        params.add(ConstantsStore.PARAM_VIDEO, String.valueOf(videoId));
+        DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO_TO_BOARD, params, new JsonHttpResponseHandler() {
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 Log.d("json error", "add to video to board " + response.toString());

@@ -54,7 +54,7 @@ public class VideoListDownloader {
 
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        DubsmaniaHttpClient.get(url, params, new VideoDataDownloaderHandler());
+        DubsmaniaHttpClient.post(url, params, new VideoDataDownloaderHandler());
     }
 
     private class VideoDataDownloaderHandler extends JsonHttpResponseHandler {
@@ -71,7 +71,7 @@ public class VideoListDownloader {
                     Bitmap thumbnail = BitmapFactory.decodeByteArray(thumbnailByte, 0, thumbnailByte.length);
                     mVideoItemList.add(new VideoListItem(Long.valueOf(video.getString(ConstantsStore.PARAM_USER_ID)),
                             video.getString(ConstantsStore.PARAM_VIDEO_TITLE),
-                            video.getString(ConstantsStore.PARAM_USER),
+                            video.getString(ConstantsStore.PARAM_USER_NAME),
                             video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV), thumbnail));
                 }
                 mCallback.onVideosDownloadSuccess(mVideoItemList);

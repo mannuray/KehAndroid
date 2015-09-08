@@ -99,6 +99,7 @@ public class ConstantsStore {
     public final static String PARAM_PASSWORD = "password";
     public final static String PARAM_DOB = "dob";
 
+    public final static String PARAM_BOARD = "board";
     public final static String PARAM_BOARD_NAME = "name";
     public final static String PARAM_BOARD_LIST = "board_list";
     public final static String PARAM_BOARD_ID = "id";
@@ -106,10 +107,11 @@ public class ConstantsStore {
 
 
     public final static String PARAM_FAVORIT = "favorite";
-    public final static String PARAM_VIDEO_ID = "video_id";
-    public final static String PARAM_VIDEO_TITLE = "video_title";
+    public final static String PARAM_VIDEO = "video";
+    public final static String PARAM_VIDEO_ID = "id";
+    public final static String PARAM_VIDEO_TITLE = "title";
     public final static String PARAM_VIDEO_FILE = "video";
-    public final static String PARAM_VIDEO_FAV = "fav";
+    public final static String PARAM_VIDEO_FAV = "favorite";
     public final static String PARAM_VIDEO_THUMBNAIL = "thumbnail";
     public final static String PARAM_VIDEO_COUNTRY = "country";
     public final static String PARAM_VIDEO_LANGUAGE = "language";
