@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class VideoUploader {
     private VideoUploaderCallback mCallback;
 
-    public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, Long country, VideoUploaderCallback callback) {
+    public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, Long language, VideoUploaderCallback callback) {
         final File mVideoFile = new File(mFilePath);
         mCallback = callback;
 
@@ -55,7 +55,7 @@ public class VideoUploader {
         params.put(ConstantsStore.PARAM_VIDEO_TITLE, title);
         params.put(ConstantsStore.PARAM_VIDEO_THUMBNAIL, myInputStream, "thumbnail.png");
         params.put(ConstantsStore.PARAM_TAGS, tagsArray.toString());
-        params.put(ConstantsStore.PARAM_VIDEO_COUNTRY, country);
+        params.put(ConstantsStore.PARAM_VIDEO_LANGUAGE, language);
 
         Log.i("URL", "ule is " + ConstantsStore.URL_ADD_VIDEO);
         DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
@@ -93,8 +93,15 @@ public class VideoUploader {
     private class VideoUploadHandler extends JsonHttpResponseHandler {
         @Override
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-            mCallback.onVideosUploadSuccess();
-            Log.i("URL", "file upload suceeded");
+            try {
+                if(response.getBoolean("result")) {
+                    mCallback.onVideosUploadSuccess();
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mCallback.onVideosUploadFailure();
         }
 
         @Override

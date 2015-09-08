@@ -8,7 +8,6 @@ public class ConstantsStore {
     //public static final String BASE_URL = "http://dubsmaniadataserver.appspot.com/dubsmaniadataserver/";
     public static final String BASE_URL = "http://kehbackend.appspot.com/";
 
-    private final static String USER_SERVICE = "userservice/";
     private final static String SEARCH_SERVICE = "searchservice/";
 
     public final static String SHARED_KEY_USER_NAME = "com.dubmania.dubsmania.username";
@@ -64,22 +63,23 @@ public class ConstantsStore {
     private final static String VIDEO = "video/";
     private final static String BOARD = "board/";
 
-    public final static String URL_ADD_VIDEO = VIDEO + "add";
-    public final static String URL_DOWNLOAD_VIDEO = VIDEO + "download";
-    public final static String URL_MARK_FAVORIT = VIDEO + "favorite";
+    public final static String URL_SEARCH_VIDEOS = "search";
+
+
+    public final static String URL_ADD_VIDEO =              VIDEO + "add";
+    public final static String URL_DOWNLOAD_VIDEO =         VIDEO + "download";
+    public final static String URL_MARK_FAVORIT =           VIDEO + "favorite";
+    public final static String URL_GET_TAGS =               VIDEO + "tags";
     public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
-    public final static String URL_SEARCH_VIDEOS = SEARCH_SERVICE + "seachbytag";
 
     public final static String URL_GET_BOARDS =         BOARD + "get";
     public final static String URL_ADD_BOARD =          BOARD + "add";
     public final static String URL_ADD_VIDEO_TO_BOARD = BOARD + "addvideo";
-    public final static String URL_GET_BOARD_VIDEOS =    BOARD + "getvideos";
+    public final static String URL_GET_BOARD_VIDEOS =   BOARD + "getvideos";
 
     public final static String URL_GET_TRENDING_BOARDS = BOARD + "gettrendingboards";
     public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
-
-    public final static String URL_GET_TAGS = SEARCH_SERVICE + "gettags";
 
     public final static String URL_LOGIN =           ACCOUNT + "login";
     public final static String URL_USER_LOGOUT =     ACCOUNT + "logout";
@@ -112,12 +112,13 @@ public class ConstantsStore {
     public final static String PARAM_VIDEO_FAV = "fav";
     public final static String PARAM_VIDEO_THUMBNAIL = "thumbnail";
     public final static String PARAM_VIDEO_COUNTRY = "country";
+    public final static String PARAM_VIDEO_LANGUAGE = "language";
     public final static String PARAM_VIDEO_LIST = "video_list";
     public final static String PARAM_VIDEO_UPLOAD_URL = "upload_url";
 
     public final static String PARAM_TAGS = "tags";
     public final static String PARAM_TAG_ID = "id";
-    public final static String PARAM_TAG_NAME = "tagname";
+    public final static String PARAM_TAG_NAME = "tag";
 
     public final static String PARAM_START = "start";
     public final static String PARAM_END = "end";

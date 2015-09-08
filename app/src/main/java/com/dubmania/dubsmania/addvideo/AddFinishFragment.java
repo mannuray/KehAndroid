@@ -50,10 +50,10 @@ public class AddFinishFragment extends Fragment {
             languages.add(language.getLanguage());
         } */
         // this is test data till we dant have data for langages
-        languages.add("India");
-        languages.add("Nepal");
-        languages.add("Bangladesh");
-        languages.add("Sri Lanka");
+        languages.add("Hindi");
+        languages.add("Nepali");
+        languages.add("Bangladeshi");
+        languages.add("Sri Lankan");
 
 
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
@@ -72,7 +72,7 @@ public class AddFinishFragment extends Fragment {
         view.findViewById(R.id.addVideo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Long id = (long) 0;
+                Long id = 6554664749236224L;
                /* for(LanguageStore language: mRealmResults) {
                     if(language.getLanguage().equals(mLanguage)){
                         id = language.getId();

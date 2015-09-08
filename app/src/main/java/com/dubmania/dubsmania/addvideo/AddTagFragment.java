@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 public class AddTagFragment extends Fragment implements AbsListView.OnItemClickListener {
     private TagListAdapter mAdapter;
+    EditText search;
     private TextView mTagsView;
     private ArrayList<Tag> mTags;
     private ArrayList<Tag> mAddedTags;
@@ -67,7 +68,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         AbsListView mListView = (AbsListView) view.findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
-        EditText search = (EditText) view.findViewById(R.id.editText);
+        search = (EditText) view.findViewById(R.id.editText);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -101,6 +102,9 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
             next.setVisible(true);
         }
         addTag(mTags.get(position));
+        search.setText("");
+        mTags.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -221,5 +225,4 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         view.destroyDrawingCache();
         return new BitmapDrawable(getResources(), viewBmp);
     }
-
 }
