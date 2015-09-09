@@ -28,6 +28,17 @@ public class VideoSharer {
         mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mFile)));
     }
 
+    public void shareViaApp(File mFile, String mPackage) {
+        Uri uri = Uri.parse(mFile.getAbsolutePath());
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_STREAM,uri);
+        intent.setType("video/mp4");
+        intent.setPackage(mPackage);
+        mActivity.startActivity(intent);
+    }
+
     public void showAlertDialog(String mFilePath) {
         this.mFile = new File(mFilePath);
         getShareAlertDialog().show();
@@ -54,8 +65,10 @@ public class VideoSharer {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0:
+                        shareViaApp(mFile, "com.whatsapp"); // find package name for facebook messenger
                         return;
                     case 1:
+                        shareViaApp(mFile, "com.whatsapp");
                         return;
                     case 3:
                         saveInGallery(mFile);

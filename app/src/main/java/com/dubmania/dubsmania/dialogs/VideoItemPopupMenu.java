@@ -35,7 +35,7 @@ public class VideoItemPopupMenu {
                 if(id == R.id.action_add_video_to_board)
                     addVideoToBoard();
                 else if(id == R.id.action_share)
-                    return false ; // write for share  
+                    shareit(); // write for share
                 else if(id == R.id.action_report)
                     feedback(ConstantsStore.INTENT_REPORT);
                 else if(id == R.id.action_improve)
@@ -57,5 +57,14 @@ public class VideoItemPopupMenu {
         intent.putExtra(ConstantsStore.INTENT_VIDEO_ID, mVideoId);
         intent.putExtra(ConstantsStore.INTENT_REPORT_ACTION, code);
         activity.startActivity(intent);
+    }
+
+    private void shareit() {
+        String shareBody = "www.vidcraft/goto/" + String.valueOf(mVideoId);
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        activity.startActivity(Intent.createChooser(sharingIntent, "share"));
     }
 }
