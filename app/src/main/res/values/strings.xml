@@ -162,6 +162,8 @@
     <!-- my account actinvity string -->
     <string name="my_account_text">Loggend in as %1$s\n(%2$s)</string>
     <string name="my_account_button_text">Logout</string>
+    <string name="title_activity_report">ReportActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 
 </resources>

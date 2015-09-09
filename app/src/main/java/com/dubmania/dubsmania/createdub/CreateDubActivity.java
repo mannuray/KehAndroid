@@ -211,8 +211,8 @@ public class CreateDubActivity extends AppCompatActivity {
                 .setAction("CreateDub")
                 .setLabel(String.valueOf(id));
 
-        DubsApplication application = (DubsApplication) getApplication();
-        Tracker mTracker = application.getDefaultTracker();
+        DubsApplication application = new DubsApplication();
+        Tracker mTracker = DubsApplication.tracker();
         mTracker.send(builder.build());
 
         mPager.setCurrentItem(1);

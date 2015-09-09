@@ -11,6 +11,7 @@ import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,6 +63,11 @@ public class VideoListDownloader {
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             try {
                 Log.d("json error", response.toString());
+                if(!response.getBoolean("result")) {
+                    mCallback.onVideosDownloadFailure();
+                    return;
+                }
+
                 JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_VIDEO_LIST);
                 ArrayList <VideoListItem> mVideoItemList = new ArrayList<>();
                 for( int i = 0; i < videoList.length(); i++ ){
@@ -82,6 +88,13 @@ public class VideoListDownloader {
 
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            Log.d("json error", errorResponse.toString());
+            mCallback.onVideosDownloadFailure();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+            Log.d("json error", response);
             mCallback.onVideosDownloadFailure();
         }
     }

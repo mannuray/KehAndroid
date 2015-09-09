@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.dubmania.dubsmania.addvideo.ImportVideoPagerFragment">
 
-    <com.dubmania.dubsmania.signupandlogin.NonSwipeableViewPager
+    <com.dubmania.dubsmania.utils.NonSwipeableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

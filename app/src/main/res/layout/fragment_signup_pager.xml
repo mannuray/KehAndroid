@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.dubmania.dubsmania.signupandlogin.PagerSignupFragment">
 
-    <com.dubmania.dubsmania.signupandlogin.NonSwipeableViewPager
+    <com.dubmania.dubsmania.utils.NonSwipeableViewPager
         android:id="@+id/signup_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

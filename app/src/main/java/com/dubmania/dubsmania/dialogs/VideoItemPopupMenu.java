@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.misc.AddVideoToBoardActivity;
+import com.dubmania.dubsmania.report.FeedbackActivity;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 
 /**
@@ -33,17 +34,28 @@ public class VideoItemPopupMenu {
                 int id = item.getItemId();
                 if(id == R.id.action_add_video_to_board)
                     addVideoToBoard();
+                else if(id == R.id.action_share)
+                    return false ; // write for share  
+                else if(id == R.id.action_report)
+                    feedback(ConstantsStore.INTENT_REPORT);
+                else if(id == R.id.action_improve)
+                    feedback(ConstantsStore.INTENT_IMPROVE);
                 return false;
             }
         });
         popup.show();
     }
 
-
-
     private void addVideoToBoard() {
         Intent intent = new Intent(activity, AddVideoToBoardActivity.class);
         intent.putExtra(ConstantsStore.INTENT_VIDEO_ID, mVideoId);
+        activity.startActivity(intent);
+    }
+
+    private void feedback(int code) {
+        Intent intent = new Intent(activity, FeedbackActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_VIDEO_ID, mVideoId);
+        intent.putExtra(ConstantsStore.INTENT_REPORT_ACTION, code);
         activity.startActivity(intent);
     }
 }

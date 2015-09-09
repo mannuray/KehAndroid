@@ -29,6 +29,10 @@ public class ConstantsStore {
     public final static int INTENT_ADD_VIDEO_IMPORT = 1;
     public final static int INTENT_ADD_VIDEO_RECORD = 0;
 
+    public final static String INTENT_REPORT_ACTION = "com.dubmania.dubsmania.report.action";
+    public final static int INTENT_REPORT = 0;
+    public final static int INTENT_IMPROVE = 1;
+
 
     // URL's
     /*
@@ -62,32 +66,35 @@ public class ConstantsStore {
     private final static String ACCOUNT = "account/";
     private final static String VIDEO = "video/";
     private final static String BOARD = "board/";
+    private final static String FEEDBACK = "feedback/";
 
     public final static String URL_SEARCH_VIDEOS = "search";
 
+    public final static String URL_LOGIN =              ACCOUNT + "login";
+    public final static String URL_USER_LOGOUT =        ACCOUNT + "logout";
+    public final static String URL_REGISTER =           ACCOUNT + "signup";
+    public final static String URL_RESET_PASSWORD =     ACCOUNT + "forgot";
+    public final static String URL_VERIFY_USER =        ACCOUNT + "verify/user";
+    public final static String URL_VERIFY_EMAIL =       ACCOUNT + "verify/email";
 
-    public final static String URL_ADD_VIDEO =              VIDEO + "add";
-    public final static String URL_DOWNLOAD_VIDEO =         VIDEO + "download";
-    public final static String URL_MARK_FAVORIT =           VIDEO + "favorite";
-    public final static String URL_GET_TAGS =               VIDEO + "tags";
-    public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
+
+    public final static String URL_ADD_VIDEO =          VIDEO + "add";
+    public final static String URL_DOWNLOAD_VIDEO =     VIDEO + "download";
+    public final static String URL_MARK_FAVORIT =       VIDEO + "favorite";
+    public final static String URL_GET_TAGS =           VIDEO + "tags";
 
     public final static String URL_GET_BOARDS =         BOARD + "get";
     public final static String URL_ADD_BOARD =          BOARD + "add";
     public final static String URL_ADD_VIDEO_TO_BOARD = BOARD + "addvideo";
     public final static String URL_GET_BOARD_VIDEOS =   BOARD + "getvideos";
 
+    public final static String URL_REPORT =   FEEDBACK + "report";
+    public final static String URL_IMPROVE =  FEEDBACK + "improve";
+
+    public final static String URL_GET_FAVORIT_VIDEOS = SEARCH_SERVICE + "getfavoritvideos";
     public final static String URL_GET_TRENDING_BOARDS = BOARD + "gettrendingboards";
     public final static String URL_GET_TRENDING_VIDEOS = SEARCH_SERVICE + "gettrendingvideos";
     public final static String URL_GET_DISCOVER_VIDEOS = SEARCH_SERVICE + "getdiscovervideos";
-
-    public final static String URL_LOGIN =           ACCOUNT + "login";
-    public final static String URL_USER_LOGOUT =     ACCOUNT + "logout";
-    public final static String URL_REGISTER =        ACCOUNT + "signup";
-    public final static String URL_RESET_PASSWORD =  ACCOUNT + "forgot";
-    public final static String URL_VERIFY_USER =     ACCOUNT + "verify/user";
-    public final static String URL_VERIFY_EMAIL =    ACCOUNT + "verify/email";
-
     public final static String URL_GET_LANGUAGES = SEARCH_SERVICE + "getlanguages";
 
 
@@ -133,6 +140,18 @@ public class ConstantsStore {
     public final static String PARAM_COUNTRY_ID = "id";
     public final static String PARAM_COUNTRY_TEXT = "country";
     public final static String PARAM_COUNTRY_LIST = "country_list";
+
+    public final static String PARAM_REPORT_REASON_CODE = "reason";
+    public final static String PARAM_REPORT_NAME = "name";
+    public final static String PARAM_REPORT_EMAIL = "email";
+    public final static String PARAM_REPORT_DESC = "description";
+
+    public final static String PARAM_IMPROVE_TITLE = "title";
+    public final static String PARAM_IMPROVE_SAID = "said";
+    public final static String PARAM_IMPROVE_NOISE = "title";
+    public final static String PARAM_IMPROVE_CROP = "crop";
+    public final static String PARAM_IMPROVE_LANGUAGE = "language";
+    public final static String PARAM_IMPROVE_LANGUAGE_SELECTED = "selected";
 
     public final static int PARAM_FAILUERE = 0;
     public final static int PARAM_SUCCESS = 1;
