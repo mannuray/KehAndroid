@@ -1,6 +1,7 @@
 package com.dubmania.dubsmania.addvideo;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoEditEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.dubsmania.utils.RangeSeekBar;
 import com.squareup.otto.Subscribe;
 
 public class EditVideoFragment extends Fragment {
@@ -25,6 +27,8 @@ public class EditVideoFragment extends Fragment {
     private boolean isVideoUriSet = false;
     private Uri mUri;
     private VideoView mVideoView;
+    private RangeSeekBar<Integer> trimmer;
+    private Thread mSeekUpdate;
 
     public EditVideoFragment() {
         // Required empty public constructor
@@ -41,6 +45,15 @@ public class EditVideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_video, container, false);
         mVideoView = (VideoView) view.findViewById(R.id.videoView);
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                Log.i("Trimmer1", " duration is prepare " + mVideoView.getDuration());
+                trimmer.setSelectedMaxValue(mVideoView.getDuration());
+            }
+        });
+        trimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
+
         mVideoView.setOnTouchListener(new OnVideoViewTouchListner());
         return view;
     }
@@ -89,17 +102,40 @@ public class EditVideoFragment extends Fragment {
 
             if(!isVideoUriSet) {
                 mVideoView.setVideoURI(mUri);
+                Log.i("Trimmer", " duration is " + mVideoView.getDuration());
+                trimmer.setSelectedMaxValue(mVideoView.getDuration());
                 isVideoUriSet = true;
             }
 
             if (!isPlaying) {
+                mVideoView.seekTo(trimmer.getSelectedMinValue());
                 mVideoView.start();
+                Log.i("Trimmer", " duration is play " + mVideoView.getDuration());
+                trimmer.setSelectedMaxValue(mVideoView.getDuration());
+                new TimeUpdater().start();
                 isPlaying = true;
             } else {
                 mVideoView.pause();
                 isPlaying = false;
             }
             return false;
+        }
+    }
+
+    private class TimeUpdater extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                    if (mVideoView.getCurrentPosition() > trimmer.getAbsoluteMaxValue())
+                        mVideoView.pause();
+                } catch (InterruptedException e) {
+                    return;
+                } catch (Exception e) {
+                    return;
+                }
+            }
         }
     }
 

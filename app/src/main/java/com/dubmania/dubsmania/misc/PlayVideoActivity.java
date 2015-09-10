@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.dubmania.dubsmania.R;
@@ -16,7 +15,6 @@ import com.dubmania.dubsmania.utils.VideoSharer;
 
 public class PlayVideoActivity extends AppCompatActivity {
 
-    private boolean isPlaying = false;
     private String mFilePath;
 
     @Override
@@ -29,21 +27,10 @@ public class PlayVideoActivity extends AppCompatActivity {
         Uri mUri = Uri.parse(mFilePath);
         final VideoView mVideoView = (VideoView) findViewById(R.id.play_video_view);
         mVideoView.setVideoURI(mUri);
-        mVideoView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!isPlaying) {
-                    mVideoView.start();
-                    isPlaying = true;
-                }
-                else {
-                    mVideoView.pause();
-                    isPlaying = false;
-                }
-                return false;
-            }
-        });
-
+        MediaController mediaController = new
+                MediaController(this);
+        mediaController.setAnchorView(mVideoView);
+        mVideoView.setMediaController(mediaController);
     }
 
     @Override
