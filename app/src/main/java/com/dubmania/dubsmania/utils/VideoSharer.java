@@ -31,12 +31,18 @@ public class VideoSharer {
     public void shareViaApp(File mFile, String mPackage) {
         Uri uri = Uri.parse(mFile.getAbsolutePath());
         Intent intent = new Intent();
+        intent.setPackage(mPackage);
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_STREAM,uri);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("video/mp4");
         intent.setPackage(mPackage);
-        mActivity.startActivity(intent);
+        try {
+            mActivity.startActivity(intent);
+        }
+        catch (android.content.ActivityNotFoundException anfe) {
+            mActivity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + mPackage)));
+        }
     }
 
     public void showAlertDialog(String mFilePath) {
@@ -65,7 +71,7 @@ public class VideoSharer {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0:
-                        shareViaApp(mFile, "com.whatsapp"); // find package name for facebook messenger
+                        shareViaApp(mFile, "com.facebook.katana");
                         return;
                     case 1:
                         shareViaApp(mFile, "com.whatsapp");

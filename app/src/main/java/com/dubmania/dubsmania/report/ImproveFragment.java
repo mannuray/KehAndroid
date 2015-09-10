@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.report;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,11 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.feedbackevent.FragmentFeedbackCreateEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.utils.ConstantsStore;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
-import org.apache.http.Header;
+import org.json.JSONException;
 
 public class ImproveFragment extends Fragment {
 
@@ -124,16 +125,25 @@ public class ImproveFragment extends Fragment {
             params.add(ConstantsStore.PARAM_IMPROVE_SAID, "Hindi"); // modify to pick from spinner
         }
 
-        DubsmaniaHttpClient.post(ConstantsStore.URL_IMPROVE, params, new AsyncHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_IMPROVE, params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                getActivity().finish();
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+                try {
+                    Log.i("Server res", response.toString());
+                    if (response.getBoolean("result")) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Thank you for your feedback", Toast.LENGTH_LONG).show();
+                        getActivity().finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                Log.i("Server res", String.valueOf(statusCode));
                 Toast.makeText(getActivity().getApplicationContext(), "Please check internet", Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                //getActivity().finish();
             }
         });
     }

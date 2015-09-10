@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
 import com.dubmania.dubsmania.communicator.eventbus.feedbackevent.FragmentFeedbackCreateEvent;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.squareup.otto.Produce;
@@ -58,11 +57,6 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(-1));
     }
 
     private void changeFragment(int position) {
