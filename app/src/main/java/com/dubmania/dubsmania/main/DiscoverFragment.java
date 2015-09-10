@@ -12,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
+import com.dubmania.dubsmania.Adapters.ListItem;
 import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
-import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
-import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverBoardListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.squareup.otto.Subscribe;
 
@@ -32,10 +30,8 @@ import java.util.ArrayList;
  * <p/>
  */
 public class DiscoverFragment extends Fragment {
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private ArrayList<VideoListItem> mVideoItemList;
-    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
+    private ArrayList<ListItem> mItemList;
     private boolean mVisibleFirstTime = true;
     private ProgressBar spinner;
 
@@ -57,15 +53,14 @@ public class DiscoverFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_discover, container, false);
         final FragmentActivity c = getActivity();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.discover_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.discover_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
 
-        mVideoItemList = new ArrayList<>();
-        mVideoBoardItemList = new ArrayList<>();
+        mItemList = new ArrayList<>();
 
-        mAdapter = new VideoAndBoardAdapter(mVideoItemList,mVideoBoardItemList);
+        mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
         spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
@@ -97,15 +92,9 @@ public class DiscoverFragment extends Fragment {
     }
 
     @Subscribe
-    public void onAddDiscoverVideoItemListEvent(AddDiscoverVideoItemListEvent event) {
-        mVideoItemList.addAll(event.mVideoItemList);
+    public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
+        mItemList.addAll(event.mItemList);
         mAdapter.notifyDataSetChanged();
         spinner.setVisibility(View.GONE);
-    }
-
-    @Subscribe
-    public void onAddTrendingBoardListEvent(AddDiscoverBoardListEvent event) {
-        mVideoBoardItemList.addAll(event.mVideoBoardItemList);
-        mAdapter.notifyDataSetChanged();
     }
 }

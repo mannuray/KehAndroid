@@ -93,12 +93,12 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     public void addVideoBroard(View v) {
         new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
             @Override
-            public void onVideoBoardsCreaterSuccess() {
+            public void onVideoBoardCreateSuccess() {
                 finish();
             }
 
             @Override
-            public void onVideosBoardsCreaterFailure() {
+            public void onVideoBoardCreateFailure() {
                 //
             }
         });

@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by rat on 7/29/2015.
  */
-public class VideoListItem {
+public class VideoListItem extends ListItem{
     private Long id;
     private String name;
     private String user;
@@ -13,6 +13,7 @@ public class VideoListItem {
     private Bitmap thumbnail;
 
     public VideoListItem(Long id, String name, String user, boolean favourite, Bitmap thumbnail) {
+        super(ListType.video);
         this.id = id;
         this.name = name;
         this.user = user;

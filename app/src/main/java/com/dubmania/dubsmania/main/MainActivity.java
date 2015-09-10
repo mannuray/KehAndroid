@@ -13,12 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dubmania.dubsmania.Adapters.ListItem;
 import com.dubmania.dubsmania.Adapters.VideoBoardListItem;
 import com.dubmania.dubsmania.Adapters.VideoListItem;
 import com.dubmania.dubsmania.Adapters.VideoPlayEvent;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverVideoItemListEvent;
+import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.dubsmania.communicator.eventbus.mainevent.MyVideoItemShareEvent;
@@ -30,6 +31,8 @@ import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoBoardClickedE
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoAndBoardDownloader;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardDownloaderCallback;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoBoardsDownloader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoFavoriteMarker;
@@ -178,14 +181,14 @@ public class MainActivity extends ActionBarActivity
 
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
-        new VideoListDownloader().downloadDiscoverVideos(event.getCurrent_page(), new SessionManager(this).getUser(), new VideoListDownloaderCallback() {
+        new VideoAndBoardDownloader(getApplicationContext()).discover(event.getCurrent_page(), new SessionManager(this).getId(), new VideoAndBoardDownloaderCallback() {
             @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
-                BusProvider.getInstance().post(new AddDiscoverVideoItemListEvent(videos));
+            public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> videos) {
+                BusProvider.getInstance().post(new AddDiscoverItemListEvent(videos));
             }
 
             @Override
-            public void onVideosDownloadFailure() {
+            public void onVideoAndBoardDownloaderFailure() {
 
             }
         });

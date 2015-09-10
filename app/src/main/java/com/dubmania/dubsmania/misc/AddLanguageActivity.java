@@ -100,7 +100,7 @@ public class AddLanguageActivity extends AppCompatActivity {
     }
 
     private void populateData() {
-        DubsmaniaHttpClient.post(ConstantsStore.URL_GET_LANGUAGES, new RequestParams(), new JsonHttpResponseHandler() {
+        DubsmaniaHttpClient.post(ConstantsStore.URL_LANGUAGES, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {

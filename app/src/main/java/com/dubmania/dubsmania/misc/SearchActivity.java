@@ -9,14 +9,14 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.dubmania.dubsmania.Adapters.VideoAdapter;
-import com.dubmania.dubsmania.Adapters.VideoListItem;
+import com.dubmania.dubsmania.Adapters.ListItem;
+import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.dubsmania.communicator.eventbus.miscevent.VideoItemMenuEvent;
-import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloader;
-import com.dubmania.dubsmania.communicator.networkcommunicator.VideoListDownloaderCallback;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoAndBoardDownloader;
+import com.dubmania.dubsmania.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.dubsmania.createdub.CreateDubActivity;
 import com.dubmania.dubsmania.dialogs.VideoItemPopupMenu;
 import com.dubmania.dubsmania.utils.ConstantsStore;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 
 public class SearchActivity extends AppCompatActivity {
-    private ArrayList<VideoListItem> mVideoItemList;
+    private ArrayList<ListItem> mItemList;
     private EditText mSearch;
 
     @Override
@@ -46,22 +46,22 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mVideoItemList = new ArrayList<>();
-        final RecyclerView.Adapter mAdapter = new VideoAdapter(mVideoItemList);
+        mItemList = new ArrayList<>();
+        final RecyclerView.Adapter mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
 
         mSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                new VideoListDownloader().searchVideos(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoListDownloaderCallback() {
+                new VideoAndBoardDownloader(getApplicationContext()).search(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoAndBoardDownloaderCallback() {
                     @Override
-                    public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
-                        mVideoItemList.addAll(videos);
+                    public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> videos) {
+                        mItemList.addAll(videos);
                         mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void onVideosDownloadFailure() {
+                    public void onVideoAndBoardDownloaderFailure() {
 
                     }
                 });

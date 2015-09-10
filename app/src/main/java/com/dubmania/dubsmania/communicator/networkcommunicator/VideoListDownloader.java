@@ -28,16 +28,7 @@ public class VideoListDownloader {
         params.add(ConstantsStore.PARAM_END, String.valueOf(end));
         params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
 
-        downloadVideos(ConstantsStore.URL_GET_TRENDING_VIDEOS, params, callback);
-    }
-
-    public void downloadDiscoverVideos(Integer page, String user, VideoListDownloaderCallback callback) {
-        RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_START, String.valueOf(page * 10));
-        params.add(ConstantsStore.PARAM_END, String.valueOf((page + 1) * 10));
-        params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
-
-        downloadVideos(ConstantsStore.URL_GET_DISCOVER_VIDEOS, params, callback);
+        downloadVideos(ConstantsStore.URL_TRENDING, params, callback);
     }
 
     public void downloadBoardVideo(Long id, String user, VideoListDownloaderCallback callback) {
@@ -46,11 +37,6 @@ public class VideoListDownloader {
         params.add(ConstantsStore.PARAM_USER, user); // change this param for current user
 
         downloadVideos(ConstantsStore.URL_GET_BOARD_VIDEOS, params, callback);
-    }
-
-    public void searchVideos(String tag, Long user, VideoListDownloaderCallback callback) {
-        downloadVideos(ConstantsStore.URL_SEARCH_VIDEOS, new RequestParams(ConstantsStore.PARAM_TAGS, tag), callback);
-
     }
 
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {

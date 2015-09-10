@@ -12,23 +12,20 @@ import java.util.ArrayList;
  * Created by rat on 7/28/2015.
  */
 public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<VideoListItem> mVideoList;
-    private ArrayList<VideoBoardListItem> mVideoBoardList;
-    private int numberOfVedios;
-
+    private ArrayList<ListItem> mList;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoAndBoardAdapter(ArrayList<VideoListItem> myVideoList, ArrayList<VideoBoardListItem> myVideoBoardList) {
-        mVideoList = myVideoList;
-        mVideoBoardList = myVideoBoardList;
-        numberOfVedios = 4;
+    public VideoAndBoardAdapter(ArrayList<ListItem> myList) {
+        this.mList = myList;
     }
 
     @Override
     public int getItemViewType(int position) {
-        // Just as an example, return 0 or 2 depending on position
-        // Note that unlike in ListView adapters, types don't have to be contiguous
-        return position < numberOfVedios? 0: 1;
+        if(mList.get(position).getType() == ListItem.ListType.video)
+            return 0;
+        else if(mList.get(position).getType() == ListItem.ListType.board)
+            return 1;
+        return -1;
     }
 
     // Create new views (invoked by the layout manager)
@@ -50,15 +47,15 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch(getItemViewType(position)) {
             case 0:
-                VideoViewHolderFactory.bindViewHolder(mVideoList.get(position), holder, position);
+                VideoViewHolderFactory.bindViewHolder((VideoListItem)mList.get(position), holder, position);
                 return;
             case 1:
-                VideoBoardViewHolderFactory.bindViewHolder(mVideoBoardList.get(position - numberOfVedios), holder);
+                VideoBoardViewHolderFactory.bindViewHolder((VideoBoardListItem)mList.get(position), holder);
         }
     }
 
     @Override
     public int getItemCount() {
-        return (mVideoList.size() + mVideoBoardList.size());
+        return mList.size();
     }
 }

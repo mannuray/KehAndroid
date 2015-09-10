@@ -26,7 +26,7 @@ public class VideoBoardCreator {
                     Log.d("json error", response.toString());
                     if (response.getBoolean("result")) {
                         Log.d("got it ", String.valueOf(statusCode));
-                        mCallback.onVideoBoardsCreaterSuccess();
+                        mCallback.onVideoBoardCreateSuccess();
                     }
 
                 } catch (JSONException e) {
@@ -36,7 +36,7 @@ public class VideoBoardCreator {
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-                mCallback.onVideosBoardsCreaterFailure();
+                mCallback.onVideoBoardCreateFailure();
             }
         });
     }
