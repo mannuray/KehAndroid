@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.dubmania.dubsmania.utils.SessionManager;
 import java.util.ArrayList;
 
 public class AddVideoBoardActivity extends AppCompatActivity {
+    Toolbar mToolbar;
     private EditText mBoardName;
     private int mIconId;
 
@@ -28,6 +30,14 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_video_board);
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         new SessionManager(this).checkLogin(new SessionManager.LoginListener() {
             @Override
             public void onSuccess() {

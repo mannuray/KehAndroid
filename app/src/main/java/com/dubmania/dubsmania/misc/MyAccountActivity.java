@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +19,20 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 
 public class MyAccountActivity extends AppCompatActivity {
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SessionManager sessionManager = new SessionManager(this);
         setContentView(R.layout.activity_my_account);
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         TextView myAccountText = (TextView) findViewById(R.id.myAccountText);
         myAccountText.setText(String.format(getString(R.string.my_account_text), sessionManager.getUser(), sessionManager.getUserEmail()));
     }

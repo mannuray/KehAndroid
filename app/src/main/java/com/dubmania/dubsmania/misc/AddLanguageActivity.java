@@ -2,6 +2,7 @@ package com.dubmania.dubsmania.misc;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class AddLanguageActivity extends AppCompatActivity {
+    Toolbar mToolbar;
     private NumberPicker mCountryPicker;
     NumberPicker mLanguagePicker;
     private LanguageData mLanguageData;
@@ -34,6 +36,14 @@ public class AddLanguageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_language);
+
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);

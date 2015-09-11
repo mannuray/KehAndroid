@@ -195,10 +195,6 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("VidCraft");
     }
 
-    public void changeLanguage(View v) {
-        changeFragment(new LanguageFragment(), "Languages");
-    }
-
     public void pushNotification(View v) {
 
     }
