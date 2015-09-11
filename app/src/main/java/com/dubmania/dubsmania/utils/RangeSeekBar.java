@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -31,7 +32,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public static final int HEIGHT_IN_DP = 30;
     public static final int TEXT_LATERAL_PADDING_IN_DP = 3;
     private static final int INITIAL_PADDING_IN_DP = 8;
-    private final int LINE_HEIGHT_IN_DP = 1;
+    private final int LINE_HEIGHT_IN_DP = 7;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_normal);
     private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(getResources(),
@@ -43,11 +44,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float thumbHalfHeight = 0.5f * thumbImage.getHeight();
     private float INITIAL_PADDING;
     private float padding;
-    private T absoluteMinValue, absoluteMaxValue;
+    private T absoluteMinValue, absoluteMaxValue, absoluteProgressValue;
     private NumberType numberType;
-    private double absoluteMinValuePrim, absoluteMaxValuePrim;
+    private double absoluteMinValuePrim, absoluteMaxValuePrim, absoluteProgressValuePrim;
     private double normalizedMinValue = 0d;
     private double normalizedMaxValue = 1d;
+    private double normalizedProgressValue = 0d;
     private Thumb pressedThumb = null;
     private boolean notifyWhileDragging = false;
     private OnRangeSeekBarChangeListener<T> listener;
@@ -147,6 +149,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public void setRangeValues(T minValue, T maxValue) {
         this.absoluteMinValue = minValue;
         this.absoluteMaxValue = maxValue;
+        this.absoluteProgressValue = minValue;
         setValuePrimAndNumberType();
     }
 
@@ -155,18 +158,21 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private void setRangeToDefaultValues() {
         this.absoluteMinValue = (T) DEFAULT_MINIMUM;
         this.absoluteMaxValue = (T) DEFAULT_MAXIMUM;
+        this.absoluteProgressValue = (T) DEFAULT_MINIMUM;
         setValuePrimAndNumberType();
     }
 
     private void setValuePrimAndNumberType() {
         absoluteMinValuePrim = absoluteMinValue.doubleValue();
         absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
+        absoluteProgressValuePrim = absoluteProgressValue.doubleValue();
         numberType = NumberType.fromNumber(absoluteMinValue);
     }
 
     public void resetSelectedValues() {
         setSelectedMinValue(absoluteMinValue);
         setSelectedMaxValue(absoluteMaxValue);
+        setCurrentProgressValue(absoluteProgressValue);
     }
 
     public boolean isNotifyWhileDragging() {
@@ -198,6 +204,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     public T getAbsoluteMaxValue() {
         return absoluteMaxValue;
+    }
+
+    /**
+     * Returns the absolute progress value of the range that has been set at construction time.
+     *
+     * @return The absolute progress value of the range.
+     */
+    public T getAbsoluteProgressValue() {
+        return absoluteProgressValue;
     }
 
     /**
@@ -244,6 +259,29 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         } else {
             setNormalizedMaxValue(valueToNormalized(value));
         }
+    }
+
+    /**
+     * Sets the currently selected maximum value. The widget will be invalidated and redrawn.
+     *
+     * @param value The Number value to set the maximum value to. Will be clamped to given absolute minimum/maximum range.
+     */
+    public void setCurrentProgressValue(T value) {
+        // in case absoluteMinValue == absoluteMaxValue, avoid division by zero when normalizing.
+        if (0 == (absoluteProgressValuePrim - absoluteMinValuePrim)) {
+            setNormalizedProgressValue(1d);
+        } else {
+            setNormalizedProgressValue(valueToNormalized(value));
+        }
+    }
+
+    /**
+     * Returns the currently selected max value.
+     *
+     * @return The currently selected max value.
+     */
+    public T getCurrentProgressValue() {
+        return normalizedToValue(normalizedProgressValue);
     }
 
     /**
@@ -436,13 +474,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         // draw min and max labels
         //String minLabel = getContext().getString(R.string.demo_min_label);
         //String maxLabel = getContext().getString(R.string.demo_max_label);
-        String minLabel = "min";
-        String maxLabel = "max";
-        float minMaxLabelSize = Math.max(paint.measureText(minLabel), paint.measureText(maxLabel));
-        float minMaxHeight = mTextOffset + thumbHalfHeight + mTextSize / 3;
-        canvas.drawText(minLabel, 0, minMaxHeight, paint);
-        canvas.drawText(maxLabel, getWidth() - minMaxLabelSize, minMaxHeight, paint);
-        padding = INITIAL_PADDING + minMaxLabelSize + thumbHalfWidth;
+        //String minLabel = "min";
+        //String maxLabel = "max";
+        //float minMaxLabelSize = Math.max(paint.measureText(minLabel), paint.measureText(maxLabel));
+        //float minMaxHeight = mTextOffset + thumbHalfHeight + mTextSize / 3;
+        //canvas.drawText(minLabel, 0, minMaxHeight, paint);
+        //canvas.drawText(maxLabel, getWidth() - minMaxLabelSize, minMaxHeight, paint);
+        padding = INITIAL_PADDING + thumbHalfWidth; //INITIAL_PADDING + minMaxLabelSize + thumbHalfWidth;
 
         // draw seek bar background line
         mRect.left = padding;
@@ -463,7 +501,16 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         paint.setColor(colorToUseForButtonsAndHighlightedLine);
         canvas.drawRect(mRect, paint);
 
+        // draw seek bar progress range line
+        Log.i("Range", "Normilit  poger value " + String.valueOf(normalizedProgressValue) + " " + String.valueOf(absoluteMinValue) + " " + String .valueOf(absoluteMaxValue));
+        mRect.left = normalizedToScreen(normalizedMinValue);
+        mRect.right = normalizedToScreen(normalizedMaxValue);
+
+        paint.setColor(Color.RED); // change it make it configurable
+        canvas.drawRect(mRect, paint);
+
         // draw minimum thumb if not a single thumb control
+
         if (!mSingleThumb) {
             drawThumb(normalizedToScreen(normalizedMinValue), Thumb.MIN.equals(pressedThumb), canvas,
                     selectedValuesAreDefault);
@@ -480,25 +527,24 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             // give text a bit more space here so it doesn't get cut off
             int offset = PixelUtil.dpToPx(getContext(), TEXT_LATERAL_PADDING_IN_DP);
 
-            String minText = String.valueOf(getSelectedMinValue());
-            String maxText = String.valueOf(getSelectedMaxValue());
-            float minTextWidth = paint.measureText(minText) + offset;
-            float maxTextWidth = paint.measureText(maxText) + offset;
+            //String minText = String.valueOf(getSelectedMinValue());
+            //String maxText = String.valueOf(getSelectedMaxValue());
+            //float minTextWidth = paint.measureText(minText) + offset;
+            //float maxTextWidth = paint.measureText(maxText) + offset;
 
-            if (!mSingleThumb) {
+            /*if (!mSingleThumb) {
                 canvas.drawText(minText,
                         normalizedToScreen(normalizedMinValue) - minTextWidth * 0.5f,
                         mDistanceToTop + mTextSize,
                         paint);
 
-            }
+            }*/
 
-            canvas.drawText(maxText,
+            /*canvas.drawText(maxText,
                     normalizedToScreen(normalizedMaxValue) - maxTextWidth * 0.5f,
                     mDistanceToTop + mTextSize,
-                    paint);
+                    paint);*/
         }
-
     }
 
     /**
@@ -593,6 +639,16 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     private void setNormalizedMaxValue(double value) {
         normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
+        invalidate();
+    }
+
+    /**
+     * Sets normalized max value to value so that 0 <= normalized min value <= value <= 1. The View will get invalidated when calling this method.
+     *
+     * @param value The new normalized max value to set.
+     */
+    private void setNormalizedProgressValue(double value) {
+        normalizedProgressValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
         invalidate();
     }
 

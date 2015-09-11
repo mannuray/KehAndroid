@@ -49,7 +49,7 @@ public class EditVideoFragment extends Fragment {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 Log.i("Trimmer1", " duration is prepare " + mVideoView.getDuration());
-                trimmer.setSelectedMaxValue(mVideoView.getDuration());
+                trimmer.setRangeValues(0, mVideoView.getDuration());
             }
         });
         trimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
@@ -110,8 +110,8 @@ public class EditVideoFragment extends Fragment {
             if (!isPlaying) {
                 mVideoView.seekTo(trimmer.getSelectedMinValue());
                 mVideoView.start();
-                Log.i("Trimmer", " duration is play " + mVideoView.getDuration());
-                trimmer.setSelectedMaxValue(mVideoView.getDuration());
+                //Log.i("Trimmer", " duration is play " + mVideoView.getDuration());
+                //trimmer.setRangeValues(0, mVideoView.getDuration());
                 new TimeUpdater().start();
                 isPlaying = true;
             } else {
@@ -128,7 +128,9 @@ public class EditVideoFragment extends Fragment {
             while (true) {
                 try {
                     Thread.sleep(1000);
-                    if (mVideoView.getCurrentPosition() > trimmer.getAbsoluteMaxValue())
+                    if(isPlaying)
+                        trimmer.setCurrentProgressValue(mVideoView.getCurrentPosition());
+                    if (mVideoView.getCurrentPosition() > trimmer.getSelectedMaxValue())
                         mVideoView.pause();
                 } catch (InterruptedException e) {
                     return;
