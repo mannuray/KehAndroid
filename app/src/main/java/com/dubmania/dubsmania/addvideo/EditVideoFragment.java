@@ -48,7 +48,6 @@ public class EditVideoFragment extends Fragment {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                Log.i("Trimmer1", " duration is prepare " + mVideoView.getDuration());
                 trimmer.setRangeValues(0, mVideoView.getDuration());
             }
         });
@@ -68,7 +67,7 @@ public class EditVideoFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if( id == R.id.action_edit_video) {
-            BusProvider.getInstance().post(new AddVideoEditEvent("")); //mUri.getPath())); // this is rendundat now but will be of use later
+            BusProvider.getInstance().post(new AddVideoEditEvent(trimmer.getSelectedMinValue(), trimmer.getSelectedMaxValue())); //mUri.getPath())); // this is rendundat now but will be of use later
         }
         return true;
     }
@@ -98,11 +97,8 @@ public class EditVideoFragment extends Fragment {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Log.d("file path ","set");
-
             if(!isVideoUriSet) {
                 mVideoView.setVideoURI(mUri);
-                Log.i("Trimmer", " duration is " + mVideoView.getDuration());
                 trimmer.setSelectedMaxValue(mVideoView.getDuration());
                 isVideoUriSet = true;
             }
@@ -110,10 +106,8 @@ public class EditVideoFragment extends Fragment {
             if (!isPlaying) {
                 mVideoView.seekTo(trimmer.getSelectedMinValue());
                 mVideoView.start();
-                //Log.i("Trimmer", " duration is play " + mVideoView.getDuration());
-                //trimmer.setRangeValues(0, mVideoView.getDuration());
-                new TimeUpdater().start();
                 isPlaying = true;
+                new TimeUpdater().start();
             } else {
                 mVideoView.pause();
                 isPlaying = false;
@@ -125,13 +119,20 @@ public class EditVideoFragment extends Fragment {
     private class TimeUpdater extends Thread {
         @Override
         public void run() {
-            while (true) {
+            while (isPlaying) {
+                Log.i("Range", "tread runnig ");
                 try {
-                    Thread.sleep(1000);
-                    if(isPlaying)
-                        trimmer.setCurrentProgressValue(mVideoView.getCurrentPosition());
-                    if (mVideoView.getCurrentPosition() > trimmer.getSelectedMaxValue())
+                    Thread.sleep(100);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            trimmer.setCurrentProgressValue(mVideoView.getCurrentPosition());
+                        }
+                    });
+                    if (mVideoView.getCurrentPosition() > trimmer.getSelectedMaxValue()) {
+                        isPlaying = false;
                         mVideoView.pause();
+                    }
                 } catch (InterruptedException e) {
                     return;
                 } catch (Exception e) {

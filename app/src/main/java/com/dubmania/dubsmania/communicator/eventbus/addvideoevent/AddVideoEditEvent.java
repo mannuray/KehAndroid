@@ -4,13 +4,19 @@ package com.dubmania.dubsmania.communicator.eventbus.addvideoevent;
  * Created by rat on 8/14/2015.
  */
 public class AddVideoEditEvent {
-    private String mFilePath;
+    private Integer mStartPos;
+    private Integer mEndPos;
 
-    public AddVideoEditEvent(String filePath) {
-        mFilePath = filePath;
+    public AddVideoEditEvent(Integer mStartPos, Integer mEndPos) {
+        this.mStartPos = mStartPos;
+        this.mEndPos = mEndPos;
     }
 
-    public String getFilePath() {
-        return mFilePath;
+    public Integer getStartPos() {
+        return mStartPos;
+    }
+
+    public Integer getEndPos() {
+        return mEndPos;
     }
 }

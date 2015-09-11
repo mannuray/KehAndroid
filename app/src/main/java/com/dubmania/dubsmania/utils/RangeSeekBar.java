@@ -267,12 +267,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param value The Number value to set the maximum value to. Will be clamped to given absolute minimum/maximum range.
      */
     public void setCurrentProgressValue(T value) {
+        Log.i("Range", "set before " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
         // in case absoluteMinValue == absoluteMaxValue, avoid division by zero when normalizing.
-        if (0 == (absoluteProgressValuePrim - absoluteMinValuePrim)) {
+        if (0 == (absoluteMaxValuePrim - absoluteMinValuePrim)) {
             setNormalizedProgressValue(1d);
         } else {
+            Log.i("Range", "in value " + String.valueOf(valueToNormalized(value)));
             setNormalizedProgressValue(valueToNormalized(value));
         }
+        Log.i("Range", "set after " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
     }
 
     /**
@@ -495,6 +498,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 DEFAULT_COLOR; //non default, filter is active
 
         // draw seek bar active range line
+        Log.i("Drawing", " main bar " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedMaxValue));
         mRect.left = normalizedToScreen(normalizedMinValue);
         mRect.right = normalizedToScreen(normalizedMaxValue);
 
@@ -502,9 +506,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         canvas.drawRect(mRect, paint);
 
         // draw seek bar progress range line
-        Log.i("Range", "Normilit  poger value " + String.valueOf(normalizedProgressValue) + " " + String.valueOf(absoluteMinValue) + " " + String .valueOf(absoluteMaxValue));
+        Log.i("Drawing", " main bar progres " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedProgressValue));
         mRect.left = normalizedToScreen(normalizedMinValue);
-        mRect.right = normalizedToScreen(normalizedMaxValue);
+        mRect.right = normalizedToScreen(normalizedProgressValue);
 
         paint.setColor(Color.RED); // change it make it configurable
         canvas.drawRect(mRect, paint);
@@ -629,6 +633,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     private void setNormalizedMinValue(double value) {
         normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
+        normalizedProgressValue = Math.max(normalizedMinValue, normalizedProgressValue);
         invalidate();
     }
 
@@ -639,6 +644,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     private void setNormalizedMaxValue(double value) {
         normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
+        normalizedProgressValue = Math.min(normalizedMaxValue, normalizedProgressValue);
         invalidate();
     }
 
@@ -648,7 +654,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param value The new normalized max value to set.
      */
     private void setNormalizedProgressValue(double value) {
-        normalizedProgressValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
+        normalizedProgressValue = Math.max(0d, Math.min(normalizedMaxValue, Math.max(value, normalizedMinValue)));
         invalidate();
     }
 

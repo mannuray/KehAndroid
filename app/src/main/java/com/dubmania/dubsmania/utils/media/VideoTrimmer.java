@@ -1,5 +1,7 @@
 package com.dubmania.dubsmania.utils.media;
 
+import android.util.Log;
+
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
@@ -50,6 +52,7 @@ public class VideoTrimmer {
             long startSample = -1;
             long endSample = -1;
             //for (int i = 0; i < track.getSampleDurations().length; i++) {
+            Log.i("Cuting ", track.getSampleDurations().toString());
             for(long time: track.getSampleDurations())
             {
                 /*TimeToSampleBox.Entry entry = track.getDecodingTimeEntries().get(i);

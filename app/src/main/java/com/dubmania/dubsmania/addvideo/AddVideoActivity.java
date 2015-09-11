@@ -22,8 +22,11 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
+import com.dubmania.dubsmania.utils.media.VideoTrimmer;
 import com.squareup.otto.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddVideoActivity extends AppCompatActivity {
@@ -116,17 +119,19 @@ public class AddVideoActivity extends AppCompatActivity {
     }
 
     private class VideoInfo {
-        private String mFilePath;
+        private String mSrcFilePath;
+        private String mDstFilePath;
         private ArrayList<Tag> mTags;
         private String mTitle;
         private String mLanguage;
 
-        public String getFilePath() {
-            return mFilePath;
+        public String getSrcFilePath() {
+            return mSrcFilePath;
         }
 
         public void setFilePath(String mFilePath) {
-            this.mFilePath = mFilePath;
+            this.mSrcFilePath = mFilePath;
+            this.mDstFilePath = "Temp_" + mFilePath;
         }
 
         public ArrayList<Tag> getTags() {
@@ -152,36 +157,45 @@ public class AddVideoActivity extends AppCompatActivity {
         public void setLanguage(String mLanguage) {
             this.mLanguage = mLanguage;
         }
+
+        public String getDstFilePath() {
+            return mDstFilePath;
+        }
     }
 
     /*
     @Produce
     public AddVideoInfoEvent produceAddVideoInfo() {
-        return new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage());
+        return new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage());
     }*/
 
     @Subscribe
     public void onSearchVideoItemListEvent(SearchVideoItemListEvent event) {
         mVideoInfo.setFilePath(event.getFilePath());
-        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(1));
     }
 
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
+        try {
+            VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
     }
 
     @Subscribe
     public void onAddTagsEvent(AddTagsEvent event) {
         mVideoInfo.setTags(event.getTags());
-        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(3));
     }
 
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
-        new VideoUploader().addVideo(mVideoInfo.mFilePath, event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
+        new VideoUploader().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
             @Override
             public void onVideosUploadSuccess() {
                 finish();

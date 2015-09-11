@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.dubmania.dubsmania.Adapters.EndlessRecyclerOnScrollListener;
 import com.dubmania.dubsmania.Adapters.ListItem;
 import com.dubmania.dubsmania.Adapters.VideoAndBoardAdapter;
 import com.dubmania.dubsmania.R;
@@ -62,7 +61,7 @@ public class DiscoverFragment extends Fragment {
 
         mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
+        //mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
         spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
         spinner.setVisibility(View.VISIBLE);
 
