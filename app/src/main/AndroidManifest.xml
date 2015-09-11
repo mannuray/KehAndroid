@@ -25,6 +25,7 @@
             android:name=".addvideo.AddVideoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.HomeActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".createdub.CreateDubActivity"
@@ -35,6 +36,7 @@
             android:name=".signupandlogin.SignupAndLoginActivity"
             android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.HomeActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".misc.AddLanguageActivity"
@@ -53,6 +55,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_add_video_board"
             android:parentActivityName=".main.HomeActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -65,11 +68,13 @@
             android:name=".misc.VideoBoardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".main.HomeActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.AddVideoToBoardActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustNothing"
             android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>

@@ -54,7 +54,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         setContentView(R.layout.activity_signup);
 
         PagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());

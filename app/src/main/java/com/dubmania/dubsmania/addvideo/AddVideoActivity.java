@@ -188,11 +188,11 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
-        try {
+        /*try {
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
     }
 
