@@ -8,6 +8,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="tag_nav_drawer_main_entry">nav_drawer_main_entry</string>
+    <string name="tag_nav_drawer_special_entry">nav_drawer_special_entry</string>
 
     <!-- menu option strings -->
     <string name="action_search">Search</string>
@@ -164,6 +166,7 @@
     <string name="my_account_button_text">Logout</string>
     <string name="title_activity_report">ReportActivity</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 
 </resources>

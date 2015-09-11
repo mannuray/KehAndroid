@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +15,14 @@ import android.view.ViewGroup;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.utils.sliding.SlidingTabLayout;
 
 public class PagerFragment extends Fragment {
-    PagerAdapter mPagerAdapter;
+    ViewPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
+    SlidingTabLayout mTabs;
+    CharSequence mTitles[]={"Discover","Trending","VideoBoard"};
+    int mNumberOfTabs = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,22 @@ public class PagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(
                 R.layout.fragment_pager, container, false);
-        mPagerAdapter = new MyPagerAdapter(
-                getChildFragmentManager());
-        mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
+        mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTitles, mNumberOfTabs);
+        mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
+
+        mTabs = (SlidingTabLayout) rootView.findViewById(R.id.tabs);
+        mTabs.setDistributeEvenly(true);
+
+        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+        mTabs.setViewPager(mViewPager);
         return rootView;
     }
 
