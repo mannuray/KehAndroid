@@ -107,7 +107,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/navigation_drawer_items_list_linearLayout_explore"
+                    android:id="@+id/navigation_drawer_items_list_linearLayout_add_video"
                     style="@style/NavDrawerRowLayout.Main" >
 
                     <com.dubmania.dubsmania.utils.TintOnStateImageView
@@ -129,7 +129,7 @@
                     layout="@layout/navigation_drawer_divider"/> -->
 
                 <FrameLayout
-                    android:id="@+id/navigation_drawer_items_list_linearLayout_help_and_feedback"
+                    android:id="@+id/navigation_drawer_items_list_linearLayout_my_dubs"
                     style="@style/NavDrawerRowLayout.Secondary">
 
                     <com.dubmania.dubsmania.utils.TintOnStateImageView
@@ -147,7 +147,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/navigation_drawer_items_list_linearLayout_about"
+                    android:id="@+id/navigation_drawer_items_list_linearLayout_settings"
                     style="@style/NavDrawerRowLayout.Secondary">
 
                     <com.dubmania.dubsmania.utils.TintOnStateImageView

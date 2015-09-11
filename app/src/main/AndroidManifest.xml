@@ -17,91 +17,78 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".main.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".misc.SearchActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_search"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".addvideo.AddVideoActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_add_sound"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".createdub.CreateDubActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_create_dub"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".signupandlogin.SignupAndLoginActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_signup"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".misc.AddLanguageActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_add_language"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.MyAccountActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_my_account"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.AddVideoBoardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_add_video_board"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.PlayVideoActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_play_video"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.VideoBoardActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_video_board"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.AddVideoToBoardActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_add_video_to_board"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".report.FeedbackActivity"
-            android:label="@string/title_activity_feedback"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".main.HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".misc.LanguageActivity"
+            android:label="@string/title_activity_language" >
         </activity>
     </application>
 

@@ -18,11 +18,9 @@ import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.utils.sliding.SlidingTabLayout;
 
 public class PagerFragment extends Fragment {
-    ViewPagerAdapter mPagerAdapter;
+    MyPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
     SlidingTabLayout mTabs;
-    CharSequence mTitles[]={"Discover","Trending","VideoBoard"};
-    int mNumberOfTabs = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,7 @@ public class PagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(
                 R.layout.fragment_pager, container, false);
-        mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTitles, mNumberOfTabs);
+        mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setAdapter(mPagerAdapter);

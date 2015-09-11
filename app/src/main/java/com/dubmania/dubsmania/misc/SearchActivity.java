@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,15 +30,20 @@ import java.util.ArrayList;
 public class SearchActivity extends AppCompatActivity {
     private ArrayList<ListItem> mItemList;
     private EditText mSearch;
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        // add the custom view to the action bar
         assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setCustomView(R.layout.search_layout);
         actionBar.setDisplayShowCustomEnabled(true);
         mSearch = (EditText) actionBar.getCustomView().findViewById(

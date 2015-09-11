@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.misc.LanguageActivity;
 import com.dubmania.dubsmania.misc.MyAccountActivity;
 import com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity;
 import com.dubmania.dubsmania.utils.SessionManager;
@@ -71,6 +72,13 @@ public class SettingFragment extends Fragment {
         }
 
         // set up text listners
+        rootView.findViewById(R.id.change_language_text).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LanguageActivity.class);
+                startActivity(intent);
+            }
+        });
         rootView.findViewById(R.id.support_center).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
         rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
