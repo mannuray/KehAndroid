@@ -7,7 +7,6 @@
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         card_view:cardCornerRadius="4dp">
@@ -15,14 +14,14 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dip">
+            android:padding="5dip">
 
             <ImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/videoThumbnailImage"
-                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
                 android:layout_centerVertical="true"/>
 
             <LinearLayout
@@ -30,7 +29,7 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/videoThumbnailImage">
 
                 <TextView
@@ -38,6 +37,9 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Medium Text"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     android:id="@+id/videoName" />
 
                 <TextView
@@ -46,27 +48,28 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="small Text"
+                    android:textSize="12sp"
                     />
             </LinearLayout>
 
             <CheckBox
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/video_menu_icon"
-                android:layout_toStartOf="@+id/video_menu_icon"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                style="?android:attr/starStyle"
-                android:id="@+id/favourite" />
-
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/video_menu_icon"
+                android:layout_centerVertical="true"
+                android:scaleX="0.70"
+                android:scaleY="0.70"
+                style="?android:attr/starStyle"
+                android:id="@+id/favourite"
+                android:checked="false" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:id="@+id/video_menu_icon"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:src="@android:drawable/ic_menu_more"/>
+                android:src="@drawable/more"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
