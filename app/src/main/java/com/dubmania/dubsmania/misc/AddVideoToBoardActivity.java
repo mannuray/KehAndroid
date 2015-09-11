@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,6 +25,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 public class AddVideoToBoardActivity extends AppCompatActivity {
+    Toolbar mToolbar;
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private Long mVideoId;
@@ -32,6 +34,14 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_video_to_board);
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         mVideoId =intent.getLongExtra(ConstantsStore.INTENT_VIDEO_ID, (long) 0);
 

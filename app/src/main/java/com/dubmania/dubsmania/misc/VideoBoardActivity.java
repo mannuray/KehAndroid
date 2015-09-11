@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
     private RecyclerView.Adapter mAdapter;
+    Toolbar mToolbar;
 
     private Long mBoardId;
 
@@ -41,6 +43,14 @@ public class VideoBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_board);
+
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, (long) 0);
