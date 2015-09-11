@@ -17,7 +17,7 @@ public class VideoViewHolderFactory {
         final VideoListItem item = mItem;
         VideoViewHolder videoHolder = (VideoViewHolder) holder;
         videoHolder.mVideoName.setText(item.getName());
-        videoHolder.mVideoUserName.setText(item.getUser());
+        videoHolder.mVideoUserName.setText("Uploaded by " + item.getUser());
         videoHolder.mFavourite.setChecked(item.isFavourite());
         videoHolder.mVideoThumbnail.setImageBitmap(item.getThumbnail());
 
