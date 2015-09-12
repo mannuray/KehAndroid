@@ -24,7 +24,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.dubmania.dubsmania.Adapters.TagListAdapter;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;

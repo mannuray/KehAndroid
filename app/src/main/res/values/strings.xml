@@ -107,7 +107,7 @@
     <!-- fragment signup dob strings -->
     <string name="question_birthday">When\'s your birthday?</string>
     <string name="quote_birthday">You must be at least 14 years to use DbusMania</string>
-    <string name="display_birthday"></string>
+    <string name="display_birthday">12 Febrauary 1998</string>
     <string name="quote_confirmationn">By clicking next you are indicating that you have read and agreed to our Term of Service and Privacy Policy</string>
 
     <!-- fragement add video strings -->

@@ -19,14 +19,25 @@
         android:text="@string/my_account_text"
         android:id="@+id/myAccountText" />
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:text="@string/my_account_button_text"
-        android:id="@+id/my_account_logout_button"
-        android:gravity="center_horizontal"
-        android:onClick="onLogoutClick"
-        android:layout_marginTop="20dp"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_below="@+id/myAccountText"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="20dp"
+        android:layout_margin="30dp"
+        android:background="@color/wallet_highlighted_text_holo_light">
+    <TextView
+        android:id="@+id/my_account_logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/my_account_button_text"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:clickable="true"
+        android:onClick="onLogoutClick"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+        </RelativeLayout>
 </RelativeLayout>

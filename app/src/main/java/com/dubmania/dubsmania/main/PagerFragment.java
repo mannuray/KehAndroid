@@ -37,7 +37,7 @@ public class PagerFragment extends Fragment {
         mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setAdapter(mPagerAdapter);
+
 
         mTabs = (SlidingTabLayout) rootView.findViewById(R.id.tabs);
         mTabs.setDistributeEvenly(true);

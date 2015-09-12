@@ -1,66 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9">
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true">
 
         <ImageView
             android:id="@+id/mail_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/common_signin_btn_icon_focus_light"/>
+            android:layout_marginTop="20dp"
+            android:src="@drawable/user_icon" />
 
         <TextView
-            android:id="@+id/choose_username_textview"
+            android:id="@+id/whats_your_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_below="@+id/mail_logo"
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"
-            android:text="Choose a username"/>
+            android:layout_marginTop="20dp"
+            android:text="Choose a username"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/choose_username_msg"
+            android:id="@+id/expose_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/choose_username_textview"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_below="@+id/whats_your_email"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:lines="2"
+            android:text="Your username should contain only letters, numbers, : and - "
             android:textSize="16sp"
-            android:text="Your username should contain only letters, numbers, : and - "/>
-
-
-        <EditText
-            android:id="@+id/enter_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/choose_username_msg"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:gravity="left"
-            android:text="Username"
-           />
-
-
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
     </RelativeLayout>
 
     <RelativeLayout
-
+        android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@id/your_email"
-        android:layout_weight="1"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/your_email">
+
+        <EditText
+            android:id="@+id/enter_username"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="#00000000"
+            android:singleLine="true"
+            android:layout_marginTop="55dp">
+
+        </EditText>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/cross_imageView"
+            android:layout_toRightOf="@+id/enter_username"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/cross"
+            />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cross_imageView"
+            android:layout_centerVertical="true"
+            style="?android:attr/android:progressBarStyleSmall"
+            android:visibility="gone"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/result_imageView"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/cross_imageView"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/tick"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/wallet_highlighted_text_holo_light">
 
         <TextView
@@ -68,14 +106,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
-            android:clickable="true"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textColor="#FFFFFF"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>
-
-
-
-</LinearLayout>
+</RelativeLayout>

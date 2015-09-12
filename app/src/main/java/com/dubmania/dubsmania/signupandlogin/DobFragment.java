@@ -23,7 +23,7 @@ public class DobFragment extends Fragment {
 
     private DatePicker picker;
     private TextView DOB;
-    private Button next;
+    private TextView next;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class DobFragment extends Fragment {
         Linkify.addLinks(confirmation, termofService, "http://www.google.ie/search?q=");
         Linkify.addLinks(confirmation, privacyPolicy, "http://www.google.ie/search?q=");
 
-        next = (Button) rootView.findViewById(R.id.next);
+        next = (TextView) rootView.findViewById(R.id.next);
         next.setVisibility(View.INVISIBLE);
         DOB = (TextView) rootView.findViewById(R.id.text_dob);
         picker = (DatePicker) rootView.findViewById(R.id.dob_picker);

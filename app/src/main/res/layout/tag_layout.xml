@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rectangular_background">
 
     <TextView
         android:id="@+id/tagName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="top|left"
+        android:textSize="16sp"
+        android:layout_marginLeft="5dp"
+        android:layout_centerVertical="true"
         android:text="name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/tagImage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/tag"
+        android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"/>
+
+</RelativeLayout>

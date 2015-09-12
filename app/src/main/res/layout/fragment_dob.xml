@@ -1,47 +1,102 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dubmania.dubsmania.signupandlogin.DobFragment">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
+        android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true">
 
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/question_birthday" />
-
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/quote_birthday" />
-
-        <TextView android:layout_width="match_parent"
-            android:id="@+id/text_dob"
-            android:layout_height="wrap_content"
-            android:text="@string/display_birthday" />
-
-        <TextView android:layout_width="match_parent"
-            android:id="@+id/text_confirmation"
-            android:layout_height="wrap_content"
-            android:text="@string/quote_confirmationn" />
-
-        <Button
-            android:id="@+id/next"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Next"/>
-
-        <DatePicker
-            android:id="@+id/dob_picker"
+        <ImageView
+            android:id="@+id/mail_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
-            android:layout_marginBottom="30dp" />
-    </LinearLayout>
+            android:layout_marginTop="20dp"
+            android:src="@drawable/calender" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/whats_your_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mail_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="When is Your Birthday??"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/expose_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/whats_your_email"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Age must be greater than 14 "
+            android:textSize="16sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+           />
+
+        <TextView
+            android:id="@+id/text_dob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expose_msg"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/display_birthday" />
+
+        <TextView
+            android:id="@+id/text_confirmation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_dob"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/quote_confirmationn" />
+    </RelativeLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/wallet_highlighted_text_holo_light">
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textSize="22sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <DatePicker
+        android:id="@+id/dob_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner" />
+
+</RelativeLayout>

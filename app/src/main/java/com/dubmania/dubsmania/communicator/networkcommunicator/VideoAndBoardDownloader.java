@@ -94,7 +94,7 @@ public class VideoAndBoardDownloader {
 
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-            Log.d("json error", errorResponse.toString());
+            //Log.d("json error", errorResponse.toString());
             mCallback.onVideoAndBoardDownloaderFailure();
         }
 
