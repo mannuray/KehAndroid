@@ -35,10 +35,9 @@ public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.mImageIcon.setImageBitmap(mDataset.get(position).getIcon());
         holder.mVideoName.setText(mDataset.get(position).getmVideoName());
-        holder.mVideoBoardName.setText(mDataset.get(position).getmBoardName());
         holder.mDateTime.setText(mDataset.get(position).getmDate());
 
-        holder.mShare.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
+        holder.mInformationBox.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
         holder.mImageIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
     }
 
@@ -48,18 +47,18 @@ public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View mInformationBox;
         public TextView mVideoName;
-        public TextView mVideoBoardName;
         public TextView mShare;
         public TextView mDateTime;
         public ImageView mImageIcon;
 
         public ViewHolder(View v) {
             super(v);
+            mInformationBox = v.findViewById(R.id.informationBox);
             mImageIcon = (ImageView) v.findViewById(R.id.my_video_thumbnail_image);
             mVideoName = (TextView) v.findViewById(R.id.my_video_name);
             mShare = (TextView) v.findViewById(R.id.my_video_share);
-            mVideoBoardName = (TextView) v.findViewById(R.id.my_video_board_name);
             mDateTime = (TextView) v.findViewById(R.id.my_video_date_time);
         }
     }

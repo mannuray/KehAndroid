@@ -9,56 +9,73 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         card_view:cardCornerRadius="4dp">
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
             android:padding="6dip">
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
                 android:id="@+id/my_video_thumbnail_image"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_alignParentLeft="true"
+                android:scaleType="fitXY"
+                android:layout_centerVertical="true"
                 android:clickable="true"/>
 
+            <RelativeLayout
+                android:id="@+id/info_box"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/my_video_thumbnail_image"
+                android:layout_marginLeft="15dp">
+
             <TextView
+                android:id="@+id/my_video_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:layout_toRightOf="@id/my_video_thumbnail_image"
-                android:id="@+id/my_video_name" />
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/my_video_share"
-                android:layout_width="match_parent"
                 android:layout_below="@id/my_video_name"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_toRightOf="@id/my_video_thumbnail_image"
-                android:text="share"
-                android:textAlignment="center"
-                android:layout_height="wrap_content" />
+                android:text="Share >"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/my_video_board_name"
-                android:layout_width="match_parent"
                 android:layout_below="@id/my_video_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_toRightOf="@id/my_video_thumbnail_image"
                 android:text="small Text"
-                android:layout_height="wrap_content" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/my_video_date_time"
-                android:layout_width="match_parent"
                 android:layout_below="@id/my_video_board_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_toRightOf="@id/my_video_thumbnail_image"
                 android:text="small Text"
-                android:layout_height="wrap_content" />
+                android:textSize="14sp"/>
+        </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

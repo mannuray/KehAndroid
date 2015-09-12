@@ -8,24 +8,18 @@ import android.graphics.Bitmap;
 public class MyVideoListItem {
     private Bitmap icon;
     private String mVideoName;
-    private String mBoardName;
     private String mFilePath;
     private String mDate;
 
-    public MyVideoListItem(Bitmap icon, String mVideoName, String mBoardName, String mFilePath, String mDate) {
+    public MyVideoListItem(Bitmap icon, String mVideoName, String mFilePath, String mDate) {
         this.icon = icon;
         this.mVideoName = mVideoName;
-        this.mBoardName = mBoardName;
         this.mFilePath = mFilePath;
         this.mDate = mDate;
     }
 
     public String getmVideoName() {
         return mVideoName;
-    }
-
-    public String getmBoardName() {
-        return mBoardName;
     }
 
     public String getmDate() {

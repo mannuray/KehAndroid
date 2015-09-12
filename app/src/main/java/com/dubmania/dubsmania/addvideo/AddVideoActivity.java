@@ -23,11 +23,8 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
-import com.dubmania.dubsmania.utils.media.VideoTrimmer;
 import com.squareup.otto.Subscribe;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddVideoActivity extends AppCompatActivity {

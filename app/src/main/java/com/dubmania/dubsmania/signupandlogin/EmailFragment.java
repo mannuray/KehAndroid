@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.dubmania.dubsmania.R;
@@ -21,7 +20,7 @@ import com.squareup.otto.Subscribe;
 
 public class EmailFragment extends Fragment {
 
-    Button next;
+    View next;
     EditText mEmail;
     ProgressDialog progressDialog;
 
@@ -42,7 +41,7 @@ public class EmailFragment extends Fragment {
             Log.i("Exception", "Exception:" + exception);
         }
 
-        next = (Button) rootView.findViewById(R.id.next);
+        next = rootView.findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

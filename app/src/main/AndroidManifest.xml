@@ -30,23 +30,27 @@
         <activity
             android:name=".createdub.CreateDubActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_create_dub"
             android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".signupandlogin.SignupAndLoginActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_signup"
             android:parentActivityName=".main.HomeActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".misc.AddLanguageActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_add_language"
             android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".misc.MyAccountActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_my_account"
             android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -74,6 +78,7 @@
         <activity
             android:name=".misc.AddVideoToBoardActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_add_video_to_board"
             android:windowSoftInputMode="adjustNothing"
             android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
@@ -93,7 +98,9 @@
         </activity>
         <activity
             android:name=".misc.LanguageActivity"
-            android:label="@string/title_activity_language" >
+            android:label="@string/title_activity_language"
+            android:parentActivityName=".main.HomeActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

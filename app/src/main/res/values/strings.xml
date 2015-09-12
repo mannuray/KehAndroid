@@ -93,15 +93,16 @@
 
     <!-- Activity titles -->
     <string name="title_activity_search">Search</string>
-    <string name="title_activity_add_sound">Add Sound</string>
+    <string name="title_activity_add_sound">Add Video</string>
     <string name="title_activity_create_dub">Record Dub</string>
     <string name="title_activity_signup">Sign Up</string>
     <string name="title_activity_language">Languages</string>
     <string name="title_activity_add_language">Add Language</string>
-    <string name="title_activity_add_video_board">Add VideoBoard</string>
+    <string name="title_activity_add_video_board">Add Videoboard</string>
+    <string name="title_activity_add_video_to_board">Add to Videoboard</string>
     <string name="title_activity_my_account">My Account</string>
-    <string name="title_activity_record_video">RecordVideoActivity</string>
-    <string name="title_activity_import_video">ImportVideoActivity</string>
+    <string name="title_activity_record_video">Record Video</string>
+    <string name="title_activity_import_video">ImportVideo</string>
 
     <!-- fragment signup dob strings -->
     <string name="question_birthday">When\'s your birthday?</string>
@@ -145,13 +146,11 @@
     <!-- activity my account strings -->
     <string name="my_account_message">you are loggend in as </string>
     <string name="my_account_logout_button_text">Logout</string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_share_video">ShareVideoActivity</string>
     <string name="title_activity_video_board">VideoBoardActivity</string>
 
     <!-- dialogs strings -->
     <string name="share_dub_title">Share your dub</string>
-    <string name="title_activity_add_video_to_board">AddVideoToBoardActivity</string>
     <string name="title_activity_add_tag">AddTagActivity</string>
     <string name="title_activity_add_video_finish">AddVideoFinishActivity</string>
 

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="40dp"
             android:hint="@string/import_video_search_hint"
             android:background="#00000000"/>
 
@@ -34,6 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:layout_below="@+id/search_Video"
             android:background="#E5E5E5">
 

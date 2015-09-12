@@ -5,12 +5,12 @@ package com.dubmania.dubsmania.Adapters;
  */
 public class ImportVideoListItem {
     public String mTitle;
-    public String mFilePath;
+    public String mArtist;
     public String mMimeType;
 
-    public ImportVideoListItem(String myTitle, String myFilePath, String  myMimeType) {
+    public ImportVideoListItem(String myTitle, String myArtist, String  myMimeType) {
         mTitle = myTitle;
-        mFilePath = myFilePath;
+        mArtist = myArtist;
         mMimeType = myMimeType;
     }
 }

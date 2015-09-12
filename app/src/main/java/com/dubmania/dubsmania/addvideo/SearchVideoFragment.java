@@ -89,7 +89,8 @@ public class SearchVideoFragment extends Fragment {
         if (cursor.moveToFirst()) {
             do {
                 mVideoItemList.add(new ImportVideoListItem(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)),
+                        //cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DESCRIPTION)),
+                        "artist for now",
                         cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE))));
             } while (cursor.moveToNext());
             cursor.close();

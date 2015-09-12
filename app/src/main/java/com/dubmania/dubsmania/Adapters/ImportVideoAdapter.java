@@ -38,12 +38,12 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(visibleObjects.get(position).mFilePath, MediaStore.Video.Thumbnails.MICRO_KIND);
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(visibleObjects.get(position).mArtist, MediaStore.Video.Thumbnails.MICRO_KIND);
         holder.mImageIcon.setImageBitmap(bitmap);
         holder.mVideoName.setText(visibleObjects.get(position).mTitle);
-        holder.mPath.setText(visibleObjects.get(position).mFilePath);
+        holder.mPath.setText(visibleObjects.get(position).mArtist);
 
-        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mFilePath)));
+        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mArtist)));
 
     }
 

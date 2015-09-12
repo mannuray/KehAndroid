@@ -43,7 +43,7 @@ public class MyDubsFragment extends Fragment {
         Realm realm = Realm.getInstance(getActivity().getApplicationContext());
         RealmResults<SavedDubsData> dubs = realm.allObjects(SavedDubsData.class).where().findAll();
         for(SavedDubsData dub: dubs) {
-            mMyVideoItemList.add(new MyVideoListItem(ThumbnailUtils.createVideoThumbnail(dub.getFilePath(), MediaStore.Video.Thumbnails.MICRO_KIND), dub.getTitle(), "boardName", dub.getFilePath(), dub.getCreationDate()));
+            mMyVideoItemList.add(new MyVideoListItem(ThumbnailUtils.createVideoThumbnail(dub.getFilePath(), MediaStore.Video.Thumbnails.MICRO_KIND), dub.getTitle(), dub.getFilePath(), dub.getCreationDate()));
         }
         RecyclerView.Adapter mAdapter = new MyVideoAdapter(mMyVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
