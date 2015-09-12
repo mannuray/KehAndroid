@@ -1,18 +1,21 @@
 package com.dubmania.dubsmania.signupandlogin;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.FailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetDobEvent;
+import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +27,8 @@ public class DobFragment extends Fragment {
     private DatePicker picker;
     private TextView DOB;
     private TextView next;
+    private ProgressBar mProgressBar;
+    private View mInfoBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,9 @@ public class DobFragment extends Fragment {
         Linkify.addLinks(confirmation, termofService, "http://www.google.ie/search?q=");
         Linkify.addLinks(confirmation, privacyPolicy, "http://www.google.ie/search?q=");
 
+
+        mInfoBox = rootView.findViewById(R.id.informationBox);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         next = (TextView) rootView.findViewById(R.id.next);
         next.setVisibility(View.INVISIBLE);
         DOB = (TextView) rootView.findViewById(R.id.text_dob);
@@ -65,6 +73,8 @@ public class DobFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mInfoBox.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
                 BusProvider.getInstance().post(new SetDobEvent(String.valueOf(picker.getYear()) +
                                                                 String.valueOf(picker.getMonth()) +
                                                                 String.valueOf(picker.getDayOfMonth())
@@ -72,6 +82,24 @@ public class DobFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onFailEvent(FailEvent event) {
+        mInfoBox.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 }
 

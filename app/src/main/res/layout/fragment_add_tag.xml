@@ -44,7 +44,7 @@
             android:hint="Enter a tag!"/>
 
         <ImageView
-            android:id="@+id/cross"
+            android:id="@+id/crossImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"

@@ -64,8 +64,6 @@ public class PagerLoginFragment extends Fragment {
             switch (i) {
                 case 0:
                     return new LoginFragment();
-                case 1:
-                    return  new ResetPasswordFragment();
             }
             return new LoginFragment();
         }

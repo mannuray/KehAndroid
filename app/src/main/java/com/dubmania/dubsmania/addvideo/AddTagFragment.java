@@ -18,12 +18,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.dubmania.dubsmania.Adapters.TagListAdapter;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -41,6 +44,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     private ArrayList<Tag> mAddedTags;
     private TagsDownloader mTagsDownloader;
     private MenuItem next;
+    private ImageView mCross;
 
     public AddTagFragment() {
         // Required empty public constructor
@@ -67,6 +71,14 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         AbsListView mListView = (AbsListView) view.findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+        mCross = (ImageView) view.findViewById(R.id.crossImage);
+        mCross.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                search.setText("");
+                return false;
+            }
+        });
         search = (EditText) view.findViewById(R.id.editText);
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,6 +88,12 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTagsDownloader.downloadTags(s.toString(), new OnTextWatcherListener());
+                if (search.getText().toString().equals("")) {
+                    mCross.setVisibility(View.GONE);
+                }
+                else {
+                    mCross.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

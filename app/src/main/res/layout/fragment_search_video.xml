@@ -12,13 +12,29 @@
 
         <EditText
             android:id="@+id/searchEdit"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
             android:hint="@string/import_video_search_hint"
             android:background="#00000000"/>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/crossImage"
+            android:layout_toRightOf="@+id/searchEdit"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/cross"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
 
         <TextView
             android:id="@+id/search_Video"

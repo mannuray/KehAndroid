@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.dubmania.dubsmania.Adapters.ImportVideoAdapter;
 import com.dubmania.dubsmania.Adapters.ImportVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
+import com.dubmania.dubsmania.utils.ClearableEditBox;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,7 @@ public class SearchVideoFragment extends Fragment {
         mAdapter = new ImportVideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
         EditText search = (EditText) view.findViewById(R.id.searchEdit);
+        ClearableEditBox mSearchEdit = new ClearableEditBox(search, (ImageView) view.findViewById(R.id.crossImage));
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

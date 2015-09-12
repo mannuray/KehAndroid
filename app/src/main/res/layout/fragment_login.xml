@@ -44,7 +44,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/username_password"
+        android:id="@+id/informationBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/your_email">
@@ -71,7 +71,7 @@
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:id="@+id/cross_imageView"
+                    android:id="@+id/emailCross"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
@@ -102,7 +102,7 @@
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:id="@+id/password_cross"
+                    android:id="@+id/passwordCross"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
@@ -127,12 +127,12 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ProgressBar
-                android:id="@+id/progressBar3"
+                android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

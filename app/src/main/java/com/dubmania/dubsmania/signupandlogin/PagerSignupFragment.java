@@ -69,15 +69,13 @@ public class PagerSignupFragment extends Fragment {
                     return new PasswordFragment();
                 case 3:
                     return new DobFragment();
-                case 4:
-                    return new FinishFragment();
             }
             return new EmailFragment();
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return 4;
         }
 
         @Override

@@ -10,7 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,28 +18,25 @@ import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.EmailCheckEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.EmailExistEvent;
+import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.FailEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.FragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
-import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.PasswordResetEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetDobEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SetUsernameEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.SignupPasswordEvent;
-import com.dubmania.dubsmania.communicator.eventbus.loginandsignupevent.UserNameExistEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 
 import org.apache.http.Header;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class SignupAndLoginActivity extends AppCompatActivity {
 
@@ -158,7 +154,6 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                BusProvider.getInstance().post(new EmailExistEvent());
                 dialog.cancel();
             }
         });
@@ -186,59 +181,25 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     }
 
     @Subscribe
+    public void onEmailExistEvent(EmailExistEvent event) {
+        signUpInfo.setEmail(event.getEmail());
+        signUpInfo.setUserName(event.getUserName());
+        getEmailExistDialog().show();
+    }
+
+    @Subscribe
     public void onEmailCheckEvent(EmailCheckEvent event) {
         signUpInfo.setEmail(event.getEmail());
         signUpInfo.setUserName(event.getEmail().split("@")[0]);
-        BusProvider.getInstance().post(this.signUpInfo);
-        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, event.getEmail()), new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-                try {
-                    Log.i("Server res", response.toString());
-                    if (response.getBoolean("result")) {
-                        changeFragment();
-                    } else {
-                        signUpInfo.setUserName(response.getString(ConstantsStore.PARAM_USER_NAME));
-                        getEmailExistDialog().show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-                changeFragment();
-            }
-
-            private void changeFragment() {
-                BusProvider.getInstance().post(new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob()));
-                BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
-            }
-        });
+        //BusProvider.getInstance().post(this.signUpInfo);
+        BusProvider.getInstance().post(new SignupInfoEvent(signUpInfo.getUserName(), signUpInfo.getEmail(), signUpInfo.getPassword(), signUpInfo.getDob()));
+        BusProvider.getInstance().post(new SignupFragmentChangeEvent(1));
     }
 
     @Subscribe
     public void onSetUsernameEvent(SetUsernameEvent event) {
         signUpInfo.setUserName(event.getUsername());
-        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER, event.getUsername()), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-                try {
-                    Toast.makeText(getApplicationContext(), "user name check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    BusProvider.getInstance().post(new UserNameExistEvent(!response.getBoolean("result")));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-
-            }
-        });
+        BusProvider.getInstance().post(new SignupFragmentChangeEvent(2));
     }
 
     @Subscribe
@@ -250,8 +211,8 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onSetDobEvent(SetDobEvent event) {
         signUpInfo.setDob(event.getDob());
-        BusProvider.getInstance().post(new SignupFragmentChangeEvent(4));
         Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
+
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_USER_NAME, signUpInfo.getUserName());
         params.add(ConstantsStore.PARAM_USER_EMAIL, signUpInfo.getEmail());
@@ -283,60 +244,14 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 Toast.makeText(getApplicationContext(), "Unable to register user", Toast.LENGTH_LONG).show();
+                BusProvider.getInstance().post(new FailEvent());
             }
         });
     }
 
     @Subscribe
     public void onLoginEvent(LoginEvent event) {
-        Toast.makeText(getApplicationContext(), "user login check event :" , Toast.LENGTH_LONG).show();
-        RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_USER_EMAIL, event.getEmail());
-        params.add(ConstantsStore.PARAM_PASSWORD, event.getPassword());
-        DubsmaniaHttpClient.post(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-                try {
-                    Toast.makeText(getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
-                        Toast.makeText(getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
-                    } else {
-                        new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),
-                                response.getString(ConstantsStore.PARAM_USER_EMAIL));
-                        setLoginResult(Activity.RESULT_OK);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-                Toast.makeText(getApplicationContext(), "Unable to Login user", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @Subscribe
-    public void onPasswordResetEvent(PasswordResetEvent event) {
-        DubsmaniaHttpClient.post(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, event.getEmail()), new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    Toast.makeText(getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
-                    JSONObject json = new JSONObject(new String(responseBody));
-                    if (!json.getBoolean("result")) {
-                        Toast.makeText(getApplicationContext(), "Unable to reset password", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                setLoginResult(Activity.RESULT_CANCELED);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            }
-        });
+        new SessionManager(SignupAndLoginActivity.this).createLoginSession(event.getUserId(), event.getUserName(), event.getEmail());
+        setLoginResult(Activity.RESULT_OK);
     }
 }

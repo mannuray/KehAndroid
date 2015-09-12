@@ -67,7 +67,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/cross_imageView"
+            android:id="@+id/crossImageView"
             android:layout_toRightOf="@+id/enter_username"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
@@ -77,17 +77,22 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/cross_imageView"
+            android:layout_toRightOf="@+id/crossImageView"
             android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             style="?android:attr/android:progressBarStyleSmall"
             android:visibility="gone"/>
+
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/result_imageView"
+            android:id="@+id/resultImageView"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/cross_imageView"
             android:layout_marginLeft="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             android:src="@drawable/tick"
             android:visibility="gone"
             />
