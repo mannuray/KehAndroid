@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class AddVideoBoardActivity extends AppCompatActivity {
     Toolbar mToolbar;
     private EditText mBoardName;
+    private View mAdd;
     private int mIconId;
 
     @Override
@@ -50,6 +51,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         mBoardName = (EditText) findViewById(R.id.add_video_board_name_edit);
         GridView mBoardIcon = (GridView) findViewById(R.id.add_video_board_gridView);
 
@@ -68,6 +70,25 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                 mIconId = position;
             }
         });
+
+        mAdd = findViewById(R.id.addVideoboard);
+        mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
+                    @Override
+                    public void onVideoBoardCreateSuccess() {
+                        finish();
+                    }
+
+                    @Override
+                    public void onVideoBoardCreateFailure() {
+                        //
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
@@ -99,19 +120,5 @@ public class AddVideoBoardActivity extends AppCompatActivity {
         */
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void addVideoBroard(View v) {
-        new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
-            @Override
-            public void onVideoBoardCreateSuccess() {
-                finish();
-            }
-
-            @Override
-            public void onVideoBoardCreateFailure() {
-                //
-            }
-        });
     }
 }
