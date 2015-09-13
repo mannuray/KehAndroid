@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,13 +20,14 @@ import com.dubmania.dubsmania.Adapters.ImportVideoAdapter;
 import com.dubmania.dubsmania.Adapters.ImportVideoListItem;
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
-import com.dubmania.dubsmania.utils.ClearableEditBox;
 
 import java.util.ArrayList;
 
 public class SearchVideoFragment extends Fragment {
     private ImportVideoAdapter mAdapter;
     private ArrayList<ImportVideoListItem> mVideoItemList;
+    private ImageView mCross;
+    private EditText search;
 
     public SearchVideoFragment() {
         // Required empty public constructor
@@ -43,6 +45,15 @@ public class SearchVideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_search_video, container, false);
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
+        mCross = (ImageView) view.findViewById(R.id.crossImage);
+        mCross.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                search.setText("");
+                return false;
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mVideoItemList = new ArrayList<>();
@@ -50,8 +61,7 @@ public class SearchVideoFragment extends Fragment {
 
         mAdapter = new ImportVideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
-        EditText search = (EditText) view.findViewById(R.id.searchEdit);
-        ClearableEditBox mSearchEdit = new ClearableEditBox(search, (ImageView) view.findViewById(R.id.crossImage));
+        search = (EditText) view.findViewById(R.id.searchEdit);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,6 +70,12 @@ public class SearchVideoFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mAdapter.setFilter(s.toString());
+                if (search.getText().toString().equals("")) {
+                        mCross.setVisibility(View.GONE);
+                }
+                else {
+                        mCross.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -85,16 +101,19 @@ public class SearchVideoFragment extends Fragment {
     private void populateVideo() {
         String[] mediaColumns = { MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA, MediaStore.Video.Media.TITLE,
-                MediaStore.Video.Media.MIME_TYPE };
+                MediaStore.Video.Media.MIME_TYPE,
+                MediaStore.Video.Media.ARTIST };
 
-        Cursor cursor = getActivity().managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 mediaColumns, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                mVideoItemList.add(new ImportVideoListItem(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)),
-                        //cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DESCRIPTION)),
-                        "artist for now",
-                        cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE))));
+                // allow only mp4 videos
+                if(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE)).equals("video/mp4")) {
+                    mVideoItemList.add(new ImportVideoListItem(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.ARTIST)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))));
+                }
             } while (cursor.moveToNext());
             cursor.close();
         }

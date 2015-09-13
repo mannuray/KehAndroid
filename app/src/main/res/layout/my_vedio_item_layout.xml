@@ -27,7 +27,7 @@
                 android:clickable="true"/>
 
             <RelativeLayout
-                android:id="@+id/info_box"
+                android:id="@+id/informationBox"
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

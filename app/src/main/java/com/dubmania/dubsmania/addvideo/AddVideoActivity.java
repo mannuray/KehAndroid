@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,9 +24,15 @@ import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
 import com.dubmania.dubsmania.utils.SessionManager;
+import com.dubmania.dubsmania.utils.media.VideoTrimmer;
 import com.squareup.otto.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddVideoActivity extends AppCompatActivity {
 
@@ -71,7 +78,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_video, menu);
+        getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
 
@@ -185,11 +192,15 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
-        /*try {
+        try {
+            Log.i("Video Trimmer", "Staring trimmer");
+            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy_hhmmss_SSS", Locale.getDefault());
+            File dst = File.createTempFile(String.format("Video_File_%s", sdf.format(new Date())), ".mp4", getApplicationContext().getCacheDir());
+            mVideoInfo.mDstFilePath = dst.getAbsolutePath();
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
     }
 
@@ -202,6 +213,7 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
+        // change it to dst file path once file is modified
         new VideoUploader().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
             @Override
             public void onVideosUploadSuccess() {

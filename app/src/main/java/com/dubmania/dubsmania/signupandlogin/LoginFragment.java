@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment {
         Toast.makeText(getActivity().getApplicationContext(), "user login check event :", Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString());
-        params.add(ConstantsStore.PARAM_PASSWORD, mLogin.getText().toString());
+        params.add(ConstantsStore.PARAM_PASSWORD, mPassword.getText().toString());
 
         DubsmaniaHttpClient.post(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
             @Override

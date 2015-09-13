@@ -6,11 +6,11 @@ package com.dubmania.dubsmania.Adapters;
 public class ImportVideoListItem {
     public String mTitle;
     public String mArtist;
-    public String mMimeType;
+    public String mFilePath;
 
-    public ImportVideoListItem(String myTitle, String myArtist, String  myMimeType) {
+    public ImportVideoListItem(String myTitle, String myArtist, String myFilePath) {
         mTitle = myTitle;
         mArtist = myArtist;
-        mMimeType = myMimeType;
+        mFilePath = myFilePath;
     }
 }

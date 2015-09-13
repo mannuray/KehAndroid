@@ -30,6 +30,7 @@ public class VideoUploader {
     private VideoUploaderCallback mCallback;
 
     public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, Long language, VideoUploaderCallback callback) {
+        Log.i("File 1", mFilePath);
         final File mVideoFile = new File(mFilePath);
         mCallback = callback;
 
@@ -62,6 +63,7 @@ public class VideoUploader {
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
+                    Log.i("URL", "response  is " + response.toString());
                     String uploadURL = response.getString(ConstantsStore.PARAM_VIDEO_UPLOAD_URL);
                     Log.i("URL", "upload ule is " + uploadURL);
                     RequestParams requestParams = new RequestParams();

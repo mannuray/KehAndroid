@@ -28,6 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:src="@drawable/cross"
+            android:visibility="gone"
             />
     </RelativeLayout>
 

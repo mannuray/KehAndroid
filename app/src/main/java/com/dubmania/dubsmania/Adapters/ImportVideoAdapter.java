@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,13 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(visibleObjects.get(position).mArtist, MediaStore.Video.Thumbnails.MICRO_KIND);
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(visibleObjects.get(position).mFilePath, MediaStore.Video.Thumbnails.MICRO_KIND);
         holder.mImageIcon.setImageBitmap(bitmap);
         holder.mVideoName.setText(visibleObjects.get(position).mTitle);
-        holder.mPath.setText(visibleObjects.get(position).mArtist);
+        holder.mArtist.setText(visibleObjects.get(position).mArtist);
 
-        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mArtist)));
+        Log.i("File ",visibleObjects.get(position).mFilePath);
+        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mFilePath)));
 
     }
 
@@ -75,14 +77,14 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mVideoName;
-        public TextView mPath;
+        public TextView mArtist;
         public ImageView mImageIcon;
 
         public ViewHolder(View v) {
             super(v);
             mImageIcon = (ImageView) v.findViewById(R.id.import_video_icon);
             mVideoName = (TextView) v.findViewById(R.id.import_video_name);
-            mPath = (TextView) v.findViewById(R.id.import_video_uri);
+            mArtist = (TextView) v.findViewById(R.id.import_video_uri);
         }
     }
 }

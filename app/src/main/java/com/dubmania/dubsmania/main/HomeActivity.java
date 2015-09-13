@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Realm.deleteRealmFile(getApplicationContext());
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
 

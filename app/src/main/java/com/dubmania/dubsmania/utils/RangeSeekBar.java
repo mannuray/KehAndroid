@@ -172,7 +172,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public void resetSelectedValues() {
         setSelectedMinValue(absoluteMinValue);
         setSelectedMaxValue(absoluteMaxValue);
-        setCurrentProgressValue(absoluteProgressValue);
+        setCurrentProgressValue(absoluteMinValue);
     }
 
     public boolean isNotifyWhileDragging() {

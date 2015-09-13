@@ -28,7 +28,6 @@ public class EditVideoFragment extends Fragment {
     private Uri mUri;
     private VideoView mVideoView;
     private RangeSeekBar<Integer> trimmer;
-    private Thread mSeekUpdate;
 
     public EditVideoFragment() {
         // Required empty public constructor
@@ -48,7 +47,9 @@ public class EditVideoFragment extends Fragment {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                Log.i("Video Trimmer ", "duration prepare " + String.valueOf(mVideoView.getDuration()));
                 trimmer.setRangeValues(0, mVideoView.getDuration());
+                trimmer.resetSelectedValues();
             }
         });
         trimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
@@ -100,6 +101,7 @@ public class EditVideoFragment extends Fragment {
             if(!isVideoUriSet) {
                 mVideoView.setVideoURI(mUri);
                 trimmer.setSelectedMaxValue(mVideoView.getDuration());
+                Log.i("Video Trimmer ", "duration " + String.valueOf(mVideoView.getDuration()));
                 isVideoUriSet = true;
             }
 
@@ -133,8 +135,6 @@ public class EditVideoFragment extends Fragment {
                         isPlaying = false;
                         mVideoView.pause();
                     }
-                } catch (InterruptedException e) {
-                    return;
                 } catch (Exception e) {
                     return;
                 }
@@ -146,6 +146,8 @@ public class EditVideoFragment extends Fragment {
     @Subscribe
     public void onAddVideoInfoEvent(AddVideoInfoEvent event) {
         mUri = Uri.parse(event.getFilePath());
-        isVideoUriSet = false;
+        mVideoView.setVideoURI(mUri);
+        mVideoView.seekTo(100);
+        isVideoUriSet = true;
     }
 }

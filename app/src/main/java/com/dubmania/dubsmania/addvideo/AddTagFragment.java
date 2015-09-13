@@ -76,6 +76,8 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 search.setText("");
+                mTags.clear();
+                mAdapter.notifyDataSetChanged();
                 return false;
             }
         });
@@ -87,11 +89,11 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTagsDownloader.downloadTags(s.toString(), new OnTextWatcherListener());
                 if (search.getText().toString().equals("")) {
                     mCross.setVisibility(View.GONE);
                 }
                 else {
+                    mTagsDownloader.downloadTags(s.toString(), new OnTextWatcherListener());
                     mCross.setVisibility(View.VISIBLE);
                 }
             }
