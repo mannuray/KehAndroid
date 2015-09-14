@@ -104,7 +104,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        changeFragment(new PagerFragment(), "VidCraft");
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, new PagerFragment())
+                .commit();
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("VidCraft");
     }
 
     @Override public void onResume() {
@@ -149,6 +153,7 @@ public class HomeActivity extends AppCompatActivity {
     private void changeFragment(Fragment fragment, String title) {
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
+                .addToBackStack(title)
                 .commit();
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(title);

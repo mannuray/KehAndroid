@@ -101,12 +101,12 @@ public class SettingFragment extends Fragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) { setLoginView(); }
+    public void onResume() {
+        super.onResume();
+        setLoginView();
     }
 
-    @Override
+        @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);

@@ -37,7 +37,6 @@
             android:name=".signupandlogin.SignupAndLoginActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_signup"
-            android:parentActivityName=".main.HomeActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity

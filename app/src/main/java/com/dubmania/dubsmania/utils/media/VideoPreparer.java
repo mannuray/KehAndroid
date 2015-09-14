@@ -25,31 +25,28 @@ public class VideoPreparer {
 
     }
 
-    public void prepareVideo(File mAudioFile, File mVideoFile, File mOutputFile) {
-        try {
-            Movie video = MovieCreator.build(mVideoFile.getAbsolutePath());
-            Movie audio = MovieCreator.build(mAudioFile.getAbsolutePath());
-            List<Track> videoTracks = video.getTracks();
-            video.setTracks(new LinkedList<Track>());
+    public void prepareVideo(File mAudioFile, File mVideoFile, File mOutputFile) throws IOException {
 
-            List<Track> audioTracks = audio.getTracks();
+        Movie video = MovieCreator.build(mVideoFile.getAbsolutePath());
+        Movie audio = MovieCreator.build(mAudioFile.getAbsolutePath());
+        List<Track> videoTracks = video.getTracks();
+        video.setTracks(new LinkedList<Track>());
 
-            for (Track audioTrack : audioTracks) {
-                video.addTrack(new AppendTrack(audioTrack));
-            }
+        List<Track> audioTracks = audio.getTracks();
 
-            for (Track videoTrack : videoTracks) {
-                if(videoTrack.getHandler().equals("vide"))
-                    video.addTrack(new AppendTrack(videoTrack));
-            }
-
-
-            Container mContainer =  new DefaultMp4Builder().build(video);
-            WritableByteChannel wbc = new FileOutputStream(mOutputFile).getChannel();
-            mContainer.writeContainer(wbc);
-        } catch (IOException e) {
-            Log.e("Video Perparer", "error in preparing video");
-            e.printStackTrace();
+        for (Track audioTrack : audioTracks) {
+            video.addTrack(new AppendTrack(audioTrack));
         }
+
+        for (Track videoTrack : videoTracks) {
+            if(videoTrack.getHandler().equals("vide"))
+                video.addTrack(new AppendTrack(videoTrack));
+        }
+
+
+        Container mContainer =  new DefaultMp4Builder().build(video);
+        WritableByteChannel wbc = new FileOutputStream(mOutputFile).getChannel();
+        mContainer.writeContainer(wbc);
+
     }
 }

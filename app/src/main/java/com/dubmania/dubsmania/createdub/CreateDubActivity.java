@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -38,7 +39,7 @@ import io.realm.Realm;
 
 public class CreateDubActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
     private ViewPager mPager;
     PagerAdapter mPagerAdapter;
     Long id;
@@ -169,19 +170,14 @@ public class CreateDubActivity extends AppCompatActivity {
     }
 
     private File getOutputFile(String mTitle) {
-        // Get the directory for the user's public pictures directory.
-        if(!Environment.getExternalStorageDirectory().exists()) {
-            Environment.getExternalStorageDirectory().mkdir();
-        }
-        /*File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES), mTitle + ".mp4");*/
 
-        File file = new File("/storage/sdcard0/dub/Movies", mTitle + ".mp4");
+        String mDatadir = getApplicationInfo().dataDir;
+
+        //File file = new File("/storage/sdcard0/dub/Movies", mTitle + ".mp4");
+        File file = new File(mDatadir, mTitle + ".mp4");
         int i = 1;
         while (file.exists()) {
-            /*file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_MOVIES), mTitle + "(" + String.valueOf(i) + ").mp4");*/
-            file = new File("/storage/sdcard0/dub/Movies", mTitle + "(" + String.valueOf(i) + ").mp4");
+            file = new File(mDatadir, mTitle + "(" + String.valueOf(i) + ").mp4");
             i++;
         }
         return file;
@@ -206,7 +202,13 @@ public class CreateDubActivity extends AppCompatActivity {
         VideoPreparer mPreparer = new VideoPreparer();
         mOutputFile = getOutputFile(mTitle);
         // prepare the audio file
-        mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, mOutputFile);
+        try {
+            mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, mOutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "unable to prepare video", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Realm realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();
