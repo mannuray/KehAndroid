@@ -7,10 +7,12 @@ import android.view.View;
  */
 public class VideoItemMenuEvent {
     private Long mId;
+    private String mTitle;
     private View mView;
 
-    public VideoItemMenuEvent(Long mId, View view) {
+    public VideoItemMenuEvent(Long mId, String mTitle, View view) {
         this.mId = mId;
+        this.mTitle = mTitle;
         this.mView = view;
     }
 
@@ -20,5 +22,9 @@ public class VideoItemMenuEvent {
 
     public View getView() {
         return mView;
+    }
+
+    public String getTitle() {
+        return mTitle;
     }
 }

@@ -107,8 +107,8 @@ public class HomeActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, new PagerFragment())
                 .commit();
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle("VidCraft");
+        /*if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("VidCraft");*/
     }
 
     @Override public void onResume() {
@@ -155,8 +155,8 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .addToBackStack(title)
                 .commit();
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle(title);
+        /*if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(title);*/
         mDrawerLayout.closeDrawers();
     }
 
@@ -207,12 +207,12 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(this, event.getId(), event.getView()).show();
+        new VideoItemPopupMenu(this, event.getId(), event.getTitle(), event.getView()).show();
     }
 
     @Subscribe
     public void onMyVideoItemShareEvent(MyVideoItemShareEvent event) {
-        new VideoSharer(this).showAlertDialog(event.getFilePath());
+        new VideoSharer(this, event.getFilePath()).showAlertDialog();
     }
 
     @Subscribe

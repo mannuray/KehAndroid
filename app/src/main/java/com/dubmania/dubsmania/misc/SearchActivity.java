@@ -89,7 +89,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(this, event.getId(), event.getView()).show();
+        new VideoItemPopupMenu(this, event.getId(), event.getTitle(), event.getView()).show();
     }
 
     @Subscribe

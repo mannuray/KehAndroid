@@ -185,13 +185,16 @@ public class CreateDubActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCreateDubShareEvent(CreateDubShareEvent event) {
+        VideoSharer sharer = new VideoSharer(this, mOutputFile.getAbsolutePath());
         switch (event.getAppId()) {
             case ConstantsStore.SHARE_APP_ID_MESSENGER:
+                sharer.shareViaWhatsApp();
                 break;
             case ConstantsStore.SHARE_APP_ID_WHATSAPP:
+                sharer.shareViaFacebookMessenger();
                 break;
             case ConstantsStore.SHARE_APP_ID_SAVE_GALLERY:
-                new VideoSharer(this).saveInGallery(mOutputFile);
+                sharer.saveInGallery();
         }
         finish();
     }

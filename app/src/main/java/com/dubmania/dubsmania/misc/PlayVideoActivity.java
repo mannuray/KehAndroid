@@ -58,7 +58,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
-            new VideoSharer(this).showAlertDialog(mFilePath);
+            new VideoSharer(this, mFilePath).showAlertDialog();
         }
 
         return super.onOptionsItemSelected(item);

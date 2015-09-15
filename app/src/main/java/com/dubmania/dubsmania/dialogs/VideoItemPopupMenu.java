@@ -16,11 +16,13 @@ import com.dubmania.dubsmania.utils.ConstantsStore;
  */
 public class VideoItemPopupMenu {
     private Long mVideoId;
+    private String mTitle;
     private View view;
     private Activity activity;
 
-    public VideoItemPopupMenu(Activity activity, Long mVideoId, View view) {
+    public VideoItemPopupMenu(Activity activity, Long mVideoId, String mTitle, View view) {
         this.mVideoId = mVideoId;
+        this.mTitle = mTitle;
         this.view = view;
         this.activity = activity;
     }
@@ -63,7 +65,7 @@ public class VideoItemPopupMenu {
         String shareBody = "www.vidcraft/goto/" + String.valueOf(mVideoId);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mTitle);
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         activity.startActivity(Intent.createChooser(sharingIntent, "share"));
     }

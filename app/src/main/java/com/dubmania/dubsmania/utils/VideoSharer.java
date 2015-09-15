@@ -10,32 +10,36 @@ import android.util.Log;
 import com.dubmania.dubsmania.R;
 
 import java.io.File;
+import java.net.URLConnection;
 
 /**
  * Created by rat on 8/10/2015.
  */
 public class VideoSharer {
     private Activity mActivity;
-    private File mFile;
+    private String mFilePath;
 
-    public VideoSharer(Activity mActivity) {
+    public VideoSharer(Activity mActivity, String mFilePath) {
         this.mActivity = mActivity;
+        this.mFilePath = mFilePath;
     }
 
-    public void saveInGallery(File mFile) {
-        //sending broadcast message to scan the media file so that it can be available
-        Log.i("prepare", "file is " + mFile.getAbsolutePath());
-        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mFile)));
+    public void saveInGallery() {
+        Log.i("prepare", "file is " + mFilePath);
+        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(mFilePath)));
     }
 
-    public void shareViaApp(File mFile, String mPackage) {
-        Uri uri = Uri.parse(mFile.getAbsolutePath());
+    public void shareViaApp(String mPackage) {
+        Log.i("Share", "file path is " + mFilePath);
+        Uri uri = Uri.parse(mFilePath);
         Intent intent = new Intent();
         intent.setPackage(mPackage);
         intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/plain");
+        intent.setType("video/*");
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TITLE, "");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.setType("video/mp4");
         intent.setPackage(mPackage);
         try {
             mActivity.startActivity(intent);
@@ -45,13 +49,15 @@ public class VideoSharer {
         }
     }
 
-    public void showAlertDialog(String mFilePath) {
-        this.mFile = new File(mFilePath);
-        getShareAlertDialog().show();
+    public void shareViaWhatsApp() {
+        shareViaApp("com.whatsapp");
     }
 
-    public void showAlertDialog(File mFile) {
-        this.mFile = mFile;
+    public void shareViaFacebookMessenger() {
+        shareViaApp("com.facebook.katana");
+    }
+
+    public void showAlertDialog() {
         getShareAlertDialog().show();
     }
 
@@ -60,7 +66,6 @@ public class VideoSharer {
                 .getStringArray(R.array.messenger_list);
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(R.string.share_dub_title);
-        //builder.setCancelable(true);
         builder.setNegativeButton(R.string.share_alert_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -70,14 +75,14 @@ public class VideoSharer {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
-                    case 0:
-                        shareViaApp(mFile, "com.facebook.katana");
+                    case ConstantsStore.SHARE_APP_ID_MESSENGER:
+                        shareViaFacebookMessenger();
                         return;
-                    case 1:
-                        shareViaApp(mFile, "com.whatsapp");
+                    case ConstantsStore.SHARE_APP_ID_WHATSAPP:
+                        shareViaWhatsApp();
                         return;
-                    case 3:
-                        saveInGallery(mFile);
+                    case ConstantsStore.SHARE_APP_ID_SAVE_GALLERY:
+                        saveInGallery();
                 }
             }
         });

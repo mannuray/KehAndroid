@@ -69,7 +69,7 @@ public class PagerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(" Video");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("VidCraft");
     }
 
     @Override
