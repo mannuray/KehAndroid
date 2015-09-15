@@ -3,7 +3,6 @@ package com.dubmania.dubsmania.createdub;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -171,9 +170,8 @@ public class CreateDubActivity extends AppCompatActivity {
 
     private File getOutputFile(String mTitle) {
 
-        String mDatadir = getApplicationInfo().dataDir;
+        String mDatadir = getApplicationContext().getExternalFilesDir(null).getAbsolutePath();
 
-        //File file = new File("/storage/sdcard0/dub/Movies", mTitle + ".mp4");
         File file = new File(mDatadir, mTitle + ".mp4");
         int i = 1;
         while (file.exists()) {

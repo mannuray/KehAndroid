@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
 
 import java.io.File;
-import java.net.URLConnection;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by rat on 8/10/2015.
@@ -26,7 +31,18 @@ public class VideoSharer {
 
     public void saveInGallery() {
         Log.i("prepare", "file is " + mFilePath);
-        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(mFilePath)));
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
+        if (! (new File(path)).exists()){ new File(path).mkdirs(); }
+        File source = new File(mFilePath);
+        File destination = new File(path + "/" + source.getName());
+        try {
+            copyFileUsingFileChannels(source, destination);
+        } catch (IOException e) {
+            Toast.makeText(mActivity.getApplicationContext(), " unabel to copy ", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(destination)));
     }
 
     public void shareViaApp(String mPackage) {
@@ -87,5 +103,19 @@ public class VideoSharer {
             }
         });
         return builder.create();
+    }
+
+    private void copyFileUsingFileChannels(File source, File dest)
+            throws IOException {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            inputChannel = new FileInputStream(source).getChannel();
+            outputChannel = new FileOutputStream(dest).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        } finally {
+            inputChannel.close();
+            outputChannel.close();
+        }
     }
 }
