@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.util.Log;
 
 import com.coremedia.iso.boxes.Container;
+import com.dubmania.dubsmania.utils.MiscFunction;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
@@ -198,8 +199,7 @@ public class AudioManager {
     }
 
     private File getRandomFileName() throws IOException {
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy_hhmmss_SSS", Locale.getDefault());
-        return File.createTempFile(String.format("Audio_File_%s", sdf.format(new Date())), ".mp4", mContext.getCacheDir());
+        return File.createTempFile(MiscFunction.getRandomFileName("Audio"), ".mp4", mContext.getCacheDir());
     }
 
 

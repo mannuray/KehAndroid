@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,10 @@ public class RecordVideoPagerFragment extends Fragment {
                 case 0:
                     return new RecordVideoFragment();
                 case 1:
-                    return new AddTagFragment();
+                    return new EditVideoFragment();
                 case 2:
+                    return new AddTagFragment();
+                case 3:
                     return new AddFinishFragment();
             }
             return new RecordVideoFragment();
@@ -77,7 +80,7 @@ public class RecordVideoPagerFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -88,6 +91,7 @@ public class RecordVideoPagerFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
+        Log.i("Change", " fragment change event");
         if (event.getPosition() == -1){
             int position = mPager.getCurrentItem();
             if (position == 0) {

@@ -19,10 +19,12 @@ import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoChange
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoEditEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
 import com.dubmania.dubsmania.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.dubsmania.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.dubsmania.utils.ConstantsStore;
+import com.dubmania.dubsmania.utils.MiscFunction;
 import com.dubmania.dubsmania.utils.SessionManager;
 import com.dubmania.dubsmania.utils.media.VideoTrimmer;
 import com.squareup.otto.Subscribe;
@@ -188,6 +190,14 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onSearchVideoItemListEvent(SearchVideoItemListEvent event) {
+        Log.i("Change", "Staring trimmer");
+        mVideoInfo.setFilePath(event.getFilePath());
+        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(1));
+    }
+
+    @Subscribe
+    public void onSearchVideoItemListEvent(AddVideoRecordDoneEvent event) {
         mVideoInfo.setFilePath(event.getFilePath());
         BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(1));
@@ -197,8 +207,8 @@ public class AddVideoActivity extends AppCompatActivity {
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
         try {
             Log.i("Video Trimmer", "Staring trimmer");
-            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy_hhmmss_SSS", Locale.getDefault());
-            File dst = File.createTempFile(String.format("Video_File_%s", sdf.format(new Date())), ".mp4", getApplicationContext().getCacheDir());
+
+            File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             mVideoInfo.mDstFilePath = dst.getAbsolutePath();
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
         } catch (IOException e) {
