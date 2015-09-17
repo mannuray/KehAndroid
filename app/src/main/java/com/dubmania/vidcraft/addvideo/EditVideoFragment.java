@@ -54,7 +54,7 @@ public class EditVideoFragment extends Fragment {
         });
         mTrimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
 
-        mVideoView.setOnTouchListener(new OnVideoViewTouchListner());
+        mVideoView.setOnTouchListener(new onVideoViewTouchListner());
         return view;
     }
 
@@ -94,13 +94,12 @@ public class EditVideoFragment extends Fragment {
         BusProvider.getInstance().unregister(this);
     }
 
-    private class OnVideoViewTouchListner implements View.OnTouchListener {
+    private class onVideoViewTouchListner implements View.OnTouchListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if(!isVideoUriSet) {
                 mVideoView.setVideoURI(mUri);
-                Log.i("prepare", " duraita set uri called ");
                 mTrimmer.setSelectedMaxValue(mVideoView.getDuration());
                 isVideoUriSet = true;
             }

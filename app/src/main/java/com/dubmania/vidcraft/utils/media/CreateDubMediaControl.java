@@ -150,7 +150,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
             mVideoManager.pause();
             mVideoManager.setPos(0);
-            mVideoManager.start(true);
+            videoStart(true);
             mVideoManager.pause(); // due to synchronization issue
             mAudioManager.setPlayingPos(0);
 
@@ -168,7 +168,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
         @Override
         public void onTrackChangeCompleted() {
-            mVideoManager.play(true);
+            videoPlay(true);
         }
     };
 
@@ -193,7 +193,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
             mPlayOriginal.setImageResource(R.drawable.pause);
             mRecordView.setEnabled(false);
-            mVideoManager.play(false);
+            videoPlay(false);
             mState = State.playingOriginal;
         }
     };
@@ -238,7 +238,7 @@ public class CreateDubMediaControl extends LinearLayout {
             disableAllBut(mPlayRecorded);
             mState = State.playingRecorded;
             mAudioManager.play();
-            mVideoManager.play(true);
+            videoPlay(true);
         }
     };
 
@@ -271,7 +271,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
             disableAllBut(mRecord);
             mState = State.recording;
-            mVideoManager.play(true);
+            videoPlay(true);
             try {
                 mAudioManager.record();
             } catch (IOException e) {
@@ -307,7 +307,15 @@ public class CreateDubMediaControl extends LinearLayout {
         }
     };
 
+    private void videoPlay(boolean state) {
+        mVideoManager.play(state);
+        new TimeUpdater().start();
+    }
 
+    private void videoStart(boolean state) {
+        mVideoManager.start(state);
+        new TimeUpdater().start();
+    }
 
     private class TimeUpdater extends Thread {
         @Override
