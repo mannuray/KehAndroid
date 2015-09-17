@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dubmania.dubsmania.main.SearchActivity">
+    tools:context="com.dubmania.vidcraft.main.SearchActivity">
 
     <include
         android:id="@+id/tool_bar"
