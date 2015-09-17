@@ -29,16 +29,24 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
+        <RelativeLayout
+            android:id="@+id/login_signup_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
+
         <TextView
             android:id="@+id/login_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="Login / Sign up!"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp">
         </TextView>
+        </RelativeLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/login_box"
@@ -115,17 +123,25 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
+        <RelativeLayout
+            android:id="@+id/change_language_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
+
         <TextView
             android:id="@+id/change_language_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Change languages"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp">
 
         </TextView>
+       </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -144,17 +160,24 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
+        <RelativeLayout
+            android:id="@+id/support_center_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/support_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Support center"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp">
 
         </TextView>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -173,15 +196,22 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
+        <RelativeLayout
+            android:id="@+id/library_weuse_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/libray_we_use"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Libraries we use"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -191,15 +221,22 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
+        <RelativeLayout
+            android:id="@+id/terms_ofuse_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/term_of_use"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Terms of  use"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -209,15 +246,22 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
+        <RelativeLayout
+            android:id="@+id/privacy_policy_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/privacy_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Privacy Policy"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -251,25 +295,39 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/push_notification_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Push notifications"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/daily_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/settingPushNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Daily"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
         </LinearLayout>
 
         <TextView
@@ -289,15 +347,22 @@
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
+        <RelativeLayout
+            android:id="@+id/logout_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/layout_selector"
+            android:layout_height="40dp">
         <TextView
             android:id="@+id/logout_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Logout"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/version_text"

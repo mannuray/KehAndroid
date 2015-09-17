@@ -66,19 +66,23 @@
             android:id="@+id/text_confirmation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_margin="15dp"
             android:textSize="14sp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/quote_confirmationn" />
 
 
         <RelativeLayout
+            android:id="@+id/next_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/text_confirmation"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/wallet_highlighted_text_holo_light">
 
             <TextView
@@ -98,8 +102,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dp"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/next_layout"
+            android:layout_marginTop="20dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner" />
     </RelativeLayout>

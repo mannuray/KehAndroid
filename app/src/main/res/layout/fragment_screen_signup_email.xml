@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:layout_alignParentTop="true">
 
         <ImageView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/mail_icon" />
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mail_logo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="What's your email?"
             android:textSize="18sp" />
 
@@ -65,8 +65,8 @@
         </EditText>
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:id="@+id/crossImageView"
             android:layout_toRightOf="@+id/email"
             android:layout_centerVertical="true"
@@ -99,8 +99,26 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/already_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Already have an account? Login"
+            android:textColor="@color/wallet_highlighted_text_holo_light"/>
+
+    </RelativeLayout>
+
+
 
     <RelativeLayout
+        android:id="@+id/next_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

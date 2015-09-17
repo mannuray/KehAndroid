@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class UserNameFragment extends Fragment {
 
     private ProgressBar mProgressBar;
     private ImageView mResult;
-
+    RelativeLayout next_layout;
     private ClearableEditBox mEmailEdit;
 
 
@@ -48,6 +49,7 @@ public class UserNameFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_username, container, false);
         next = (TextView) rootView.findViewById(R.id.next);
+        next_layout=(RelativeLayout)rootView.findViewById(R.id.next_layout);
         mUsername = (EditText) rootView.findViewById(R.id.enter_username);
         mUsername.setText(mUsernameStore);
 
@@ -55,7 +57,7 @@ public class UserNameFragment extends Fragment {
         mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
         ClearableEditBox mEmailEdit = new ClearableEditBox(mUsername, (ImageView) rootView.findViewById(R.id.crossImageView));
 
-        next.setOnClickListener(new View.OnClickListener() {
+        next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BusProvider.getInstance().post(new SetUsernameEvent(mUsername.getText().toString()));

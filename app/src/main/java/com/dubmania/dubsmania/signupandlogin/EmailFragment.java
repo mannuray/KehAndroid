@@ -3,6 +3,7 @@ package com.dubmania.dubsmania.signupandlogin;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.dubmania.dubsmania.R;
 import com.dubmania.dubsmania.communicator.eventbus.BusProvider;
@@ -34,6 +37,17 @@ public class EmailFragment extends Fragment {
     private EditText mEmail;
     private ProgressBar mProgressBar;
     private ImageView mResult;
+    RelativeLayout next_layout;
+    RelativeLayout already_layout;
+    Typeface tf;
+    TextView expose_msg;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tf = Typeface.createFromAsset(getActivity().getAssets(), "FontAwesome.otf");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +55,8 @@ public class EmailFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_email, container, false);
         mEmail = (EditText) rootView.findViewById(R.id.email);
+        expose_msg=(TextView)rootView.findViewById(R.id.expose_msg);
+
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
         ClearableEditBox mEmailEdit = new ClearableEditBox(mEmail, (ImageView) rootView.findViewById(R.id.crossImageView));
@@ -56,12 +72,21 @@ public class EmailFragment extends Fragment {
             Log.i("Exception", "Exception:" + exception);
         }
 
+        next_layout=(RelativeLayout)rootView.findViewById(R.id.next_layout);
+        already_layout=(RelativeLayout)rootView.findViewById(R.id.already_layout);
         next = rootView.findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
+        next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 verify();
                 //BusProvider.getInstance().post(new EmailCheckEvent(mEmail.getText().toString()));
+            }
+        });
+
+        already_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
         return rootView;
