@@ -147,7 +147,7 @@ public class SettingFragment extends Fragment {
             mUsername.setText(manager.getUser());
             mEmail.setText(manager.getUserEmail());
 
-            mLogin.setVisibility(View.GONE);
+            login_signup_layout.setVisibility(View.GONE);
             mLoginInfo.setVisibility(View.VISIBLE);
             mLogout.setVisibility(View.VISIBLE);
         }

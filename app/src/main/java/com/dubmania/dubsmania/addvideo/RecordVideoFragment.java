@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dubmania.dubsmania.R;
@@ -28,7 +29,7 @@ public class RecordVideoFragment extends Fragment implements SurfaceHolder.Callb
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
     public MediaRecorder mrec = new MediaRecorder();
-    private Button startRecording = null;
+    private ImageView startRecording = null;
     private boolean recordAvailable = false;
     private boolean recording = false;
 
@@ -48,13 +49,14 @@ public class RecordVideoFragment extends Fragment implements SurfaceHolder.Callb
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_recond_video, container, false);
-        startRecording = (Button) view.findViewById(R.id.buttonstart);
+        startRecording = (ImageView) view.findViewById(R.id.buttonstart);
         startRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!recording) {
                     try {
                         startRecording();
+                        startRecording.setImageResource(R.drawable.record_video);
                         Log.i("Change", "Recording Start" );
                         recording = true;
                     } catch (Exception e) {
@@ -64,6 +66,7 @@ public class RecordVideoFragment extends Fragment implements SurfaceHolder.Callb
                     }
                 }
                 else {
+                    startRecording.setImageResource(R.drawable.before_record);
                     mrec.stop();
                     mrec.release();
                     mrec = null;
