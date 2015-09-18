@@ -9,7 +9,7 @@ import com.google.android.gms.analytics.Tracker;
 /**
  * Created by rat on 9/2/2015.
  */
-public class DubsApplication extends Application {
+public class VidCraftApplication extends Application {
     private static Application mInstance;
     private static GoogleAnalytics mAnalytics;
     private static Tracker mTracker;

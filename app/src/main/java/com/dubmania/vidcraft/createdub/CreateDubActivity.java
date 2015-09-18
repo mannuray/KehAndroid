@@ -9,6 +9,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,7 +22,7 @@ import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFiles
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.vidcraft.utils.ConstantsStore;
-import com.dubmania.vidcraft.utils.DubsApplication;
+import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.SavedDubsData;
 import com.dubmania.vidcraft.utils.VideoSharer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
@@ -68,16 +69,11 @@ public class CreateDubActivity extends AppCompatActivity {
         id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
         mTitle = intent.getStringExtra(ConstantsStore.INTENT_VIDEO_TITLE);
 
-        try {
-            mVideoFile = File.createTempFile(id.toString() + "_video", ".mp4", getApplicationContext().getCacheDir());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         VideoDownloader mVideoDownloader = new VideoDownloader();
-        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, mVideoFile, new VideoDownloaderCallback() {
+        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
+                mVideoFile = mFile;
                 BusProvider.getInstance().post(new SetRecordFilesEvent(mVideoFile));
             }
 
@@ -224,8 +220,8 @@ public class CreateDubActivity extends AppCompatActivity {
                 .setAction("CreateDub")
                 .setLabel(String.valueOf(id));
 
-        DubsApplication application = new DubsApplication();
-        Tracker mTracker = DubsApplication.tracker();
+        VidCraftApplication application = new VidCraftApplication();
+        Tracker mTracker = VidCraftApplication.tracker();
         mTracker.send(builder.build());
 
         mPager.setCurrentItem(1);
