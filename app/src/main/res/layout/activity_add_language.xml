@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.dubmania.dubsmania.misc.AddLanguageActivity">
+    tools:context="com.dubmania.vidcraft.misc.AddLanguageActivity">
 
     <include
         android:id="@+id/tool_bar"

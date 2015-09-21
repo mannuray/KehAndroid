@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.0"
 
     defaultConfig {
-        applicationId "com.dubmania.dubsmania"
+        applicationId "com.dubmania.vidcraft"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1

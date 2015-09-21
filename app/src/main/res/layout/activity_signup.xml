@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.dubmania.dubsmania.signupandlogin.SignupAndLoginActivity" >
+    tools:context="com.dubmania.vidcraft.signupandlogin.SignupAndLoginActivity" >
 
-    <com.dubmania.dubsmania.utils.NonSwipeableViewPager
+    <com.dubmania.vidcraft.utils.NonSwipeableViewPager
         android:id="@+id/loginAndSignupViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

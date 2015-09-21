@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.dubmania.dubsmania.addvideo.AddTagFragment">
+    tools:context="com.dubmania.vidcraft.addvideo.AddTagFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
