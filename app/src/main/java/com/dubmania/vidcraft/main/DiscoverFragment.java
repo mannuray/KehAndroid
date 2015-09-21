@@ -57,7 +57,13 @@ public class DiscoverFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
 
-        mItemList = new ArrayList<>();
+        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mItemList = savedInstanceState.getParcelableArrayList("array_list");
+            mVisibleFirstTime = false;
+        }
+        else {
+            mItemList = new ArrayList<>();
+        }
 
         mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
@@ -67,6 +73,15 @@ public class DiscoverFragment extends Fragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Bundle b = new Bundle();
+        b.putParcelableArrayList("array_list", new ArrayList<ListItem>());
+
+        onSaveInstanceState(b);
     }
 
     @Override

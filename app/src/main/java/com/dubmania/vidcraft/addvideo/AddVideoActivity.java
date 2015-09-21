@@ -2,6 +2,9 @@ package com.dubmania.vidcraft.addvideo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +29,9 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallb
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.MiscFunction;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.media.VideoTrimmer;
+import com.dubmania.vidcraft.utils.media.WaterMarker;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -36,7 +41,9 @@ import java.util.ArrayList;
 public class AddVideoActivity extends AppCompatActivity {
 
     private VideoInfo mVideoInfo;
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
+    private Bitmap mWaterMark;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,7 @@ public class AddVideoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         changeFragment(intent.getIntExtra(ConstantsStore.INTENT_ADD_VIDEO_ACTION, ConstantsStore.INTENT_ADD_VIDEO_RECORD));
         mVideoInfo = new VideoInfo();
+        mWaterMark = BitmapFactory.decodeResource(getResources(), R.drawable.watermark);
     }
 
     @Override
@@ -208,6 +216,14 @@ public class AddVideoActivity extends AppCompatActivity {
             File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             mVideoInfo.mDstFilePath = dst.getAbsolutePath();
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
+            // ok we got the trim video on enode water mark.
+            new Thread() {
+                @Override
+                public void run() {
+                    new WaterMarker(VidCraftApplication.getContext().getExternalCacheDir(),mVideoInfo.mDstFilePath,"outputfile").waterMark(mWaterMark);
+                }
+
+            }.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
