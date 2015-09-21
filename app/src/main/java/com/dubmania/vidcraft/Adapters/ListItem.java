@@ -1,9 +1,11 @@
 package com.dubmania.vidcraft.Adapters;
 
+import android.os.Parcelable;
+
 /**
  * Created by rat on 9/10/2015.
  */
-public class ListItem {
+public abstract class ListItem implements Parcelable {
 
     enum ListType {video, board}
     private ListType mType;
