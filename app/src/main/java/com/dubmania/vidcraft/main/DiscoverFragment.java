@@ -57,13 +57,15 @@ public class DiscoverFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
 
-        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+/*        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mItemList = savedInstanceState.getParcelableArrayList("array_list");
             mVisibleFirstTime = false;
         }
         else {
             mItemList = new ArrayList<>();
-        }
+        }*/
+
+        mItemList = new ArrayList<>();
 
         mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
@@ -107,8 +109,10 @@ public class DiscoverFragment extends Fragment {
 
     @Subscribe
     public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
-        mItemList.addAll(event.mItemList);
-        mAdapter.notifyDataSetChanged();
-        spinner.setVisibility(View.GONE);
+        if(mItemList != null) {
+            mItemList.addAll(event.mItemList);
+            mAdapter.notifyDataSetChanged();
+            spinner.setVisibility(View.GONE);
+        }
     }
 }

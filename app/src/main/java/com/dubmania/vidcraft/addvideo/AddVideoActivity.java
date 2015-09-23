@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,10 +29,12 @@ import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.MiscFunction;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
+import com.dubmania.vidcraft.utils.media.ImageOverlayer;
+import com.dubmania.vidcraft.utils.media.VideoPreparer;
 import com.dubmania.vidcraft.utils.media.VideoTrimmer;
-import com.dubmania.vidcraft.utils.media.WaterMarker;
 import com.squareup.otto.Subscribe;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -213,21 +214,43 @@ public class AddVideoActivity extends AppCompatActivity {
         try {
             Log.i("Video Trimmer", "Staring trimmer");
 
-            File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
-            mVideoInfo.mDstFilePath = dst.getAbsolutePath();
-            VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), new File(mVideoInfo.getDstFilePath()), event.getStartPos(), event.getEndPos());
+            final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
+            VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
             // ok we got the trim video on enode water mark.
             new Thread() {
                 @Override
                 public void run() {
-                    new WaterMarker(VidCraftApplication.getContext().getExternalCacheDir(),mVideoInfo.mDstFilePath,"outputfile").waterMark(mWaterMark);
+                    new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath()).overLay(mWaterMark, new ImageOverlayer.Callback() {
+                        @Override
+                        public void onConversionCompleted(String h264Track, int fps) {
+                            try {
+                                File out = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
+                                mVideoInfo.mDstFilePath = out.getAbsolutePath();
+                                VideoPreparer.prepareMovieFromH264Track(dst, new File(h264Track), out, fps);
+
+                                // hope this shit work
+                                AddVideoActivity.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onConversionFailed(String error) {
+
+                        }
+                    });
+
                 }
 
             }.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
     }
 
     @Subscribe

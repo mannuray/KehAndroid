@@ -1,18 +1,15 @@
 package com.dubmania.vidcraft.utils.media;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.media.MediaMuxer;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Surface;
 
@@ -24,13 +21,10 @@ import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.tracks.H264TrackImpl;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -44,32 +38,30 @@ import javax.microedition.khronos.egl.EGLSurface;
 /**
  * Created by rat on 9/19/2015.
  */
-public class WaterMarker {
-    private static final String TAG = "WaterMarker";
-    private static final boolean VERBOSE = false;           // lots of logging
+public class ImageOverlayer {
+    private static final String TAG = "ImageOverlayer";
+    private static final boolean VERBOSE = true;           // lots of logging
 
-    // where to find files (note: requires WRITE_EXTERNAL_STORAGE permission)
-    private File FILES_DIR = Environment.getExternalStorageDirectory();
-    private String INPUT_FILE = "source.mp4";
-    private int MAX_FRAMES = 10;       // stop extracting after this many
+    private File mCacheDir;
+    private String mInputFile;
     private Bitmap mWaterMark;
+    private Callback mCallback;
 
-    private MediaCodec mMediaCodec;
-    private String mOutputFile;
-    private int first = 0;
+    private int overlayPositionX;
+    private int overlayPositionY;
 
     /** test entry point
      public void testExtractMpegFrames() throws Throwable {
      ExtractMpegFramesWrapper.runTest(this);
      } dont't need this now */
 
-    public WaterMarker(File outputDir, String inputFile, String outputFile) {
-        FILES_DIR = outputDir;
-        INPUT_FILE = inputFile;
-        mOutputFile = outputFile;
+    public ImageOverlayer(File cacheDir, String inputFile) {
+        mCacheDir = cacheDir;
+        mInputFile = inputFile;
     }
 
-    public void waterMark(Bitmap bitmap) {
+    public void overLay(Bitmap bitmap, Callback callback) {
+        mCallback = callback;
         mWaterMark = bitmap;
         try {
             ExtractMpegFramesWrapper.runTest(this);
@@ -87,9 +79,9 @@ public class WaterMarker {
      */
     private static class ExtractMpegFramesWrapper implements Runnable {
         private Throwable mThrowable;
-        private WaterMarker mTest;
+        private ImageOverlayer mTest;
 
-        private ExtractMpegFramesWrapper(WaterMarker test) {
+        private ExtractMpegFramesWrapper(ImageOverlayer test) {
             mTest = test;
         }
 
@@ -103,7 +95,7 @@ public class WaterMarker {
         }
 
         /** Entry point. */
-        public static void runTest(WaterMarker obj) throws Throwable {
+        public static void runTest(ImageOverlayer obj) throws Throwable {
             ExtractMpegFramesWrapper wrapper = new ExtractMpegFramesWrapper(obj);
             Thread th = new Thread(wrapper, "codec test");
             th.start();
@@ -124,24 +116,18 @@ public class WaterMarker {
      */
     private void extractMpegFrames() throws IOException {
         MediaCodec decoder = null;
+        MediaCodec encoder = null;
         CodecOutputSurface outputSurface = null;
         MediaExtractor extractor = null;
         int saveWidth = 640;
         int saveHeight = 480;
-        first++;
-        if(first > 2) {
-            return;
-        }
 
         try {
-            File inputFile = new File(INPUT_FILE);   // must be an absolute path
+            File inputFile = new File(mInputFile);
             Log.i(TAG, "inp file " + inputFile.getAbsolutePath());
-            // The MediaExtractor error messages aren't very useful.  Check to see if the input
-            // file exists so we can throw a better one if it's not there.
             if (!inputFile.canRead()) {
                 throw new FileNotFoundException("Unable to read " + inputFile);
             }
-
 
             extractor = new MediaExtractor();
             extractor.setDataSource(inputFile.toString());
@@ -152,35 +138,47 @@ public class WaterMarker {
             extractor.selectTrack(trackIndex);
 
             MediaFormat format = extractor.getTrackFormat(trackIndex);
+            saveWidth = format.getInteger(MediaFormat.KEY_WIDTH);
+            saveHeight = format.getInteger(MediaFormat.KEY_HEIGHT);
+
             if (VERBOSE) {
                 Log.d(TAG, "Video size is " + format.getInteger(MediaFormat.KEY_WIDTH) + "x" +
                         format.getInteger(MediaFormat.KEY_HEIGHT));
             }
 
-            // Could use width/height from the MediaFormat to get full-size frames.
             outputSurface = new CodecOutputSurface(saveWidth, saveHeight);
 
-            // Create a MediaCodec decoder, and configure it with the MediaFormat from the
-            // extractor.  It's very important to use the format from the extractor because
-            // it contains a copy of the CSD-0/CSD-1 codec-specific data chunks.
-            String mime = format.getString(MediaFormat.KEY_MIME);
-            decoder = MediaCodec.createDecoderByType(mime);
-            Log.i(TAG, " mime is " + mime);
+            decoder = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME));
             decoder.configure(format, outputSurface.getSurface(), null, 0);
             decoder.start();
 
-            mMediaCodec = MediaCodec.createEncoderByType("video/avc");
-            MediaFormat mMediaFormat;
-            mMediaFormat = MediaFormat.createVideoFormat("video/avc", 640, 480);
-            mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 500000);
-            mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
-            mMediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar);
-            mMediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
-            mMediaCodec.configure(mMediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
-            Log.i(TAG, " befrre input mime is " + mime);
-            mMediaCodec.start();
+            encoder = MediaCodec.createEncoderByType("video/avc");
+            MediaFormat encoderFormat = MediaFormat.createVideoFormat("video/avc", saveWidth, saveHeight);
+            encoderFormat.setInteger(MediaFormat.KEY_BIT_RATE, 500000);
+            encoderFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
+            encoderFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar);
+            encoderFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
+            encoder.configure(encoderFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+            encoder.start();
 
-            doExtract(extractor, trackIndex, decoder, outputSurface);
+            doExtract(extractor, trackIndex, decoder, encoder, outputSurface, saveWidth, saveHeight);
+            // see if we can detect fps
+            float fps = 0;
+            long lastFramePTS = -1;
+            extractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+            extractor.selectTrack(trackIndex);
+            for (int i = 0; i < 100; i++) {
+                fps++;
+                if (extractor.getSampleTime() > 1000000) break;
+                lastFramePTS = extractor.getSampleTime();
+                extractor.advance();
+            }
+            fps *= (lastFramePTS / 1000000f);
+            fps = Math.round(fps);
+            Log.i(TAG, "Detected FPS is " + fps);
+
+            mCallback.onConversionCompleted(mCacheDir.getAbsolutePath() + "/temp.h264", (int)fps);
+
         } finally {
             // release everything we grabbed
             if (outputSurface != null) {
@@ -191,6 +189,12 @@ public class WaterMarker {
                 decoder.stop();
                 decoder.release();
                 decoder = null;
+            }
+
+            if (encoder != null) {
+                encoder.stop();
+                encoder.release();
+                encoder = null;
             }
             if (extractor != null) {
                 extractor.release();
@@ -224,232 +228,112 @@ public class WaterMarker {
     /**
      * Work loop.
      */
-    public void doExtract(MediaExtractor extractor, int trackIndex, MediaCodec decoder,
-                          CodecOutputSurface outputSurface) throws IOException {
+    public void doExtract(MediaExtractor extractor, int trackIndex, MediaCodec decoder, MediaCodec encoder,
+                          CodecOutputSurface outputSurface, int saveWidth, int saveHeight) throws IOException {
         final int TIMEOUT_USEC = 10000;
         ByteBuffer[] decoderInputBuffers = decoder.getInputBuffers();
-        ByteBuffer[] mInputBuffers;
+        ByteBuffer[] encoderInputBuffers = encoder.getInputBuffers();
+        ByteBuffer[] encoderOutputBuffers = encoder.getOutputBuffers();
+
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
-        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(FILES_DIR, "temp.h264")));
-        long presentationTimeUs = 0;
-        int inputChunk = 0;
-        int decodeCount = 0;
-        long frameSaveTime = 0;
-
-        byte[] sps = null;
-        byte[] pps = null;
-
-        mInputBuffers = mMediaCodec.getInputBuffers();
-        ByteBuffer[] outputBuffers = mMediaCodec.getOutputBuffers();
+        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(mCacheDir, "temp.h264")));
 
         boolean outputDone = false;
         boolean inputDone = false;
+
         while (!outputDone) {
             if (VERBOSE) Log.d(TAG, "loop");
 
             // Feed more data to the decoder.
             if (!inputDone) {
-                int inputBufIndex = decoder.dequeueInputBuffer(TIMEOUT_USEC);
-                if (inputBufIndex >= 0) {
-                    ByteBuffer inputBuf = decoderInputBuffers[inputBufIndex];
-                    // Read the sample data into the ByteBuffer.  This neither respects nor
-                    // updates inputBuf's position, limit, etc.
+                int decoderInputBufferIndex = decoder.dequeueInputBuffer(TIMEOUT_USEC);
+                if (decoderInputBufferIndex >= 0) {
+                    ByteBuffer inputBuf = decoderInputBuffers[decoderInputBufferIndex];
                     int chunkSize = extractor.readSampleData(inputBuf, 0);
                     if (chunkSize < 0) {
-                        // End of stream -- send empty frame with EOS flag set.
-                        decoder.queueInputBuffer(inputBufIndex, 0, 0, 0L,
-                                MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+                        decoder.queueInputBuffer(decoderInputBufferIndex, 0, 0, 0L, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                         inputDone = true;
-                        if (VERBOSE) Log.d(TAG, "sent input EOS");
                     } else {
                         if (extractor.getSampleTrackIndex() != trackIndex) {
                             Log.w(TAG, "WEIRD: got sample from track " +
                                     extractor.getSampleTrackIndex() + ", expected " + trackIndex);
                         }
-                        presentationTimeUs = extractor.getSampleTime();
-                        //Log.i(TAG, "presentatino time is " + String.valueOf(presentationTimeUs));
-                        decoder.queueInputBuffer(inputBufIndex, 0, chunkSize,
-                                presentationTimeUs, 0 /*flags*/);
-                        if (VERBOSE) {
-                            Log.d(TAG, "submitted frame " + inputChunk + " to dec, size=" +
-                                    chunkSize);
-                        }
-                        inputChunk++;
+                        decoder.queueInputBuffer(decoderInputBufferIndex, 0, chunkSize, extractor.getSampleTime() , 0 /*flags*/);
                         extractor.advance();
                     }
-                } else {
-                    if (VERBOSE) Log.d(TAG, "input buffer not available");
                 }
             }
 
             if (!outputDone) {
                 int decoderStatus = decoder.dequeueOutputBuffer(info, TIMEOUT_USEC);
-                if (decoderStatus == MediaCodec.INFO_TRY_AGAIN_LATER) {
-                    // no output available yet
-                    if (VERBOSE) Log.d(TAG, "no output from decoder available");
-                } else if (decoderStatus == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                    // not important for us, since we're using Surface
-                    if (VERBOSE) Log.d(TAG, "decoder output buffers changed");
-                } else if (decoderStatus == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                    Log.i(TAG, "mimet type of format ");
-                    MediaFormat newFormat = decoder.getOutputFormat();
-                    if (VERBOSE) Log.d(TAG, "decoder output format changed: " + newFormat);
-                } else if (decoderStatus < 0) {
-                    Log.i(TAG, "unexpected result from decoder.dequeueOutputBuffer: " + decoderStatus);
-                } else { // decoderStatus >= 0
-                    if (VERBOSE) Log.d(TAG, "surface decoder given buffer " + decoderStatus +
-                            " (size=" + info.size + ")");
+                if (decoderStatus >= 0) {
                     if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
-                        if (VERBOSE) Log.d(TAG, "output EOS");
                         outputDone = true;
                     }
 
                     boolean doRender = (info.size != 0);
-
-                    // As soon as we call releaseOutputBuffer, the buffer will be forwarded
-                    // to SurfaceTexture to convert to a texture.  The API doesn't guarantee
-                    // that the texture will be available before the call returns, so we
-                    // need to wait for the onFrameAvailable callback to fire.
                     decoder.releaseOutputBuffer(decoderStatus, doRender);
+
                     if (doRender) {
-                        if (VERBOSE) Log.d(TAG, "awaiting decode of frame " + decodeCount);
                         outputSurface.awaitNewImage();
                         outputSurface.drawImage(true);
 
-                        if (true) { //decodeCount < MAX_FRAMES) {
-                            /*File outputFile = new File(FILES_DIR,
-                                    String.format("frame-%03d.png", decodeCount));
-                            Log.i(TAG, "output file is " + outputFile.getAbsolutePath());*/
-                            long startWhen = System.nanoTime();
-                            //outputSurface.saveFrame(outputFile.toString());
+                        Bitmap mutableBitmap = outputSurface.getFrame();
+                        Canvas comboImage = new Canvas(mutableBitmap);
+                        comboImage.drawBitmap(mWaterMark, 0f, 0f, null);
+                        byte[] input = getNV21(saveWidth, saveHeight, mutableBitmap);//
 
-
-                            Bitmap mutableBitmap = outputSurface.getFrame();
-                            Canvas comboImage = new Canvas(mutableBitmap);
-                            comboImage.drawBitmap(mWaterMark, 0f, 0f, null);
-                            /*OutputStream os = null;
-                            try {
-                                /*File outputFile1 = new File(FILES_DIR,
-                                        String.format("overLay-frame-%02d.png", decodeCount)); /
-                                os = new FileOutputStream(outputFile.getAbsolutePath());
-                                mutableBitmap.compress(Bitmap.CompressFormat.PNG, 50, os);
-                            } catch(IOException e) {
-                                e.printStackTrace();
-                            }*/
-
-                            byte[] input = getNV21(640, 480, mutableBitmap);//
-
-                            /*ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                            mutableBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream); // image is the bitmap
-                            byte[] input = byteArrayOutputStream.toByteArray();*/
-
-                            int inputBufferIndex = mMediaCodec.dequeueInputBuffer(-1);
-                            if (inputBufferIndex >= 0) {
-                                ByteBuffer inputBuffer = mInputBuffers[inputBufferIndex];
-                                inputBuffer.clear();
-                                inputBuffer.put(input);
-                                mMediaCodec.queueInputBuffer(inputBufferIndex, 0, input.length, info.presentationTimeUs, 0);
-                                Log.i(TAG, "presentatino time is info " + String.valueOf(info.presentationTimeUs));
-                            }
-
-                            MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-                            int outputBufferIndex = mMediaCodec.dequeueOutputBuffer(bufferInfo,0);
-
-                            while (outputBufferIndex >= 0) {
-
-
-                                ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
-                                outputBuffer.position(bufferInfo.offset);
-                                outputBuffer.limit(bufferInfo.offset + bufferInfo.size);
-                                byte[] outData = new byte[bufferInfo.size];
-                                outputBuffer.get(outData);
-                              /*  if (sps != null && pps != null) {
-                                    Log.i(TAG, "sps and pps not null");
-                                    ByteBuffer frameBuffer = ByteBuffer.wrap(outData);
-                                    frameBuffer.putInt(bufferInfo.size - 4);
-                                    try {
-                                        outputStream.write(outData, 0, outData.length);
-
-                                    } catch (Exception e) {
-                                        Log.d(TAG, "Outputstream write failed");
-                                        e.printStackTrace();
-                                    }
-                                }
-                                else {
-                                    ByteBuffer spsPpsBuffer = ByteBuffer.wrap(outData);
-                                    if (spsPpsBuffer.getInt() == 0x00000001) {
-                                        Log.i(TAG, "parsing sps/pps");
-                                    } else {
-                                        Log.i(TAG, "something is amiss?");
-                                    }
-                                    int ppsIndex = 0;
-                                    while(!(spsPpsBuffer.get() == 0x00 && spsPpsBuffer.get() == 0x00 && spsPpsBuffer.get() == 0x00 && spsPpsBuffer.get() == 0x01)) {
-
-                                    }
-                                    ppsIndex = spsPpsBuffer.position();
-                                    sps = new byte[ppsIndex - 8];
-                                    System.arraycopy(outData, 4, sps, 0, sps.length);
-                                    pps = new byte[outData.length - ppsIndex];
-                                    System.arraycopy(outData, ppsIndex, pps, 0, pps.length);
-                                } */
-                                //Log.i("AvcEncoder", outData.length + " bytes written");
-
-                                try {
-                                    outputStream.write(outData, 0, outData.length);
-
-                                } catch (Exception e) {
-                                    Log.d(TAG, "Outputstream write failed");
-                                    e.printStackTrace();
-                                }
-
-                                mMediaCodec.releaseOutputBuffer(outputBufferIndex, false);
-                                outputBufferIndex = mMediaCodec.dequeueOutputBuffer(bufferInfo, 0);
-
-                            }
-                            // hope here the magic will work
-
-                            frameSaveTime += System.nanoTime() - startWhen;
+                        int encoderInputBufferIndex = encoder.dequeueInputBuffer(-1);
+                        if (encoderInputBufferIndex >= 0) {
+                            ByteBuffer inputBuffer = encoderInputBuffers[encoderInputBufferIndex];
+                            inputBuffer.clear();
+                            inputBuffer.put(input);
+                            encoder.queueInputBuffer(encoderInputBufferIndex, 0, input.length, info.presentationTimeUs, 0);
                         }
-                        decodeCount++;
+
+                        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+                        int encoderOutputBufferIndex = encoder.dequeueOutputBuffer(bufferInfo,0);
+
+                        while (encoderOutputBufferIndex >= 0) {
+                            ByteBuffer outputBuffer = encoderOutputBuffers[encoderOutputBufferIndex];
+                            outputBuffer.position(bufferInfo.offset);
+                            outputBuffer.limit(bufferInfo.offset + bufferInfo.size);
+                            byte[] outData = new byte[bufferInfo.size];
+                            outputBuffer.get(outData);
+
+                            try {
+                                outputStream.write(outData, 0, outData.length);
+
+                            } catch (Exception e) {
+                                Log.d(TAG, "Outputstream write failed");
+                                e.printStackTrace();
+                            }
+
+                            encoder.releaseOutputBuffer(encoderOutputBufferIndex, false);
+                            encoderOutputBufferIndex = encoder.dequeueOutputBuffer(bufferInfo, 0);
+                        }
                     }
                 }
             }
         }
-
-        DataSource videoFile = new FileDataSourceImpl(new File(FILES_DIR, "temp.h264"));
-
-        H264TrackImpl h264Track = new H264TrackImpl(videoFile, "eng"); // 5fps. you can play with timescale and timetick to get non integer fps, 23.967 is 24000/1001
-
-        Movie movie = new Movie();
-
-        movie.addTrack(h264Track);
-
-        Container out = new DefaultMp4Builder().build(movie);
-        FileOutputStream fos = new FileOutputStream(new File(FILES_DIR, mOutputFile));
-        out.writeContainer(fos.getChannel());
-
-        fos.close();
-
-        int numSaved = (MAX_FRAMES < decodeCount) ? MAX_FRAMES : decodeCount;
-        Log.d(TAG, "Saving " + numSaved + " frames took " +
-                (frameSaveTime / numSaved / 1000) + " us per frame");
     }
 
     byte[] getNV21(int inputWidth, int inputHeight, Bitmap scaled) {
 
         int[] argb = new int[inputWidth * inputHeight];
         scaled.getPixels(argb, 0, inputWidth, 0, 0, inputWidth, inputHeight);
-        byte[] yuv = encodeYUV420P(argb, inputWidth, inputHeight); //new byte[inputWidth * inputHeight * 3 / 2];
-        //encodeYUV420SP(yuv, argb, inputWidth, inputHeight);
+        byte[] yuv = encodeYUV420P(argb, inputWidth, inputHeight);
+        //encodeYUV420SP(argb, inputWidth, inputHeight);
         scaled.recycle();
         return yuv;
     }
 
-    void encodeYUV420SP(byte[] yuv420sp, int[] argb, int width, int height) {
+    private byte[] encodeYUV420SP(int[] argb, int width, int height) {
         final int frameSize = width * height;
 
         int yIndex = 0;
         int uvIndex = frameSize;
+        byte [] yuv = new byte[width*height*3/2];
 
         int a, R, G, B, Y, U, V;
         int index = 0;
@@ -471,18 +355,20 @@ public class WaterMarker {
                 // meaning for every 4 Y pixels there are 1 V and 1 U. Note the
                 // sampling is every other
                 // pixel AND every other scanline.
-                yuv420sp[yIndex++] = (byte) ((Y < 0) ? 0
+                yuv[yIndex++] = (byte) ((Y < 0) ? 0
                         : ((Y > 255) ? 255 : Y));
                 if (j % 2 == 0 && index % 2 == 0) {
-                    yuv420sp[uvIndex++] = (byte) ((V < 0) ? 0
+                    yuv[uvIndex++] = (byte) ((V < 0) ? 0
                             : ((V > 255) ? 255 : V));
-                    yuv420sp[uvIndex++] = (byte) ((U < 0) ? 0
+                    yuv[uvIndex++] = (byte) ((U < 0) ? 0
                             : ((U > 255) ? 255 : U));
                 }
 
                 index++;
             }
         }
+
+        return yuv;
     }
 
     public byte[] encodeYUV420P(int[] aRGB, int width, int height) {
@@ -536,7 +422,7 @@ public class WaterMarker {
      */
     private static class CodecOutputSurface
             implements SurfaceTexture.OnFrameAvailableListener {
-        private WaterMarker.STextureRender mTextureRender;
+        private ImageOverlayer.STextureRender mTextureRender;
         private SurfaceTexture mSurfaceTexture;
         private Surface mSurface;
         private EGL10 mEgl;
@@ -574,7 +460,7 @@ public class WaterMarker {
          * Creates interconnected instances of TextureRender, SurfaceTexture, and Surface.
          */
         private void setup() {
-            mTextureRender = new WaterMarker.STextureRender();
+            mTextureRender = new ImageOverlayer.STextureRender();
             mTextureRender.surfaceCreated();
 
             if (VERBOSE) Log.d(TAG, "textureID=" + mTextureRender.getTextureId());
@@ -811,37 +697,7 @@ public class WaterMarker {
         }
 
         public Bitmap getFrame() {
-            // glReadPixels gives us a ByteBuffer filled with what is essentially big-endian RGBA
-            // data (i.e. a byte of red, followed by a byte of green...).  To use the Bitmap
-            // constructor that takes an int[] array with pixel data, we need an int[] filled
-            // with little-endian ARGB data.
-            //
-            // If we implement this as a series of buf.get() calls, we can spend 2.5 seconds just
-            // copying data around for a 720p frame.  It's better to do a bulk get() and then
-            // rearrange the data in memory.  (For comparison, the PNG compress takes about 500ms
-            // for a trivial frame.)
-            //
-            // So... we set the ByteBuffer to little-endian, which should turn the bulk IntBuffer
-            // get() into a straight memcpy on most Android devices.  Our ints will hold ABGR data.
-            // Swapping B and R gives us ARGB.  We need about 30ms for the bulk get(), and another
-            // 270ms for the color swap.
-            //
-            // We can avoid the costly B/R swap here if we do it in the fragment shader (see
-            // http://stackoverflow.com/questions/21634450/ ).
-            //
-            // Having said all that... it turns out that the Bitmap#copyPixelsFromBuffer()
-            // method wants RGBA pixels, not ARGB, so if we create an empty bitmap and then
-            // copy pixel data in we can avoid the swap issue entirely, and just copy straight
-            // into the Bitmap from the ByteBuffer.
-            //
-            // Making this even more interesting is the upside-down nature of GL, which means
-            // our output will look upside-down relative to what appears on screen if the
-            // typical GL conventions are used.  (For ExtractMpegFrameTest, we avoid the issue
-            // by inverting the frame when we render it.)
-            //
-            // Allocating large buffers is expensive, so we really want mPixelBuf to be
-            // allocated ahead of time if possible.  We still get some allocations from the
-            // Bitmap / PNG creation.
+            // same as saveFrame
 
             mPixelBuf.rewind();
             GLES20.glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
@@ -1088,219 +944,13 @@ public class WaterMarker {
         }
     }
 
-    // class to render textre from bitmap
-    private static class BSTextureRender {
-        private static final int FLOAT_SIZE_BYTES = 4;
-        private static final int TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 5 * FLOAT_SIZE_BYTES;
-        private static final int TRIANGLE_VERTICES_DATA_POS_OFFSET = 0;
-        private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
-        private final float[] mTriangleVerticesData = {
-                // X, Y, Z, U, V
-                -1.0f, -1.0f, 0, 0.f, 0.f,
-                1.0f, -1.0f, 0, 1.f, 0.f,
-                -1.0f, 1.0f, 0, 0.f, 1.f,
-                1.0f, 1.0f, 0, 1.f, 1.f,
-        };
+    public static interface Callback {
+        //public void onProgressUpdated(int done, int total);
 
-        private FloatBuffer mTriangleVertices;
+        public void onConversionCompleted(String h264Track, int fps);
 
-        private static final String VERTEX_SHADER =
-                "uniform mat4 uMVPMatrix;\n" +
-                        "uniform mat4 uSTMatrix;\n" +
-                        "attribute vec4 aPosition;\n" +
-                        "attribute vec4 aTextureCoord;\n" +
-                        "varying vec2 vTextureCoord;\n" +
-                        "void main() {\n" +
-                        "    gl_Position = uMVPMatrix * aPosition;\n" +
-                        "    vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
-                        "}\n";
+        public void onConversionFailed(String error);
 
-        private static final String FRAGMENT_SHADER =
-                "#extension GL_OES_EGL_image_external : require\n" +
-                        "precision mediump float;\n" +      // highp here doesn't seem to matter
-                        "varying vec2 vTextureCoord;\n" +
-                        "uniform samplerExternalOES sTexture;\n" +
-                        "void main() {\n" +
-                        "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-                        "}\n";
-
-        private float[] mMVPMatrix = new float[16];
-        private float[] mSTMatrix = new float[16];
-
-        private int mProgram;
-        private int mTextureID = -12345;
-        private int muMVPMatrixHandle;
-        private int muSTMatrixHandle;
-        private int maPositionHandle;
-        private int maTextureHandle;
-
-        public BSTextureRender() {
-            mTriangleVertices = ByteBuffer.allocateDirect(
-                    mTriangleVerticesData.length * FLOAT_SIZE_BYTES)
-                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
-            mTriangleVertices.put(mTriangleVerticesData).position(0);
-
-            Matrix.setIdentityM(mSTMatrix, 0);
-        }
-
-        public int getTextureId() {
-            return mTextureID;
-        }
-
-        /**
-         * Draws the external texture in SurfaceTexture onto the current EGL surface.
-         */
-        public void drawFrame(SurfaceTexture st, boolean invert) {
-            checkGlError("onDrawFrame start");
-            //st.getTransformMatrix(mSTMatrix);
-            if (invert) {
-                mSTMatrix[5] = -mSTMatrix[5];
-                mSTMatrix[13] = 1.0f - mSTMatrix[13];
-            }
-
-            // (optional) clear to green so we can see if we're failing to set pixels
-            GLES20.glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-            GLES20.glUseProgram(mProgram);
-            checkGlError("glUseProgram");
-
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID);
-
-            mTriangleVertices.position(TRIANGLE_VERTICES_DATA_POS_OFFSET);
-            GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false,
-                    TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices);
-            checkGlError("glVertexAttribPointer maPosition");
-            GLES20.glEnableVertexAttribArray(maPositionHandle);
-            checkGlError("glEnableVertexAttribArray maPositionHandle");
-
-            mTriangleVertices.position(TRIANGLE_VERTICES_DATA_UV_OFFSET);
-            GLES20.glVertexAttribPointer(maTextureHandle, 2, GLES20.GL_FLOAT, false,
-                    TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices);
-            checkGlError("glVertexAttribPointer maTextureHandle");
-            GLES20.glEnableVertexAttribArray(maTextureHandle);
-            checkGlError("glEnableVertexAttribArray maTextureHandle");
-
-            Matrix.setIdentityM(mMVPMatrix, 0);
-            GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-            GLES20.glUniformMatrix4fv(muSTMatrixHandle, 1, false, mSTMatrix, 0);
-
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-            checkGlError("glDrawArrays");
-
-            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
-        }
-
-        /**
-         * Initializes GL state.  Call this after the EGL surface has been created and made current.
-         */
-        public void surfaceCreated() {
-            mProgram = createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
-            if (mProgram == 0) {
-                throw new RuntimeException("failed creating program");
-            }
-
-            maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
-            checkLocation(maPositionHandle, "aPosition");
-            maTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
-            checkLocation(maTextureHandle, "aTextureCoord");
-
-            muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-            checkLocation(muMVPMatrixHandle, "uMVPMatrix");
-            muSTMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uSTMatrix");
-            checkLocation(muSTMatrixHandle, "uSTMatrix");
-
-            int[] textures = new int[1];
-            GLES20.glGenTextures(1, textures, 0);
-
-            mTextureID = textures[0];
-            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureID);
-            checkGlError("glBindTexture mTextureID");
-
-            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER,
-                    GLES20.GL_NEAREST);
-            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER,
-                    GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_S,
-                    GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_T,
-                    GLES20.GL_CLAMP_TO_EDGE);
-            checkGlError("glTexParameter");
-        }
-
-        /**
-         * Replaces the fragment shader.  Pass in null to reset to default.
-         */
-        public void changeFragmentShader(String fragmentShader) {
-            if (fragmentShader == null) {
-                fragmentShader = FRAGMENT_SHADER;
-            }
-            GLES20.glDeleteProgram(mProgram);
-            mProgram = createProgram(VERTEX_SHADER, fragmentShader);
-            if (mProgram == 0) {
-                throw new RuntimeException("failed creating program");
-            }
-        }
-
-        private int loadShader(int shaderType, String source) {
-            int shader = GLES20.glCreateShader(shaderType);
-            checkGlError("glCreateShader type=" + shaderType);
-            GLES20.glShaderSource(shader, source);
-            GLES20.glCompileShader(shader);
-            int[] compiled = new int[1];
-            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-            if (compiled[0] == 0) {
-                Log.e(TAG, "Could not compile shader " + shaderType + ":");
-                Log.e(TAG, " " + GLES20.glGetShaderInfoLog(shader));
-                GLES20.glDeleteShader(shader);
-                shader = 0;
-            }
-            return shader;
-        }
-
-        private int createProgram(String vertexSource, String fragmentSource) {
-            int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
-            if (vertexShader == 0) {
-                return 0;
-            }
-            int pixelShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentSource);
-            if (pixelShader == 0) {
-                return 0;
-            }
-
-            int program = GLES20.glCreateProgram();
-            if (program == 0) {
-                Log.e(TAG, "Could not create program");
-            }
-            GLES20.glAttachShader(program, vertexShader);
-            checkGlError("glAttachShader");
-            GLES20.glAttachShader(program, pixelShader);
-            checkGlError("glAttachShader");
-            GLES20.glLinkProgram(program);
-            int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-            if (linkStatus[0] != GLES20.GL_TRUE) {
-                Log.e(TAG, "Could not link program: ");
-                Log.e(TAG, GLES20.glGetProgramInfoLog(program));
-                GLES20.glDeleteProgram(program);
-                program = 0;
-            }
-            return program;
-        }
-
-        public void checkGlError(String op) {
-            int error;
-            while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-                Log.e(TAG, op + ": glError " + error);
-                throw new RuntimeException(op + ": glError " + error);
-            }
-        }
-
-        public static void checkLocation(int location, String label) {
-            if (location < 0) {
-                throw new RuntimeException("Unable to locate '" + label + "' in program");
-            }
-        }
+        //public void onReady();
     }
 }
