@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.dubmania.vidcraft.Adapters.VideoBoardAdapter;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
@@ -45,7 +46,7 @@ public class VideoBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
-        ImageButton mAddBoardButton = (ImageButton) view.findViewById(R.id.add_video_board_button);
+        RelativeLayout mAddBoardButton = (RelativeLayout) view.findViewById(R.id.add_video_board_button);
         mAddBoardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

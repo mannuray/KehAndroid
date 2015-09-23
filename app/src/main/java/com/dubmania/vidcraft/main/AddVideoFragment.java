@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.addvideo.AddVideoActivity;
@@ -32,8 +33,8 @@ public class AddVideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_add_video, container, false);
-        Button mRecord = (Button) view.findViewById(R.id.add_video_record_button);
-        Button mImporct = (Button) view.findViewById(R.id.add_video_import_button);
+        RelativeLayout mRecord = (RelativeLayout) view.findViewById(R.id.add_video_record_layout);
+        RelativeLayout mImporct = (RelativeLayout) view.findViewById(R.id.add_video_import_layout);
         mRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

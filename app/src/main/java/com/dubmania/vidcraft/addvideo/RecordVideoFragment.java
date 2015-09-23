@@ -1,26 +1,40 @@
 package com.dubmania.vidcraft.addvideo;
 
 import android.app.Activity;
+import android.hardware.Camera;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
 import com.dubmania.vidcraft.utils.MiscFunction;
-import com.dubmania.vidcraft.utils.media.VideoRecorder;
 
+import java.io.File;
 import java.io.IOException;
 
-public class RecordVideoFragment extends Fragment {
+public class RecordVideoFragment extends Fragment implements SurfaceHolder.Callback {
+    private SurfaceHolder surfaceHolder;
+    private SurfaceView surfaceView;
+    public MediaRecorder mrec = new MediaRecorder();
+    private ImageView startRecording = null;
+    private boolean recordAvailable = false;
+    private boolean recording = false;
 
-    private String mVideoFilePath;
-    private VideoRecorder mVideoRecorder;
+    private String video;
+    private Camera mCamera;
 
     public RecordVideoFragment() {
         // Required empty public constructor
@@ -35,26 +49,38 @@ public class RecordVideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_recond_video, container, false);
-        Button startRecording = (Button) view.findViewById(R.id.buttonstart);
+        startRecording = (ImageView) view.findViewById(R.id.buttonstart);
         startRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mVideoRecorder.isRecording()) {
-                    mVideoRecorder.stopRecording();
-                    BusProvider.getInstance().post(new AddVideoRecordDoneEvent(mVideoFilePath));
+                if(!recording) {
+                    try {
+                        startRecording();
+                        startRecording.setImageResource(R.drawable.record_video);
+                        Log.i("Change", "Recording Start" );
+                        recording = true;
+                    } catch (Exception e) {
+                        String message = e.getMessage();
+                        Log.i(null, "Problem Start" + message);
+                        mrec.release();
+                    }
                 }
                 else {
-                    try {
-                        mVideoRecorder.startRecording();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    startRecording.setImageResource(R.drawable.before_record);
+                    mrec.stop();
+                    releaseMediaRecorder();
+                    mrec.release();
+                    mrec = null;
+                    Log.i("Change", "Recording Stop" );
+                    BusProvider.getInstance().post(new AddVideoRecordDoneEvent(video));
                 }
             }
         });
-        mVideoFilePath = getActivity().getApplicationContext().getCacheDir().getAbsolutePath() + "/" + MiscFunction.getRandomFileName("Record") + ".mp4";
-        SurfaceView surfaceView = (SurfaceView) view.findViewById(R.id.surface_camera);
-        mVideoRecorder = new VideoRecorder(surfaceView.getHolder(), mVideoFilePath);
+        mCamera = Camera.open();
+        surfaceView = (SurfaceView) view.findViewById(R.id.surface_camera);
+        surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         return view;
     }
@@ -69,5 +95,84 @@ public class RecordVideoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    protected void startRecording() throws IOException
+    {
+        mrec = new MediaRecorder();  // Works well
+        mCamera.unlock();
+
+        mrec.setCamera(mCamera);
+
+        mrec.setPreviewDisplay(surfaceHolder.getSurface());
+        mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        mrec.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+        CamcorderProfile profile = CamcorderProfile.get(Camera.CameraInfo.CAMERA_FACING_FRONT,CamcorderProfile.QUALITY_HIGH);
+        profile.fileFormat = MediaRecorder.OutputFormat.MPEG_4;
+        profile.videoCodec = MediaRecorder.VideoEncoder.MPEG_4_SP;
+        profile.videoFrameHeight = 240;
+        profile.videoFrameWidth = 320;
+        profile.videoBitRate = 15;
+
+        mrec.setProfile(profile);
+        mrec.setPreviewDisplay(surfaceHolder.getSurface());
+        video = getActivity().getApplicationContext().getCacheDir().getAbsolutePath() + "/" + MiscFunction.getRandomFileName("Record") + ".mp4";
+        mrec.setOutputFile(video);
+
+        mrec.prepare();
+        mrec.start();
+    }
+
+    protected void stopRecording() {
+        mrec.stop();
+        mrec.release();
+        mCamera.release();
+    }
+
+    private void releaseMediaRecorder(){
+        if (mrec != null) {
+            mrec.reset();   // clear recorder configuration
+            mrec.release(); // release the recorder object
+            mrec = null;
+            mCamera.lock();           // lock camera for later use
+        }
+    }
+
+    private void releaseCamera(){
+        if (mCamera != null){
+            mCamera.release();        // release the camera for other applications
+            mCamera = null;
+        }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (mCamera != null){
+            Camera.Parameters params = mCamera.getParameters();
+            mCamera.setParameters(params);
+        }
+        else {
+            Toast.makeText(getActivity().getApplicationContext(), "Camera not available!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mCamera.stopPreview();
+        mCamera.release();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releaseMediaRecorder();
+        releaseCamera();
     }
 }

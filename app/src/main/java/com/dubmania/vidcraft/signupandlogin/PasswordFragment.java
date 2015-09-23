@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.R;
@@ -20,6 +21,7 @@ public class PasswordFragment extends Fragment {
     EditText mPassword;
     private ProgressBar mProgressBar;
     private ImageView mResult;
+    RelativeLayout next_layout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,9 +32,10 @@ public class PasswordFragment extends Fragment {
         mPassword = (EditText) rootView.findViewById(R.id.enter_password);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar); // set progress bar for password verifier
         mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
+        next_layout=(RelativeLayout)rootView.findViewById(R.id.next_layout);
         ClearableEditBox mEmailEdit = new ClearableEditBox(mPassword, (ImageView) rootView.findViewById(R.id.crossImageView));
 
-        next.setOnClickListener(new View.OnClickListener() {
+        next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BusProvider.getInstance().post(new SignupPasswordEvent(mPassword.getText().toString()));

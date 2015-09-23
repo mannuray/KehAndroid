@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:layout_alignParentTop="true">
 
         <ImageView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/user_icon" />
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mail_logo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Choose a username"
             android:textSize="18sp" />
 
@@ -65,8 +65,8 @@
         </EditText>
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:id="@+id/crossImageView"
             android:layout_toRightOf="@+id/enter_username"
             android:layout_centerVertical="true"
@@ -85,8 +85,8 @@
             android:visibility="gone"/>
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:id="@+id/resultImageView"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/cross_imageView"
@@ -101,6 +101,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/next_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

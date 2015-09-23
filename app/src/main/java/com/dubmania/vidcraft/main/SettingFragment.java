@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.R;
@@ -30,6 +31,15 @@ public class SettingFragment extends Fragment {
     private TextView mEmail;
     private TextView mLogout;
     private TextView mPushStatus;
+    private RelativeLayout login_signup_layout;
+    private RelativeLayout change_language_layout;
+    private RelativeLayout support_center_layout;
+    private RelativeLayout library_weuse_layout;
+    private RelativeLayout terms_ofuse_layout;
+    private RelativeLayout privacy_policy_layout;
+    private RelativeLayout push_notification_layout;
+    private RelativeLayout daily_layout;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,13 +53,23 @@ public class SettingFragment extends Fragment {
         setHasOptionsMenu(true);
         View rootView =  inflater.inflate(R.layout.fragment_setting, container, false);
         mLogin = (TextView) rootView.findViewById(R.id.login_signup);
+        login_signup_layout=(RelativeLayout)rootView.findViewById(R.id.login_signup_layout);
+        change_language_layout=(RelativeLayout)rootView.findViewById(R.id.change_language_layout);
+        support_center_layout=(RelativeLayout)rootView.findViewById(R.id.support_center_layout);
+        library_weuse_layout=(RelativeLayout)rootView.findViewById(R.id.library_weuse_layout);
+        terms_ofuse_layout=(RelativeLayout)rootView.findViewById(R.id.terms_ofuse_layout);
+        privacy_policy_layout=(RelativeLayout)rootView.findViewById(R.id.privacy_policy_layout);
+        push_notification_layout=(RelativeLayout)rootView.findViewById(R.id.push_notification_layout);
+        daily_layout=(RelativeLayout)rootView.findViewById(R.id.daily_layout);
+
+
         mLoginInfo = rootView.findViewById(R.id.login_box);
         mUsername = (TextView) rootView.findViewById(R.id.frament_setting_username_edit);
         mEmail = (TextView) rootView.findViewById(R.id.frament_setting_email_edit);
         mPushStatus = (TextView) rootView.findViewById(R.id.settingPushNotification);
         mLogout = (TextView) rootView.findViewById(R.id.logout_text);
 
-        mLogin.setOnClickListener(new View.OnClickListener() {
+        login_signup_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SignupAndLoginActivity.class);
@@ -73,18 +93,18 @@ public class SettingFragment extends Fragment {
         }
 
         // set up text listners
-        rootView.findViewById(R.id.change_language_text).setOnClickListener(new View.OnClickListener() {
+        change_language_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LanguageActivity.class);
                 startActivity(intent);
             }
         });
-        rootView.findViewById(R.id.support_center).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        rootView.findViewById(R.id.libray_we_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        rootView.findViewById(R.id.term_of_use).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        rootView.findViewById(R.id.privacy_policy).setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        rootView.findViewById(R.id.pushBox).setOnClickListener(new View.OnClickListener() {
+        support_center_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        library_weuse_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        terms_ofuse_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        privacy_policy_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        push_notification_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // show list dialog box
@@ -127,7 +147,7 @@ public class SettingFragment extends Fragment {
             mUsername.setText(manager.getUser());
             mEmail.setText(manager.getUserEmail());
 
-            mLogin.setVisibility(View.GONE);
+            login_signup_layout.setVisibility(View.GONE);
             mLoginInfo.setVisibility(View.VISIBLE);
             mLogout.setVisibility(View.VISIBLE);
         }

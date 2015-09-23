@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class LoginFragment extends Fragment {
     private TextView mLogin;
     private EditText mEmail;
     private EditText mPassword;
+    RelativeLayout next_layout;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
 
 
@@ -77,7 +79,8 @@ public class LoginFragment extends Fragment {
             }
         });
         //mLogin.setVisibility(View.INVISIBLE);
-        mLogin.setOnClickListener(new View.OnClickListener() {
+        next_layout=(RelativeLayout)view.findViewById(R.id.next_layout);
+        next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();

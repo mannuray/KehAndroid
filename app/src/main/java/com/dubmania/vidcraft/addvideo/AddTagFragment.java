@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.Adapters.TagListAdapter;
@@ -174,10 +176,12 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
     private void addTag(Tag mTag) {
         TextView textview = new TextView(getActivity());
-        textview.setText(mTag.getTag());
-        textview.setBackgroundResource(R.drawable.oval);
-        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.abc_ic_clear_mtrl_alpha, 0);
 
+
+       // textview.setGravity(Gravity.CENTER_VERTICAL);
+        textview.setText(mTag.getTag());
+        textview.setBackgroundResource(R.drawable.rectangular_background);
+        textview.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross_15,0);
         BitmapDrawable dd = (BitmapDrawable) getDrawableFromTextView(textview);
         mTagsView.append(addSpanText(mTag.getTag(), dd));
         mTagsView.append(" ");
