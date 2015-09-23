@@ -19,7 +19,7 @@
 
     <view
         android:id="@+id/trimmer"
-        class="com.dubmania.dubsmania.utils.RangeSeekBar"
+        class="com.dubmania.vidcraft.utils.RangeSeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="180dp"

@@ -37,6 +37,13 @@ public class TrendingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mVideoItemList = savedInstanceState.getParcelableArrayList("trending_list");
+            mVisibleFirstTime = false;
+        }
+        else {
+            mVideoItemList = new ArrayList<>();
+        }
     }
 
     @Override
@@ -46,8 +53,6 @@ public class TrendingFragment extends Fragment {
         final FragmentActivity c = getActivity();
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
-
-        mVideoItemList = new ArrayList<>();
 
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
@@ -63,6 +68,12 @@ public class TrendingFragment extends Fragment {
             BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
             mVisibleFirstTime = false;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("trending_list", mVideoItemList);
     }
 
     @Override

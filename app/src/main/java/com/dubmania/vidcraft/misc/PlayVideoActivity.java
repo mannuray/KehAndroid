@@ -61,6 +61,11 @@ public class PlayVideoActivity extends AppCompatActivity {
             new VideoSharer(this, mFilePath).showAlertDialog();
         }
 
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

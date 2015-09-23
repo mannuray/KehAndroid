@@ -31,10 +31,10 @@ public class VideoListDownloader {
         downloadVideos(ConstantsStore.URL_TRENDING, params, callback);
     }
 
-    public void downloadBoardVideo(Long id, String user, VideoListDownloaderCallback callback) {
+    public void downloadBoardVideo(Long id, Long user_id, VideoListDownloaderCallback callback) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(id));
-        params.add(ConstantsStore.PARAM_USER, user); // change this param for current user
+        params.add(ConstantsStore.PARAM_USER_ID, String .valueOf(user_id)); // change this param for current user
 
         downloadVideos(ConstantsStore.URL_GET_BOARD_VIDEOS, params, callback);
     }

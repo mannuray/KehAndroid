@@ -66,7 +66,7 @@ public class AddLanguageActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_add_language, menu);
+        inflater.inflate(R.menu.menu_empty, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -75,14 +75,12 @@ public class AddLanguageActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
-        */
 
         return super.onOptionsItemSelected(item);
     }

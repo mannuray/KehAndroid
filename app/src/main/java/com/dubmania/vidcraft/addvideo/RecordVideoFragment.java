@@ -164,8 +164,10 @@ public class RecordVideoFragment extends Fragment implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mCamera.stopPreview();
-        mCamera.release();
+        if(mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+        }
     }
 
 

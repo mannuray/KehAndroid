@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -78,7 +79,7 @@ public class PagerFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private class MyPagerAdapter extends FragmentPagerAdapter {
+    private class MyPagerAdapter extends FragmentStatePagerAdapter {
 
         TypedArray title = getResources()
                 .obtainTypedArray(R.array.pager_titles);
@@ -90,7 +91,7 @@ public class PagerFragment extends Fragment {
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int i) {
+        public Fragment getItem(int i) {
             switch (i) {
                 case 0:
                     return new DiscoverFragment();

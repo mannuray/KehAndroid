@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.misc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -57,12 +58,19 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch(id) {
+            case R.id.action_add_language:
+                intent = new Intent(this, AddLanguageActivity.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

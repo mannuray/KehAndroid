@@ -140,9 +140,6 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_search:
                 intent = new Intent(this, SearchActivity.class);
                 break;
-            case R.id.action_add_language:
-                intent = new Intent(this, AddLanguageActivity.class);
-                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -39,6 +39,22 @@ public class VideoBoardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mVideoBoardItemList = savedInstanceState.getParcelableArrayList("board_list");
+            mVisibleFirstTime = false;
+        }
+        else {
+            mVideoBoardItemList = new ArrayList<>();
+            TypedArray mBoardIcons = getResources()
+                    .obtainTypedArray(R.array.video_board_icons);
+
+            mVideoBoardItemList = new ArrayList<>((Arrays.asList(
+                    new VideoBoardListItem((long) -1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
+                    new VideoBoardListItem((long) -2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
+            )));
+            mBoardIcons.recycle();
+        }
     }
 
     @Override
@@ -58,14 +74,6 @@ public class VideoBoardFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // specify an adapter (see also next example)
-        TypedArray mBoardIcons = getResources()
-                .obtainTypedArray(R.array.video_board_icons);
-
-        mVideoBoardItemList = new ArrayList<>((Arrays.asList(
-                new VideoBoardListItem((long) -1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
-                new VideoBoardListItem((long) -2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
-        )));
-        mBoardIcons.recycle();
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -78,15 +86,11 @@ public class VideoBoardFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    /*
     @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
-            mVisibleFirstTime = false;
-        }
-    }*/
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("board_list", mVideoBoardItemList);
+    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
