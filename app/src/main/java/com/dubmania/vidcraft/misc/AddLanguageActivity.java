@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
+import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -21,13 +23,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import static com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader.*;
 
 public class AddLanguageActivity extends AppCompatActivity {
     Toolbar mToolbar;
     private NumberPicker mCountryPicker;
     NumberPicker mLanguagePicker;
-    private LanguageData mLanguageData;
+    private LanguageAndCountryDataHandler mLanguageData;
     private int mLanguagePosition;
     private int mCountryPosition;
 
@@ -87,20 +89,20 @@ public class AddLanguageActivity extends AppCompatActivity {
 
     private void setData() {
         mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize());
+        mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize() - 1);
         mLanguagePicker.setDisplayedValues(mLanguageData.getLanguages());
-        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+        mLanguagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onScrollStateChange(NumberPicker view, int scrollState) {
-                mLanguagePosition = scrollState;
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mLanguagePosition = newVal;
                 mCountryPicker.setDisplayedValues(null);
                 mCountryPicker.setMinValue(0);
-                mLanguagePicker.setMaxValue(mLanguageData.getCountriesSize(scrollState));
-                mCountryPicker.setDisplayedValues(mLanguageData.getContries(scrollState));
-                mCountryPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                mCountryPicker.setMaxValue(mLanguageData.getCountriesSize(mLanguagePosition) - 1);
+                mCountryPicker.setDisplayedValues(mLanguageData.getCountries(mLanguagePosition));
+                mCountryPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
-                    public void onScrollStateChange(NumberPicker view, int scrollState) {
-                        mCountryPosition = scrollState;
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        mCountryPosition = newVal;
                     }
                 });
             }
@@ -108,116 +110,17 @@ public class AddLanguageActivity extends AppCompatActivity {
     }
 
     private void populateData() {
-        DubsmaniaHttpClient.post(ConstantsStore.URL_LANGUAGES, new RequestParams(), new JsonHttpResponseHandler() {
+        new LanguageListDownloader().downloadLanguageAndCountry(new LanguageListDownloader.LanguageListDownloadCallback() {
             @Override
-            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
-                try {
-                    Log.d("json error", response.toString());
-                    mLanguageData = new LanguageData();
-                    JSONArray languageList = response.getJSONArray(ConstantsStore.PARAM_LANGUAGE_LIST);
-                    for( int i = 0; i < languageList.length(); i++ ){
-                        JSONObject language = languageList.getJSONObject(i);
-                        LanguageData.Language l = new LanguageData.Language(language.getLong(ConstantsStore.PARAM_LANGUAGE_ID), ConstantsStore.PARAM_LANGUAGE_TEXT);
-                        JSONArray countryList = response.getJSONArray(ConstantsStore.PARAM_COUNTRY_LIST);
-                        for( int j = 0; j < languageList.length(); j++ ) {
-                            JSONObject country = countryList.getJSONObject(i);
-                            l.addCountry(new LanguageData.Country(country.getLong(ConstantsStore.PARAM_COUNTRY_ID), ConstantsStore.PARAM_COUNTRY_TEXT));
-                        }
-                    }
-
-                    setData();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
+                mLanguageData = mData;
+                setData();
             }
 
             @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-                // show layout for retry
+            public void onLanguageListDownloadFailure() {
+
             }
         });
-    }
-
-    private static class LanguageData {
-
-        ArrayList<Language> mLanguages;
-
-        public LanguageData() {
-            mLanguages = new ArrayList<>();
-        }
-
-        public String[] getLanguages() {
-            String[] languages = new String[mLanguages.size()];
-            for(int i = 0; i < mLanguages.size(); i++) {
-                languages[i] = mLanguages.get(i).getLanguage();
-            }
-            return languages;
-        }
-
-        public String[] getContries(int pos) {
-            return mLanguages.get(pos).getContries();
-        }
-
-        public int getLanguageSize() {
-            return mLanguages.size();
-        }
-
-        public int getCountriesSize(int pos) {
-            return mLanguages.get(pos).getCountriesSize();
-        }
-
-        public static class Language {
-            private Long id;
-            private String mLanguage;
-            private ArrayList<Country> mCountries;
-
-            public Language(Long id, String mLanguage) {
-                this.id = id;
-                this.mLanguage = mLanguage;
-                mCountries = new ArrayList<>();
-            }
-
-            public Long getId() {
-                return id;
-            }
-
-            public String getLanguage() {
-                return mLanguage;
-            }
-
-            public void addCountry(Country country) {
-                mCountries.add(country);
-            }
-
-            public String[] getContries() {
-                String[] countries = new String[mCountries.size()];
-                for(int i = 0; i < mCountries.size(); i++) {
-                    countries[i] = mCountries.get(i).getCountry();
-                }
-                return countries;
-            }
-
-            public int getCountriesSize() {
-                return mCountries.size();
-            }
-        }
-
-        public static class Country {
-            private Long id;
-            private String mCountry;
-
-            public Country(Long id, String mCountry) {
-                this.id = id;
-                this.mCountry = mCountry;
-            }
-
-            public Long getId() {
-                return id;
-            }
-
-            public String getCountry() {
-                return mCountry;
-            }
-        }
     }
 }

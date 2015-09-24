@@ -35,7 +35,7 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
 
         String[] values = new String[] { "English(USA)"}; // TO DO get it from real list
         mAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, R.id.language_empty, values);
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         mListView = (AbsListView) findViewById(R.id.language_list);
         mListView.setAdapter(mAdapter);
