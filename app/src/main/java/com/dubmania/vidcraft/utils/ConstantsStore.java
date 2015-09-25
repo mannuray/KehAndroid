@@ -47,6 +47,8 @@ public class ConstantsStore {
     public final static String URL_VERIFY_USER =        ACCOUNT + "verify/user";
     public final static String URL_VERIFY_EMAIL =       ACCOUNT + "verify/email";
 
+    public final static String URL_GET_LANGUAGES = "language";
+
 
     public final static String URL_ADD_VIDEO =          VIDEO + "add";
     public final static String URL_DOWNLOAD_VIDEO =     VIDEO + "download";
@@ -99,9 +101,10 @@ public class ConstantsStore {
     public final static String PARAM_RESULT = "result";
     public final static String PARAM_PAGE = "page";
 
+    public final static String PARAM_LANGUAGE = "language";
     public final static String PARAM_LANGUAGE_ID = "id";
     public final static String PARAM_LANGUAGE_TEXT = "language";
-    public final static String PARAM_LANGUAGE_LIST = "language_list";
+    public final static String PARAM_LANGUAGE_LIST = "list"; // change this later
     public final static String PARAM_COUNTRY_ID = "id";
     public final static String PARAM_COUNTRY_TEXT = "country";
     public final static String PARAM_COUNTRY_LIST = "country_list";

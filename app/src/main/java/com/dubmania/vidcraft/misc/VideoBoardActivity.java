@@ -81,7 +81,7 @@ public class VideoBoardActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_video_board, menu);
+        getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
 
@@ -90,21 +90,21 @@ public class VideoBoardActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
-        */
 
         return super.onOptionsItemSelected(item);
     }
 
     private void populateData() {
 
-        new VideoListDownloader().downloadBoardVideo(mBoardId, new SessionManager(this).getUser(), new VideoListDownloaderCallback() {
+        new VideoListDownloader().downloadBoardVideo(mBoardId, new SessionManager(this).getId(), new VideoListDownloaderCallback() {
+
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 mVideoItemList.addAll(videos);

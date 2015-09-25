@@ -2,10 +2,12 @@ package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,14 @@ public class DiscoverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mItemList = savedInstanceState.getParcelableArrayList("discover_list");
+            mVisibleFirstTime = false;
+        }
+        else {
+            mItemList = new ArrayList<>();
+        }
+
     }
 
     @Override
@@ -57,14 +67,6 @@ public class DiscoverFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
 
-        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            mItemList = savedInstanceState.getParcelableArrayList("array_list");
-            mVisibleFirstTime = false;
-        }
-        else {
-            mItemList = new ArrayList<>();
-        }
-
         mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
         //mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
@@ -76,11 +78,9 @@ public class DiscoverFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Bundle b = new Bundle();
-        b.putParcelableArrayList("array_list", new ArrayList<ListItem>());
-        onSaveInstanceState(b);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("discover_list", mItemList);
     }
 
     @Override
@@ -106,8 +106,10 @@ public class DiscoverFragment extends Fragment {
 
     @Subscribe
     public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
-        mItemList.addAll(event.mItemList);
-        mAdapter.notifyDataSetChanged();
-        spinner.setVisibility(View.GONE);
+        if(mItemList != null) {
+            mItemList.addAll(event.mItemList);
+            mAdapter.notifyDataSetChanged();
+            spinner.setVisibility(View.GONE);
+        }
     }
 }

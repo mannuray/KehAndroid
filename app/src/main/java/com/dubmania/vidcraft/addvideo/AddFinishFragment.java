@@ -13,11 +13,12 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
-import com.dubmania.vidcraft.utils.LanguageStore;
+import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -25,7 +26,7 @@ public class AddFinishFragment extends Fragment {
     private EditText mVideoTitle;
     private String[] mLanguages;
     private String mLanguage;
-    RealmResults<LanguageStore> mRealmResults;
+    RealmResults<AvailableLanguage> mRealmResults;
 
     public AddFinishFragment() {
         // Required empty public constructor
@@ -42,43 +43,39 @@ public class AddFinishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_finish, container, false);
-        ArrayList<String> languages = new ArrayList<>();
 
-/*        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
-        mRealmResults = realm.allObjects(LanguageStore.class).where().equalTo("supported", true).findAll();
-        for(LanguageStore language: mRealmResults) {
-            languages.add(language.getLanguage());
-        } */
-        // this is test data till we dant have data for langages
-        languages.add("Hindi");
-        languages.add("Nepali");
-        languages.add("Bangladeshi");
-        languages.add("Sri Lankan");
+        ArrayList<String> availableLanguages = new ArrayList<>();
+        Realm realm = Realm.getInstance(getActivity().getApplicationContext());
+        mRealmResults = realm.allObjects(AvailableLanguage.class).where().findAll();
+        for(AvailableLanguage language: mRealmResults) {
+            availableLanguages.add(language.getLanguage());
+        }
+
+        mLanguages = availableLanguages.toArray(new String[mRealmResults.size()]);
 
 
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
         NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
         mLanguagePicker.setMinValue(0);
-        mLanguagePicker.setMaxValue(3); // mRealmResults.size());
-        mLanguages = languages.toArray(new String[4]); //mRealmResults.size()]);
+        mLanguagePicker.setMaxValue(mRealmResults.size() - 1);
         mLanguagePicker.setDisplayedValues(mLanguages);
-        mLanguagePicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+        mLanguagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onScrollStateChange(NumberPicker view, int scrollState) {
-                mLanguage = mLanguages[scrollState];
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mLanguage = mLanguages[newVal];
             }
         });
 
         view.findViewById(R.id.addVideo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Long id = 6554664749236224L;
-               /* for(LanguageStore language: mRealmResults) {
+               long id = 0;
+               for(AvailableLanguage language: mRealmResults) {
                     if(language.getLanguage().equals(mLanguage)){
-                        id = language.getId();
+                        id = language.getLanguageId();
                         break;
                     }
-                }*/
+                }
                 BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), id));
             }
         });
