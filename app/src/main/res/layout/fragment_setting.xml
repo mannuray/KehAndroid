@@ -30,7 +30,7 @@
             android:background="@android:color/holo_blue_dark" />
 
         <RelativeLayout
-            android:id="@+id/login_signup_layout"
+            android:id="@+id/login_signup"
             android:layout_width="match_parent"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
@@ -38,7 +38,7 @@
             android:layout_height="40dp">
 
         <TextView
-            android:id="@+id/login_signup"
+            android:id="@+id/login_signup1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
@@ -202,6 +202,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:visibility="gone"
             android:background="@drawable/layout_selector"
             android:layout_height="40dp">
         <TextView
@@ -219,6 +220,7 @@
             android:layout_height="1dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:visibility="gone"
             android:layout_marginTop="2dp"
             android:background="@android:color/darker_gray" />
 
@@ -331,7 +333,13 @@
         </RelativeLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/logout_layout"
+            android:layout_width="match_parent"
+            android:layout_marginRight="12dp"
+            android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/account_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -341,25 +349,24 @@
             android:textSize="12sp"/>
 
         <View
+            android:id="@+id/single_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_below="@+id/account_action"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="2dp"
             android:background="@android:color/holo_blue_dark" />
 
-        <RelativeLayout
-            android:id="@+id/logout_layout"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/layout_selector"
-            android:layout_height="40dp">
+
         <TextView
             android:id="@+id/logout_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/single_line"
+            android:background="@drawable/layout_selector"
             android:layout_marginTop="15dp"
+            android:layout_marginLeft="12dp"
             android:text="Logout"
             android:textColor="@android:color/secondary_text_dark"
             android:textSize="12sp"/>

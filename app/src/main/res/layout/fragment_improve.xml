@@ -5,78 +5,119 @@
     android:orientation="vertical"
     tools:context="com.dubmania.vidcraft.report.ImproveFragment">
 
+
     <CheckBox
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-        android:text="New CheckBox"
+        android:text="The title doesn't fit the sound"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/checkBoxTitle" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="What is being said in the sound?"
         android:id="@+id/editText" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
         android:background="@android:color/darker_gray" />
 
     <CheckBox
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-        android:text="New CheckBox"
+        android:text="The title doesn't fit the sound"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/checkBoxNoise" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray" />
 
     <CheckBox
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-        android:text="New CheckBox"
+        android:text="The title doesn't fit the sound"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/checkBoxCrop" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray" />
 
     <CheckBox
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-        android:text="New CheckBox"
+        android:text="The title doesn't fit the sound"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/checkBoxLanguage" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
-        android:layout_gravity="center_horizontal" />
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
+
+
+
+    <RelativeLayout
         android:id="@+id/send"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/wallet_highlighted_text_holo_light">
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Send"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

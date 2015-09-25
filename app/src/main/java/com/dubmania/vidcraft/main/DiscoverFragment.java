@@ -80,7 +80,6 @@ public class DiscoverFragment extends Fragment {
         super.onPause();
         Bundle b = new Bundle();
         b.putParcelableArrayList("array_list", new ArrayList<ListItem>());
-
         onSaveInstanceState(b);
     }
 

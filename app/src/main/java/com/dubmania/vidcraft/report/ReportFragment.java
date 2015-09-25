@@ -3,6 +3,7 @@ package com.dubmania.vidcraft.report;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class ReportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Report");
     }
 
     @Override

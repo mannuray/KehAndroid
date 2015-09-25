@@ -3,10 +3,12 @@ package com.dubmania.vidcraft.report;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -41,6 +43,7 @@ public class ImproveFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Improve");
     }
 
     @Override
@@ -61,9 +64,14 @@ public class ImproveFragment extends Fragment {
             }
         });
 
-        mNoise = (CheckBox) view.findViewById(R.id.checkBoxTitle);
+        mNoise = (CheckBox) view.findViewById(R.id.checkBoxNoise);
         mCrop = (CheckBox) view.findViewById(R.id.checkBoxCrop);
         mLanguage = (CheckBox) view.findViewById(R.id.checkBoxLanguage);
+        mLanguageSelector = (Spinner) view.findViewById(R.id.spinner); // write code to populate spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.improve, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLanguageSelector.setAdapter(adapter);
+
         mLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -73,8 +81,8 @@ public class ImproveFragment extends Fragment {
                     mLanguageSelector.setVisibility(View.GONE);
             }
         });
-        mLanguageSelector = (Spinner) view.findViewById(R.id.spinner); // write code to populate spinner
-        mLanguageSelector.setVisibility(View.GONE);
+
+       // mLanguageSelector.setVisibility(View.GONE);
 
         view.findViewById(R.id.send).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -201,7 +201,7 @@ public class CreateDubActivity extends AppCompatActivity {
         // prepare the audio file
         try {
             mPreparer.prepareVideo(event.getAudioFile(), mVideoFile, mOutputFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "unable to prepare video", Toast.LENGTH_LONG).show();
             return;

@@ -18,11 +18,10 @@ public class VideoBoardViewHolderFactory {
         videoBoardHolder.mVideoCardName.setText(item.getName());
         videoBoardHolder.mVideoCardUserName.setText("Uploaded by " + item.getUser());
 
-        videoBoardHolder.mCard.setOnTouchListener(new View.OnTouchListener() {
+        videoBoardHolder.mCard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 BusProvider.getInstance().post(new VideoBoardClickedEvent(item.getId(), item.getName(), item.getUser()));
-                return false;
             }
         });
 

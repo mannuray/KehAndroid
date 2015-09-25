@@ -166,6 +166,16 @@
     <string name="title_activity_report">ReportActivity</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
     <string name="title_activity_home">HomeActivity</string>
+    
+    
+    <!-- Improve Fragment-->
+    <string-array name="improve">
+        <item>Select your language</item>
+        <item>Hindi</item>
+        <item>English</item>
+
+
+    </string-array>
 
 
 </resources>
