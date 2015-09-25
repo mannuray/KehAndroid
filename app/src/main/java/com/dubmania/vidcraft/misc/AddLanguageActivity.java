@@ -16,12 +16,19 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.InstalledLanguage;
+import com.dubmania.vidcraft.utils.SavedDubsData;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.Date;
+
+import io.realm.Realm;
 
 import static com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader.*;
 
@@ -55,8 +62,17 @@ public class AddLanguageActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO decide what to do based on country and language
-                // add to data store and finish
+                Realm realm = Realm.getInstance(getApplicationContext());
+                realm.beginTransaction();
+                InstalledLanguage installedLanguage = realm.createObject( InstalledLanguage.class );
+                LanguageAndCountryDataHandler.Language lan = mLanguageData.getLanguage(mLanguagePosition);
+                installedLanguage.setLanguageId(lan.getId());
+                installedLanguage.setLanguage(lan.getLanguage());
+                LanguageAndCountryDataHandler.Country con = lan.getCountry(mCountryPosition);
+                installedLanguage.setCountryId(con.getId());
+                installedLanguage.setCountry(con.getCountry());
+                realm.commitTransaction();
+                finish();
             }
         });
 

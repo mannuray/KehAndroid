@@ -1,7 +1,9 @@
 package com.dubmania.vidcraft.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
@@ -32,6 +35,7 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEv
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardDownloaderCallback;
@@ -45,7 +49,9 @@ import com.dubmania.vidcraft.misc.AddLanguageActivity;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
+import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.InstalledLanguage;
 import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.UtilsDevice;
@@ -55,6 +61,8 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -66,8 +74,42 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         //Realm.deleteRealmFile(getApplicationContext());
+
+        final SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        boolean dataBaseInitialized = sharedPreferences
+                .getBoolean("dataBaseInitialized", false);
+
+        Log.i("realm", " i is " + dataBaseInitialized);
+        if(!dataBaseInitialized) {
+            new LanguageListDownloader().downloadLanguage(new LanguageListDownloader.LanguageListDownloadCallback() {
+                @Override
+                public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
+                    ArrayList<LanguageAndCountryDataHandler.Language> languages = mData.getLanguagesArray();
+                    Realm realm = Realm.getInstance(getApplicationContext());
+                    realm.beginTransaction();
+
+                    for(int i = 0; i < languages.size(); i++) {
+                        Log.i("realm", " i is " + i);
+                        AvailableLanguage availableLanguage = realm.createObject( AvailableLanguage.class );
+                        LanguageAndCountryDataHandler.Language lan = languages.get(i);
+                        availableLanguage.setLanguageId(lan.getId());
+                        availableLanguage.setLanguage(lan.getLanguage());
+                    }
+                    realm.commitTransaction();
+                    sharedPreferences.edit()
+                            .putBoolean("dataBaseInitialized", true).commit();
+                }
+
+                @Override
+                public void onLanguageListDownloadFailure() {
+
+                }
+            });
+        }
+
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
 
@@ -107,8 +149,6 @@ public class HomeActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, new PagerFragment())
                 .commit();
-        /*if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle("VidCraft");*/
     }
 
     @Override public void onResume() {
@@ -152,8 +192,6 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .addToBackStack(title)
                 .commit();
-        /*if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle(title);*/
         mDrawerLayout.closeDrawers();
     }
 

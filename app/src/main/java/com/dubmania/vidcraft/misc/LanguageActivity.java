@@ -1,7 +1,9 @@
 package com.dubmania.vidcraft.misc;
 
 import android.content.Intent;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,7 +14,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
+import com.dubmania.vidcraft.Adapters.MyVideoListItem;
 import com.dubmania.vidcraft.R;
+import com.dubmania.vidcraft.utils.InstalledLanguage;
+import com.dubmania.vidcraft.utils.SavedDubsData;
+
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class LanguageActivity extends AppCompatActivity implements AbsListView.OnItemClickListener  {
 
@@ -33,7 +43,15 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String[] values = new String[] { "English(USA)"}; // TO DO get it from real list
+        ArrayList<String> installedLanguages = new ArrayList<>();
+        Realm realm = Realm.getInstance(getApplicationContext());
+        RealmResults<InstalledLanguage> languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+        for(InstalledLanguage language: languages) {
+            installedLanguages.add(language.getLanguage());
+        }
+
+        String[] values = installedLanguages.toArray(new String[languages.size()]);
+
         mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
@@ -75,6 +93,6 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        // delete the language from realm database
     }
 }

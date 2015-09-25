@@ -21,8 +21,16 @@ public class LanguageAndCountryDataHandler {
         return languages;
     }
 
+    public ArrayList<Language> getLanguagesArray() {
+        return mLanguages;
+    }
+
     public String[] getCountries(int pos) {
         return mLanguages.get(pos).getCountries();
+    }
+
+    public Language getLanguage(int position) {
+        return mLanguages.get(position);
     }
 
     public int getLanguageSize() {
@@ -50,6 +58,10 @@ public class LanguageAndCountryDataHandler {
 
         public String getLanguage() {
             return mLanguage;
+        }
+
+        public Country getCountry(int position) {
+            return mCountries.get(position);
         }
 
         public void addCountry(Country country) {
