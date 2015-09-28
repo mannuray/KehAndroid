@@ -31,7 +31,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     public static final Integer DEFAULT_MINIMUM = 0;
     public static final Integer DEFAULT_MAXIMUM = 100;
     public static final int HEIGHT_IN_DP = 30;
-    private static final int INITIAL_PADDING_IN_DP = 8;
+    private static final int INITIAL_PADDING_IN_DP = 0;
     private final int LINE_HEIGHT_IN_DP = 7;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_normal);

@@ -12,37 +12,54 @@
         android:layout_width="match_parent"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="pick a language to add" />
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="Select your languages and country for localized sounds" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:layout_gravity="center_horizontal">
 
         <NumberPicker
             android:id="@+id/language_picker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="30dp" />
 
         <NumberPicker
             android:id="@+id/country_picker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="30dp" />
 
     </LinearLayout>
 
-    <Button
+    <RelativeLayout
         android:id="@+id/add_language"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Now"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/wallet_highlighted_text_holo_light">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start now"
+            android:textSize="22sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
 
 
 

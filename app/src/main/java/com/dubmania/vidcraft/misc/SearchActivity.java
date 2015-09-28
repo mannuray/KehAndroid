@@ -49,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setCustomView(R.layout.search_layout);
         actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         mSearch = (EditText) actionBar.getCustomView().findViewById(
                 R.id.searchfield);

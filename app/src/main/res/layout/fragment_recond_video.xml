@@ -1,24 +1,56 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dubmania.vidcraft.addvideo.RecordVideoFragment">
+    android:orientation="vertical">
 
-    <SurfaceView
-        android:id="@+id/surface_camera"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/buttonstart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/surface_camera"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/before_record"
-         />
+        <RelativeLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-</FrameLayout>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/buttonstart"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/before_record" />
+
+            <ImageView
+                android:id="@+id/switch_camera"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="42dp"
+                android:src="@drawable/switch_camera" />
+
+            <ImageView
+                android:id="@+id/auto_flash"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/switch_camera"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="44dp"
+                android:src="@drawable/auto_flash"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

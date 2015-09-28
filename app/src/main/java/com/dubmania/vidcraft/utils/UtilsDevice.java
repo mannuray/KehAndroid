@@ -1,7 +1,10 @@
 package com.dubmania.vidcraft.utils;
 
 import android.content.Context;
+import android.media.MediaRecorder;
 import android.util.DisplayMetrics;
+
+import com.dubmania.vidcraft.addvideo.RecordVideoFragment;
 
 /**
  * This utility class is for device related stuff.
@@ -23,4 +26,6 @@ public class UtilsDevice
 
         return metrics.widthPixels;
     }
+
+
 }

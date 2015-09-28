@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_create_dub"
-        android:icon="@drawable/ic_add_lang"
+        android:icon="@drawable/ic_menu_forward"
         android:title="@string/action_add_language"
         app:showAsAction="always"/>
 

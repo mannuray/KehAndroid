@@ -5,22 +5,26 @@
 
     <VideoView
         android:id="@+id/videoView"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_margin="5dp"
         android:layout_centerHorizontal="true"/>
 
     <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignTop="@+id/videoView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="88dp" />
 
     <com.dubmania.vidcraft.utils.media.CreateDubMediaControl
         android:id="@+id/mediaControl"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
         android:layout_below="@+id/videoView"/>
+
+
 </RelativeLayout>

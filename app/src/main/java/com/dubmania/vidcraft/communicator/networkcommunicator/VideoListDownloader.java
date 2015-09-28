@@ -74,13 +74,13 @@ public class VideoListDownloader {
 
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
-            Log.d("json error", errorResponse.toString());
+           // Log.d("json error", errorResponse.toString());
             mCallback.onVideosDownloadFailure();
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
-            Log.d("json error", response);
+            //Log.d("json error", response);
             mCallback.onVideosDownloadFailure();
         }
     }

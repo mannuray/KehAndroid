@@ -26,12 +26,12 @@ import com.dubmania.vidcraft.utils.SessionManager;
 public class SettingFragment extends Fragment {
 
     private View mLoginInfo;
-    private TextView mLogin;
+    private View mLogin;
     private TextView mUsername;
     private TextView mEmail;
     private TextView mLogout;
     private TextView mPushStatus;
-    private RelativeLayout login_signup_layout;
+    //private RelativeLayout login_signup_layout;
     private RelativeLayout change_language_layout;
     private RelativeLayout support_center_layout;
     private RelativeLayout library_weuse_layout;
@@ -39,6 +39,7 @@ public class SettingFragment extends Fragment {
     private RelativeLayout privacy_policy_layout;
     private RelativeLayout push_notification_layout;
     private RelativeLayout daily_layout;
+    RelativeLayout lagout_layout;
 
 
     @Override
@@ -52,14 +53,15 @@ public class SettingFragment extends Fragment {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
         View rootView =  inflater.inflate(R.layout.fragment_setting, container, false);
-        mLogin = (TextView) rootView.findViewById(R.id.login_signup);
-        login_signup_layout=(RelativeLayout)rootView.findViewById(R.id.login_signup_layout);
+        mLogin =  (View)rootView.findViewById(R.id.login_signup);
+        //login_signup_layout=(RelativeLayout)rootView.findViewById(R.id.login_signup_layout);
         change_language_layout=(RelativeLayout)rootView.findViewById(R.id.change_language_layout);
         support_center_layout=(RelativeLayout)rootView.findViewById(R.id.support_center_layout);
         library_weuse_layout=(RelativeLayout)rootView.findViewById(R.id.library_weuse_layout);
         terms_ofuse_layout=(RelativeLayout)rootView.findViewById(R.id.terms_ofuse_layout);
         privacy_policy_layout=(RelativeLayout)rootView.findViewById(R.id.privacy_policy_layout);
         push_notification_layout=(RelativeLayout)rootView.findViewById(R.id.push_notification_layout);
+        lagout_layout=(RelativeLayout)rootView.findViewById(R.id.logout_layout);
         daily_layout=(RelativeLayout)rootView.findViewById(R.id.daily_layout);
 
 
@@ -69,7 +71,7 @@ public class SettingFragment extends Fragment {
         mPushStatus = (TextView) rootView.findViewById(R.id.settingPushNotification);
         mLogout = (TextView) rootView.findViewById(R.id.logout_text);
 
-        login_signup_layout.setOnClickListener(new View.OnClickListener() {
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SignupAndLoginActivity.class);
@@ -100,10 +102,10 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        support_center_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        library_weuse_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        terms_ofuse_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
-        privacy_policy_layout.setOnClickListener(new OnSettingClickListner("http://www.google.com"));
+        support_center_layout.setOnClickListener(new OnSettingClickListener("http://www.google.com"));
+        library_weuse_layout.setOnClickListener(new OnSettingClickListener("http://www.google.com"));
+        terms_ofuse_layout.setOnClickListener(new OnSettingClickListener("http://www.google.com"));
+        privacy_policy_layout.setOnClickListener(new OnSettingClickListener("http://www.google.com"));
         push_notification_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,21 +149,22 @@ public class SettingFragment extends Fragment {
             mUsername.setText(manager.getUser());
             mEmail.setText(manager.getUserEmail());
 
-            login_signup_layout.setVisibility(View.GONE);
+            mLogin.setVisibility(View.GONE);
             mLoginInfo.setVisibility(View.VISIBLE);
-            mLogout.setVisibility(View.VISIBLE);
+            //mLogout.setVisibility(View.VISIBLE);
+            lagout_layout.setVisibility(View.VISIBLE);
         }
         else {
             mLogin.setVisibility(View.VISIBLE);
             mLoginInfo.setVisibility(View.GONE);
-            mLogout.setVisibility(View.GONE);
+            lagout_layout.setVisibility(View.GONE);
         }
     }
 
-    private class OnSettingClickListner implements View.OnClickListener {
+    private class OnSettingClickListener implements View.OnClickListener {
         private String uri;
 
-        private OnSettingClickListner(String uri) {
+        private OnSettingClickListener(String uri) {
             this.uri = uri;
         }
 
