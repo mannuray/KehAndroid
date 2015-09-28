@@ -129,7 +129,7 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
-        new VideoFavoriteMarker().markVavrioute(event.getId(), event.ismFavrioute());
+        new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
     }
 
     @Subscribe

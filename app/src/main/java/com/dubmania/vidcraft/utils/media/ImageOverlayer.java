@@ -50,11 +50,6 @@ public class ImageOverlayer {
     private int overlayPositionX;
     private int overlayPositionY;
 
-    /** test entry point
-     public void testExtractMpegFrames() throws Throwable {
-     ExtractMpegFramesWrapper.runTest(this);
-     } dont't need this now */
-
     public ImageOverlayer(File cacheDir, String inputFile) {
         mCacheDir = cacheDir;
         mInputFile = inputFile;
@@ -433,7 +428,7 @@ public class ImageOverlayer {
         int mWidth;
         int mHeight;
 
-        private Object mFrameSyncObject = new Object();     // guards mFrameAvailable
+        private final Object mFrameSyncObject = new Object();     // guards mFrameAvailable
         private boolean mFrameAvailable;
 
         private ByteBuffer mPixelBuf;                       // used by saveFrame()
@@ -944,12 +939,12 @@ public class ImageOverlayer {
         }
     }
 
-    public static interface Callback {
+    public interface Callback {
         //public void onProgressUpdated(int done, int total);
 
-        public void onConversionCompleted(String h264Track, int fps);
+        void onConversionCompleted(String h264Track, int fps);
 
-        public void onConversionFailed(String error);
+        void onConversionFailed(String error);
 
         //public void onReady();
     }

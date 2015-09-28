@@ -45,13 +45,11 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloade
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
-import com.dubmania.vidcraft.misc.AddLanguageActivity;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
 import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.dubmania.vidcraft.utils.ConstantsStore;
-import com.dubmania.vidcraft.utils.InstalledLanguage;
 import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.UtilsDevice;
@@ -316,7 +314,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
-        new VideoFavoriteMarker().markVavrioute(event.getId(), event.ismFavrioute());
+        new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
     }
 
     @Subscribe

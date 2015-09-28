@@ -52,7 +52,7 @@ public class ConstantsStore {
 
     public final static String URL_ADD_VIDEO =          VIDEO + "add";
     public final static String URL_DOWNLOAD_VIDEO =     VIDEO + "download";
-    public final static String URL_MARK_FAVORIT =       VIDEO + "favorite";
+    public final static String URL_MARK_FAVORIT =       VIDEO + "favorite/mark";
     public final static String URL_GET_TAGS =           VIDEO + "tags";
 
     public final static String URL_GET_BOARDS =         BOARD + "get";
