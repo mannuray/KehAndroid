@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
@@ -58,7 +59,7 @@ public class AddLanguageActivity extends AppCompatActivity {
         mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
 
-        Button start = (Button) findViewById(R.id.add_language);
+        RelativeLayout start = (RelativeLayout) findViewById(R.id.add_language);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

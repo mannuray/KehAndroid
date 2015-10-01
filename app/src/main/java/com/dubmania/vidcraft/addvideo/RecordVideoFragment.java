@@ -164,7 +164,6 @@ public class RecordVideoFragment extends Fragment  {
 
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setCamera(mCamera);
-
         mediaRecorder.setPreviewDisplay(cameraPreview.getHolder().getSurface());
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);

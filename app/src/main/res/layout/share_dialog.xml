@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/share_dub_title"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/wallet_highlighted_text_holo_light"
+        android:textSize="14sp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/wallet_highlighted_text_holo_light">
+    </View>
+
+    <TextView
+        android:id="@+id/share_messanger"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Messanger"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:clickable="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5E5E5">
+    </View>
+    <TextView
+        android:id="@+id/share_whatsapp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Whatsapp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:clickable="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5E5E5">
+    </View>
+    <TextView
+        android:id="@+id/share_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Gallery"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5E5E5">
+    </View>
+
+    <TextView
+        android:id="@+id/no_thanks"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="No thanks"/>
+</LinearLayout>
