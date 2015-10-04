@@ -53,7 +53,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_create_dub"
             android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.dubmania.vidcraft.signupandlogin.SignupAndLoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -112,8 +112,21 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/title_activity_create_dub">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="http"
+                    android:host="www.vidcraft.com"
+                    android:pathPrefix="/goto" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "example://gizmos”
+                <data android:scheme="example"
+                      android:host="gizmos" />
+                -->
             </intent-filter>
         </activity>
         <activity

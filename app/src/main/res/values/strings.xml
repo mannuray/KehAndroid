@@ -58,6 +58,33 @@
         <item>@drawable/board_icon_24</item>
     </array>
 
+    <array name="video_board_icon_colors">
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+        <item>#ff000000</item>
+    </array>
+
     <array name="pager_titles">
         <item>Discover</item>
         <item>Trending</item>

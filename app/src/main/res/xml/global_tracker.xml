@@ -1,5 +1,0 @@
-<!-- Google Analytics Version v4 needs this value for easy tracking -->
-<meta-data
-    android:name="com.google.android.gms.analytics.globalConfigResource"
-    android:resource="@xml/global_tracker"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
