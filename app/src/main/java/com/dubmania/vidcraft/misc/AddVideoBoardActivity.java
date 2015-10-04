@@ -26,8 +26,7 @@ import java.util.ArrayList;
 public class AddVideoBoardActivity extends AppCompatActivity {
     Toolbar mToolbar;
     private EditText mBoardName;
-    private View mAdd;
-    private int mIconId;
+    private int mIconId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +65,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
         mBoardIcons.recycle();
 
         mBoardIcon.setAdapter(new ImageAdapter(getApplicationContext(), mThumbIds));
+        mBoardIcon.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
         mBoardIcon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -73,7 +73,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             }
         });
 
-        mAdd = findViewById(R.id.addVideoboard);
+        View mAdd = findViewById(R.id.addVideoboard);
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

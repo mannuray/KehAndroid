@@ -50,14 +50,17 @@ public class ImageOverlayer {
     private int overlayPositionX;
     private int overlayPositionY;
 
+    private CoordinateCalculator mCalculator;
+
     public ImageOverlayer(File cacheDir, String inputFile) {
         mCacheDir = cacheDir;
         mInputFile = inputFile;
     }
 
-    public void overLay(Bitmap bitmap, Callback callback) {
-        mCallback = callback;
+    public void overLay(Bitmap bitmap, CoordinateCalculator calculator, Callback callback) {
         mWaterMark = bitmap;
+        mCalculator = calculator;
+        mCallback = callback;
         try {
             ExtractMpegFramesWrapper.runTest(this);
         } catch (Throwable throwable) {
@@ -135,6 +138,10 @@ public class ImageOverlayer {
             MediaFormat format = extractor.getTrackFormat(trackIndex);
             saveWidth = format.getInteger(MediaFormat.KEY_WIDTH);
             saveHeight = format.getInteger(MediaFormat.KEY_HEIGHT);
+
+            Coordinate coordinate = mCalculator.calculatePosition(saveWidth, saveHeight, mWaterMark);
+            overlayPositionX = coordinate.getX();
+            overlayPositionY = coordinate.getY();
 
             if (VERBOSE) {
                 Log.d(TAG, "Video size is " + format.getInteger(MediaFormat.KEY_WIDTH) + "x" +
@@ -275,7 +282,7 @@ public class ImageOverlayer {
 
                         Bitmap mutableBitmap = outputSurface.getFrame();
                         Canvas comboImage = new Canvas(mutableBitmap);
-                        comboImage.drawBitmap(mWaterMark, 0f, 0f, null);
+                        comboImage.drawBitmap(mWaterMark, overlayPositionX, overlayPositionY, null);
                         byte[] input = getNV21(saveWidth, saveHeight, mutableBitmap);//
 
                         int encoderInputBufferIndex = encoder.dequeueInputBuffer(-1);
@@ -947,5 +954,28 @@ public class ImageOverlayer {
         void onConversionFailed(String error);
 
         //public void onReady();
+    }
+
+    public interface CoordinateCalculator {
+        Coordinate calculatePosition(int mWith, int mHeight, Bitmap mBitmap);
+
+    }
+
+    public static class Coordinate {
+        private int mX;
+        private int mY;
+
+        public Coordinate(int mX, int mY) {
+            this.mX = mX;
+            this.mY = mY;
+        }
+
+        public int getX() {
+            return mX;
+        }
+
+        public int getY() {
+            return mY;
+        }
     }
 }

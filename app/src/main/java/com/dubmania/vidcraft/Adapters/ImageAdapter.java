@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import com.dubmania.vidcraft.R;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
@@ -37,14 +38,12 @@ public class ImageAdapter extends BaseAdapter {
 
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            /*imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);*/
         }
         else
         {
             imageView = (ImageView) convertView;
         }
+        imageView.setBackground(mContext.getResources().getDrawable(R.drawable.add_video_board_selector));
         imageView.setImageResource(mThumbIds.get(position));
         return imageView;
     }

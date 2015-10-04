@@ -32,6 +32,7 @@ import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.media.ImageOverlayer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
 import com.dubmania.vidcraft.utils.media.VideoTrimmer;
+import com.dubmania.vidcraft.utils.media.WaterMarkPositionCalculator;
 import com.squareup.otto.Subscribe;
 
 import java.io.BufferedOutputStream;
@@ -218,7 +219,8 @@ public class AddVideoActivity extends AppCompatActivity {
             new Thread() {
                 @Override
                 public void run() {
-                    new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath()).overLay(mWaterMark, new ImageOverlayer.Callback() {
+                    new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath()).overLay(mWaterMark, new WaterMarkPositionCalculator(),
+                    new ImageOverlayer.Callback() {
                         @Override
                         public void onConversionCompleted(String h264Track, int fps) {
                             try {
