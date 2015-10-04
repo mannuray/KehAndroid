@@ -56,15 +56,22 @@ public class VideoBoardActivity extends AppCompatActivity {
         String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME); // set it in action bar
         int icon = intent.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0); // set it in action bar
 
+        getSupportActionBar().setTitle(mBoardName);
+        mToolbar.setSubtitle("Uploaded by " + mUserName);
+        mToolbar.setLogo(R.drawable.abc_ratingbar_full_material);
+
+
+
         spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
         spinner.setVisibility(View.VISIBLE);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.boardRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVideoItemList = new ArrayList<>();
+        populateData();
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
-        populateData();
+
     }
 
     @Override public void onResume() {

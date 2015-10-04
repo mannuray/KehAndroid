@@ -177,7 +177,7 @@ public class RecordVideoFragment extends Fragment  {
 
         mediaRecorder.setProfile(profile);
         mediaRecorder.setPreviewDisplay(cameraPreview.getHolder().getSurface());
-        CameraPreview.setMediaRecorderOrientation(getActivity(), mediaRecorder);
+        //CameraPreview.setMediaRecorderOrientation(getActivity(), mediaRecorder);
         video = getActivity().getApplicationContext().getCacheDir().getAbsolutePath() + "/" + MiscFunction.getRandomFileName("Record") + ".mp4";
         mediaRecorder.setOutputFile(video);
 
@@ -234,12 +234,14 @@ public class RecordVideoFragment extends Fragment  {
             cameraId = findBackFacingCamera();
             if (cameraId >= 0) {
                 mCamera = Camera.open(cameraId);
+                auto_flash.setVisibility(View.VISIBLE);
                 cameraPreview.refreshCamera(mCamera);
             }
         } else {
             cameraId = findFrontFacingCamera();
             if (cameraId >= 0) {
                 mCamera = Camera.open(cameraId);
+                auto_flash.setVisibility(View.GONE);
                 cameraPreview.refreshCamera(mCamera);
             }
         }
