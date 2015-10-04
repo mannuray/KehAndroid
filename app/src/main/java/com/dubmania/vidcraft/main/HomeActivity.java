@@ -324,6 +324,7 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_ID, event.getId());
         intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
         startActivity(intent);
     }
 

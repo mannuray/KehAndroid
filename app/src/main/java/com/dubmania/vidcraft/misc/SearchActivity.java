@@ -18,6 +18,7 @@ import com.dubmania.vidcraft.Adapters.VideoAndBoardAdapter;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
@@ -123,6 +124,16 @@ public class SearchActivity extends AppCompatActivity {
     public void onCreateDubEvent(CreateDubEvent event) {
         Intent intent = new Intent(this, CreateDubActivity.class);
         intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
+        startActivity(intent);
+    }
+
+    @Subscribe
+    public void onVideoBoardClickedEvent(VideoBoardClickedEvent event) {
+        Intent intent = new Intent(this, VideoBoardActivity.class);
+        intent.putExtra(ConstantsStore.INTENT_BOARD_ID, event.getId());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
+        intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
         startActivity(intent);
     }
 }
