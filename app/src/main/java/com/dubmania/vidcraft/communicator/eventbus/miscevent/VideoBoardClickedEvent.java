@@ -5,11 +5,13 @@ package com.dubmania.vidcraft.communicator.eventbus.miscevent;
  */
 public class VideoBoardClickedEvent {
     private Long mId;
+    private int mIcon;
     private String mBoardName;
     private String mBoardUsername;
 
-    public VideoBoardClickedEvent(Long mId, String mBoardName, String mBoardUsername) {
+    public VideoBoardClickedEvent(Long mId, int mIcon, String mBoardName, String mBoardUsername) {
         this.mId = mId;
+        this.mIcon = mIcon;
         this.mBoardName = mBoardName;
         this.mBoardUsername = mBoardUsername;
     }
@@ -24,5 +26,9 @@ public class VideoBoardClickedEvent {
 
     public String getBoardUsername() {
         return mBoardUsername;
+    }
+
+    public int getIcon() {
+        return mIcon;
     }
 }

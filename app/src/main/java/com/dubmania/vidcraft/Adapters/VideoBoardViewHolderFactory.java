@@ -1,7 +1,6 @@
 package com.dubmania.vidcraft.Adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
@@ -21,7 +20,7 @@ public class VideoBoardViewHolderFactory {
         videoBoardHolder.mCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BusProvider.getInstance().post(new VideoBoardClickedEvent(item.getId(), item.getName(), item.getUser()));
+                BusProvider.getInstance().post(new VideoBoardClickedEvent(item.getId(), item.getIcon(), item.getName(), item.getUser()));
             }
         });
 

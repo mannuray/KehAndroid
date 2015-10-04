@@ -56,6 +56,7 @@ public class VideoBoardActivity extends AppCompatActivity {
         mBoardId = intent.getLongExtra(ConstantsStore.INTENT_BOARD_ID, (long) 0);
         String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME); // set it in action bar
         String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME); // set it in action bar
+        int icon = intent.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0); // set it in action bar
 
         spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
         spinner.setVisibility(View.VISIBLE);
