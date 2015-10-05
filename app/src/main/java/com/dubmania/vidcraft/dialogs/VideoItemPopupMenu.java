@@ -62,7 +62,7 @@ public class VideoItemPopupMenu {
     }
 
     private void shareit() {
-        String shareBody = "www.vidcraft/goto/" + String.valueOf(mVideoId);
+        String shareBody = mTitle + " - http://www.kehbackend.appspot.com/goto/" + String.valueOf(mVideoId);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mTitle);

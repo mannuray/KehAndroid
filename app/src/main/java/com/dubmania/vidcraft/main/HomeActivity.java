@@ -50,6 +50,7 @@ import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
+import com.dubmania.vidcraft.utils.ActivityStarter;
 import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
@@ -155,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if ("com.dubmania.action.VIEW".equals(action)) {
             Log.i("ezp", "EXTRA: "+intent.getExtras().getString("id"));
+            ActivityStarter.createDub(this, new Long(intent.getExtras().getString("id")), " as of now" );
         }
     }
 
@@ -315,10 +317,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCreateDubEvent(CreateDubEvent event) {
-        Intent intent = new Intent(this, CreateDubActivity.class);
-        intent.putExtra(ConstantsStore.VIDEO_ID, event.getId());
-        intent.putExtra(ConstantsStore.INTENT_VIDEO_TITLE, event.getTitle());
-        startActivity(intent);
+        ActivityStarter.createDub(this, event.getId(), event.getTitle());
     }
 
     @Subscribe
