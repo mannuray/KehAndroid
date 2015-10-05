@@ -150,9 +150,12 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.container, new PagerFragment())
                 .commit();
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        if ("com.dubmania.action.VIEW".equals(action)) {
+            Log.i("ezp", "EXTRA: "+intent.getExtras().getString("id"));
+        }
     }
 
     @Override public void onResume() {
