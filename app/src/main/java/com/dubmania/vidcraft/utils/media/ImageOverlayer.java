@@ -194,7 +194,6 @@ public class ImageOverlayer {
             }
 
             if (encoder != null) {
-                encoder.stop();
                 encoder.release();
                 encoder = null;
             }

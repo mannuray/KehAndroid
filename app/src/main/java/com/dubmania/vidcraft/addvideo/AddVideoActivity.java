@@ -43,7 +43,6 @@ import java.util.ArrayList;
 public class AddVideoActivity extends AppCompatActivity {
 
     private VideoInfo mVideoInfo;
-    private Toolbar mToolbar;
     private Bitmap mWaterMark;
 
 
@@ -51,7 +50,7 @@ public class AddVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_video);
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
