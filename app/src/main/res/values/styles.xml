@@ -95,7 +95,7 @@
     </style>
 
     <!--  My Custom Toolbar Theme -->
-    <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+    <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:textSize">10sp</item>
 
     </style>

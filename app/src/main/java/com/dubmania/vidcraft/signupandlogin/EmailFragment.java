@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +88,11 @@ public class EmailFragment extends Fragment {
         already_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Fragment loginFragment = new LoginFragment();
+                transaction.replace(R.id.content,loginFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         return rootView;

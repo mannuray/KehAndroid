@@ -60,7 +60,7 @@ public class VideoBoardActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(mBoardName);
         mToolbar.setSubtitle("Uploaded by " + mUserName);
-        mToolbar.setLogo(R.drawable.abc_ratingbar_full_material);
+        mToolbar.setLogo(icon);
 
 
 
