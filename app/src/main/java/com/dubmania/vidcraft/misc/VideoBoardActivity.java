@@ -35,8 +35,6 @@ public class VideoBoardActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     private Long mBoardId;
-
-
     ProgressBar spinner;
 
     @Override

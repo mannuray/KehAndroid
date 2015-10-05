@@ -58,13 +58,21 @@ public class AddVideoBoardActivity extends AppCompatActivity {
 
         TypedArray mBoardIcons = getResources()
                 .obtainTypedArray(R.array.video_board_icons);
+
+        TypedArray mBoardIconsColors = getResources()
+                .obtainTypedArray(R.array.video_board_icon_colors);
+
         ArrayList<Integer> mThumbIds = new ArrayList<>();
+        ArrayList<String> mColors = new ArrayList<>();
+        // we will assume the size of boards array and colore array will be same
         for(int i = 0; i < mBoardIcons.length(); i++) {
             mThumbIds.add(mBoardIcons.getResourceId(i, -1));
+            mColors.add(mBoardIconsColors.getString(i));
         }
         mBoardIcons.recycle();
+        mBoardIconsColors.recycle();
 
-        mBoardIcon.setAdapter(new ImageAdapter(getApplicationContext(), mThumbIds));
+        mBoardIcon.setAdapter(new ImageAdapter(getApplicationContext(), mThumbIds, mColors));
         mBoardIcon.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
         mBoardIcon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

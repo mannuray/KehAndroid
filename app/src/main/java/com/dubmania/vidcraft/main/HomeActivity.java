@@ -2,6 +2,7 @@ package com.dubmania.vidcraft.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -81,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         boolean dataBaseInitialized = sharedPreferences
                 .getBoolean("dataBaseInitialized", false);
 
-        Log.i("realm", " i is " + dataBaseInitialized);
+        //Log.i("realm", " i is " + dataBaseInitialized);
         if(!dataBaseInitialized) {
             new LanguageListDownloader().downloadLanguage(new LanguageListDownloader.LanguageListDownloadCallback() {
                 @Override
@@ -91,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
                     realm.beginTransaction();
 
                     for(int i = 0; i < languages.size(); i++) {
-                        Log.i("realm", " i is " + i);
+                        //Log.i("realm", " i is " + i);
                         AvailableLanguage availableLanguage = realm.createObject( AvailableLanguage.class );
                         LanguageAndCountryDataHandler.Language lan = languages.get(i);
                         availableLanguage.setLanguageId(lan.getId());
@@ -148,6 +149,10 @@ public class HomeActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, new PagerFragment())
                 .commit();
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
     }
 
     @Override public void onResume() {
