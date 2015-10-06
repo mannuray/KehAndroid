@@ -117,6 +117,10 @@ public class AudioManager {
 
     }
 
+    public int getCurrentPos() {
+        return mRecordingPosition;
+    }
+
     public void play() {
         if(mState != State.pause)
             return;

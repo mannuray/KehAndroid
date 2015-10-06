@@ -203,6 +203,7 @@ public class CreateDubMediaControl extends LinearLayout {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.initial) {
                 mAudioManager.setPrevPos();
+                mMarkerBar.setSelectedMarker(mAudioManager.getCurrentPos());
             }
         }
     };
@@ -273,6 +274,7 @@ public class CreateDubMediaControl extends LinearLayout {
             mState = State.recording;
             videoPlay(true);
             try {
+                mMarkerBar.removeMarkersFrom(mAudioManager.getCurrentPos());
                 mAudioManager.record();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -303,6 +305,7 @@ public class CreateDubMediaControl extends LinearLayout {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.initial) {
                 mAudioManager.setNextPos();
+                mMarkerBar.setSelectedMarker(mAudioManager.getCurrentPos());
             }
         }
     };

@@ -35,6 +35,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     private final int LINE_HEIGHT_IN_DP = 7;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_normal);
+    private final Bitmap thumbImageSelected = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_pressed);
     private final float thumbWidth = thumbImage.getWidth();
     private final float thumbHalfWidth = 0.5f * thumbWidth;
     private final float thumbHalfHeight = 0.5f * thumbImage.getHeight();
@@ -181,6 +182,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
 
     public void addMarker(T marker) {
         mMarkers.add(valueToNormalized(marker));
+        selectedMarker = mMarkers.size() - 1;
         invalidate();
     }
 
@@ -305,9 +307,14 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         canvas.drawRect(mRect, paint);
 
         for(double marker: mMarkers) {
-            canvas.drawBitmap(thumbImage, normalizedToScreen(marker) - thumbHalfWidth,
-                    mTextOffset,
-                    paint);
+            if(marker ==  mMarkers.get(selectedMarker))
+                canvas.drawBitmap(thumbImageSelected, normalizedToScreen(marker) - thumbHalfWidth,
+                        mTextOffset,
+                        paint);
+            else
+                canvas.drawBitmap(thumbImage, normalizedToScreen(marker) - thumbHalfWidth,
+                        mTextOffset,
+                        paint);
         }
     }
 
