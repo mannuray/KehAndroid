@@ -113,7 +113,8 @@ public class VideoBoardActivity extends AppCompatActivity {
             new DeleteVideoBoard().deleteVideoBoard(mBoardId, new DeleteVideoBoard.DeleteVideoBoardCallback() {
                 @Override
                 public void onDeleteVideoBoardSuccess() {
-
+                    finish();
+                    // send event to decelare you have been deleted
                 }
 
                 @Override

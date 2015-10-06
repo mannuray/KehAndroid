@@ -256,6 +256,7 @@ public class CreateDubMediaControl extends LinearLayout {
                     mVideoManager.pause();
                     mAudioManager.pause(mVideoManager.getPos());
                     mMarkerBar.addMarker(mVideoManager.getPos());
+                    Log.i("Marker", "added marke in contol" + mMarkerBar.getNumberMarkers() + " " +  mAudioManager.getCurrentPos());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

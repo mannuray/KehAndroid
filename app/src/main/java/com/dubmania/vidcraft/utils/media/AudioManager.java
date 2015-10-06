@@ -59,7 +59,7 @@ public class AudioManager {
     }
 
     public void record() throws IOException {
-
+        /*
         if(mRecordingPosition < mAudioFlileList.size()) {
             // remove all previos records
             if(mRecordingPosition == 0) {
@@ -72,7 +72,11 @@ public class AudioManager {
                     mAudioFlileList.remove(i);
                 }
             }
+        }*/
+        for (int i = mAudioFlileList.size() - 1; i > mRecordingPosition; i--) {
+            mAudioFlileList.remove(i);
         }
+
         File audioFile = getRandomFileName();
         mAudioRecorder.startRecording(audioFile);
         mState = State.recording;
@@ -84,9 +88,9 @@ public class AudioManager {
             if(mAudioFlileList.size() <= 0 )
                 audio = new Audio(mAudioRecorder.stopRecording(), 0, pos);
             else
-                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition-1).getEndTime(), pos);
+                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition).getEndTime(), pos);
             mAudioFlileList.add(audio);
-            mRecordingPosition++;
+            mRecordingPosition = mAudioFlileList.size() - 1;
             isRecordingAvailable = true;
         }
         else if (mState == State.playing) {
@@ -106,14 +110,16 @@ public class AudioManager {
         if(mRecordingPosition < 0)
             return;
         mRecordingPosition--;
-        setPlayingPos(--mPlayingPosition);
+        mPlayingPosition = mRecordingPosition;
+        setPlayingPos(mPlayingPosition);
     }
 
     public void setNextPos() {
         if(mRecordingPosition >= mAudioFlileList.size())
             return;
         mRecordingPosition++;
-        setPlayingPos(++mPlayingPosition);
+        mPlayingPosition = mRecordingPosition;
+        setPlayingPos(mPlayingPosition);
 
     }
 
@@ -195,8 +201,8 @@ public class AudioManager {
     public long getCurrentTime() {
         if(mAudioFlileList.size() <= 0)
             return 0;
-        Log.i("Record Test", "mRecord position " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition - 1).getStartTime() + mAudioFlileList.get(mRecordingPosition - 1).getDuration());
-        return mAudioFlileList.get(mRecordingPosition - 1).getEndTime();
+        Log.i("Record Test", "mRecord position " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
+        return mAudioFlileList.get(mRecordingPosition).getEndTime();
     }
 
     private File getRandomFileName() throws IOException {

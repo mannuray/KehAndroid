@@ -182,6 +182,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
 
     public void addMarker(T marker) {
         mMarkers.add(valueToNormalized(marker));
+        Log.i("Marker", "marker added " + mMarkers.size());
         selectedMarker = mMarkers.size() - 1;
         invalidate();
     }
@@ -232,15 +233,12 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
      * @param value The Number value to set the maximum value to. Will be clamped to given absolute minimum/maximum range.
      */
     public void setCurrentProgressValue(T value) {
-        Log.i("Range", "set before " + value +  " sep "+ String.valueOf(normalizedProgressValue) +  " " + String .valueOf(normalizedMaxValue));
         // in case absoluteMinValue == absoluteMaxValue, avoid division by zero when normalizing.
         if (0 == (absoluteMaxValuePrim)) {
             setNormalizedProgressValue(1d);
         } else {
-            Log.i("Range", "in value " + String.valueOf(valueToNormalized(value)));
             setNormalizedProgressValue(valueToNormalized(value));
         }
-        Log.i("Range", "set after " + value + " sep " + String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMaxValue));
     }
 
     /**
@@ -291,7 +289,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         int colorToUseForButtonsAndHighlightedLine = DEFAULT_COLOR; //non default, filter is active
 
         // draw seek bar active range line
-        Log.i("Drawing", " main bar " + String.valueOf(0) + " " + String.valueOf(normalizedMaxValue));
         mRect.left = normalizedToScreen(0);
         mRect.right = normalizedToScreen(normalizedMaxValue);
 
@@ -299,7 +296,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         canvas.drawRect(mRect, paint);
 
         // draw seek bar progress range line
-        Log.i("Drawing", " main bar progres " + String.valueOf(0) + " " + String.valueOf(normalizedProgressValue));
         mRect.left = normalizedToScreen(0);
         mRect.right = normalizedToScreen(normalizedProgressValue);
 
