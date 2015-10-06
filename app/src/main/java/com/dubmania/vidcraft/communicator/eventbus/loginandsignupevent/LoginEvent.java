@@ -5,13 +5,13 @@ package com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent;
  */
 public class LoginEvent {
     private Long mUserId;
-    private String mEmail;
     private String mUserName;
+    private String mEmail;
 
-    public LoginEvent(Long mUserId, String mEmail, String mUserName) {
+    public LoginEvent(Long mUserId, String mUserName, String mEmail) {
         this.mUserId = mUserId;
-        this.mEmail = mEmail;
         this.mUserName = mUserName;
+        this.mEmail = mEmail;
     }
 
     public String getEmail() {

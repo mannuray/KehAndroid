@@ -2,7 +2,6 @@ package com.dubmania.vidcraft.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -45,7 +44,6 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardsDownloa
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarker;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
-import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
@@ -251,7 +249,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(this, event.getId(), event.getTitle(), event.getView()).show();
+        new VideoItemPopupMenu(new Long(0), this, event.getId(), event.getTitle(), event.getView(), false).show();
     }
 
     @Subscribe
@@ -332,6 +330,12 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
+        String userName = new SessionManager(this).getUser();
+        Log.i("user name", "sessino name " + userName + " event " + event.getBoardUsername());
+        if(userName.equals(event.getBoardUsername()))
+            intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);
+        else
+            intent.putExtra(ConstantsStore.INTENT_BOARD_USER, false);
         startActivity(intent);
     }
 

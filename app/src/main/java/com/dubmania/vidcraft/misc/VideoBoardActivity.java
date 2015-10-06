@@ -18,6 +18,7 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
+import com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoBoard;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarker;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
@@ -32,17 +33,17 @@ import java.util.ArrayList;
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
     private RecyclerView.Adapter mAdapter;
-    Toolbar mToolbar;
 
     private Long mBoardId;
-    ProgressBar spinner;
+    private boolean mUserBoard;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_board);
 
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -55,6 +56,7 @@ public class VideoBoardActivity extends AppCompatActivity {
         String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME); // set it in action bar
         String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME); // set it in action bar
         int icon = intent.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0); // set it in action bar
+        mUserBoard = intent.getBooleanExtra(ConstantsStore.INTENT_BOARD_USER, false);
 
         getSupportActionBar().setTitle(mBoardName);
         mToolbar.setSubtitle("Uploaded by " + mUserName);
@@ -87,7 +89,10 @@ public class VideoBoardActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_empty, menu);
+        if(mUserBoard)
+            getMenuInflater().inflate(R.menu.menu_video_board, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
 
@@ -102,6 +107,20 @@ public class VideoBoardActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        }
+
+        if(id == R.id.action_delete_board) {
+            new DeleteVideoBoard().deleteVideoBoard(mBoardId, new DeleteVideoBoard.DeleteVideoBoardCallback() {
+                @Override
+                public void onDeleteVideoBoardSuccess() {
+
+                }
+
+                @Override
+                public void onDeleteVideoBoardFailure() {
+
+                }
+            });
         }
 
         return super.onOptionsItemSelected(item);
@@ -140,6 +159,6 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(this, event.getId(), event.getTitle(), event.getView()).show();
+        new VideoItemPopupMenu(mBoardId, this, event.getId(), event.getTitle(), event.getView(), mUserBoard).show();
     }
 }

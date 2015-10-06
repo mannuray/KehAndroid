@@ -18,6 +18,7 @@ public class ConstantsStore {
     public final static String INTENT_BOARD_ID = "com.dubmania.vidcraft.board.id";
     public final static String INTENT_BOARD_USER_NAME = "com.dubmania.vidcraft.board.username";
     public final static String INTENT_BOARD_ICON = "com.dubmania.vidcraft.board.icon";
+    public final static String INTENT_BOARD_USER = "com.dubmania.vidcraft.board.user";
 
     public final static String INTENT_USER_NAME = "com.dubmania.vidcraft.username";
 
@@ -58,7 +59,9 @@ public class ConstantsStore {
 
     public final static String URL_GET_BOARDS =         BOARD + "get";
     public final static String URL_ADD_BOARD =          BOARD + "add";
+    public final static String URL_DELETE_BOARD =          BOARD + "delete";
     public final static String URL_ADD_VIDEO_TO_BOARD = BOARD + "addvideo";
+    public final static String URL_DELETE_VIDEO_FROM_BOARD = BOARD + "deletevideo";
     public final static String URL_GET_BOARD_VIDEOS =   BOARD + "getvideos";
 
     public final static String URL_REPORT =             FEEDBACK + "report";

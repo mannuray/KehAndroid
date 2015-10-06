@@ -3,39 +3,54 @@ package com.dubmania.vidcraft.dialogs;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.dubmania.vidcraft.R;
+import com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoFromBoard;
 import com.dubmania.vidcraft.misc.AddVideoToBoardActivity;
 import com.dubmania.vidcraft.report.FeedbackActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+
+import static com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoFromBoard.*;
 
 /**
  * Created by rat on 8/2/2015.
  */
 public class VideoItemPopupMenu {
+    private Long mBoardId;
     private Long mVideoId;
     private String mTitle;
     private View view;
+    private boolean mUserBoard;
     private Activity activity;
 
-    public VideoItemPopupMenu(Activity activity, Long mVideoId, String mTitle, View view) {
+    public VideoItemPopupMenu(Long mBoardId, Activity activity, Long mVideoId, String mTitle, View view, boolean mUserBoard) {
+        this.mBoardId = mBoardId;
         this.mVideoId = mVideoId;
         this.mTitle = mTitle;
         this.view = view;
         this.activity = activity;
+        this.mUserBoard = mUserBoard;
     }
 
     public void show() {
         PopupMenu popup = new PopupMenu(activity, view);
-        popup.getMenuInflater().inflate(R.menu.menu_video_item_popup, popup.getMenu());
+        Menu menu = popup.getMenu();
+
+        popup.getMenuInflater().inflate(R.menu.menu_video_item_popup, menu);
+        if(!mUserBoard) menu.removeItem(R.id.action_delete_video_from_board);
+
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.action_add_video_to_board)
                     addVideoToBoard();
+                else if(id == R.id.action_delete_video_from_board)
+                    removeFromVideoBoard();
                 else if(id == R.id.action_share)
                     shareit(); // write for share
                 else if(id == R.id.action_report)
@@ -52,6 +67,20 @@ public class VideoItemPopupMenu {
         Intent intent = new Intent(activity, AddVideoToBoardActivity.class);
         intent.putExtra(ConstantsStore.INTENT_VIDEO_ID, mVideoId);
         activity.startActivity(intent);
+    }
+
+    private void removeFromVideoBoard() {
+        new DeleteVideoFromBoard().deleteVideoFromBoard(mBoardId, mVideoId, new DeleteVideoFromBoardCallback() {
+            @Override
+            public void onDeleteVideoFromBoardSuccess() {
+
+            }
+
+            @Override
+            public void onDeleteVideoFromBoardFailure() {
+
+            }
+        });
     }
 
     private void feedback(int code) {

@@ -117,7 +117,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(this, event.getId(), event.getTitle(), event.getView()).show();
+        new VideoItemPopupMenu(new Long(0), this, event.getId(), event.getTitle(), event.getView(), false).show();
     }
 
     @Subscribe

@@ -3,4 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dubmania.vidcraft.misc.VideoBoardActivity">
 
+    <item
+        android:id="@+id/action_delete_board"
+        android:orderInCategory="100"
+        android:title="Delete Videoboard"/>
+
 </menu>

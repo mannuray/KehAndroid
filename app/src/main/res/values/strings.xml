@@ -114,6 +114,7 @@
 
     <!-- popup menu item string -->
     <string name="add_video_to_board">Add to Videoboard</string>
+    <string name="add_delete_from_board">Delete from Videoboard</string>
     <string name="share_it">Share it</string>
     <string name="report_it">Report it</string>
     <string name="improve">Improve</string>
