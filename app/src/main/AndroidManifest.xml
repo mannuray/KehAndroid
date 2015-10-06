@@ -17,114 +17,120 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
-            android:name="com.dubmania.vidcraft.misc.SearchActivity"
+            android:name=".misc.SearchActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.dubmania.vidcraft.addvideo.AddVideoActivity"
+            android:name=".addvideo.AddVideoActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" />
+            android:parentActivityName=".main.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.dubmania.vidcraft.createdub.CreateDubActivity"
+            android:name=".createdub.CreateDubActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_create_dub"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="com.dubmania.vidcraft.signupandlogin.SignupAndLoginActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_signup"
-            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.dubmania.vidcraft.misc.AddLanguageActivity"
+            android:name=".signupandlogin.SignupAndLoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".misc.AddLanguageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_add_language"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.misc.MyAccountActivity"
+            android:name=".misc.MyAccountActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_my_account"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.misc.AddVideoBoardActivity"
+            android:name=".misc.AddVideoBoardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_add_video_board"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" >
+            android:parentActivityName=".main.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.misc.PlayVideoActivity"
+            android:name=".misc.PlayVideoActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.misc.VideoBoardActivity"
+            android:name=".misc.VideoBoardActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" >
+            android:parentActivityName=".main.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.misc.AddVideoToBoardActivity"
+            android:name=".misc.AddVideoToBoardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_add_video_to_board"
-            android:windowSoftInputMode="adjustNothing"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
+            android:parentActivityName=".main.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name=".report.FeedbackActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.report.FeedbackActivity"
+            android:name=".main.HomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.dubmania.vidcraft.main.HomeActivity"
+            android:name=".misc.LanguageActivity"
+            android:label="@string/title_activity_language"
+            android:parentActivityName=".main.HomeActivity"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".main.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.dubmania.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.dubmania.vidcraft.misc.LanguageActivity"
-            android:label="@string/title_activity_language"
-            android:parentActivityName="com.dubmania.vidcraft.main.HomeActivity"
-            android:screenOrientation="portrait">
         </activity>
     </application>
 

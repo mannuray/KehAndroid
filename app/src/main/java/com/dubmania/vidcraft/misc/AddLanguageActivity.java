@@ -1,5 +1,8 @@
 package com.dubmania.vidcraft.misc;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,13 +12,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
+import com.dubmania.vidcraft.main.HomeActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.InstalledLanguage;
 import com.dubmania.vidcraft.utils.SavedDubsData;
@@ -40,6 +46,9 @@ public class AddLanguageActivity extends AppCompatActivity {
     private LanguageAndCountryDataHandler mLanguageData;
     private int mLanguagePosition;
     private int mCountryPosition;
+    public SharedPreferences token_prefs;
+    ProgressBar progressBar;
+    LinearLayout languagePickerLayout;
 
 
     @Override
@@ -52,12 +61,14 @@ public class AddLanguageActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+       /* actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);*/
 
 
         mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
+        progressBar=(ProgressBar)findViewById(R.id.progressBar3);
+        languagePickerLayout=(LinearLayout)findViewById(R.id.language_picker_layout);
 
         RelativeLayout start = (RelativeLayout) findViewById(R.id.add_language);
         start.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +84,15 @@ public class AddLanguageActivity extends AppCompatActivity {
                 installedLanguage.setCountryId(con.getId());
                 installedLanguage.setCountry(con.getCountry());
                 realm.commitTransaction();
+                token_prefs = getApplicationContext()
+                        .getSharedPreferences("token_pref",
+                                Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = token_prefs.edit();
+                editor.putBoolean("add_language", true);
+                editor.commit();
+
+                Intent intent = new Intent(AddLanguageActivity.this, HomeActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -131,6 +151,8 @@ public class AddLanguageActivity extends AppCompatActivity {
             @Override
             public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
                 mLanguageData = mData;
+                progressBar.setVisibility(View.GONE);
+                languagePickerLayout.setVisibility(View.VISIBLE);
                 setData();
             }
 
