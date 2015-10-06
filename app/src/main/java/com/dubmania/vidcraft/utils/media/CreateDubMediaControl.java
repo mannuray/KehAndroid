@@ -38,7 +38,7 @@ public class CreateDubMediaControl extends LinearLayout {
     private AudioManager mAudioManager;
     private VideoManager mVideoManager;
 
-    enum State {initial, playingOriginal, playingRecorded, recording, pausePlayOriginal, pausePlayRecording, pauseRecording}
+    enum State {initial, playingOriginal, playingRecorded, recording, pausePlayOriginal, pausePlayRecording, pauseRecording, posChanged}
     State mState = State.initial;
 
     public CreateDubMediaControl(Context context, AttributeSet attrs) {
@@ -230,8 +230,8 @@ public class CreateDubMediaControl extends LinearLayout {
             }
 
             if(mState == State.pausePlayOriginal || mState == State.pauseRecording || mState == State.initial) {
-                mVideoManager.setPos(0);
-                mAudioManager.setPlayingPos(0);
+                long position = mAudioManager.getCurrentTime();
+                mVideoManager.setPos((int) position);
             }
 
             mPlayRecorded.setImageResource(R.drawable.pause);
