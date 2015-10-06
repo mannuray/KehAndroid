@@ -10,10 +10,6 @@ buildscript {
 
     }
 
-    compile ('com.github.worker8:tourguide:1.0.16-SNAPSHOT@aar'){
-        transitive=true
-    }
-
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
 

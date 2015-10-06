@@ -107,7 +107,7 @@ public class AudioManager {
     }
 
     public void setPrevPos() {
-        if(mRecordingPosition < 0)
+        if(mRecordingPosition <= 0)
             return;
         mRecordingPosition--;
         mPlayingPosition = mRecordingPosition;
@@ -115,7 +115,7 @@ public class AudioManager {
     }
 
     public void setNextPos() {
-        if(mRecordingPosition >= mAudioFlileList.size())
+        if(mRecordingPosition >= mAudioFlileList.size() - 1)
             return;
         mRecordingPosition++;
         mPlayingPosition = mRecordingPosition;
@@ -198,10 +198,17 @@ public class AudioManager {
         }
     }
 
-    public long getCurrentTime() {
+    public long getCurrentStartTime() {
         if(mAudioFlileList.size() <= 0)
             return 0;
-        Log.i("Record Test", "mRecord position " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
+        Log.i("Record Test", "mRecord position satret" + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
+        return mAudioFlileList.get(mRecordingPosition).getStartTime();
+    }
+
+    public long getCurrentEndTime() {
+        if(mAudioFlileList.size() <= 0)
+            return 0;
+        Log.i("Record Test", "mRecord position end " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getEndTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
         return mAudioFlileList.get(mRecordingPosition).getEndTime();
     }
 

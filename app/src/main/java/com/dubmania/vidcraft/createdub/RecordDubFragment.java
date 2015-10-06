@@ -92,6 +92,9 @@ public class RecordDubFragment extends Fragment {
 
     @Subscribe
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
+        if(mVideoManager == null)
+            return;
+
         mVideoManager.setVideoFilePath(event.getVideoFile());
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
         mProgressBar.setVisibility(View.GONE);
