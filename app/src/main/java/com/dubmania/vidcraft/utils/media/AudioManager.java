@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.coremedia.iso.boxes.Container;
 import com.dubmania.vidcraft.utils.MiscFunction;
+//import com.google.common.collect.Iterables;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
@@ -23,11 +24,11 @@ import java.util.List;
 /**
  * Created by rat on 8/25/2015.
  */
+
 public class AudioManager {
 
     private ArrayList<Audio> mAudioFlileList;
     private MediaPlayer mAudioPlayer;
-    private int mRecordingPosition = 0;
     private int mPlayingPosition = 0;
     private boolean isRecordingAvailable = false;
     private boolean isPlayRecordingIntilized = false;
@@ -58,7 +59,7 @@ public class AudioManager {
         this.mTrackCallback = mTrackCallback;
     }
 
-    public void record() throws IOException {
+    public void recordFrom(int position) throws IOException {
         /*
         if(mRecordingPosition < mAudioFlileList.size()) {
             // remove all previos records
@@ -73,7 +74,8 @@ public class AudioManager {
                 }
             }
         }*/
-        for (int i = mAudioFlileList.size() - 1; i > mRecordingPosition; i--) {
+        for (int i = mAudioFlileList.size() - 1; i > position - 1; i--) {
+            Log.i("Maker", "size of file list is " + mAudioFlileList.size());
             mAudioFlileList.remove(i);
         }
 
@@ -88,10 +90,9 @@ public class AudioManager {
             if(mAudioFlileList.size() <= 0 )
                 audio = new Audio(mAudioRecorder.stopRecording(), 0, pos);
             else
-                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mRecordingPosition).getEndTime(), pos);
+                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mAudioFlileList.size()-1).getEndTime()/*Iterables.getLast(mAudioFlileList).getEndTime()*/, pos);
             mAudioFlileList.add(audio);
-            mRecordingPosition = mAudioFlileList.size() - 1;
-            isRecordingAvailable = true;
+            isRecordingAvailable = true; // improve this
         }
         else if (mState == State.playing) {
             mAudioPlayer.pause();
@@ -106,25 +107,18 @@ public class AudioManager {
         }
     }
 
-    public void setPrevPos() {
-        if(mRecordingPosition <= 0)
+    public void playFrom(int position) {
+        mPlayingPosition = position;
+        if(mState != State.pause)
             return;
-        mRecordingPosition--;
-        mPlayingPosition = mRecordingPosition;
-        setPlayingPos(mPlayingPosition);
-    }
-
-    public void setNextPos() {
-        if(mRecordingPosition >= mAudioFlileList.size() - 1)
-            return;
-        mRecordingPosition++;
-        mPlayingPosition = mRecordingPosition;
-        setPlayingPos(mPlayingPosition);
-
-    }
-
-    public int getCurrentPos() {
-        return mRecordingPosition;
+        try {
+            if(initializePlayRecording()) {
+                mAudioPlayer.start();
+                mState = State.playing;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void play() {
@@ -198,18 +192,18 @@ public class AudioManager {
         }
     }
 
-    public long getCurrentStartTime() {
+    public long getCurrentStartTimeOf(int position) {
         if(mAudioFlileList.size() <= 0)
             return 0;
-        Log.i("Record Test", "mRecord position satret" + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getStartTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
-        return mAudioFlileList.get(mRecordingPosition).getStartTime();
+        Log.i("Record Test", "mRecord position satret" + position + " du " + mAudioFlileList.get(position).getStartTime() + mAudioFlileList.get(position).getDuration());
+        return mAudioFlileList.get(position).getStartTime();
     }
 
-    public long getCurrentEndTime() {
+    public long getCurrentEndTimeOf(int position) {
         if(mAudioFlileList.size() <= 0)
             return 0;
-        Log.i("Record Test", "mRecord position end " + mRecordingPosition + " du " + mAudioFlileList.get(mRecordingPosition).getEndTime() + mAudioFlileList.get(mRecordingPosition).getDuration());
-        return mAudioFlileList.get(mRecordingPosition).getEndTime();
+        Log.i("Record Test", "mRecord position end " + position + " du " + mAudioFlileList.get(position).getEndTime() + mAudioFlileList.get(position).getDuration());
+        return mAudioFlileList.get(position).getEndTime();
     }
 
     private File getRandomFileName() throws IOException {

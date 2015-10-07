@@ -36,7 +36,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_normal);
     private final Bitmap thumbImageSelected = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_pressed);
-    private final Bitmap thumbImageLast = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb_disabled);
     private final float thumbWidth = thumbImage.getWidth();
     private final float thumbHalfWidth = 0.5f * thumbWidth;
     private final float thumbHalfHeight = 0.5f * thumbImage.getHeight();
@@ -49,7 +48,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     private double normalizedProgressValue = 0d;
     private ArrayList<Double> mMarkers;
     private int selectedMarker = 0;
-    private T endMarker;
     /**
      * Default color of a {@link RecordMarkerBar}, #FF33B5E5. This is also known as "Ice Cream Sandwich" blue.
      */
@@ -117,7 +115,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
             a.recycle();
         }
         mMarkers = new ArrayList<>();
-        endMarker = (T)DEFAULT_MINIMUM;
+        mMarkers.add(0d);
 
         setValuePrimAndNumberType();
 
@@ -184,8 +182,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     }
 
     public void addMarker(T marker) {
-        mMarkers.add(valueToNormalized(endMarker));
-        endMarker = marker;
+        mMarkers.add(valueToNormalized(marker));
         selectedMarker = mMarkers.size() - 1;
         invalidate();
     }
@@ -200,7 +197,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
 
     public void removeMarkersFrom(int mark) {
         for (int i = mMarkers.size() - 1; i > mark; i--) {
-            endMarker = normalizedToValue(mMarkers.get(i));
             mMarkers.remove(i);
         }
     }
@@ -316,10 +312,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
                         mTextOffset,
                         paint);
         }
-
-        canvas.drawBitmap(thumbImageLast, normalizedToScreen(valueToNormalized(endMarker)) - thumbHalfWidth,
-                mTextOffset,
-                paint);
     }
 
     /**

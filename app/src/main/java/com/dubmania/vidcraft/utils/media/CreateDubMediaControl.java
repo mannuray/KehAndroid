@@ -38,6 +38,9 @@ public class CreateDubMediaControl extends LinearLayout {
     private AudioManager mAudioManager;
     private VideoManager mVideoManager;
 
+    private int mNumberOfAudioSegment = 0;
+    private int mSelectedMarker = 0; // will have a marker i.e start position
+
     enum State {initial, playingOriginal, playingRecorded, recording, pausePlayOriginal, pausePlayRecording, pauseRecording, posChanged}
     State mState = State.initial;
 
@@ -64,7 +67,7 @@ public class CreateDubMediaControl extends LinearLayout {
     public void setAnchorView(View view) {
         //mAnchor = view;
 
-        LinearLayout.LayoutParams frameParams = new LinearLayout.LayoutParams(
+        LayoutParams frameParams = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
@@ -172,7 +175,7 @@ public class CreateDubMediaControl extends LinearLayout {
         }
     };
 
-    private View.OnClickListener mPlayOriginalListener = new View.OnClickListener() {
+    private OnClickListener mPlayOriginalListener = new OnClickListener() {
         public void onClick(View v) {
             if(!(mState == State.pausePlayOriginal || mState == State.pausePlayRecording || mState == State.posChanged ||
                     mState == State.pauseRecording || mState == State.initial || mState == State.playingOriginal)) {
@@ -192,7 +195,8 @@ public class CreateDubMediaControl extends LinearLayout {
             }
 
             if(mState == State.posChanged) {
-                long position = mAudioManager.getCurrentStartTime();
+                mSelectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
+                long position = mAudioManager.getCurrentStartTimeOf(mSelectedMarker);
                 mVideoManager.setPos((int) position);
             }
 
@@ -203,18 +207,18 @@ public class CreateDubMediaControl extends LinearLayout {
         }
     };
 
-    private View.OnClickListener mPreviousListener = new View.OnClickListener() {
+    private OnClickListener mPreviousListener = new OnClickListener() {
         public void onClick(View v) {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.posChanged || mState == State.initial) {
-                mAudioManager.setPrevPos();
-                mMarkerBar.setSelectedMarker(mAudioManager.getCurrentPos());
+                mSelectedMarker = Math.max(0, --mSelectedMarker);
+                mMarkerBar.setSelectedMarker(mSelectedMarker);
                 mState = State.posChanged;
             }
         }
     };
 
-    private View.OnClickListener mPlayRecordedListener = new View.OnClickListener() {
+    private OnClickListener mPlayRecordedListener = new OnClickListener() {
         public void onClick(View v) {
             if(!(mState == State.pausePlayOriginal || mState == State.pausePlayRecording || mState == State.posChanged ||
                     mState == State.pauseRecording || mState == State.initial || mState == State.playingRecorded)) {
@@ -241,7 +245,8 @@ public class CreateDubMediaControl extends LinearLayout {
             }
 
             if(mState == State.posChanged) {
-                long position = mAudioManager.getCurrentStartTime();
+                mSelectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
+                long position = mAudioManager.getCurrentStartTimeOf(mSelectedMarker);
                 mVideoManager.setPos((int) position);
             }
 
@@ -249,12 +254,12 @@ public class CreateDubMediaControl extends LinearLayout {
 
             disableAllBut(mPlayRecorded);
             mState = State.playingRecorded;
-            mAudioManager.play();
+            mAudioManager.playFrom(mSelectedMarker);
             videoPlay(true);
         }
     };
 
-    private View.OnClickListener mRecordListener = new View.OnClickListener() {
+    private OnClickListener mRecordListener = new OnClickListener() {
         public void onClick(View v) {
             if(!(mState == State.pausePlayOriginal || mState == State.pausePlayRecording || mState == State.posChanged ||
                     mState == State.pauseRecording || mState == State.initial || mState == State.recording)) {
@@ -267,6 +272,8 @@ public class CreateDubMediaControl extends LinearLayout {
                     mVideoManager.pause();
                     mAudioManager.pause(mVideoManager.getPos());
                     mMarkerBar.addMarker(mVideoManager.getPos());
+                    mSelectedMarker++;
+                    mNumberOfAudioSegment++;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -276,17 +283,24 @@ public class CreateDubMediaControl extends LinearLayout {
                 return;
             }
 
-            long position = mAudioManager.getCurrentEndTime();
+            long position = 0;
+            if(mSelectedMarker == mNumberOfAudioSegment) { // ok we at the end of recording
+                position = mAudioManager.getCurrentEndTimeOf(mSelectedMarker-1);
+            }
+            else { // play from the beginig of current marker
+                position = mAudioManager.getCurrentStartTimeOf(mSelectedMarker);
+            }
             mVideoManager.setPos((int) position);
 
             mRecord.setImageResource(R.drawable.pause);
 
             disableAllBut(mRecord);
             mState = State.recording;
-            videoPlay(true);
             try {
-                mMarkerBar.removeMarkersFrom(mAudioManager.getCurrentPos());
-                mAudioManager.record();
+                mMarkerBar.removeMarkersFrom(mSelectedMarker);
+                videoPlay(true);
+                mAudioManager.recordFrom(mSelectedMarker);
+                mNumberOfAudioSegment = mSelectedMarker;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -311,12 +325,12 @@ public class CreateDubMediaControl extends LinearLayout {
         button.setEnabled(true);
     }
 
-    private View.OnClickListener mNextListener = new View.OnClickListener() {
+    private OnClickListener mNextListener = new OnClickListener() {
         public void onClick(View v) {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
-                    mState == State.pauseRecording || mState == State.posChanged ||  mState == State.initial) {
-                mAudioManager.setNextPos();
-                mMarkerBar.setSelectedMarker(mAudioManager.getCurrentPos());
+                    mState == State.pauseRecording || mState == State.posChanged || mState == State.initial) {
+                mSelectedMarker = Math.min(++mSelectedMarker, mNumberOfAudioSegment);
+                mMarkerBar.setSelectedMarker(mSelectedMarker);
                 mState = State.posChanged;
             }
         }
