@@ -195,8 +195,8 @@ public class CreateDubMediaControl extends LinearLayout {
             }
 
             if(mState == State.posChanged) {
-                mSelectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
-                long position = mAudioManager.getCurrentStartTimeOf(mSelectedMarker);
+                int selectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
+                long position = mAudioManager.getCurrentStartTimeOf(selectedMarker);
                 mVideoManager.setPos((int) position);
             }
 
@@ -245,17 +245,20 @@ public class CreateDubMediaControl extends LinearLayout {
             }
 
             if(mState == State.posChanged) {
-                mSelectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
-                long position = mAudioManager.getCurrentStartTimeOf(mSelectedMarker);
+                int selectedMarker = mSelectedMarker == mNumberOfAudioSegment ? 0 : mSelectedMarker;
+                long position = mAudioManager.getCurrentStartTimeOf(selectedMarker);
                 mVideoManager.setPos((int) position);
+                mAudioManager.playFrom(selectedMarker);
             }
+            else {
+                mAudioManager.play();
+            }
+            videoPlay(true);
 
             mPlayRecorded.setImageResource(R.drawable.pause);
-
             disableAllBut(mPlayRecorded);
             mState = State.playingRecorded;
-            mAudioManager.playFrom(mSelectedMarker);
-            videoPlay(true);
+
         }
     };
 
