@@ -109,6 +109,7 @@ public class AudioManager {
 
     public void playFrom(int position) {
         mPlayingPosition = position;
+        isPlayRecordingIntilized = false;
         if(mState != State.pause)
             return;
         try {

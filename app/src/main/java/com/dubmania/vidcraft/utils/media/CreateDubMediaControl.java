@@ -119,6 +119,9 @@ public class CreateDubMediaControl extends LinearLayout {
                 mRecord.setImageResource(R.drawable.record);
                 try {
                     mAudioManager.pause(mVideoManager.getPos());
+                    mMarkerBar.addMarker(mVideoManager.getPos());
+                    mSelectedMarker++;
+                    mNumberOfAudioSegment++;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,7 +130,6 @@ public class CreateDubMediaControl extends LinearLayout {
                 mPlayRecorded.setImageResource(R.drawable.play);
                 try {
                     mAudioManager.pause(mVideoManager.getPos());
-                    mAudioManager.setPlayingPos(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -155,7 +157,6 @@ public class CreateDubMediaControl extends LinearLayout {
             mVideoManager.setPos(0);
             videoStart(true);
             mVideoManager.pause(); // due to synchronization issue
-            mAudioManager.setPlayingPos(0);
 
             enableAllButton();
             mState = State.initial;
@@ -211,7 +212,9 @@ public class CreateDubMediaControl extends LinearLayout {
         public void onClick(View v) {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.posChanged || mState == State.initial) {
+                Log.i("position", "back button before" + mSelectedMarker);
                 mSelectedMarker = Math.max(0, --mSelectedMarker);
+                Log.i("position", "back button " + mSelectedMarker);
                 mMarkerBar.setSelectedMarker(mSelectedMarker);
                 mState = State.posChanged;
             }
@@ -332,7 +335,9 @@ public class CreateDubMediaControl extends LinearLayout {
         public void onClick(View v) {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.posChanged || mState == State.initial) {
+                Log.i("position", "nxt button befor" + mSelectedMarker);
                 mSelectedMarker = Math.min(++mSelectedMarker, mNumberOfAudioSegment);
+                Log.i("position", "back button after" + mSelectedMarker);
                 mMarkerBar.setSelectedMarker(mSelectedMarker);
                 mState = State.posChanged;
             }
