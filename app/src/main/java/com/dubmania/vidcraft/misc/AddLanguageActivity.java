@@ -128,6 +128,10 @@ public class AddLanguageActivity extends AppCompatActivity {
         mLanguagePicker.setMinValue(0);
         mLanguagePicker.setMaxValue(mLanguageData.getLanguageSize() - 1);
         mLanguagePicker.setDisplayedValues(mLanguageData.getLanguages());
+        int pos = mLanguagePicker.getValue();
+        mCountryPicker.setMinValue(0);
+        mCountryPicker.setMaxValue(mLanguageData.getCountriesSize(mLanguagePosition) - 1);
+        mCountryPicker.setDisplayedValues(mLanguageData.getCountries(pos));
         mLanguagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
