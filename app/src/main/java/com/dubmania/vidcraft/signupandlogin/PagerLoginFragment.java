@@ -70,7 +70,7 @@ public class PagerLoginFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 2;
+            return 1;
         }
 
         @Override
@@ -84,7 +84,7 @@ public class PagerLoginFragment extends Fragment {
         if (event.getPosition() == -1){
             int position = mPager.getCurrentItem();
             if (position == 0) {
-                BusProvider.getInstance().post(new FragmentChangeEvent(0));
+                BusProvider.getInstance().post(new FragmentChangeEvent(-1));
                 return;
             }
             mPager.setCurrentItem(position - 1);

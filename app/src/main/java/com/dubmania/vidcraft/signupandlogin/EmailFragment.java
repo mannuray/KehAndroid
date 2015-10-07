@@ -22,8 +22,11 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.EmailCheckEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.EmailExistEvent;
+import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.FragmentChangeEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
+import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
+import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.vidcraft.utils.ClearableEditBox;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -61,7 +64,7 @@ public class EmailFragment extends Fragment {
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
-        ClearableEditBox mEmailEdit = new ClearableEditBox(mEmail, (ImageView) rootView.findViewById(R.id.crossImageView));
+        final ClearableEditBox mEmailEdit = new ClearableEditBox(mEmail, (ImageView) rootView.findViewById(R.id.crossImageView));
 
         try {
             Account[] accounts = AccountManager.get(getActivity()).getAccountsByType("com.google");
@@ -88,13 +91,11 @@ public class EmailFragment extends Fragment {
         already_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Fragment loginFragment = new LoginFragment();
-                transaction.replace(R.id.content,loginFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                BusProvider.getInstance().post(new LoginSetEmailEvent(mEmail.getText().toString()));
+                BusProvider.getInstance().post(new FragmentChangeEvent(1));
             }
         });
+
         return rootView;
     }
 

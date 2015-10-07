@@ -172,12 +172,17 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     
     @Subscribe
     public void onFragmentChangeEvent(FragmentChangeEvent event) {
-        int position = mPager.getCurrentItem();
-        switch (position) {
-            case 0:
-                finish();
-            case 1:
-                changeFragment(0);
+        if (event.getPosition() == -1) {
+            int position = mPager.getCurrentItem();
+            switch (position) {
+                case 0:
+                    finish();
+                case 1:
+                    changeFragment(0);
+            }
+        }
+        else{
+            changeFragment(event.getPosition());
         }
     }
 

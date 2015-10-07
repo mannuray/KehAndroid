@@ -89,7 +89,7 @@ public class PagerSignupFragment extends Fragment {
         if (event.getPosition() == -1){
             int position = mPager.getCurrentItem();
             if (position == 0) {
-                BusProvider.getInstance().post(new FragmentChangeEvent(0));
+                BusProvider.getInstance().post(new FragmentChangeEvent(-1));
                 return;
             }
             mPager.setCurrentItem(position - 1);
