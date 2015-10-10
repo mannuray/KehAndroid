@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.opengl.GLES11Ext;
@@ -117,6 +118,16 @@ public class ImageOverlayer {
         MediaCodec encoder = null;
         CodecOutputSurface outputSurface = null;
         MediaExtractor extractor = null;
+        final String MIME_TYPE = "video/avc";
+
+        MediaCodecInfo codecInfo = selectCodec(MIME_TYPE);
+        if (codecInfo == null) {
+            // Don't fail CTS if they don't have an AVC codec (not here, anyway).
+            Log.e(TAG, "Unable to find an appropriate codec for " + MIME_TYPE);
+            return;
+        }
+        if (VERBOSE) Log.d(TAG, "found codec: " + codecInfo.getName());
+        int colorFormat = selectColorFormat(codecInfo, MIME_TYPE);
         int saveWidth = 640;
         int saveHeight = 480;
 
@@ -158,12 +169,12 @@ public class ImageOverlayer {
             MediaFormat encoderFormat = MediaFormat.createVideoFormat("video/avc", saveWidth, saveHeight);
             encoderFormat.setInteger(MediaFormat.KEY_BIT_RATE, 500000);
             encoderFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
-            encoderFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar);
+            encoderFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, colorFormat);
             encoderFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
             encoder.configure(encoderFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             encoder.start();
 
-            doExtract(extractor, trackIndex, decoder, encoder, outputSurface, saveWidth, saveHeight);
+            doExtract(extractor, trackIndex, decoder, encoder, outputSurface, colorFormat, saveWidth, saveHeight);
             // see if we can detect fps
             float fps = 0;
             long lastFramePTS = -1;
@@ -230,7 +241,7 @@ public class ImageOverlayer {
      * Work loop.
      */
     public void doExtract(MediaExtractor extractor, int trackIndex, MediaCodec decoder, MediaCodec encoder,
-                          CodecOutputSurface outputSurface, int saveWidth, int saveHeight) throws IOException {
+                          CodecOutputSurface outputSurface, int colorFormat, int saveWidth, int saveHeight) throws IOException {
         final int TIMEOUT_USEC = 10000;
         ByteBuffer[] decoderInputBuffers = decoder.getInputBuffers();
         ByteBuffer[] encoderInputBuffers = encoder.getInputBuffers();
@@ -282,8 +293,7 @@ public class ImageOverlayer {
                         Bitmap mutableBitmap = outputSurface.getFrame();
                         Canvas comboImage = new Canvas(mutableBitmap);
                         comboImage.drawBitmap(mWaterMark, overlayPositionX, overlayPositionY, null);
-                        byte[] input = getNV21(saveWidth, saveHeight, mutableBitmap);//
-
+                        byte[] input = getNV21(saveWidth, saveHeight, mutableBitmap, colorFormat);//
                         int encoderInputBufferIndex = encoder.dequeueInputBuffer(-1);
                         if (encoderInputBufferIndex >= 0) {
                             ByteBuffer inputBuffer = encoderInputBuffers[encoderInputBufferIndex];
@@ -319,11 +329,15 @@ public class ImageOverlayer {
         }
     }
 
-    byte[] getNV21(int inputWidth, int inputHeight, Bitmap scaled) {
+    byte[] getNV21(int inputWidth, int inputHeight, Bitmap scaled, int colorFormat) {
 
         int[] argb = new int[inputWidth * inputHeight];
         scaled.getPixels(argb, 0, inputWidth, 0, 0, inputWidth, inputHeight);
-        byte[] yuv = encodeYUV420P(argb, inputWidth, inputHeight);
+        byte[] yuv = new byte[0];
+        if( colorFormat == MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar)
+            yuv = encodeYUV420P(argb, inputWidth, inputHeight);
+        else if(colorFormat ==  MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar)
+            yuv = encodeYUV420SP(argb, inputWidth, inputHeight);
         //encodeYUV420SP(argb, inputWidth, inputHeight);
         scaled.recycle();
         return yuv;
@@ -407,6 +421,48 @@ public class ImageOverlayer {
             }
         }
         return yuv;
+    }
+
+    private static MediaCodecInfo selectCodec(String mimeType) {
+        int numCodecs = MediaCodecList.getCodecCount();
+        for (int i = 0; i < numCodecs; i++) {
+            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
+            if (!codecInfo.isEncoder()) {
+                continue;
+            }
+            String[] types = codecInfo.getSupportedTypes();
+            for (int j = 0; j < types.length; j++) {
+                if (types[j].equalsIgnoreCase(mimeType)) {
+                    return codecInfo;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static int selectColorFormat(MediaCodecInfo codecInfo, String mimeType) {
+        MediaCodecInfo.CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(mimeType);
+        for (int i = 0; i < capabilities.colorFormats.length; i++) {
+            int colorFormat = capabilities.colorFormats[i];
+            if (isRecognizedFormat(colorFormat)) {
+                return colorFormat;
+            }
+        }
+        return 0;   // not reached
+    }
+
+    private static boolean isRecognizedFormat(int colorFormat) {
+        switch (colorFormat) {
+            // these are the formats we know how to handle for this test
+            case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar:
+            case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420PackedPlanar:
+            case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar:
+            case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420PackedSemiPlanar:
+            case MediaCodecInfo.CodecCapabilities.COLOR_TI_FormatYUV420PackedSemiPlanar:
+                return true;
+            default:
+                return false;
+        }
     }
 
 

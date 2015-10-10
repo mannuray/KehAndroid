@@ -22,6 +22,8 @@ import com.dubmania.vidcraft.utils.media.CreateDubMediaControl;
 import com.dubmania.vidcraft.utils.media.VideoManager;
 import com.squareup.otto.Subscribe;
 
+import java.io.File;
+
 
 public class RecordDubFragment extends Fragment {
 
@@ -29,7 +31,9 @@ public class RecordDubFragment extends Fragment {
     private ProgressBar mProgressBar;
 
     private AudioManager mAudioManager;
-    private VideoManager mVideoManager;
+    private VideoManager mVideoManager = null;
+
+    private File mVideoFile = null;
 
     public RecordDubFragment() {
         // Required empty public constructor
@@ -52,6 +56,11 @@ public class RecordDubFragment extends Fragment {
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        if(mVideoFile != null) { // ok the event was recived before so set it
+            mVideoManager.setVideoFilePath(mVideoFile);
+            mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
+            mProgressBar.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -92,8 +101,10 @@ public class RecordDubFragment extends Fragment {
 
     @Subscribe
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
-        if(mVideoManager == null)
+        if(mVideoManager == null) {
+            mVideoFile = event.getVideoFile();
             return;
+        }
 
         mVideoManager.setVideoFilePath(event.getVideoFile());
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
