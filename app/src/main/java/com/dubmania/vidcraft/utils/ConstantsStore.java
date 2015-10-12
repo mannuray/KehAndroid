@@ -32,6 +32,9 @@ public class ConstantsStore {
     public final static int INTENT_REPORT = 0;
     public final static int INTENT_IMPROVE = 1;
 
+    public final static String INTENT_INSTALL_LANGUAGE = "com.dubmania.vidcraft.addlanguage.language";
+    public final static String INTENT_INSTALL_LANGUAGE_ID = "com.dubmania.vidcraft.addlanguage.id";
+
     private final static String ACCOUNT = "account/";
     private final static String VIDEO = "video/";
     private final static String BOARD = "board/";

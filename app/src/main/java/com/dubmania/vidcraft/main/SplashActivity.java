@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,8 +30,8 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 if (!checkLanguage()) {
                     Intent intent = new Intent(SplashActivity.this, AddLanguageActivity.class);
-                    startActivity(intent);
-                    finish();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, 1);
                 } else {
                     Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);
@@ -40,6 +41,25 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, SPLASH_TIME);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            mPref = getApplicationContext()
+                    .getSharedPreferences("token_pref",
+                            Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = mPref.edit();
+            editor.putBoolean("add_language", true);
+            editor.commit();
+
+            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            finish();
+        }
     }
 
     private boolean checkLanguage(){

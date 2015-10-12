@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.misc;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.dubmania.vidcraft.Adapters.MyVideoListItem;
 import com.dubmania.vidcraft.R;
@@ -80,7 +82,8 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
         switch(id) {
             case R.id.action_add_language:
                 intent = new Intent(this, AddLanguageActivity.class);
-                startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 1);
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -89,6 +92,13 @@ public class LanguageActivity extends AppCompatActivity implements AbsListView.O
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+           // put code to display the installed language in language List
+        }
     }
 
     @Override

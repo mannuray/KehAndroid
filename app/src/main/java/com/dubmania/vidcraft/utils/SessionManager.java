@@ -95,7 +95,6 @@ public class SessionManager {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(mActivity, SignupAndLoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mActivity.startActivityForResult(intent, 1);
                 }
             })

@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.misc;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,7 +47,6 @@ public class AddLanguageActivity extends AppCompatActivity {
     private LanguageAndCountryDataHandler mLanguageData;
     private int mLanguagePosition;
     private int mCountryPosition;
-    public SharedPreferences token_prefs;
     ProgressBar progressBar;
     LinearLayout languagePickerLayout;
 
@@ -84,15 +84,11 @@ public class AddLanguageActivity extends AppCompatActivity {
                 installedLanguage.setCountryId(con.getId());
                 installedLanguage.setCountry(con.getCountry());
                 realm.commitTransaction();
-                token_prefs = getApplicationContext()
-                        .getSharedPreferences("token_pref",
-                                Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = token_prefs.edit();
-                editor.putBoolean("add_language", true);
-                editor.commit();
 
-                Intent intent = new Intent(AddLanguageActivity.this, HomeActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(AddLanguageActivity.this, LanguageActivity.class);
+                intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE, lan.getLanguage());
+                intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, lan.getId());
+                setResult(Activity.RESULT_OK, intent);
                 finish();
             }
         });

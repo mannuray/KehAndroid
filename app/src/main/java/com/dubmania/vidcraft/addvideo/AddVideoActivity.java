@@ -78,12 +78,10 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getApplicationContext(), " an resurt called ", Toast.LENGTH_LONG).show();
         if (resultCode == Activity.RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), " an resurt called fail", Toast.LENGTH_LONG).show();
             finish();
         }
-        Toast.makeText(getApplicationContext(), " an resurt called success", Toast.LENGTH_LONG).show();
     }
 
     @Override

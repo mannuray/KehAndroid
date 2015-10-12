@@ -18,7 +18,6 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
-import com.dubmania.vidcraft.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.dubmania.vidcraft.utils.media.AudioManager;
 import com.dubmania.vidcraft.utils.media.CreateDubMediaControl;
 import com.dubmania.vidcraft.utils.media.VideoManager;
