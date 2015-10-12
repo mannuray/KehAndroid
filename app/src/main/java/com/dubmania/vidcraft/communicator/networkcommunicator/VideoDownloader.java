@@ -1,5 +1,7 @@
 package com.dubmania.vidcraft.communicator.networkcommunicator;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -28,19 +30,7 @@ public class VideoDownloader {
         this.mCallback = mCallback;
         try {
             final File f = mCache.getFile(String.valueOf(id));
-            // to simulate time so that event get delivered
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(100); // hope the time is enough, need to verify by testing
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mCallback.onVideosDownloadSuccess(f);
-
-                }
-            }).start();
+            mCallback.onVideosDownloadSuccess(f);
 
         } catch (IOException e) {
             DubsmaniaHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDataDownloaderHandler(mCache.getTempFile(String.valueOf(id))));

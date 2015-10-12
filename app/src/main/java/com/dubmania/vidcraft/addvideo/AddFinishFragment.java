@@ -59,6 +59,7 @@ public class AddFinishFragment extends Fragment {
         mLanguagePicker.setMinValue(0);
         mLanguagePicker.setMaxValue(mRealmResults.size() - 1);
         mLanguagePicker.setDisplayedValues(mLanguages);
+        mLanguage = mLanguages[mLanguagePicker.getValue()];
         mLanguagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {

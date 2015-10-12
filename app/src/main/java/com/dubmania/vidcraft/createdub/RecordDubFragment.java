@@ -16,7 +16,9 @@ import android.widget.VideoView;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
+import com.dubmania.vidcraft.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.dubmania.vidcraft.utils.media.AudioManager;
 import com.dubmania.vidcraft.utils.media.CreateDubMediaControl;
 import com.dubmania.vidcraft.utils.media.VideoManager;
@@ -32,8 +34,6 @@ public class RecordDubFragment extends Fragment {
 
     private AudioManager mAudioManager;
     private VideoManager mVideoManager = null;
-
-    private File mVideoFile = null;
 
     public RecordDubFragment() {
         // Required empty public constructor
@@ -56,11 +56,7 @@ public class RecordDubFragment extends Fragment {
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        if(mVideoFile != null) { // ok the event was recived before so set it
-            mVideoManager.setVideoFilePath(mVideoFile);
-            mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
-            mProgressBar.setVisibility(View.GONE);
-        }
+        BusProvider.getInstance().post(new RequestVideoEvent());
         return view;
     }
 
@@ -101,11 +97,6 @@ public class RecordDubFragment extends Fragment {
 
     @Subscribe
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
-        if(mVideoManager == null) {
-            mVideoFile = event.getVideoFile();
-            return;
-        }
-
         mVideoManager.setVideoFilePath(event.getVideoFile());
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
         mProgressBar.setVisibility(View.GONE);

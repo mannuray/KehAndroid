@@ -18,6 +18,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.CreateDubShareEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
@@ -68,25 +69,6 @@ public class CreateDubActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getLongExtra(ConstantsStore.VIDEO_ID, (long) 0);
         mTitle = intent.getStringExtra(ConstantsStore.INTENT_VIDEO_TITLE);
-
-        VideoDownloader mVideoDownloader = new VideoDownloader();
-        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, new VideoDownloaderCallback() {
-            @Override
-            public void onVideosDownloadSuccess(File mFile) {
-                mVideoFile = mFile;
-                BusProvider.getInstance().post(new SetRecordFilesEvent(mVideoFile));
-            }
-
-            @Override
-            public void onVideosDownloadFailure() {
-
-            }
-
-            @Override
-            public void onProgress(int mPercentage) {
-
-            }
-        });
     }
 
     @Override public void onResume() {
@@ -173,6 +155,28 @@ public class CreateDubActivity extends AppCompatActivity {
             i++;
         }
         return file;
+    }
+
+    @Subscribe
+    public void onRequestVideoEvent(RequestVideoEvent event) {
+        VideoDownloader mVideoDownloader = new VideoDownloader();
+        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, new VideoDownloaderCallback() {
+            @Override
+            public void onVideosDownloadSuccess(File mFile) {
+                mVideoFile = mFile;
+                BusProvider.getInstance().post(new SetRecordFilesEvent(mVideoFile));
+            }
+
+            @Override
+            public void onVideosDownloadFailure() {
+
+            }
+
+            @Override
+            public void onProgress(int mPercentage) {
+
+            }
+        });
     }
 
     @Subscribe

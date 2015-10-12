@@ -30,7 +30,6 @@ public class VideoUploader {
     private VideoUploaderCallback mCallback;
 
     public void addVideo(final String mFilePath, String title, ArrayList<Tag> tags, Long language, VideoUploaderCallback callback) {
-        Log.i("File 1", mFilePath);
         final File mVideoFile = new File(mFilePath);
         mCallback = callback;
 

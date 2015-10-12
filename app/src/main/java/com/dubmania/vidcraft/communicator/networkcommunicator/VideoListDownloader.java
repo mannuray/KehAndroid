@@ -21,12 +21,21 @@ import java.util.ArrayList;
 public class VideoListDownloader {
     private VideoListDownloaderCallback mCallback;
 
-    public void downloadTrendingVideos(String region, Integer start, Integer end, String user, VideoListDownloaderCallback callback){
+    public void downloadTrendingVideos(Integer start, Integer end, Long user_id, ArrayList<Long> languages, VideoListDownloaderCallback callback){
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_REGION, region);
         params.add(ConstantsStore.PARAM_START, String.valueOf(start));
         params.add(ConstantsStore.PARAM_END, String.valueOf(end));
-        params.add(ConstantsStore.PARAM_USER, user);// TO DO get user name
+
+        params.add(ConstantsStore.PARAM_USER_ID, String .valueOf(user_id));
+        JSONArray LanguageArray = new JSONArray();
+        for (Long language: languages) {
+            try {
+                LanguageArray.put(new JSONObject().put(ConstantsStore.PARAM_LANGUAGE_ID, String.valueOf(language)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        params.put(ConstantsStore.PARAM_LANGUAGE, LanguageArray.toString());
 
         downloadVideos(ConstantsStore.URL_TRENDING, params, callback);
     }
@@ -34,7 +43,6 @@ public class VideoListDownloader {
     public void downloadBoardVideo(Long id, Long user_id, VideoListDownloaderCallback callback) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(id));
-        params.add(ConstantsStore.PARAM_USER, String .valueOf(user_id)); // change this param for current user
 
         downloadVideos(ConstantsStore.URL_GET_BOARD_VIDEOS, params, callback);
     }

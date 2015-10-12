@@ -65,9 +65,10 @@ import io.realm.Realm;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    FragmentManager mFragmentManager;
-    DrawerLayout mDrawerLayout;
+    private Toolbar toolbar;
+    private FragmentManager mFragmentManager;
+    private DrawerLayout mDrawerLayout;
+    private ArrayList<Long> languages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mFragmentManager = getSupportFragmentManager();
         init_navigator();
+        init_languages();
+
 
         findViewById(R.id.navigation_drawer_items_list_linearLayout_create_dub).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +246,11 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("VidCraft");
     }
 
+    private void init_languages() {
+        languages = new ArrayList<>();
+        // process to pick up from database the interested languages of user
+    }
+
     public void pushNotification(View v) {
 
     }
@@ -259,7 +267,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
-        new VideoAndBoardDownloader(getApplicationContext()).discover(event.getCurrent_page(), new SessionManager(this).getId(), new VideoAndBoardDownloaderCallback() {
+        new VideoAndBoardDownloader(getApplicationContext()).discover(event.getCurrent_page(), new SessionManager(this).getId(), languages, new VideoAndBoardDownloaderCallback() {
             @Override
             public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> videos) {
                 BusProvider.getInstance().post(new AddDiscoverItemListEvent(videos));
@@ -278,7 +286,7 @@ public class HomeActivity extends AppCompatActivity {
     @Subscribe
     public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
         // TO DO get user name
-        new VideoListDownloader().downloadTrendingVideos("India", 0, 4, new SessionManager(this).getUser(), new VideoListDownloaderCallback() {
+        new VideoListDownloader().downloadTrendingVideos(event.getCurrent_page(), event.getCurrent_page() + 10, new SessionManager(this).getId(), languages, new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));

@@ -10,6 +10,7 @@ import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
+import com.dubmania.vidcraft.addvideo.Tag;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -40,10 +41,22 @@ public class VideoAndBoardDownloader {
         downloadVideoAndBoard(ConstantsStore.URL_SEARCH_VIDEOS, params, callback);
     }
 
-    public void discover(int page, Long user, VideoAndBoardDownloaderCallback callback) {
+    public void discover(int page, Long user, ArrayList<Long> languages, VideoAndBoardDownloaderCallback callback) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_PAGE, String.valueOf(page));
         params.add(ConstantsStore.PARAM_USER_ID, String.valueOf(user));
+
+
+        JSONArray LanguageArray = new JSONArray();
+        for (Long language: languages) {
+            try {
+                LanguageArray.put(new JSONObject().put(ConstantsStore.PARAM_LANGUAGE_ID, String.valueOf(language)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        params.put(ConstantsStore.PARAM_LANGUAGE, LanguageArray.toString());
+
         downloadVideoAndBoard(ConstantsStore.URL_DISCOVER, params, callback);
     }
 
