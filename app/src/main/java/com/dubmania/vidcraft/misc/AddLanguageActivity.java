@@ -132,6 +132,7 @@ public class AddLanguageActivity extends AppCompatActivity {
         int pos = mLanguagePicker.getValue();
         mCountryPicker.setMinValue(0);
         mCountryPicker.setMaxValue(mLanguageData.getCountriesSize(mLanguagePosition) - 1);
+        mCountryPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         mCountryPicker.setDisplayedValues(mLanguageData.getCountries(pos));
         mLanguagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -140,7 +141,7 @@ public class AddLanguageActivity extends AppCompatActivity {
                 mCountryPicker.setDisplayedValues(null);
                 mCountryPicker.setMinValue(0);
                 mCountryPicker.setMaxValue(mLanguageData.getCountriesSize(mLanguagePosition) - 1);
-                mCountryPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
                 mCountryPicker.setDisplayedValues(mLanguageData.getCountries(mLanguagePosition));
                 mCountryPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
