@@ -56,6 +56,7 @@ public class AddFinishFragment extends Fragment {
 
         mVideoTitle = (EditText) view.findViewById(R.id.editText);
         NumberPicker mLanguagePicker = (NumberPicker) view.findViewById(R.id.languagePicker);
+        mLanguagePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         mLanguagePicker.setMinValue(0);
         mLanguagePicker.setMaxValue(mRealmResults.size() - 1);
         mLanguagePicker.setDisplayedValues(mLanguages);
