@@ -19,6 +19,7 @@ import com.dubmania.vidcraft.Adapters.ImageAdapter;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreaterCallback;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreator;
+import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 
 import java.util.ArrayList;
@@ -87,13 +88,19 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
                     @Override
-                    public void onVideoBoardCreateSuccess() {
+                    public void onVideoBoardCreateSuccess(Long boardId) {
+                        Intent intent = new Intent();
+                        intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, mBoardName.getText().toString());
+                        intent.putExtra(ConstantsStore.INTENT_BOARD_ID, boardId);
+                        intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, mIconId);
+                        setResult(Activity.RESULT_OK);
                         finish();
                     }
 
                     @Override
                     public void onVideoBoardCreateFailure() {
-                        //
+                        setResult(Activity.RESULT_CANCELED);
+                        finish();
                     }
                 });
             }

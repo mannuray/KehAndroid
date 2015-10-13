@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -316,7 +317,7 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);
         else
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, false);
-        startActivity(intent);
+        startActivityForResult(intent, Activity.RESULT_OK);
     }
 
     @Subscribe

@@ -1,7 +1,9 @@
 package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,8 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEndedEvent;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
+import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -67,7 +71,7 @@ public class VideoBoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddVideoBoardActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Activity.RESULT_OK);
             }
         });
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
@@ -78,6 +82,18 @@ public class VideoBoardFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            String boardName = data.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
+            Long id = data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0);
+            int iconId = data.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0);
+            mVideoBoardItemList.add(new VideoBoardListItem(id, boardName, new SessionManager(this.getActivity()).getUser(), iconId));
+            mAdapter.notifyDataSetChanged();
+
+        }
     }
 
     @Override

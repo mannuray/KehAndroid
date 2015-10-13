@@ -19,6 +19,7 @@ public class ConstantsStore {
     public final static String INTENT_BOARD_USER_NAME = "com.dubmania.vidcraft.board.username";
     public final static String INTENT_BOARD_ICON = "com.dubmania.vidcraft.board.icon";
     public final static String INTENT_BOARD_USER = "com.dubmania.vidcraft.board.user";
+    public final static String INTENT_BOARD_DELETED = "com.dubmania.vidcraft.board.deleted";
 
     public final static String INTENT_USER_NAME = "com.dubmania.vidcraft.username";
 

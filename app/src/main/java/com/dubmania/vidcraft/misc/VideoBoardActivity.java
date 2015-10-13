@@ -1,5 +1,6 @@
 package com.dubmania.vidcraft.misc;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -113,8 +114,11 @@ public class VideoBoardActivity extends AppCompatActivity {
             new DeleteVideoBoard().deleteVideoBoard(mBoardId, new DeleteVideoBoard.DeleteVideoBoardCallback() {
                 @Override
                 public void onDeleteVideoBoardSuccess() {
+                    Intent intent = new Intent();
+                    intent.putExtra(ConstantsStore.INTENT_BOARD_ID, mBoardId);
+                    intent.putExtra(ConstantsStore.INTENT_BOARD_DELETED, true);
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
-                    // send event to decelare you have been deleted
                 }
 
                 @Override

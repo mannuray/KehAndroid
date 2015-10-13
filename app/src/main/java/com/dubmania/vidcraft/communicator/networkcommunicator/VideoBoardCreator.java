@@ -26,7 +26,7 @@ public class VideoBoardCreator {
                     Log.d("json error", response.toString());
                     if (response.getBoolean("result")) {
                         Log.d("got it ", String.valueOf(statusCode));
-                        mCallback.onVideoBoardCreateSuccess();
+                        mCallback.onVideoBoardCreateSuccess(response.getLong("id"));
                     }
 
                 } catch (JSONException e) {
