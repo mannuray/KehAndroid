@@ -118,11 +118,21 @@ public class LanguageActivity extends AppCompatActivity {
                 ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
                 imageView.setImageResource(android.R.drawable.ic_delete);
                 imageView.setOnClickListener(new View.OnClickListener() {
+                    int mPosition;
                     @Override
                     public void onClick(View view) {
-
+                        realm.beginTransaction();
+                        languages.remove(mPosition);
+                        realm.commitTransaction();
+                        languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+                        notifyDataSetChanged();
                     }
-                });
+
+                    private View.OnClickListener position(int position) {
+                        mPosition = position;
+                        return this;
+                    }
+                }.position(position));
             }
 
             return rowView;
