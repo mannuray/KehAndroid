@@ -51,6 +51,7 @@ import com.dubmania.vidcraft.misc.VideoBoardActivity;
 import com.dubmania.vidcraft.utils.ActivityStarter;
 import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.InstalledLanguage;
 import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.UtilsDevice;
@@ -62,6 +63,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -214,7 +216,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void init_languages() {
         languages = new ArrayList<>();
-        // process to pick up from database the interested languages of user
+        Realm realm = Realm.getInstance(getApplicationContext());
+        RealmResults<InstalledLanguage> installedLanguages = realm.allObjects(InstalledLanguage.class).where().findAll();
+        for(InstalledLanguage language: installedLanguages) {
+            languages.add(language.getLanguageId());
+        }
     }
 
     public void pushNotification(View v) {
