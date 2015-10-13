@@ -76,40 +76,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         //Realm.deleteRealmFile(getApplicationContext());
 
-        final SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-
-        boolean dataBaseInitialized = sharedPreferences
-                .getBoolean("dataBaseInitialized", false);
-
-        //Log.i("realm", " i is " + dataBaseInitialized);
-        if(!dataBaseInitialized) {
-            new LanguageListDownloader().downloadLanguage(new LanguageListDownloader.LanguageListDownloadCallback() {
-                @Override
-                public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
-                    ArrayList<LanguageAndCountryDataHandler.Language> languages = mData.getLanguagesArray();
-                    Realm realm = Realm.getInstance(getApplicationContext());
-                    realm.beginTransaction();
-
-                    for(int i = 0; i < languages.size(); i++) {
-                        //Log.i("realm", " i is " + i);
-                        AvailableLanguage availableLanguage = realm.createObject( AvailableLanguage.class );
-                        LanguageAndCountryDataHandler.Language lan = languages.get(i);
-                        availableLanguage.setLanguageId(lan.getId());
-                        availableLanguage.setLanguage(lan.getLanguage());
-                    }
-                    realm.commitTransaction();
-                    sharedPreferences.edit()
-                            .putBoolean("dataBaseInitialized", true).commit();
-                }
-
-                @Override
-                public void onLanguageListDownloadFailure() {
-
-                }
-            });
-        }
-
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
 
