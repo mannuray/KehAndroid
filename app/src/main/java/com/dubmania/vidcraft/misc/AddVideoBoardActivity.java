@@ -94,7 +94,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                         intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, mBoardName.getText().toString());
                         intent.putExtra(ConstantsStore.INTENT_BOARD_ID, boardId);
                         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, mIconId);
-                        setResult(Activity.RESULT_OK);
+                        setResult(Activity.RESULT_OK, intent);
                         finish();
                     }
 

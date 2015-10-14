@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -145,7 +146,8 @@ public class VideoBoardActivity extends AppCompatActivity {
 
             @Override
             public void onVideosDownloadFailure() {
-
+                finish();
+                //new Snackbar add, toast or snackbar
             }
         });
     }
@@ -169,9 +171,10 @@ public class VideoBoardActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onVideoBoardDeletedEvent(VideoDeletedEvent event) {
+    public void onVideoDeletedEvent(VideoDeletedEvent event) {
+        Log.i("BOARD", "video deleet event reciveed");
         for(int i = 0; i < mVideoItemList.size(); i++) {
-            if(mVideoItemList.get(i).getId() == event.getmVideoId()) {
+            if(mVideoItemList.get(i).getId().equals(event.getmVideoId())) {
                 mVideoItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;

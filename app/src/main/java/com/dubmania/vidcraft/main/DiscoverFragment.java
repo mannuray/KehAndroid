@@ -104,7 +104,6 @@ public class DiscoverFragment extends Fragment {
         super.setMenuVisibility(visible);
         if (visible && mVisibleFirstTime) {
             BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(0, 0));
-            mVisibleFirstTime = false;
         }
     }
 
@@ -114,13 +113,14 @@ public class DiscoverFragment extends Fragment {
             mItemList.addAll(event.mItemList);
             mAdapter.notifyDataSetChanged();
             spinner.setVisibility(View.GONE);
+            mVisibleFirstTime = false;
         }
     }
 
     @Subscribe
     public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
         for(int i = 0; i < mItemList.size(); i++) {
-            if((mItemList.get(i).getType() == ListItem.ListType.board) && ((VideoBoardListItem)mItemList.get(i)).getId() == event.getBoardId()) {
+            if((mItemList.get(i).getType() == ListItem.ListType.board) && ((VideoBoardListItem)mItemList.get(i)).getId().equals(event.getBoardId())) {
                 mItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;

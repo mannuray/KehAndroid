@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,17 +69,18 @@ public class VideoBoardFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
         RelativeLayout mAddBoardButton = (RelativeLayout) view.findViewById(R.id.add_video_board_button);
+        final Fragment f = this;
         mAddBoardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddVideoBoardActivity.class);
-                startActivityForResult(intent, Activity.RESULT_OK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                f.startActivityForResult(intent, 2);
             }
         });
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // specify an adapter (see also next example)
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -87,6 +89,7 @@ public class VideoBoardFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("Board", "Add video booard result recived ouoeu ");
         if (resultCode == Activity.RESULT_OK) {
             String boardName = data.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
             Long id = data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0);
@@ -139,7 +142,7 @@ public class VideoBoardFragment extends Fragment {
     @Subscribe
     public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
         for(int i = 0; i < mVideoBoardItemList.size(); i++) {
-            if(mVideoBoardItemList.get(i).getId() == event.getBoardId()) {
+            if(mVideoBoardItemList.get(i).getId().equals(event.getBoardId())) {
                 mVideoBoardItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;

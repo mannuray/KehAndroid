@@ -2,6 +2,7 @@ package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -144,10 +145,25 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Log.i("Board", "Add video booard result recived " + requestCode + " " + resultCode);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK && data != null) {
             if(data.getBooleanExtra(ConstantsStore.INTENT_BOARD_DELETED, false)) {
                 BusProvider.getInstance().post(new VideoBoardDeletedEvent(data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0)));
             }
+        }
+        // this is because onActivityResult for fragment is not firing, don't know why request code is behaving in such maner
+        if (requestCode == 196610 && resultCode == Activity.RESULT_OK && data != null) {
+            String boardName = data.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
+            Long id = data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0);
+            int iconId = data.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0);
+            TypedArray mBoardIcons = getResources()
+                    .obtainTypedArray(R.array.video_board_icons);
+
+            ArrayList<VideoBoardListItem> boards = new ArrayList<>();
+            boards.add(new VideoBoardListItem(id, boardName, new SessionManager(this).getUser(), mBoardIcons.getResourceId(iconId, -1)));
+            mBoardIcons.recycle();
+            BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
         }
     }
 
@@ -315,12 +331,13 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_NAME, event.getBoardName());
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         String userName = new SessionManager(this).getUser();
         if(userName.equals(event.getBoardUsername()))
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);
         else
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, false);
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, 1);
     }
 
     @Subscribe

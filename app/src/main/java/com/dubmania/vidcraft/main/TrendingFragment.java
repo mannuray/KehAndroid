@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.dubmania.vidcraft.Adapters.VideoAdapter;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
@@ -25,6 +26,7 @@ public class TrendingFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
+    private ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,6 +58,8 @@ public class TrendingFragment extends Fragment {
 
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
+        spinner = (ProgressBar) view.findViewById(R.id.progress_bar);
+        spinner.setVisibility(View.VISIBLE);
 
 
         return view;
@@ -66,7 +70,6 @@ public class TrendingFragment extends Fragment {
         super.setMenuVisibility(visible);
         if (visible && mVisibleFirstTime) {
             BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
-            mVisibleFirstTime = false;
         }
     }
 
@@ -92,5 +95,7 @@ public class TrendingFragment extends Fragment {
     public void onAddTrendingVideoListEvent(AddTrendingVideoListEvent event) {
         mVideoItemList.addAll(event.mVideoItemList);
         mAdapter.notifyDataSetChanged();
+        spinner.setVisibility(View.GONE);
+        mVisibleFirstTime = false;
     }
 }

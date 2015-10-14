@@ -29,7 +29,7 @@ public class VideoItemPopupMenu {
     private boolean mUserBoard;
     private Activity activity;
 
-    public VideoItemPopupMenu(Long mBoardId, Activity activity, Long mVideoId, String mTitle, View view, boolean mUserBoard) {
+    public VideoItemPopupMenu( Long mBoardId, Activity activity, Long mVideoId, String mTitle, View view, boolean mUserBoard) {
         this.mBoardId = mBoardId;
         this.mVideoId = mVideoId;
         this.mTitle = mTitle;
