@@ -17,7 +17,8 @@ import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
-import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoDeletedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoBoard;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarker;
@@ -158,12 +159,23 @@ public class VideoBoardActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
+    public void onVideoFavoriteChangedEvent(VideoFavoriteChangedEvent event) {
         new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
     }
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
         new VideoItemPopupMenu(mBoardId, this, event.getId(), event.getTitle(), event.getView(), mUserBoard).show();
+    }
+
+    @Subscribe
+    public void onVideoBoardDeletedEvent(VideoDeletedEvent event) {
+        for(int i = 0; i < mVideoItemList.size(); i++) {
+            if(mVideoItemList.get(i).getId() == event.getmVideoId()) {
+                mVideoItemList.remove(i);
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 }

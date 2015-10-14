@@ -70,6 +70,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             mThumbIds.add(mBoardIcons.getResourceId(i, -1));
             mColors.add(mBoardIconsColors.getString(i));
         }
+
         mBoardIcons.recycle();
         mBoardIconsColors.recycle();
 

@@ -6,7 +6,7 @@ import android.widget.CompoundButton;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
-import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 
 /**
@@ -26,7 +26,7 @@ public class VideoViewHolderFactory {
         videoHolder.mFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                BusProvider.getInstance().post(new VideoFavriouteChangedEvent(isChecked, item.getId()));
+                BusProvider.getInstance().post(new VideoFavoriteChangedEvent(isChecked, item.getId()));
             }
         });
     }

@@ -3,11 +3,11 @@ package com.dubmania.vidcraft.communicator.eventbus.miscevent;
 /**
  * Created by rat on 8/8/2015.
  */
-public class VideoFavriouteChangedEvent {
+public class VideoFavoriteChangedEvent {
     private boolean mFavrioute;
     private Long mId;
 
-    public VideoFavriouteChangedEvent(boolean mFavrioute, Long id) {
+    public VideoFavoriteChangedEvent(boolean mFavrioute, Long id) {
         this.mFavrioute = mFavrioute;
         this.mId = id;
     }

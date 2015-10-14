@@ -2,10 +2,7 @@ package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
@@ -34,10 +30,10 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEnd
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
-import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavriouteChangedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
-import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardDownloaderCallback;
@@ -50,7 +46,6 @@ import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
 import com.dubmania.vidcraft.utils.ActivityStarter;
-import com.dubmania.vidcraft.utils.AvailableLanguage;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.InstalledLanguage;
 import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
@@ -145,6 +140,15 @@ public class HomeActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if(data.getBooleanExtra(ConstantsStore.INTENT_BOARD_DELETED, false)) {
+                BusProvider.getInstance().post(new VideoBoardDeletedEvent(data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0)));
+            }
+        }
     }
 
     @Override
@@ -300,7 +304,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onnVideoFavriouteChangedEvent(VideoFavriouteChangedEvent event) {
+    public void onnVideoFavriouteChangedEvent(VideoFavoriteChangedEvent event) {
         new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
     }
 
@@ -312,12 +316,11 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
         String userName = new SessionManager(this).getUser();
-        Log.i("user name", "sessino name " + userName + " event " + event.getBoardUsername());
         if(userName.equals(event.getBoardUsername()))
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);
         else
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, false);
-        startActivityForResult(intent, Activity.RESULT_OK);
+        startActivityForResult(intent, 2);
     }
 
     @Subscribe

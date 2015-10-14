@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoAndBoardAdapter;
+import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -112,6 +114,17 @@ public class DiscoverFragment extends Fragment {
             mItemList.addAll(event.mItemList);
             mAdapter.notifyDataSetChanged();
             spinner.setVisibility(View.GONE);
+        }
+    }
+
+    @Subscribe
+    public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
+        for(int i = 0; i < mItemList.size(); i++) {
+            if((mItemList.get(i).getType() == ListItem.ListType.board) && ((VideoBoardListItem)mItemList.get(i)).getId() == event.getBoardId()) {
+                mItemList.remove(i);
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
         }
     }
 

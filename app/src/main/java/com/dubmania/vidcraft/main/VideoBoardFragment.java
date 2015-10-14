@@ -23,6 +23,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEndedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
@@ -133,5 +134,16 @@ public class VideoBoardFragment extends Fragment {
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
         mVideoBoardItemList.addAll(event.getVideoBoard());
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe
+    public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
+        for(int i = 0; i < mVideoBoardItemList.size(); i++) {
+            if(mVideoBoardItemList.get(i).getId() == event.getBoardId()) {
+                mVideoBoardItemList.remove(i);
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 }

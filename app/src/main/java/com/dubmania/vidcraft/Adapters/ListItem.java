@@ -7,7 +7,7 @@ import android.os.Parcelable;
  */
 public abstract class ListItem implements Parcelable {
 
-    enum ListType {video, board}
+    public enum ListType {video, board}
     private ListType mType;
 
     public ListItem(ListType mType) {
