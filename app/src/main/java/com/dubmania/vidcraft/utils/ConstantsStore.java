@@ -143,6 +143,9 @@ public class ConstantsStore {
     public final static int SHARE_APP_ID_WHATSAPP = 1;
     public final static int SHARE_APP_ID_SAVE_GALLERY = 2;
 
+    public final static double IMAGE_SCALE_RATIO_X = 265d/640d;
+    public final static double IMAGE_SCALE_RATIO_Y = 32d/480d;
+
 
 }
 

@@ -14,13 +14,6 @@ import android.opengl.Matrix;
 import android.util.Log;
 import android.view.Surface;
 
-import com.coremedia.iso.boxes.Container;
-import com.googlecode.mp4parser.DataSource;
-import com.googlecode.mp4parser.FileDataSourceImpl;
-import com.googlecode.mp4parser.authoring.Movie;
-import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
-import com.googlecode.mp4parser.authoring.tracks.H264TrackImpl;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,15 +44,14 @@ public class ImageOverlayer {
     private int overlayPositionX;
     private int overlayPositionY;
 
-    private CoordinateCalculator mCalculator;
+    private ImagePostioner mCalculator;
 
     public ImageOverlayer(File cacheDir, String inputFile) {
         mCacheDir = cacheDir;
         mInputFile = inputFile;
     }
 
-    public void overLay(Bitmap bitmap, CoordinateCalculator calculator, Callback callback) {
-        mWaterMark = bitmap;
+    public void overLay(ImagePostioner calculator, Callback callback) {
         mCalculator = calculator;
         mCallback = callback;
         try {
@@ -150,9 +142,10 @@ public class ImageOverlayer {
             saveWidth = format.getInteger(MediaFormat.KEY_WIDTH);
             saveHeight = format.getInteger(MediaFormat.KEY_HEIGHT);
 
-            Coordinate coordinate = mCalculator.calculatePosition(saveWidth, saveHeight, mWaterMark);
+            Coordinate coordinate = mCalculator.calculatePosition(saveWidth, saveHeight);
             overlayPositionX = coordinate.getX();
             overlayPositionY = coordinate.getY();
+            mWaterMark = coordinate.getBitmap();
 
             if (VERBOSE) {
                 Log.d(TAG, "Video size is " + format.getInteger(MediaFormat.KEY_WIDTH) + "x" +
@@ -192,7 +185,11 @@ public class ImageOverlayer {
 
             mCallback.onConversionCompleted(mCacheDir.getAbsolutePath() + "/temp.h264", (int)fps);
 
-        } finally {
+        }
+        catch (Exception e) {
+            mCallback.onConversionFailed(e.getMessage());
+        }
+        finally {
             // release everything we grabbed
             if (outputSurface != null) {
                 outputSurface.release();
@@ -1011,18 +1008,19 @@ public class ImageOverlayer {
         //public void onReady();
     }
 
-    public interface CoordinateCalculator {
-        Coordinate calculatePosition(int mWith, int mHeight, Bitmap mBitmap);
-
+    public interface ImagePostioner {
+        Coordinate calculatePosition(int mWith, int mHeight);
     }
 
     public static class Coordinate {
         private int mX;
         private int mY;
+        private Bitmap mBitmap;
 
-        public Coordinate(int mX, int mY) {
+        public Coordinate(int mX, int mY, Bitmap mBitmap) {
             this.mX = mX;
             this.mY = mY;
+            this.mBitmap = mBitmap;
         }
 
         public int getX() {
@@ -1031,6 +1029,10 @@ public class ImageOverlayer {
 
         public int getY() {
             return mY;
+        }
+
+        public Bitmap getBitmap() {
+            return mBitmap;
         }
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
@@ -72,6 +73,10 @@ public class AddFinishFragment extends Fragment {
             @Override
             public void onClick(View v) {
                long id = 0;
+                if(mVideoTitle.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Please give a title", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                for(AvailableLanguage language: mRealmResults) {
                     if(language.getLanguage().equals(mLanguage)){
                         id = language.getLanguageId();

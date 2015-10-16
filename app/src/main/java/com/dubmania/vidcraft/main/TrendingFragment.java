@@ -59,7 +59,10 @@ public class TrendingFragment extends Fragment {
         mAdapter = new VideoAdapter(mVideoItemList);
         mRecyclerView.setAdapter(mAdapter);
         spinner = (ProgressBar) view.findViewById(R.id.progress_bar);
-        spinner.setVisibility(View.VISIBLE);
+        if(mVisibleFirstTime)
+            spinner.setVisibility(View.VISIBLE);
+        else
+            spinner.setVisibility(View.GONE);
 
 
         return view;

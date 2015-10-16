@@ -75,7 +75,11 @@ public class DiscoverFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         //mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
         spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
-        spinner.setVisibility(View.VISIBLE);
+
+        if(mVisibleFirstTime)
+            spinner.setVisibility(View.VISIBLE);
+        else
+            spinner.setVisibility(View.GONE);
 
         return view;
 
