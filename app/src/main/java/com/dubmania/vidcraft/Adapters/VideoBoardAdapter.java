@@ -25,7 +25,7 @@ public class VideoBoardAdapter extends EndlessRecyclerAdapter<VideoBoardListItem
 
         if(viewType == VIEW_ITEM) {
             return new VideoBoardViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.video_item_list_layout, parent, false));
+                    .inflate(R.layout.video_board_item_list_layout, parent, false));
         }else {
             return new ProgressViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recycler_progress_card_view, parent, false));
@@ -35,7 +35,6 @@ public class VideoBoardAdapter extends EndlessRecyclerAdapter<VideoBoardListItem
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VideoBoardViewHolder){
-            Log.i("BORAD", " positino is " + position);
             VideoBoardViewHolderFactory.bindViewHolder(mDataset.get(position), holder);
         }else{
             ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);

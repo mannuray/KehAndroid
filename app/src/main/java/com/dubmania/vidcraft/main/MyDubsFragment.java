@@ -16,6 +16,7 @@ import com.dubmania.vidcraft.Adapters.MyVideoAdapter;
 import com.dubmania.vidcraft.Adapters.MyVideoListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
+import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SavedDubsData;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ public class MyDubsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_my_dubs, container, false);
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
+        EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.my_dubs_recycler_view);
+        mRecyclerView.setEmptyView(view.findViewById(R.id.list_empty));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         ArrayList<MyVideoListItem> mMyVideoItemList = new ArrayList<>();

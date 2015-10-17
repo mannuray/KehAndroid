@@ -36,7 +36,7 @@ public class MyVideoAdapter extends EndlessRecyclerAdapter<MyVideoListItem> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if(holder instanceof VideoViewHolder){
+        if(holder instanceof ViewHolder){
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mImageIcon.setImageBitmap(mDataset.get(position).getIcon());
             viewHolder.mVideoName.setText(mDataset.get(position).getmVideoName());

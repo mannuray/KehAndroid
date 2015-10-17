@@ -5,11 +5,17 @@
     tools:context="com.dubmania.vidcraft.main.MyDubsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
+    <com.dubmania.vidcraft.utils.EmptyRecyclerView
         android:id="@+id/my_dubs_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+
+    <TextView android:id="@+id/list_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empty"
+        />
 
 
 </FrameLayout>
