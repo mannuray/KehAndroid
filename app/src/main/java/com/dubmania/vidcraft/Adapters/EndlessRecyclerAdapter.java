@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.dubmania.vidcraft.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by rat on 10/17/2015.
@@ -45,21 +43,16 @@ public class EndlessRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView
         if(recyclerView.getLayoutManager()instanceof LinearLayoutManager) {
 
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
-            Log.i("ENDLESS", "super con called");
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    Log.i("ENDLESS", "on scroll listner called");
 
                     totalItemCount = linearLayoutManager.getItemCount();
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    Log.i("ENDLESS", "value " + totalItemCount + " " + lastVisibleItem + " " + loading);
                     if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                         // End has been reached
                         // Do something
-                        mDataset.add(null);
-                        EndlessRecyclerAdapter.this.notifyDataSetChanged();
                         if (onLoadMoreListener != null) {
                             onLoadMoreListener.onLoadMore();
                         }

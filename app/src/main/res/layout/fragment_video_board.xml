@@ -33,7 +33,7 @@
             android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -44,7 +44,7 @@
             android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -54,7 +54,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
     </android.support.design.widget.CoordinatorLayout>
 

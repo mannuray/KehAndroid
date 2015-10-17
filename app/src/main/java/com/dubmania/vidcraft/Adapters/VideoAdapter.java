@@ -11,14 +11,10 @@ import java.util.ArrayList;
  * Created by rat on 7/28/2015.
  */
 public class VideoAdapter extends EndlessRecyclerAdapter<VideoListItem> {
-    //private ArrayList<VideoListItem> mDataset;
 
     public VideoAdapter(ArrayList<VideoListItem> myDataSet, RecyclerView recyclerView) {
         super(myDataSet, recyclerView);
-        //mDataset = myDataSet;
     }
-
-    public void shict() {}
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,

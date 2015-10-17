@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 
 public class VideoBoardFragment extends Fragment {
-    private RecyclerView.Adapter mAdapter;
+    private VideoBoardAdapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
     private FloatingActionButton fab_btn1,fab_btn2;
@@ -54,10 +54,11 @@ public class VideoBoardFragment extends Fragment {
             TypedArray mBoardIcons = getResources()
                     .obtainTypedArray(R.array.video_board_icons);
 
+            /*
             mVideoBoardItemList = new ArrayList<>((Arrays.asList(
                     new VideoBoardListItem((long) -1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
                     new VideoBoardListItem((long) -2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
-            )));
+            ))); */
             mBoardIcons.recycle();
         }
     }
@@ -85,7 +86,7 @@ public class VideoBoardFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
+        mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         initData();
@@ -149,8 +150,7 @@ public class VideoBoardFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
-        mVideoBoardItemList.addAll(event.getVideoBoard());
-        mAdapter.notifyDataSetChanged();
+        mAdapter.addData(event.getVideoBoard());
     }
 
     @Subscribe

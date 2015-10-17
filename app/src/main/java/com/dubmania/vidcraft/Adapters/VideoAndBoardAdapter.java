@@ -11,20 +11,23 @@ import java.util.ArrayList;
 /**
  * Created by rat on 7/28/2015.
  */
-public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<ListItem> mList;
+public class VideoAndBoardAdapter extends EndlessRecyclerAdapter<ListItem> {
+    protected int VIEW_VIDO = 1;
+    protected int VIEW_BORD = 2;
+    protected int VIEW_PROG = 0;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoAndBoardAdapter(ArrayList<ListItem> myList) {
-        this.mList = myList;
+    public VideoAndBoardAdapter(ArrayList<ListItem> mList, RecyclerView mRecyclerView) {
+        super(mList, mRecyclerView);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(mList.get(position).getType() == ListItem.ListType.video)
-            return 0;
-        else if(mList.get(position).getType() == ListItem.ListType.board)
-            return 1;
+        if(mDataset.get(position) == null)
+            return VIEW_PROG;
+        if(mDataset.get(position).getType() == ListItem.ListType.video)
+            return VIEW_VIDO;
+        else if(mDataset.get(position).getType() == ListItem.ListType.board)
+            return VIEW_BORD;
         return -1;
     }
 
@@ -32,12 +35,15 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public  RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,  int viewType) {
         switch (viewType) {
-            case 0:
+            case 1:
                 return new VideoViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.video_item_list_layout, parent, false));
-            case 1:
+            case 2:
                 return new VideoBoardViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.video_board_item_list_layout, parent, false));
+            case 0:
+                return new ProgressViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.recycler_progress_card_view, parent, false));
             default:
                 return null;
         }
@@ -46,16 +52,19 @@ public class VideoAndBoardAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch(getItemViewType(position)) {
-            case 0:
-                VideoViewHolderFactory.bindViewHolder((VideoListItem)mList.get(position), holder, position);
-                return;
             case 1:
-                VideoBoardViewHolderFactory.bindViewHolder((VideoBoardListItem)mList.get(position), holder);
+                VideoViewHolderFactory.bindViewHolder((VideoListItem)mDataset.get(position), holder, position);
+                return;
+            case 2:
+                VideoBoardViewHolderFactory.bindViewHolder((VideoBoardListItem)mDataset.get(position), holder);
+                return;
+            case 0:
+                ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);
         }
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mDataset.size();
     }
 }

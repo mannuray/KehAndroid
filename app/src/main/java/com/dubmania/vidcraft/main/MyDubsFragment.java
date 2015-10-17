@@ -46,7 +46,7 @@ public class MyDubsFragment extends Fragment {
         for(SavedDubsData dub: dubs) {
             mMyVideoItemList.add(new MyVideoListItem(ThumbnailUtils.createVideoThumbnail(dub.getFilePath(), MediaStore.Video.Thumbnails.MICRO_KIND), dub.getTitle(), dub.getFilePath(), dub.getCreationDate()));
         }
-        RecyclerView.Adapter mAdapter = new MyVideoAdapter(mMyVideoItemList);
+        RecyclerView.Adapter mAdapter = new MyVideoAdapter(mMyVideoItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

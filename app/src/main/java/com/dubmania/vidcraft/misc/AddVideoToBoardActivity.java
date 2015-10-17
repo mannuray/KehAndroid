@@ -26,8 +26,7 @@ import java.util.ArrayList;
 
 public class AddVideoToBoardActivity extends AppCompatActivity {
     Toolbar mToolbar;
-    private RecyclerView.Adapter mAdapter;
-    private ArrayList<VideoBoardListItem> mVideoBoardItemList;
+    private VideoBoardAdapter mAdapter;
     private Long mVideoId;
 
     @Override
@@ -48,8 +47,9 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.add_video_to_board_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mVideoBoardItemList = new ArrayList<>();
-        mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
+        ArrayList<VideoBoardListItem> mVideoBoardItemList = new ArrayList<>();
+        mVideoBoardItemList.add(null);
+        mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         populateData();
     }
@@ -106,8 +106,7 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
         new VideoBoardsDownloader(getApplicationContext()).getUserBoards(user, new VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
-                mVideoBoardItemList.addAll(boards);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.addData(boards);
             }
 
             @Override
