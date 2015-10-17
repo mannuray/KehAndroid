@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +70,8 @@ public class VideoBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
-        RelativeLayout mAddBoardButton = (RelativeLayout) view.findViewById(R.id.add_video_board_button);
+        CoordinatorLayout rootLayout=(CoordinatorLayout)view.findViewById(R.id.rootLayout);
+        FloatingActionButton mAddBoardButton = (FloatingActionButton) view.findViewById(R.id.fabBtn);
         final Fragment f = this;
         mAddBoardButton.setOnClickListener(new View.OnClickListener() {
             @Override

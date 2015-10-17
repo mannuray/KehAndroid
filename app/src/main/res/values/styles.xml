@@ -60,14 +60,6 @@
         <item name="android:tag">@string/tag_nav_drawer_special_entry</item>
     </style>
 
-    <style name="NavDrawerRowItemIcon">
-        <item name="android:layout_width">@dimen/nav_drawer_item_row_icon_size</item>
-        <item name="android:layout_height">@dimen/nav_drawer_item_row_icon_size</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginLeft">@dimen/nav_drawer_vertical_keyline_icon_left</item>
-        <item name="colorStateList">@color/nav_drawer_row_icon</item>
-    </style>
-
     <style name="NavDrawerRowItemText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -96,8 +88,12 @@
 
     <!--  My Custom Toolbar Theme -->
     <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:textSize">10sp</item>
 
+    </style>
+
+    <style name="Toolbar_Popup" parent="Base.ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">#000</item>
+        <item name="android:background">@color/white</item>
     </style>
 
 
