@@ -23,6 +23,7 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
+import com.dubmania.vidcraft.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

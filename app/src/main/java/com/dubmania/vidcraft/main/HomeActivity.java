@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.Adapters.ListItem;
@@ -43,6 +45,7 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarke
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
+import com.dubmania.vidcraft.misc.MyAccountActivity;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
@@ -66,12 +69,15 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ArrayList<Long> languages;
     private NavigationView navigationView;
+    private TextView userName,email,logout;
+    private RelativeLayout headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         //Realm.deleteRealmFile(getApplicationContext());
+
 
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
@@ -83,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
         init_navigator();
         init_languages();
 
-
+        initData();
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
@@ -95,6 +101,20 @@ public class HomeActivity extends AppCompatActivity {
 
         changeFragment(new PagerFragment(), "VidCraft");
     }
+
+
+    private void initData(){
+        SessionManager manager = new SessionManager(this);
+        if(manager.isLoggedIn()) {
+            userName.setText(manager.getUser());
+            email.setText(manager.getUserEmail());
+            logout.setVisibility(View.VISIBLE);
+        }
+        else {
+            headerLayout.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override public void onResume() {
         super.onResume();
@@ -161,7 +181,20 @@ public class HomeActivity extends AppCompatActivity {
         // Navigation Drawer
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_DrawerLayout);
+        headerLayout= (RelativeLayout) navigationView.findViewById(R.id.header);
+        userName= (TextView) navigationView.findViewById(R.id.username);
+        email= (TextView) navigationView.findViewById(R.id.email);
+        logout= (TextView) navigationView.findViewById(R.id.logout);
+
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primaryDark));
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, MyAccountActivity.class);
+                startActivity(intent);
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -207,8 +240,7 @@ public class HomeActivity extends AppCompatActivity {
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        if (getSupportActionBar() != null)
-        {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             //getSupportActionBar().setHomeButtonEnabled(true);
@@ -277,10 +309,9 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onVideosDownloadFailure() {
-
-            }
+            public void onVideosDownloadFailure() {}
         });
+
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
     }
 
@@ -337,6 +368,8 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getFilePath());
         startActivity(intent);
     }
+
+
 
 
 }

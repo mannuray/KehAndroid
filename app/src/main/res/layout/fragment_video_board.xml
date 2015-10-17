@@ -18,10 +18,34 @@
             android:scrollbars="vertical" />
     </LinearLayout>
 
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabBtn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:src="@drawable/ic_plus"
+            app:fabSize="normal" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabBtn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:src="@drawable/ic_plus"
+            app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBtn"
