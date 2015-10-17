@@ -73,7 +73,6 @@ public class DiscoverFragment extends Fragment {
 
         mAdapter = new VideoAndBoardAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
-        //mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
         spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
 
         if(mVisibleFirstTime)

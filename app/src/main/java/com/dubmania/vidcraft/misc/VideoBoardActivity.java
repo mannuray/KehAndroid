@@ -71,10 +71,10 @@ public class VideoBoardActivity extends AppCompatActivity {
         spinner.setVisibility(View.VISIBLE);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.boardRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVideoItemList = new ArrayList<>();
         populateData();
-        mAdapter = new VideoAdapter(mVideoItemList);
+        mAdapter = new VideoAdapter(mVideoItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
     }
