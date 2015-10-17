@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,13 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.Adapters.VideoPlayEvent;
-import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddTrendingVideoListEvent;
@@ -43,16 +45,14 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarke
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
+import com.dubmania.vidcraft.misc.MyAccountActivity;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
 import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
 import com.dubmania.vidcraft.utils.ActivityStarter;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.InstalledLanguage;
-import com.dubmania.vidcraft.utils.ScrimInsetsFrameLayout;
 import com.dubmania.vidcraft.utils.SessionManager;
-import com.dubmania.vidcraft.utils.UtilsDevice;
-import com.dubmania.vidcraft.utils.UtilsMiscellaneous;
 import com.dubmania.vidcraft.utils.VideoSharer;
 import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
@@ -68,6 +68,9 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
     private DrawerLayout mDrawerLayout;
     private ArrayList<Long> languages;
+    private NavigationView navigationView;
+    private TextView userName,email,logout;
+    private RelativeLayout headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,47 +78,18 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         //Realm.deleteRealmFile(getApplicationContext());
 
+
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         DubsmaniaHttpClient.setCookieStore(myCookieStore);
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         mFragmentManager = getSupportFragmentManager();
+
         init_navigator();
         init_languages();
 
-
-        findViewById(R.id.navigation_drawer_items_list_linearLayout_create_dub).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new PagerFragment(), "VidCraft");
-            }
-        });
-
-        findViewById(R.id.navigation_drawer_items_list_linearLayout_add_video).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new AddVideoFragment(), "Add Video");
-            }
-        });
-
-        findViewById(R.id.navigation_drawer_items_list_linearLayout_my_dubs).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new MyDubsFragment(), "My Dubs");
-            }
-        });
-
-        findViewById(R.id.navigation_drawer_items_list_linearLayout_settings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new SettingFragment(), "Settings");
-            }
-        });
-
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, new PagerFragment())
-                .commit();
+        initData();
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
@@ -124,7 +98,23 @@ public class HomeActivity extends AppCompatActivity {
             Log.i("ezp", "EXTRA: "+intent.getExtras().getString("id"));
             ActivityStarter.createDub(this, new Long(intent.getExtras().getString("id")), " as of now" );
         }
+
+        changeFragment(new PagerFragment(), "VidCraft");
     }
+
+
+    private void initData(){
+        SessionManager manager = new SessionManager(this);
+        if(manager.isLoggedIn()) {
+            userName.setText(manager.getUser());
+            email.setText(manager.getUserEmail());
+            logout.setVisibility(View.VISIBLE);
+        }
+        else {
+            headerLayout.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override public void onResume() {
         super.onResume();
@@ -186,19 +176,52 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    private void changeFragment(Fragment fragment, String title) {
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(title)
-                .commit();
-        mDrawerLayout.closeDrawers();
-    }
 
     private void init_navigator(){
         // Navigation Drawer
+        navigationView=(NavigationView)findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_DrawerLayout);
+        headerLayout= (RelativeLayout) navigationView.findViewById(R.id.header);
+        userName= (TextView) navigationView.findViewById(R.id.username);
+        email= (TextView) navigationView.findViewById(R.id.email);
+        logout= (TextView) navigationView.findViewById(R.id.logout);
+
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primaryDark));
-        ScrimInsetsFrameLayout mScrimInsetsFrameLayout = (ScrimInsetsFrameLayout) findViewById(R.id.main_activity_navigation_drawer_rootLayout);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, MyAccountActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                if(menuItem.isChecked()) menuItem.setChecked(false);
+                else menuItem.setChecked(true);
+                //Closing drawer on item click
+                mDrawerLayout.closeDrawers();
+
+                switch (menuItem.getItemId()){
+                    case R.id.create_dub:
+                        changeFragment(new PagerFragment(), "VidCraft");
+                        return  true;
+                    case R.id.add_video:
+                        changeFragment(new AddVideoFragment(), "Add Video");
+                        return  true;
+                    case R.id.my_dubs:
+                        changeFragment(new MyDubsFragment(), "My Dubs");
+                        return  true;
+                    case R.id.settings:
+                        changeFragment(new SettingFragment(), "Settings");
+                        return  true;
+                    default:
+                        return  true;
+                }
+            }
+        });
 
         ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle
                 (
@@ -217,22 +240,22 @@ public class HomeActivity extends AppCompatActivity {
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        if (getSupportActionBar() != null)
-        {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             //getSupportActionBar().setHomeButtonEnabled(true);
         }
 
         mActionBarDrawerToggle.syncState();
-
-        // Navigation Drawer layout width
-        int possibleMinDrawerWidth = UtilsDevice.getScreenWidth(this) -
-                UtilsMiscellaneous.getThemeAttributeDimensionSize(this, android.R.attr.actionBarSize);
-        int maxDrawerWidth = getResources().getDimensionPixelSize(R.dimen.navigation_drawer_max_width);
-
-        mScrimInsetsFrameLayout.getLayoutParams().width = Math.min(possibleMinDrawerWidth, maxDrawerWidth);
         getSupportActionBar().setTitle("VidCraft");
+    }
+
+    private void changeFragment(Fragment fragment, String title) {
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(title)
+                .commit();
+        mDrawerLayout.closeDrawers();
     }
 
     private void init_languages() {
@@ -286,10 +309,9 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onVideosDownloadFailure() {
-
-            }
+            public void onVideosDownloadFailure() {}
         });
+
         Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
     }
 
@@ -346,6 +368,8 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_FILE_PATH, event.getFilePath());
         startActivity(intent);
     }
+
+
 
 
 }

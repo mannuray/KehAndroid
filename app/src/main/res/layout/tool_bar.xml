@@ -6,4 +6,5 @@
     android:background="@color/ColorPrimary"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/MyCustomToolbarTheme"
+    app:popupTheme="@style/Toolbar_Popup"
     xmlns:android="http://schemas.android.com/apk/res/android" />
