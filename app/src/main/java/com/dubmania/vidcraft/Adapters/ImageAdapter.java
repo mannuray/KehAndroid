@@ -2,7 +2,6 @@ package com.dubmania.vidcraft.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.view.View;
@@ -10,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import java.nio.channels.Selector;
 import java.util.ArrayList;
-import com.dubmania.vidcraft.R;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
@@ -51,11 +48,15 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        GradientDrawable selected = (GradientDrawable) mContext.getResources().getDrawable(R.drawable.rectangular_background);
+        GradientDrawable selected = new GradientDrawable();
+        selected.setCornerRadius(3);
+        selected.setColor(Color.parseColor("#ffffffff"));
+        // seems we cannot get new drawarble, it return the same refrence
+        //(GradientDrawable) mContext.getResources().getDrawable(R.drawable.rectangular_background);
         selected.setStroke(3, Color.parseColor(mThumbColors.get(position)));
-        StateListDrawable background = new StateListDrawable(); // mContext.getResources().getDrawable(R.drawable.add_video_board_selector);
+        StateListDrawable background = new StateListDrawable();
         background.addState(new int[]{android.R.attr.state_activated }, selected);
-        imageView.setBackground(background); //mContext.getResources().getDrawable(R.drawable.add_video_board_selector));
+        imageView.setBackground(background);
         imageView.setImageResource(mThumbIds.get(position));
         return imageView;
     }
