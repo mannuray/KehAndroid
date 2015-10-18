@@ -119,6 +119,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
+        initData();
     }
 
     @Override public void onPause() {
@@ -179,7 +180,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void init_navigator(){
         // Navigation Drawer
-        navigationView=(NavigationView)findViewById(R.id.navigation_view);
+        navigationView =(NavigationView)findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_DrawerLayout);
         headerLayout= (RelativeLayout) navigationView.findViewById(R.id.header);
         userName= (TextView) navigationView.findViewById(R.id.username);
@@ -270,7 +271,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoItemMenuEvent(VideoItemMenuEvent event) {
-        new VideoItemPopupMenu(new Long(0), this, event.getId(), event.getTitle(), event.getView(), false).show();
+        new VideoItemPopupMenu((long) 0, this, event.getId(), event.getTitle(), event.getView(), false).show();
     }
 
     @Subscribe
@@ -314,9 +315,11 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoBoardScrollEndedEvent(VideoBoardScrollEndedEvent event) {
+        final ArrayList<VideoBoardListItem> boards = new ArrayList<>();
         SessionManager manager = new SessionManager(this);
         if(!manager.isLoggedIn()) {
             Log.d("Board ,", "not logged in");
+            BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
             return;
         }
 
@@ -328,7 +331,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onVideosBoardsDownloadFailure() {
-
+                BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
             }
         });
     }

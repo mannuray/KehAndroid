@@ -10,6 +10,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -36,9 +37,11 @@ dependencies {
     compile 'io.realm:realm-android:0.72.0'
     compile 'com.googlecode.mp4parser:isoparser:1.0.6'
     compile 'com.google.android.gms:play-services-analytics:7.3.0'
-    compile "org.apache.httpcomponents:httpcore:4.3.2"
+    compile 'org.apache.httpcomponents:httpcore:4.3.2'
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile 'com.google.guava:guava:16.0.1'
+    compile 'com.android.support:multidex:1.0.1'
 }
 
 apt {

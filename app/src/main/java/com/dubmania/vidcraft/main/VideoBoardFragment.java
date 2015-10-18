@@ -24,6 +24,7 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEnd
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
@@ -81,7 +82,8 @@ public class VideoBoardFragment extends Fragment {
             }
         });
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
+        EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.video_board_recycler_view);
+        mRecyclerView.setEmptyView(view.findViewById(R.id.list_empty));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
