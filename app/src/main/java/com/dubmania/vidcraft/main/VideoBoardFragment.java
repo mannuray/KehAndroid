@@ -26,6 +26,7 @@ import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,7 +158,8 @@ public class VideoBoardFragment extends Fragment {
     public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
         for(int i = 0; i < mVideoBoardItemList.size(); i++) {
             if(mVideoBoardItemList.get(i).getId().equals(event.getBoardId())) {
-                mVideoBoardItemList.remove(i);
+                SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Videoboard: " + mVideoBoardItemList.get(i).getName() + " deleted").show();
+                        mVideoBoardItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;
             }

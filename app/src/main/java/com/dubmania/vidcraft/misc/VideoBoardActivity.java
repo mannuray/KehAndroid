@@ -21,6 +21,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoDeletedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
@@ -32,6 +33,7 @@ import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -141,8 +143,13 @@ public class VideoBoardActivity extends AppCompatActivity {
 
             @Override
             public void onVideosDownloadFailure() {
+                SnackFactory.getInternetConnectionRetrySnack(findViewById(android.R.id.content), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        populateData();
+                    }
+                }).show();
                 finish();
-                //new Snackbar();
             }
         });
     }
@@ -170,7 +177,8 @@ public class VideoBoardActivity extends AppCompatActivity {
         for(int i = 0; i < mVideoItemList.size(); i++) {
             if(mVideoItemList.get(i).getId().equals(event.getmVideoId())) {
                 mVideoItemList.remove(i);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();;
+                SnackFactory.getSnack(findViewById(android.R.id.content), "Video deleted from board").show();
                 break;
             }
         }

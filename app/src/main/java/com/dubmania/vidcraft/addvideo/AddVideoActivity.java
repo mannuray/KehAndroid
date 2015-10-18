@@ -28,6 +28,7 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallb
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.MiscFunction;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.media.ImageOverlayer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
@@ -237,7 +238,8 @@ public class AddVideoActivity extends AppCompatActivity {
 
                         @Override
                         public void onConversionFailed(String error) {
-
+                            SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to process video due to unknown error").show();
+                            finish();
                         }
                     });
 
