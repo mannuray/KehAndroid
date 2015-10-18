@@ -112,7 +112,7 @@ public class VideoBoardFragment extends Fragment {
             int iconId = data.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0);
             mVideoBoardItemList.add(new VideoBoardListItem(id, boardName, new SessionManager(this.getActivity()).getUser(), iconId));
             mAdapter.notifyDataSetChanged();
-
+            SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
         }
     }
 

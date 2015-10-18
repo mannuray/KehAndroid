@@ -8,20 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
-import com.dubmania.vidcraft.Adapters.EndlessRecyclerAdapter;
 import com.dubmania.vidcraft.Adapters.VideoAdapter;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
-import com.dubmania.vidcraft.communicator.eventbus.mainevent.TrendingViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
-import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoDeletedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
@@ -178,7 +173,6 @@ public class VideoBoardActivity extends AppCompatActivity {
             if(mVideoItemList.get(i).getId().equals(event.getmVideoId())) {
                 mVideoItemList.remove(i);
                 mAdapter.notifyDataSetChanged();;
-                SnackFactory.getSnack(findViewById(android.R.id.content), "Video deleted from board").show();
                 break;
             }
         }

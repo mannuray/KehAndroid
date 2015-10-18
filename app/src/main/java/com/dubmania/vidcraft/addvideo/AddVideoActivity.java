@@ -22,6 +22,7 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoEditEve
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallback;
@@ -249,6 +250,11 @@ public class AddVideoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe
+    public void onCancelVideoWaterMarking(CancelVideoWaterMarking event) {
+        // cancel the wartermarknig thread
     }
 
     @Subscribe
