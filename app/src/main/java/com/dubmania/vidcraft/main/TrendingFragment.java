@@ -6,11 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
+import com.dubmania.vidcraft.Adapters.EndlessRecyclerAdapter;
 import com.dubmania.vidcraft.Adapters.VideoAdapter;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
@@ -23,10 +24,9 @@ import java.util.ArrayList;
 
 public class TrendingFragment extends Fragment {
 
-    private RecyclerView.Adapter mAdapter;
+    private VideoAdapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
-    private ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,6 +45,7 @@ public class TrendingFragment extends Fragment {
         }
         else {
             mVideoItemList = new ArrayList<>();
+            mVideoItemList.add(null); // show the progress bar
         }
     }
 
@@ -54,16 +55,21 @@ public class TrendingFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_trending, container, false);
         final FragmentActivity c = getActivity();
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.trending_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(c)); // probably we dont need this
 
-        mAdapter = new VideoAdapter(mVideoItemList);
+        mAdapter = new VideoAdapter(mVideoItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
-        spinner = (ProgressBar) view.findViewById(R.id.progress_bar);
-        if(mVisibleFirstTime)
-            spinner.setVisibility(View.VISIBLE);
-        else
-            spinner.setVisibility(View.GONE);
 
+        mAdapter.setOnLoadMoreListener(new EndlessRecyclerAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add progress item
+                ArrayList<VideoListItem> a = new ArrayList();
+                a.add(null);
+                mAdapter.addData(a);
+                BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+            }
+        });
 
         return view;
     }
@@ -96,9 +102,7 @@ public class TrendingFragment extends Fragment {
 
     @Subscribe
     public void onAddTrendingVideoListEvent(AddTrendingVideoListEvent event) {
-        mVideoItemList.addAll(event.mVideoItemList);
-        mAdapter.notifyDataSetChanged();
-        spinner.setVisibility(View.GONE);
+        mAdapter.addData(event.mVideoItemList);
         mVisibleFirstTime = false;
     }
 }

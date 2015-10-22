@@ -29,6 +29,7 @@ public class EditVideoFragment extends Fragment {
     private Uri mUri;
     private VideoView mVideoView;
     private RangeSeekBar<Integer> mTrimmer;
+    private MenuItem next;
 
     public EditVideoFragment() {
         // Required empty public constructor
@@ -50,7 +51,6 @@ public class EditVideoFragment extends Fragment {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                Log.i("prepare", " duraita form manag in edit" + mVideoView.getDuration());
                 mTrimmer.setRangeValues(0, mVideoView.getDuration());
                 mTrimmer.resetSelectedValues();
             }
@@ -65,12 +65,15 @@ public class EditVideoFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_edit_video, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        next = menu.findItem(R.id.action_edit_video);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if( id == R.id.action_edit_video) {
+            item.setEnabled(false);
+            item.setVisible(false);
             BusProvider.getInstance().post(new AddVideoEditEvent(mTrimmer.getSelectedMinValue(), mTrimmer.getSelectedMaxValue())); //mUri.getPath())); // this is rendundat now but will be of use later
         }
         return true;
@@ -79,6 +82,10 @@ public class EditVideoFragment extends Fragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
+        if(next != null) {
+            next.setEnabled(true);
+            next.setVisible(true);
+        }
         if(mVideoView != null) {
             mVideoView.pause();
             isPlaying = false;
@@ -149,6 +156,8 @@ public class EditVideoFragment extends Fragment {
         mUri = Uri.parse(event.getFilePath());
         mVideoView.setVideoURI(mUri);
         mVideoView.seekTo(100);
+        /*if(next != null)
+            next.setEnabled(true);*/
         isVideoUriSet = true;
     }
 }

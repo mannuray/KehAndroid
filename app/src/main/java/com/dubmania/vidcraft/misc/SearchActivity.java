@@ -59,22 +59,26 @@ public class SearchActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mItemList = new ArrayList<>();
-        final RecyclerView.Adapter mAdapter = new VideoAndBoardAdapter(mItemList);
+        final VideoAndBoardAdapter mAdapter = new VideoAndBoardAdapter(mItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         mSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                mItemList.clear();
+                mItemList.add(null);
+                mAdapter.notifyDataSetChanged();
                 new VideoAndBoardDownloader(getApplicationContext()).search(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoAndBoardDownloaderCallback() {
                     @Override
-                    public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> videos) {
-                        mItemList.addAll(videos);
-                        mAdapter.notifyDataSetChanged();
+                    public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> items) {
+                        mAdapter.addData(items);
                     }
 
                     @Override
                     public void onVideoAndBoardDownloaderFailure() {
-
+                        mItemList.clear();
+                        mAdapter.notifyDataSetChanged();
+                        // add a toast or msg
                     }
                 });
                 return false;

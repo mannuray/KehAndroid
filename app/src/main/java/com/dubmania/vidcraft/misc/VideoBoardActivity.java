@@ -3,15 +3,14 @@ package com.dubmania.vidcraft.misc;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.dubmania.vidcraft.Adapters.VideoAdapter;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
@@ -29,17 +28,17 @@ import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
-    private RecyclerView.Adapter mAdapter;
+    private VideoAdapter mAdapter;
 
     private Long mBoardId;
     private boolean mUserBoard;
-    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +64,13 @@ public class VideoBoardActivity extends AppCompatActivity {
         mToolbar.setSubtitle("Uploaded by " + mUserName);
         mToolbar.setLogo(icon);
 
-
-
-        spinner = (ProgressBar) findViewById(R.id.BoardProgressBar);
-        spinner.setVisibility(View.VISIBLE);
-
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.boardRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVideoItemList = new ArrayList<>();
+        mVideoItemList.add(null);
         populateData();
-        mAdapter = new VideoAdapter(mVideoItemList);
+        mAdapter = new VideoAdapter(mVideoItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override public void onResume() {
@@ -139,15 +133,18 @@ public class VideoBoardActivity extends AppCompatActivity {
 
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
-                mVideoItemList.addAll(videos);
-                mAdapter.notifyDataSetChanged();
-                spinner.setVisibility(View.GONE);
+                mAdapter.addData(videos);
             }
 
             @Override
             public void onVideosDownloadFailure() {
+                SnackFactory.getInternetConnectionRetrySnack(findViewById(android.R.id.content), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        populateData();
+                    }
+                }).show();
                 finish();
-                //new Snackbar add, toast or snackbar
             }
         });
     }
@@ -172,11 +169,10 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoDeletedEvent(VideoDeletedEvent event) {
-        Log.i("BOARD", "video deleet event reciveed");
         for(int i = 0; i < mVideoItemList.size(); i++) {
             if(mVideoItemList.get(i).getId().equals(event.getmVideoId())) {
                 mVideoItemList.remove(i);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();;
                 break;
             }
         }

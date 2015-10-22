@@ -24,14 +24,16 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEnd
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class VideoBoardFragment extends Fragment {
-    private RecyclerView.Adapter mAdapter;
+    private VideoBoardAdapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
     private FloatingActionButton fab_btn1,fab_btn2;
@@ -54,10 +56,9 @@ public class VideoBoardFragment extends Fragment {
             TypedArray mBoardIcons = getResources()
                     .obtainTypedArray(R.array.video_board_icons);
 
-            mVideoBoardItemList = new ArrayList<>((Arrays.asList(
-                    new VideoBoardListItem((long) -1, "My Sounds", "me", mBoardIcons.getResourceId(0, -1)),
-                    new VideoBoardListItem((long) -2, "My Favorites", "me", mBoardIcons.getResourceId(1, -1))
-            )));
+
+            mVideoBoardItemList = new ArrayList<>();
+            mVideoBoardItemList.add(null);
             mBoardIcons.recycle();
         }
     }
@@ -82,10 +83,11 @@ public class VideoBoardFragment extends Fragment {
             }
         });
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.video_board_recycler_view);
+        EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.video_board_recycler_view);
+        mRecyclerView.setEmptyView(view.findViewById(R.id.list_empty));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new VideoBoardAdapter(mVideoBoardItemList);
+        mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         initData();
@@ -110,7 +112,7 @@ public class VideoBoardFragment extends Fragment {
             int iconId = data.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0);
             mVideoBoardItemList.add(new VideoBoardListItem(id, boardName, new SessionManager(this.getActivity()).getUser(), iconId));
             mAdapter.notifyDataSetChanged();
-
+            SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
         }
     }
 
@@ -149,15 +151,15 @@ public class VideoBoardFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
-        mVideoBoardItemList.addAll(event.getVideoBoard());
-        mAdapter.notifyDataSetChanged();
+        mAdapter.addData(event.getVideoBoard());
     }
 
     @Subscribe
     public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
         for(int i = 0; i < mVideoBoardItemList.size(); i++) {
             if(mVideoBoardItemList.get(i).getId().equals(event.getBoardId())) {
-                mVideoBoardItemList.remove(i);
+                SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Videoboard: " + mVideoBoardItemList.get(i).getName() + " deleted").show();
+                        mVideoBoardItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;
             }

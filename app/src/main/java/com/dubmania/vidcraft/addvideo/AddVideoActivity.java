@@ -22,12 +22,14 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoEditEve
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.MiscFunction;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.media.ImageOverlayer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
@@ -237,7 +239,8 @@ public class AddVideoActivity extends AppCompatActivity {
 
                         @Override
                         public void onConversionFailed(String error) {
-
+                            SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to process video due to unknown error").show();
+                            finish();
                         }
                     });
 
@@ -247,6 +250,11 @@ public class AddVideoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe
+    public void onCancelVideoWaterMarking(CancelVideoWaterMarking event) {
+        // cancel the wartermarknig thread
     }
 
     @Subscribe

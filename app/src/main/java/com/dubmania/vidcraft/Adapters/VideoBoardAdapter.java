@@ -1,6 +1,7 @@
 package com.dubmania.vidcraft.Adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,35 +13,32 @@ import java.util.ArrayList;
 /**
  * Created by rat on 7/28/2015.
  */
-public class VideoBoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<VideoBoardListItem> mDataset;
+public class VideoBoardAdapter extends EndlessRecyclerAdapter<VideoBoardListItem> {
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public VideoBoardAdapter(ArrayList<VideoBoardListItem> myDataset) {
-        mDataset = myDataset;
+    public VideoBoardAdapter(ArrayList<VideoBoardListItem> mDataset, RecyclerView mRecyclerView) {
+        super(mDataset, mRecyclerView);
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                            int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.video_board_item_list_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        VideoBoardViewHolder vh;
-        vh = new VideoBoardViewHolder(v);
-        return vh;
+
+        if(viewType == VIEW_ITEM) {
+            return new VideoBoardViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.video_board_item_list_layout, parent, false));
+        }else {
+            return new ProgressViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_progress_card_view, parent, false));
+        }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        //holder.mTextView.setText(mDataset[position]);
-        VideoBoardViewHolderFactory.bindViewHolder(mDataset.get(position), holder);
-
+        if(holder instanceof VideoBoardViewHolder){
+            VideoBoardViewHolderFactory.bindViewHolder(mDataset.get(position), holder);
+        }else{
+            ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

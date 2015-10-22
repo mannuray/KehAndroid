@@ -26,7 +26,9 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEv
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.squareup.otto.Subscribe;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -36,10 +38,9 @@ import java.util.ArrayList;
  * <p/>
  */
 public class DiscoverFragment extends Fragment {
-    private RecyclerView.Adapter mAdapter;
+    private VideoAndBoardAdapter mAdapter;
     private ArrayList<ListItem> mItemList;
     private boolean mVisibleFirstTime = true;
-    private ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,6 +59,7 @@ public class DiscoverFragment extends Fragment {
         }
         else {
             mItemList = new ArrayList<>();
+            mItemList.add(null);
         }
 
     }
@@ -70,17 +72,9 @@ public class DiscoverFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.discover_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
         mRecyclerView.setLayoutManager(layoutManager);
-        // specify an adapter (see also next example)
 
-        mAdapter = new VideoAndBoardAdapter(mItemList);
+        mAdapter = new VideoAndBoardAdapter(mItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
-        //mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager));
-        spinner = (ProgressBar) view.findViewById(R.id.discover_progress_bar);
-
-        if(mVisibleFirstTime)
-            spinner.setVisibility(View.VISIBLE);
-        else
-            spinner.setVisibility(View.GONE);
 
         return view;
 
@@ -115,10 +109,7 @@ public class DiscoverFragment extends Fragment {
     @Subscribe
     public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
         if(mItemList != null) {
-            mItemList.addAll(event.mItemList);
-            mAdapter.notifyDataSetChanged();
-            spinner.setVisibility(View.GONE);
-            mVisibleFirstTime = false;
+            mAdapter.addData(event.mItemList);
         }
     }
 

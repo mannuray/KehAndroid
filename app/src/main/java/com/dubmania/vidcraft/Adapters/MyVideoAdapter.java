@@ -16,29 +16,37 @@ import java.util.ArrayList;
 /**
  * Created by rat on 8/1/2015.
  */
-public class MyVideoAdapter extends RecyclerView.Adapter<MyVideoAdapter.ViewHolder> {
-    private ArrayList<MyVideoListItem> mDataset;
+public class MyVideoAdapter extends EndlessRecyclerAdapter<MyVideoListItem> {
 
-    public MyVideoAdapter(ArrayList<MyVideoListItem> myDataset) {
-        mDataset = myDataset;
+    public MyVideoAdapter(ArrayList<MyVideoListItem> mDataset, RecyclerView mRecyclerView) {
+        super(mDataset, mRecyclerView);
     }
 
     @Override
-    public MyVideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType==VIEW_ITEM) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.my_vedio_item_layout, parent, false));
+        }else {
+            return new ProgressViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_progress_card_view, parent, false));
+        }
 
-        return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_vedio_item_layout, parent, false));
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.mImageIcon.setImageBitmap(mDataset.get(position).getIcon());
-        holder.mVideoName.setText(mDataset.get(position).getmVideoName());
-        holder.mDateTime.setText(mDataset.get(position).getmDate());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if(holder instanceof ViewHolder){
+            ViewHolder viewHolder = (ViewHolder) holder;
+            viewHolder.mImageIcon.setImageBitmap(mDataset.get(position).getIcon());
+            viewHolder.mVideoName.setText(mDataset.get(position).getmVideoName());
+            viewHolder.mDateTime.setText(mDataset.get(position).getmDate());
 
-        holder.mInformationBox.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
-        holder.mImageIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
+            viewHolder.mInformationBox.setOnClickListener(new OnClickListnerEvent<>(new MyVideoItemShareEvent(mDataset.get(position).getFilePath())));
+            viewHolder.mImageIcon.setOnClickListener(new OnClickListnerEvent<>(new VideoPlayEvent(mDataset.get(position).getFilePath())));
+        }else{
+            ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);
+        }
     }
 
     @Override

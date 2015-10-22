@@ -7,6 +7,7 @@ import android.util.Log;
 import com.coremedia.iso.boxes.Container;
 import com.dubmania.vidcraft.utils.MiscFunction;
 //import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterables;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
@@ -90,7 +91,7 @@ public class AudioManager {
             if(mAudioFlileList.size() <= 0 )
                 audio = new Audio(mAudioRecorder.stopRecording(), 0, pos);
             else
-                audio = new Audio(mAudioRecorder.stopRecording(), mAudioFlileList.get(mAudioFlileList.size()-1).getEndTime()/*Iterables.getLast(mAudioFlileList).getEndTime()*/, pos);
+                audio = new Audio(mAudioRecorder.stopRecording(), /*mAudioFlileList.get(mAudioFlileList.size()-1).getEndTime()*/Iterables.getLast(mAudioFlileList).getEndTime(), pos);
             mAudioFlileList.add(audio);
             isRecordingAvailable = true; // improve this
         }

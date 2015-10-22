@@ -21,6 +21,7 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreaterC
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreator;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.dubmania.vidcraft.utils.SnackFactory;
 
 import java.util.ArrayList;
 
@@ -83,10 +84,11 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             }
         });
 
-        View mAdd = findViewById(R.id.addVideoboard);
+        final View mAdd = findViewById(R.id.addVideoboard);
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAdd.setEnabled(false); // user should not be able to press it twice
                 new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
                     @Override
                     public void onVideoBoardCreateSuccess(Long boardId) {
@@ -101,6 +103,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                     @Override
                     public void onVideoBoardCreateFailure() {
                         setResult(Activity.RESULT_CANCELED);
+                        SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
                         finish();
                     }
                 });

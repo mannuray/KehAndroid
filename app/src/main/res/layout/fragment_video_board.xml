@@ -11,12 +11,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
+        <com.dubmania.vidcraft.utils.EmptyRecyclerView
             android:id="@+id/video_board_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </LinearLayout>
+
+    <TextView android:id="@+id/list_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No video Board's to show login to see your boards\nOr sign up to add boards"/>
 
 
     <android.support.design.widget.CoordinatorLayout
@@ -30,10 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -41,10 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -54,7 +57,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_plus"
+            android:src="@drawable/ic_add_lang"
             app:fabSize="normal" />
     </android.support.design.widget.CoordinatorLayout>
 

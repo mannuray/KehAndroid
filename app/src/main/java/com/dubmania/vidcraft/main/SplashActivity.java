@@ -22,7 +22,7 @@ import io.realm.Realm;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static long SPLASH_TIME = 2000;
+    private static long SPLASH_TIME = 200; // origiran time 2000
 
     SharedPreferences mPref;
     SharedPreferences.Editor editor;
