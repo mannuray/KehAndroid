@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment {
         mInfoBox.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        Toast.makeText(getActivity().getApplicationContext(), "user login check event :", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity().getApplicationContext(), "user login check event :", Toast.LENGTH_LONG).show();
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString());
         params.add(ConstantsStore.PARAM_PASSWORD, mPassword.getText().toString());
@@ -135,7 +135,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getActivity().getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "user login check event " + response.toString(), Toast.LENGTH_LONG).show();
                     if (!response.getBoolean(ConstantsStore.PARAM_RESULT)) {
                         Toast.makeText(getActivity().getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
                         mInfoBox.setVisibility(View.VISIBLE);
@@ -163,7 +163,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    Toast.makeText(getActivity().getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
                     JSONObject json = new JSONObject(new String(responseBody));
                     if (!json.getBoolean("result")) {
                         Toast.makeText(getActivity().getApplicationContext(), "Unable to reset password", Toast.LENGTH_LONG).show();

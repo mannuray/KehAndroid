@@ -95,13 +95,13 @@ public class UserNameFragment extends Fragment {
 
     private void verify() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(getActivity().getApplicationContext(), "user name " + mUsername.getText().toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity().getApplicationContext(), "user name " + mUsername.getText().toString(), Toast.LENGTH_LONG).show();
         DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER_NAME, mUsername.getText().toString()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 mProgressBar.setVisibility(View.GONE);
                 try {
-                    Toast.makeText(getActivity().getApplicationContext(), "user name check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "user name check event " + response.toString(), Toast.LENGTH_LONG).show();
                     if (response.getBoolean("result")) {
                         mResult.setImageResource(R.drawable.tick);
                         mResult.setVisibility(View.VISIBLE);

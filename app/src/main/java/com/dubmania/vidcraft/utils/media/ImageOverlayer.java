@@ -51,6 +51,10 @@ public class ImageOverlayer {
         mInputFile = inputFile;
     }
 
+    public void cancel() {
+        ExtractMpegFramesWrapper.cancel();
+    }
+
     public void overLay(ImagePostioner calculator, Callback callback) {
         mCalculator = calculator;
         mCallback = callback;
@@ -71,6 +75,7 @@ public class ImageOverlayer {
     private static class ExtractMpegFramesWrapper implements Runnable {
         private Throwable mThrowable;
         private ImageOverlayer mTest;
+        private static Thread th;
 
         private ExtractMpegFramesWrapper(ImageOverlayer test) {
             mTest = test;
@@ -88,12 +93,16 @@ public class ImageOverlayer {
         /** Entry point. */
         public static void runTest(ImageOverlayer obj) throws Throwable {
             ExtractMpegFramesWrapper wrapper = new ExtractMpegFramesWrapper(obj);
-            Thread th = new Thread(wrapper, "codec test");
+            th = new Thread(wrapper, "codec test");
             th.start();
             th.join();
             if (wrapper.mThrowable != null) {
                 throw wrapper.mThrowable;
             }
+        }
+
+        public static void cancel() {
+            th.interrupt();
         }
     }
 
@@ -187,7 +196,10 @@ public class ImageOverlayer {
 
         }
         catch (Exception e) {
-            mCallback.onConversionFailed(e.getMessage());
+            if(!e.getMessage().equals("java.lang.InterruptedException")) { // it's a bloody hack find a better way to do in
+                //Log.i("CANCEL", "caugt excetpin " + e.getMessage()); //
+                mCallback.onConversionFailed(e.getMessage());
+            }
         }
         finally {
             // release everything we grabbed
@@ -250,7 +262,7 @@ public class ImageOverlayer {
         boolean outputDone = false;
         boolean inputDone = false;
 
-        while (!outputDone) {
+        while (!outputDone && !Thread.currentThread().isInterrupted()) {
             if (VERBOSE) Log.d(TAG, "loop");
 
             // Feed more data to the decoder.

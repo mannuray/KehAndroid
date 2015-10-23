@@ -217,7 +217,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
     @Subscribe
     public void onSetDobEvent(SetDobEvent event) {
         signUpInfo.setDob(event.getDob());
-        Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "user rister check event :" , Toast.LENGTH_LONG).show();
 
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_USER_NAME, signUpInfo.getUserName());
@@ -228,8 +228,8 @@ public class SignupAndLoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, @SuppressWarnings("deprecation") Header[] headers, org.json.JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "user rister check event " + response.toString(), Toast.LENGTH_LONG).show();
-                    Log.i("user name", response.toString());
+                    //Toast.makeText(getApplicationContext(), "user rister check event " + response.toString(), Toast.LENGTH_LONG).show();
+                    //Log.i("user name", response.toString());
                     if (response.getBoolean("result")) {
                         Toast.makeText(getApplicationContext(), "User registered", Toast.LENGTH_LONG).show();
                         new SessionManager(SignupAndLoginActivity.this).createLoginSession(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),

@@ -45,6 +45,7 @@ public class AddVideoActivity extends AppCompatActivity {
 
     private VideoInfo mVideoInfo;
     private Bitmap mWaterMark;
+    private CancelableThread overlayerThread;
 
 
     @Override
@@ -185,12 +186,6 @@ public class AddVideoActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    @Produce
-    public AddVideoInfoEvent produceAddVideoInfo() {
-        return new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage());
-    }*/
-
     @Subscribe
     public void onSearchVideoItemListEvent(SearchVideoItemListEvent event) {
         Log.i("Change", "Staring trimmer");
@@ -214,39 +209,42 @@ public class AddVideoActivity extends AppCompatActivity {
             final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
             // ok we got the trim video on enode water mark.
-            new Thread() {
+            overlayerThread = new CancelableThread() {
+
                 @Override
                 public void run() {
-                    new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath()).overLay(new WaterMarkPositionCalculator(mWaterMark),
-                    new ImageOverlayer.Callback() {
-                        @Override
-                        public void onConversionCompleted(String h264Track, int fps) {
-                            try {
-                                File out = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
-                                mVideoInfo.mDstFilePath = out.getAbsolutePath();
-                                VideoPreparer.prepareMovieFromH264Track(dst, new File(h264Track), out, fps);
 
-                                // hope this shit work
-                                AddVideoActivity.this.runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
+                    th = new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath());
+                    th.overLay(new WaterMarkPositionCalculator(mWaterMark),
+                            new ImageOverlayer.Callback() {
+                                @Override
+                                public void onConversionCompleted(String h264Track, int fps) {
+                                    try {
+                                        File out = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
+                                        mVideoInfo.mDstFilePath = out.getAbsolutePath();
+                                        VideoPreparer.prepareMovieFromH264Track(dst, new File(h264Track), out, fps);
+
+                                        // hope this shit work
+                                        AddVideoActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(2));
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                                }
 
-                        @Override
-                        public void onConversionFailed(String error) {
-                            SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to process video due to unknown error").show();
-                            finish();
-                        }
-                    });
-
+                                @Override
+                                public void onConversionFailed(String error) {
+                                    SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to process video due to unknown error").show();
+                                    finish();
+                                }
+                            });
                 }
 
-            }.start();
+            };
+            overlayerThread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -254,7 +252,8 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCancelVideoWaterMarking(CancelVideoWaterMarking event) {
-        // cancel the wartermarknig thread
+        if(overlayerThread != null)
+            overlayerThread.cancel();
     }
 
     @Subscribe
@@ -278,5 +277,14 @@ public class AddVideoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), " unable to add video", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    class CancelableThread extends Thread {
+        ImageOverlayer th;
+
+        public void cancel() {
+            if(th != null)
+                th.cancel();
+        }
     }
 }
