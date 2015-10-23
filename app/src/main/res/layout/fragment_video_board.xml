@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.dubmania.vidcraft.dummy.VideoBoardFragment">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,10 +18,14 @@
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <TextView android:id="@+id/list_empty"
+    <TextView
+        android:id="@+id/list_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No video Board's to show login to see your boards\nOr sign up to add boards"/>
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_margin="25dp"
+        android:text="No video Board's to show login to see your boards\nOr sign up to add boards" />
 
 
     <android.support.design.widget.CoordinatorLayout
@@ -33,32 +37,46 @@
             android:id="@+id/fabBtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_add_lang"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_plus"
             app:fabSize="normal" />
+
+        <View
+            android:id="@+id/dummy1"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            app:layout_anchor="@id/fabBtn1"
+            app:layout_anchorGravity="top|right|end" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBtn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_add_lang"
-            app:fabSize="normal" />
+            android:layout_gravity="end|top"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_plus"
+            app:fabSize="normal"
+            app:layout_anchor="@id/dummy1"
+            app:layout_anchorGravity="top|right|end" />
+
+        <View
+            android:id="@+id/dummy"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            app:layout_anchor="@id/fabBtn2"
+            app:layout_anchorGravity="top|right|end" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:src="@drawable/ic_add_lang"
-            app:fabSize="normal" />
+            android:layout_gravity="end|top"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_plus"
+            app:fabSize="normal"
+            app:layout_anchor="@id/dummy"
+            app:layout_anchorGravity="top|right|end" />
     </android.support.design.widget.CoordinatorLayout>
 
 </FrameLayout>
