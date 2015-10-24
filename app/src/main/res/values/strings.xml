@@ -30,6 +30,11 @@
         <item>@drawable/ic_drawer_t</item>
     </array>
 
+    <array name="video_board_fav_icons">
+        <item>@drawable/board_icon_1</item>
+        <item>@drawable/board_icon_2</item>
+    </array>
+
     <!-- array of icons -->
     <array name="video_board_icons">
         <item>@drawable/board_icon_1</item>

@@ -354,6 +354,7 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_USER_NAME, event.getBoardUsername());
         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         String userName = new SessionManager(this).getUser();
         if(userName.equals(event.getBoardUsername()))
             intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);

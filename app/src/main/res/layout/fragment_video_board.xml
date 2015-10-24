@@ -34,7 +34,7 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabBtn1"
+            android:id="@+id/floatingAddBoardButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
@@ -46,11 +46,11 @@
             android:id="@+id/dummy1"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            app:layout_anchor="@id/fabBtn1"
+            app:layout_anchor="@id/floatingAddBoardButton"
             app:layout_anchorGravity="top|right|end" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabBtn2"
+            android:id="@+id/floatingMyFavrioutes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|top"
@@ -64,11 +64,11 @@
             android:id="@+id/dummy"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            app:layout_anchor="@id/fabBtn2"
+            app:layout_anchor="@id/floatingMyFavrioutes"
             app:layout_anchorGravity="top|right|end" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabBtn"
+            android:id="@+id/floatingMyUploads"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|top"

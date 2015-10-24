@@ -10,7 +10,6 @@ import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.addvideo.Tag;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.Base64;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -99,6 +98,7 @@ public class VideoAndBoardDownloader {
                                     mBoardIcons.getResourceId(item.getInt(ConstantsStore.PARAM_BOARD_ICON), -1)));
                     }
                 }
+                mBoardIcons.recycle();
                 mCallback.onVideoAndBoardDownloaderSuccess(mList);
             } catch (JSONException e) {
                 e.printStackTrace();

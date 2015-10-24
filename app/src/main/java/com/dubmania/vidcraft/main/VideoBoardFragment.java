@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +19,8 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddVideoBoardListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEndedEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -29,14 +29,13 @@ import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class VideoBoardFragment extends Fragment {
     private VideoBoardAdapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
-    private FloatingActionButton fab_btn1,fab_btn2;
+    private FloatingActionButton mMyUploads, mMyFavrioutes;
 
     public VideoBoardFragment() {
         // Required empty public constructor
@@ -68,10 +67,9 @@ public class VideoBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
-        CoordinatorLayout rootLayout=(CoordinatorLayout)view.findViewById(R.id.rootLayout);
-        FloatingActionButton mAddBoardButton = (FloatingActionButton) view.findViewById(R.id.fabBtn);
-        fab_btn1= (FloatingActionButton) view.findViewById(R.id.fabBtn1);
-        fab_btn2= (FloatingActionButton) view.findViewById(R.id.fabBtn2);
+        FloatingActionButton mAddBoardButton = (FloatingActionButton) view.findViewById(R.id.floatingAddBoardButton);
+        mMyUploads = (FloatingActionButton) view.findViewById(R.id.floatingMyUploads);
+        mMyFavrioutes = (FloatingActionButton) view.findViewById(R.id.floatingMyFavrioutes);
 
         final Fragment f = this;
         mAddBoardButton.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +80,13 @@ public class VideoBoardFragment extends Fragment {
                 f.startActivityForResult(intent, 2);
             }
         });
+
+        TypedArray mBoardIcons = getActivity().getResources()
+                .obtainTypedArray(R.array.video_board_fav_icons);
+
+        mMyUploads.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-1l, mBoardIcons.getResourceId(0, -1), "My Uploads", "Me")));
+        mMyFavrioutes.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
+        mBoardIcons.recycle();
 
         EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.video_board_recycler_view);
         mRecyclerView.setEmptyView(view.findViewById(R.id.list_empty));
@@ -97,15 +102,14 @@ public class VideoBoardFragment extends Fragment {
     private void initData(){
         SessionManager manager = new SessionManager(getActivity());
         if(manager.isLoggedIn()) {
-            fab_btn1.setVisibility(View.VISIBLE);
-            fab_btn2.setVisibility(View.VISIBLE);
+            mMyUploads.setVisibility(View.VISIBLE);
+            mMyFavrioutes.setVisibility(View.VISIBLE);
         }
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("Board", "Add video booard result recived ouoeu ");
         if (resultCode == Activity.RESULT_OK) {
             String boardName = data.getStringExtra(ConstantsStore.INTENT_BOARD_NAME);
             Long id = data.getLongExtra(ConstantsStore.INTENT_BOARD_ID, 0);
