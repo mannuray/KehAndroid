@@ -35,6 +35,8 @@ import com.dubmania.vidcraft.utils.media.ImageOverlayer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
 import com.dubmania.vidcraft.utils.media.VideoTrimmer;
 import com.dubmania.vidcraft.utils.media.WaterMarkPositionCalculator;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -268,7 +270,15 @@ public class AddVideoActivity extends AppCompatActivity {
         // change it to dst file path once file is modified
         new VideoUploader().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
             @Override
-            public void onVideosUploadSuccess() {
+            public void onVideosUploadSuccess(long mId) {
+                HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
+                        .setCategory("Video")
+                        .setAction("AddVideo")
+                        .setLabel(String.valueOf(mId));
+
+                VidCraftApplication application = new VidCraftApplication();
+                Tracker mTracker = VidCraftApplication.tracker();
+                mTracker.send(builder.build());
                 finish();
             }
 

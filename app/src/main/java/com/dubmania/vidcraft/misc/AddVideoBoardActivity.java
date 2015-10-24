@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,9 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreator;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
+import com.dubmania.vidcraft.utils.VidCraftApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 
@@ -29,6 +33,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
     Toolbar mToolbar;
     private EditText mBoardName;
     private int mIconId = 0;
+    CoordinatorLayout mLayoutRoot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             }
         });
 
+        mLayoutRoot= (CoordinatorLayout) findViewById(R.id.layout_main);
         mBoardName = (EditText) findViewById(R.id.add_video_board_name_edit);
         GridView mBoardIcon = (GridView) findViewById(R.id.add_video_board_gridView);
 
@@ -97,13 +103,28 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                         intent.putExtra(ConstantsStore.INTENT_BOARD_ID, boardId);
                         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, mIconId);
                         setResult(Activity.RESULT_OK, intent);
+
+                        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
+                                .setCategory("Video")
+                                .setAction("VideoBoard")
+                                .setLabel(String.valueOf(boardId));
+
+                        VidCraftApplication application = new VidCraftApplication();
+                        Tracker mTracker = VidCraftApplication.tracker();
+                        mTracker.send(builder.build());
+
                         finish();
                     }
 
                     @Override
                     public void onVideoBoardCreateFailure() {
                         setResult(Activity.RESULT_CANCELED);
-                        SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
+                        SnackFactory.createSnackbar(
+                                AddVideoBoardActivity.this,
+                                mLayoutRoot,
+                                "Unable to add videoboard due to unknown error"
+                        ).show();
+                        //SnackFactory.getSnack(findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
                         finish();
                     }
                 });

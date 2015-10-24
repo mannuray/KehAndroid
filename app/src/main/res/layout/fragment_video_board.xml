@@ -77,6 +77,13 @@
             app:fabSize="normal"
             app:layout_anchor="@id/dummy"
             app:layout_anchorGravity="top|right|end" />
+        <View
+            android:id="@+id/dummy3"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_anchor="@id/floatingMyUploads"
+            app:layout_anchorGravity="top|right|end" />
     </android.support.design.widget.CoordinatorLayout>
 
 </FrameLayout>

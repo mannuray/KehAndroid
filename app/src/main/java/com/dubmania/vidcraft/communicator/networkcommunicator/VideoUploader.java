@@ -64,11 +64,11 @@ public class VideoUploader {
                 try {
                     Log.i("URL", "response  is " + response.toString());
                     String uploadURL = response.getString(ConstantsStore.PARAM_VIDEO_UPLOAD_URL);
-                    Log.i("URL", "upload ule is " + uploadURL);
+                    Long id = response.getLong(ConstantsStore.PARAM_VIDEO_ID);
                     RequestParams requestParams = new RequestParams();
                     requestParams.put("file", mVideoFile);
                     requestParams.setForceMultipartEntityContentType(true);
-                    DubsmaniaHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler());
+                    DubsmaniaHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -92,11 +92,17 @@ public class VideoUploader {
     }
 
     private class VideoUploadHandler extends JsonHttpResponseHandler {
+        private long mId;
+
+        private VideoUploadHandler(long mId) {
+            this.mId = mId;
+        }
+
         @Override
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             try {
                 if(response.getBoolean("result")) {
-                    mCallback.onVideosUploadSuccess();
+                    mCallback.onVideosUploadSuccess(mId);
                     return;
                 }
             } catch (JSONException e) {

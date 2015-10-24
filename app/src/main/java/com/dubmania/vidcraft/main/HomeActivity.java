@@ -106,6 +106,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initData(){
         SessionManager manager = new SessionManager(this);
         if(manager.isLoggedIn()) {
+            headerLayout.setVisibility(View.VISIBLE);
             userName.setText(manager.getUser());
             email.setText(manager.getUserEmail());
             logout.setVisibility(View.VISIBLE);

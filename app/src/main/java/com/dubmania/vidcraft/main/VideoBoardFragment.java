@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,7 @@ public class VideoBoardFragment extends Fragment {
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
     private FloatingActionButton mMyUploads, mMyFavrioutes;
+    CoordinatorLayout mLayoutRoot;
 
     public VideoBoardFragment() {
         // Required empty public constructor
@@ -67,6 +69,7 @@ public class VideoBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
+        mLayoutRoot= (CoordinatorLayout) view.findViewById(R.id.rootLayout);
         FloatingActionButton mAddBoardButton = (FloatingActionButton) view.findViewById(R.id.floatingAddBoardButton);
         mMyUploads = (FloatingActionButton) view.findViewById(R.id.floatingMyUploads);
         mMyFavrioutes = (FloatingActionButton) view.findViewById(R.id.floatingMyFavrioutes);
@@ -162,8 +165,13 @@ public class VideoBoardFragment extends Fragment {
     public void onVideoBoardDeletedEvent(VideoBoardDeletedEvent event) {
         for(int i = 0; i < mVideoBoardItemList.size(); i++) {
             if(mVideoBoardItemList.get(i).getId().equals(event.getBoardId())) {
-                SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Videoboard: " + mVideoBoardItemList.get(i).getName() + " deleted").show();
-                        mVideoBoardItemList.remove(i);
+                SnackFactory.createSnackbar(
+                        getActivity(),
+                        mLayoutRoot,
+                        "Videoboard: " + mVideoBoardItemList.get(i).getName() + " deleted"
+                ).show();
+               // SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Videoboard: " + mVideoBoardItemList.get(i).getName() + " deleted").show();
+                mVideoBoardItemList.remove(i);
                 mAdapter.notifyDataSetChanged();
                 break;
             }
