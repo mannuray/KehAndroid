@@ -7,6 +7,8 @@ public class ConstantsStore {
 
     public static final String BASE_URL = "http://kehbackend.appspot.com/";
 
+    public final static String VIDEO_BOARD_FRAGMENT_BUTTON_LEARNED = "com.monkeybusiness.vidscraft.videoboardfragment.button.learned";
+
     public final static String SHARED_KEY_USER_NAME = "com.dubmania.vidcraft.username";
     public final static String SHARED_KEY_USER_EMAIL = "com.dubmania.vidcraft.useremail";
     public final static String SHARED_KEY_USER_LOGIN = "com.dubmania.vidcraft.login";
@@ -20,8 +22,6 @@ public class ConstantsStore {
     public final static String INTENT_BOARD_ICON = "com.dubmania.vidcraft.board.icon";
     public final static String INTENT_BOARD_USER = "com.dubmania.vidcraft.board.user";
     public final static String INTENT_BOARD_DELETED = "com.dubmania.vidcraft.board.deleted";
-
-    public final static String INTENT_USER_NAME = "com.dubmania.vidcraft.username";
 
     public final static String INTENT_VIDEO_ID = "com.dubmania.vidcraft.video.id";
     public final static String INTENT_VIDEO_TITLE = "com.dubmania.vidcraft.video.title";

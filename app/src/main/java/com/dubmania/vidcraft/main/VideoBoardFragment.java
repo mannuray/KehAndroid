@@ -31,6 +31,8 @@ import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 
 public class VideoBoardFragment extends Fragment {
     private VideoBoardAdapter mAdapter;
@@ -111,6 +113,18 @@ public class VideoBoardFragment extends Fragment {
 
     }
 
+    private void presentShowcaseView(int withDelay) {
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(mMyUploads)
+                .setContentText("Click this button to get extra menu")
+                .setDismissText("GOT IT")
+                .setContentTextColor(getResources().getColor(R.color.green_500))
+                .setMaskColour(getResources().getColor(R.color.blue_500))
+                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("12345") // provide a unique ID used to ensure it is only shown once
+                .show();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -146,6 +160,7 @@ public class VideoBoardFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && mVisibleFirstTime) {
             BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
+            presentShowcaseView(1000);
             mVisibleFirstTime = false;
         }
     }
