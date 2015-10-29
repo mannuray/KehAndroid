@@ -33,6 +33,8 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
     private VideoAdapter mAdapter;
@@ -71,6 +73,7 @@ public class VideoBoardActivity extends AppCompatActivity {
         populateData();
         mAdapter = new VideoAdapter(mVideoItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override public void onResume() {
