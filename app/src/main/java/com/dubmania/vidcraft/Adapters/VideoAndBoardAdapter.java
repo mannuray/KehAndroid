@@ -1,12 +1,16 @@
 package com.dubmania.vidcraft.Adapters;
 
+import android.graphics.Color;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.dubmania.vidcraft.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by rat on 7/28/2015.
@@ -66,5 +70,15 @@ public class VideoAndBoardAdapter extends EndlessRecyclerAdapter<ListItem> {
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public static void setImageColor(ImageView image,int color){
+        DrawableCompat.setTint(image.getDrawable(), color);
+    }
+
+
+    public int randomColor() {
+        Random rnd = new Random();
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 }

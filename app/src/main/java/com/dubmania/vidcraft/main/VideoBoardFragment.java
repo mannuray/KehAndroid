@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -14,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import com.dubmania.vidcraft.Adapters.VideoBoardAdapter;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.R;
@@ -28,6 +29,9 @@ import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
@@ -36,8 +40,8 @@ public class VideoBoardFragment extends Fragment {
     private VideoBoardAdapter mAdapter;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
-    private FloatingActionButton mMyUploads, mMyFavrioutes;
     CoordinatorLayout mLayoutRoot;
+    public static FloatingActionButton actionButton;
 
     public VideoBoardFragment() {
         // Required empty public constructor
@@ -70,25 +74,41 @@ public class VideoBoardFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_video_board, container, false);
         mLayoutRoot= (CoordinatorLayout) view.findViewById(R.id.rootLayout);
-        FloatingActionButton mAddBoardButton = (FloatingActionButton) view.findViewById(R.id.floatingAddBoardButton);
-        mMyUploads = (FloatingActionButton) view.findViewById(R.id.floatingMyUploads);
-        mMyFavrioutes = (FloatingActionButton) view.findViewById(R.id.floatingMyFavrioutes);
-
-        final Fragment f = this;
-        mAddBoardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddVideoBoardActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                f.startActivityForResult(intent, 2);
-            }
-        });
 
         TypedArray mBoardIcons = getActivity().getResources()
                 .obtainTypedArray(R.array.video_board_fav_icons);
 
-        mMyUploads.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-1l, mBoardIcons.getResourceId(0, -1), "My Uploads", "Me")));
-        mMyFavrioutes.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
+        ImageView imageView=new ImageView(getActivity());
+        imageView.setImageResource(R.drawable.ic_plus);
+
+         actionButton = new FloatingActionButton.Builder(getActivity())
+                .setContentView(imageView)
+                .setBackgroundDrawable(R.drawable.selected_fab)
+                .build();
+
+        ImageView imageView1=new ImageView(getActivity());
+        imageView1.setImageResource(R.drawable.user_icon);
+
+        ImageView imageView2=new ImageView(getActivity());
+        imageView2.setImageResource(R.drawable.user_icon);
+
+        ImageView imageView3=new ImageView(getActivity());
+        imageView3.setImageResource(R.drawable.user_icon);
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(getActivity());
+
+        SubActionButton button1 = itemBuilder.setContentView(imageView1).build();
+        SubActionButton button2 = itemBuilder.setContentView(imageView2).build();
+        SubActionButton button3 = itemBuilder.setContentView(imageView3).build();
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(getActivity())
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .addSubActionView(button3)
+                .attachTo(actionButton)
+                .build();
+
+
         mBoardIcons.recycle();
 
         EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.video_board_recycler_view);
@@ -105,8 +125,8 @@ public class VideoBoardFragment extends Fragment {
     private void initData(){
         SessionManager manager = new SessionManager(getActivity());
         if(manager.isLoggedIn()) {
-            mMyUploads.setVisibility(View.VISIBLE);
-            mMyFavrioutes.setVisibility(View.VISIBLE);
+           // mMyUploads.setVisibility(View.VISIBLE);
+           // mMyFavrioutes.setVisibility(View.VISIBLE);
         }
 
     }

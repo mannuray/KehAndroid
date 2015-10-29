@@ -11,6 +11,7 @@
 
     <color name="ColorPrimary">#00897B</color>
     <color name="ColorPrimaryDark">#00695C</color>
+    <color name="accent">#03A9F4</color>
     <color name="tabsScrollColor">#004D40</color>
 
     <!-- App Main Palette -->

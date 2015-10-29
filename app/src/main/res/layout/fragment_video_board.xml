@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,8 +22,8 @@
         android:id="@+id/list_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_margin="25dp"
         android:text="No video Board's to show login to see your boards\nOr sign up to add boards" />
 
@@ -33,57 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingAddBoardButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_plus"
-            app:fabSize="normal" />
 
-        <View
-            android:id="@+id/dummy1"
-            android:layout_width="1dp"
-            android:layout_height="16dp"
-            app:layout_anchor="@id/floatingAddBoardButton"
-            app:layout_anchorGravity="top|right|end" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingMyFavrioutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|top"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_plus"
-            app:fabSize="normal"
-            app:layout_anchor="@id/dummy1"
-            app:layout_anchorGravity="top|right|end" />
-
-        <View
-            android:id="@+id/dummy"
-            android:layout_width="1dp"
-            android:layout_height="16dp"
-            app:layout_anchor="@id/floatingMyFavrioutes"
-            app:layout_anchorGravity="top|right|end" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingMyUploads"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|top"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_plus"
-            app:fabSize="normal"
-            app:layout_anchor="@id/dummy"
-            app:layout_anchorGravity="top|right|end" />
-        <View
-            android:id="@+id/dummy3"
-            android:layout_width="1dp"
-            android:layout_height="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_anchor="@id/floatingMyUploads"
-            app:layout_anchorGravity="top|right|end" />
     </android.support.design.widget.CoordinatorLayout>
 
-</FrameLayout>
+</RelativeLayout>

@@ -39,6 +39,23 @@ public class PagerFragment extends Fragment {
         mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 2)
+                    VideoBoardFragment.actionButton.setVisibility(View.VISIBLE);
+                else
+                    VideoBoardFragment.actionButton.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
 
         mTabs = (SlidingTabLayout) rootView.findViewById(R.id.tabs);
@@ -70,7 +87,7 @@ public class PagerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("VidCraft");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("VidCraft");
     }
 
     @Override
