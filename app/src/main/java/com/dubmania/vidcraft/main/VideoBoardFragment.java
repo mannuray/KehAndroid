@@ -135,7 +135,7 @@ public class VideoBoardFragment extends Fragment {
 
     private void presentShowcaseView(int withDelay) {
         new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(mMyUploads)
+                .setTarget(actionButton)
                 .setContentText("Click this button to get extra menu")
                 .setDismissText("GOT IT")
                 .setContentTextColor(getResources().getColor(R.color.green_500))
