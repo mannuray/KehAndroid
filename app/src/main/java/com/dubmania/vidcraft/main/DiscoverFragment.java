@@ -1,9 +1,11 @@
 package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +26,13 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemList
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.utils.SessionManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -53,14 +59,28 @@ public class DiscoverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String savedValue = prefs.getString("discover_list", "");
+        if (savedValue.equals("")) {
+            mItemList = new ArrayList<>();
+            mItemList.add(null);
+        } else {
+            //mItemList = savedInstanceState.getParcelableArrayList("discover_list");
+            Gson gson = new GsonBuilder().create();
+            Type type = new TypeToken<ArrayList<ListItem>>(){}.getType();
+            mItemList = gson.fromJson(savedValue, type);
+            mVisibleFirstTime = false;
+        }
+
+
+        /*if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mItemList = savedInstanceState.getParcelableArrayList("discover_list");
             mVisibleFirstTime = false;
         }
         else {
             mItemList = new ArrayList<>();
             mItemList.add(null);
-        }
+        }*/
 
     }
 
@@ -84,6 +104,17 @@ public class DiscoverFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("discover_list", mItemList);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        Gson gson = new GsonBuilder().create();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.edit().putString("discover_list", gson.toJson(mItemList)).commit();
     }
 
     @Override

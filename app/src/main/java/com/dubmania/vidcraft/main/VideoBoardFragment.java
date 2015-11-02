@@ -85,7 +85,7 @@ public class VideoBoardFragment extends Fragment {
 
          actionButton = new FloatingActionButton.Builder(getActivity())
                 .setContentView(imageView)
-                .setBackgroundDrawable(R.drawable.selected_fab)
+                .setBackgroundDrawable(R.drawable.play)
                 .build();
 
         ImageView imageView1=new ImageView(getActivity());
@@ -159,7 +159,7 @@ public class VideoBoardFragment extends Fragment {
                     "Unable to add videoboard due to unknown error"
             ).show();
 
-           // SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
+            //SnackFactory.getSnack(getActivity().findViewById(android.R.id.content), "Unable to add videoboard due to unknown error").show();
         }
     }
 
