@@ -59,7 +59,7 @@ public class DiscoverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String savedValue = prefs.getString("discover_list", "");
         if (savedValue.equals("")) {
             mItemList = new ArrayList<>();
@@ -70,17 +70,17 @@ public class DiscoverFragment extends Fragment {
             Type type = new TypeToken<ArrayList<ListItem>>(){}.getType();
             mItemList = gson.fromJson(savedValue, type);
             mVisibleFirstTime = false;
-        }
+        }*/
 
 
-        /*if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+        if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mItemList = savedInstanceState.getParcelableArrayList("discover_list");
             mVisibleFirstTime = false;
         }
         else {
             mItemList = new ArrayList<>();
             mItemList.add(null);
-        }*/
+        }
 
     }
 
@@ -106,6 +106,7 @@ public class DiscoverFragment extends Fragment {
         outState.putParcelableArrayList("discover_list", mItemList);
     }
 
+    /*
     @Override public void onResume() {
         super.onResume();
     }
@@ -115,7 +116,7 @@ public class DiscoverFragment extends Fragment {
         Gson gson = new GsonBuilder().create();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         prefs.edit().putString("discover_list", gson.toJson(mItemList)).commit();
-    }
+    }*/
 
     @Override
     public void onAttach(Activity activity) {

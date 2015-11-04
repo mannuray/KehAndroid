@@ -24,12 +24,13 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEnd
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
+import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.EmptyRecyclerView;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.otto.Subscribe;
@@ -39,11 +40,11 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 
 public class VideoBoardFragment extends Fragment {
-    private VideoBoardAdapter mAdapter;
+    private VideoBoardAdapter mAdapter = null;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
     CoordinatorLayout mLayoutRoot;
-    public static FloatingActionButton actionButton;
+    public static FloatingActionButton actionButton = null;
 
     public VideoBoardFragment() {
         // Required empty public constructor
@@ -83,10 +84,7 @@ public class VideoBoardFragment extends Fragment {
         ImageView imageView=new ImageView(getActivity());
         imageView.setImageResource(R.drawable.ic_plus);
 
-         actionButton = new FloatingActionButton.Builder(getActivity())
-                .setContentView(imageView)
-                .setBackgroundDrawable(R.drawable.play)
-                .build();
+         actionButton = (FloatingActionButton) view.findViewById(R.id.floatingButton);
 
         ImageView imageView1=new ImageView(getActivity());
         imageView1.setImageResource(R.drawable.user_icon);
@@ -99,14 +97,28 @@ public class VideoBoardFragment extends Fragment {
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(getActivity());
 
-        SubActionButton button1 = itemBuilder.setContentView(imageView1).build();
-        SubActionButton button2 = itemBuilder.setContentView(imageView2).build();
-        SubActionButton button3 = itemBuilder.setContentView(imageView3).build();
+        SubActionButton addVideoBoard  = itemBuilder.setContentView(imageView1).build();
+        SubActionButton favorites = itemBuilder.setContentView(imageView2).build();
+        SubActionButton myUploads = itemBuilder.setContentView(imageView3).build();
+
+        final Fragment f = this;
+        addVideoBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddVideoBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                f.startActivityForResult(intent, 2);
+            }
+        });
+
+        myUploads.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-1l, mBoardIcons.getResourceId(0, -1), "My Uploads", "Me")));
+        favorites.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
+        mBoardIcons.recycle();
 
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(getActivity())
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
+                .addSubActionView(myUploads)
+                .addSubActionView(favorites)
+                .addSubActionView(addVideoBoard)
                 .attachTo(actionButton)
                 .build();
 
@@ -120,17 +132,7 @@ public class VideoBoardFragment extends Fragment {
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
-        initData();
         return view;
-    }
-
-    private void initData(){
-        SessionManager manager = new SessionManager(getActivity());
-        if(manager.isLoggedIn()) {
-           // mMyUploads.setVisibility(View.VISIBLE);
-           // mMyFavrioutes.setVisibility(View.VISIBLE);
-        }
-
     }
 
     private void presentShowcaseView(int withDelay) {
@@ -199,7 +201,8 @@ public class VideoBoardFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
-        mAdapter.addData(event.getVideoBoard());
+        if(mAdapter != null)
+            mAdapter.addData(event.getVideoBoard());
     }
 
     @Subscribe
