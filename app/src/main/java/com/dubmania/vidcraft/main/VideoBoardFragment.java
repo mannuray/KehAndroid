@@ -24,7 +24,6 @@ import com.dubmania.vidcraft.communicator.eventbus.mainevent.VideoBoardScrollEnd
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
-import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.misc.AddVideoBoardActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.EmptyRecyclerView;
@@ -111,11 +110,11 @@ public class VideoBoardFragment extends Fragment {
             }
         });
 
-        myUploads.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-1l, mBoardIcons.getResourceId(0, -1), "My Uploads", "Me")));
-        favorites.setOnClickListener(new OnClickListnerEvent<VideoBoardClickedEvent>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
+        myUploads.setOnClickListener(new OnClickListnerEvent<>(new VideoBoardClickedEvent(-1l, mBoardIcons.getResourceId(0, -1), "My Uploads", "Me")));
+        favorites.setOnClickListener(new OnClickListnerEvent<>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
         mBoardIcons.recycle();
 
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(getActivity())
+        new FloatingActionMenu.Builder(getActivity())
                 .addSubActionView(myUploads)
                 .addSubActionView(favorites)
                 .addSubActionView(addVideoBoard)
@@ -182,7 +181,7 @@ public class VideoBoardFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && mVisibleFirstTime) {
             BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
-            presentShowcaseView(1000);
+            //presentShowcaseView(1000);
             mVisibleFirstTime = false;
         }
     }

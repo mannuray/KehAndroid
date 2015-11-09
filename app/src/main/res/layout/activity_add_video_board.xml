@@ -66,9 +66,8 @@
             android:id="@+id/add_video_board_gridView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:stretchMode="columnWidth"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:scrollbars="none"
             android:numColumns="4" />
 

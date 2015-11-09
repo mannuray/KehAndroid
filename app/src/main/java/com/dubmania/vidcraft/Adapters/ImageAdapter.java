@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,11 +42,11 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
 
         if (convertView == null) {
-            imageView = new ImageView(mContext);
+            imageView = new SquareImageView(mContext);
         }
         else
         {
-            imageView = (ImageView) convertView;
+            imageView = (SquareImageView) convertView;
         }
 
         GradientDrawable selected = new GradientDrawable();
@@ -55,9 +56,29 @@ public class ImageAdapter extends BaseAdapter {
         //(GradientDrawable) mContext.getResources().getDrawable(R.drawable.rectangular_background);
         selected.setStroke(3, Color.parseColor(mThumbColors.get(position)));
         StateListDrawable background = new StateListDrawable();
-        background.addState(new int[]{android.R.attr.state_activated }, selected);
+        background.addState(new int[]{android.R.attr.state_activated}, selected);
         imageView.setBackground(background);
         imageView.setImageResource(mThumbIds.get(position));
         return imageView;
+    }
+
+    private class SquareImageView extends ImageView {
+        public SquareImageView(Context context) {
+            super(context);
+        }
+
+        public SquareImageView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SquareImageView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth()); //Snap to width
+        }
     }
 }

@@ -49,6 +49,7 @@ public class AddLanguageActivity extends AppCompatActivity {
     private int mCountryPosition;
     ProgressBar progressBar;
     LinearLayout languagePickerLayout;
+    RelativeLayout start;
 
 
     @Override
@@ -70,7 +71,7 @@ public class AddLanguageActivity extends AppCompatActivity {
         progressBar=(ProgressBar)findViewById(R.id.progressBar3);
         languagePickerLayout=(LinearLayout)findViewById(R.id.language_picker_layout);
 
-        RelativeLayout start = (RelativeLayout) findViewById(R.id.add_language);
+        start = (RelativeLayout) findViewById(R.id.add_language);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +93,7 @@ public class AddLanguageActivity extends AppCompatActivity {
                 finish();
             }
         });
+        start.setEnabled(false);
 
         populateData();
     }
@@ -157,6 +159,7 @@ public class AddLanguageActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 languagePickerLayout.setVisibility(View.VISIBLE);
                 setData();
+                start.setEnabled(true);
             }
 
             @Override
