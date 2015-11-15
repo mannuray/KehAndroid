@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/kehAndroid.iml" filepath="$PROJECT_DIR$/kehAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newvidcraft_icon.iml" filepath="$PROJECT_DIR$/newvidcraft_icon.iml" />
     </modules>
   </component>
 </project>
