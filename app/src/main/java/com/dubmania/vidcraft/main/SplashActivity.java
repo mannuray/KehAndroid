@@ -22,11 +22,9 @@ import io.realm.Realm;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static long SPLASH_TIME = 20; // origiran time 2000
+    private static long SPLASH_TIME = 2000; // origiran time 2000
 
     SharedPreferences mPref;
-    SharedPreferences.Editor editor;
-    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                     realm.commitTransaction();
                     sharedPreferences.edit()
-                            .putBoolean("dataBaseInitialized", true).commit();
+                            .putBoolean("dataBaseInitialized", true).apply();
                 }
 
                 @Override
@@ -94,7 +92,7 @@ public class SplashActivity extends AppCompatActivity {
                             Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = mPref.edit();
             editor.putBoolean("add_language", true);
-            editor.commit();
+            editor.apply();
 
             Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(intent);

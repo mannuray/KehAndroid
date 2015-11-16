@@ -125,6 +125,7 @@
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
                         android:clickable="true"
                         android:text="Reset"
                         android:textColor="@color/wallet_highlighted_text_holo_light"
