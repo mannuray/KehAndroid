@@ -42,7 +42,8 @@ public class VideoBoardFragment extends Fragment {
     private VideoBoardAdapter mAdapter = null;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
-    CoordinatorLayout mLayoutRoot;
+    private CoordinatorLayout mLayoutRoot;
+    private FloatingActionMenu mFloatingMenu;
     public static FloatingActionButton actionButton = null;
 
     public VideoBoardFragment() {
@@ -114,15 +115,12 @@ public class VideoBoardFragment extends Fragment {
         favorites.setOnClickListener(new OnClickListnerEvent<>(new VideoBoardClickedEvent(-2l, mBoardIcons.getResourceId(1, -1), "My Favrioutes", "Me")));
         mBoardIcons.recycle();
 
-        new FloatingActionMenu.Builder(getActivity())
+        mFloatingMenu = new FloatingActionMenu.Builder(getActivity())
                 .addSubActionView(myUploads)
                 .addSubActionView(favorites)
                 .addSubActionView(addVideoBoard)
                 .attachTo(actionButton)
                 .build();
-
-
-        mBoardIcons.recycle();
 
         EmptyRecyclerView mRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.video_board_recycler_view);
         mRecyclerView.setEmptyView(view.findViewById(R.id.list_empty));
@@ -184,6 +182,9 @@ public class VideoBoardFragment extends Fragment {
             //presentShowcaseView(1000);
             mVisibleFirstTime = false;
         }
+
+        if(!isVisibleToUser && mFloatingMenu != null && mFloatingMenu.isOpen())
+            mFloatingMenu.close(true);
     }
 
     @Override
@@ -196,6 +197,14 @@ public class VideoBoardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("Visible", " in pause ");
+        if(mFloatingMenu != null && mFloatingMenu.isOpen())
+            mFloatingMenu.close(true);
     }
 
     @Subscribe

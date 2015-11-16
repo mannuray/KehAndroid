@@ -29,6 +29,7 @@
 
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="android:fitsSystemWindows">true</item>
 
     </style>
 

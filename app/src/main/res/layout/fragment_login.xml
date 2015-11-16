@@ -4,146 +4,155 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/your_email"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_alignParentTop="true">
-
-        <ImageView
-            android:id="@+id/mail_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/user_icon" />
-
-        <TextView
-            android:id="@+id/whats_your_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mail_logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Login to Dubsmania"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/login_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/whats_your_email"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="Please enter your Dubsmania username or email and password below "
-            android:textSize="12sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/informationBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/your_email">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/login_email"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:hint="Email/Username"
-                    android:singleLine="true"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/emailCross"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/login_email"
-                    android:src="@drawable/cross" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/editPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editText">
-
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:hint="Enter password"
-                    android:inputType="textWebPassword"
-                    android:singleLine="true"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/passwordCross"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/login_password"
-                    android:src="@drawable/cross" />
-
-                <TextView
-                    android:id="@+id/login_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentRight="true"
-                    android:clickable="true"
-                    android:text="Reset"
-                    android:textColor="@color/wallet_highlighted_text_holo_light"
-                    android:textSize="15sp" />
-
-
-            </RelativeLayout>
-        </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/progressBarView"
+            android:id="@+id/your_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="160dp"
+            android:layout_alignParentTop="true">
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleLarge"
+            <ImageView
+                android:id="@+id/mail_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:indeterminate="false"
-                android:visibility="gone"/>
+                android:layout_marginTop="15dp"
+                android:src="@drawable/user_icon" />
 
+            <TextView
+                android:id="@+id/whats_your_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mail_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Login to Dubsmania"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/login_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/whats_your_email"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Please enter your Dubsmania username or email and password below "
+                android:textSize="12sp" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/informationBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/your_email">
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/login_email"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:hint="Email/Username"
+                        android:singleLine="true"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/emailCross"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/login_email"
+                        android:src="@drawable/cross" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/editPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editText">
+
+                    <EditText
+                        android:id="@+id/login_password"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:hint="Enter password"
+                        android:inputType="textWebPassword"
+                        android:singleLine="true"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/passwordCross"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/login_password"
+                        android:src="@drawable/cross" />
+
+                    <TextView
+                        android:id="@+id/login_forgot_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentRight="true"
+                        android:clickable="true"
+                        android:text="Reset"
+                        android:textColor="@color/wallet_highlighted_text_holo_light"
+                        android:textSize="15sp" />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/progressBarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:indeterminate="false"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 
     <RelativeLayout

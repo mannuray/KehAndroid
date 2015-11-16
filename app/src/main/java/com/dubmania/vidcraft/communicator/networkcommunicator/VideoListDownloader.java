@@ -57,7 +57,7 @@ public class VideoListDownloader {
         @Override
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
             try {
-                Log.d("json error", response.toString());
+                //Log.d("json error", response.toString());
                 if(!response.getBoolean("result")) {
                     mCallback.onVideosDownloadFailure();
                     return;

@@ -156,6 +156,7 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
+    /*
     boolean doubleBackToExitPressedOnce = false;
 
     public void onBackPressed() {
@@ -175,4 +176,5 @@ public class DiscoverFragment extends Fragment {
             }
         }, 2000);
     }
+    */
 }

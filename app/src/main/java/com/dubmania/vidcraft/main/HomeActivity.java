@@ -68,7 +68,6 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
     private DrawerLayout mDrawerLayout;
     private ArrayList<Long> languages;
-    private NavigationView navigationView;
     private TextView userName,email,logout;
     private RelativeLayout headerLayout;
 
@@ -96,10 +95,12 @@ public class HomeActivity extends AppCompatActivity {
 
         if ("com.dubmania.action.VIEW".equals(action)) {
             Log.i("ezp", "EXTRA: "+intent.getExtras().getString("id"));
-            ActivityStarter.createDub(this, new Long(intent.getExtras().getString("id")), " as of now" );
+            ActivityStarter.createDub(this, Long.valueOf(intent.getExtras().getString("id")), " as of now" );
         }
 
-        changeFragment(new PagerFragment(), "VidCraft");
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, new PagerFragment())
+                .commit();
     }
 
 
@@ -181,7 +182,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void init_navigator(){
         // Navigation Drawer
-        navigationView =(NavigationView)findViewById(R.id.navigation_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_DrawerLayout);
         headerLayout= (RelativeLayout) navigationView.findViewById(R.id.header);
         userName= (TextView) navigationView.findViewById(R.id.username);
@@ -203,21 +204,22 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
 
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.create_dub:
                         changeFragment(new PagerFragment(), "VidCraft");
-                        return  true;
+                        return true;
                     case R.id.add_video:
                         changeFragment(new AddVideoFragment(), "Add Video");
-                        return  true;
+                        return true;
                     case R.id.my_dubs:
                         changeFragment(new MyDubsFragment(), "My Dubs");
-                        return  true;
+                        return true;
                     case R.id.settings:
                         changeFragment(new SettingFragment(), "Settings");
-                        return  true;
+                        return true;
                     default:
-                        return  true;
+                        changeFragment(new PagerFragment(), "VidCraft");
+                        return true;
                 }
             }
         });
