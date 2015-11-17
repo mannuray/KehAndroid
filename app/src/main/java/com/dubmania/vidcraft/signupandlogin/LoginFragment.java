@@ -85,6 +85,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 login();
+                next_layout.setEnabled(false);
                 //BusProvider.getInstance().post(new LoginEvent(mEmail.getText().toString(), mPassword.getText().toString()));// TO DO change it login from email
             }
         });
@@ -154,6 +155,7 @@ public class LoginFragment extends Fragment {
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 mInfoBox.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
+                next_layout.setEnabled(true);
                 Toast.makeText(getActivity().getApplicationContext(), "Unable to Login user", Toast.LENGTH_LONG).show();
             }
         });

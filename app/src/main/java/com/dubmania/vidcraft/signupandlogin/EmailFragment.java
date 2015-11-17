@@ -78,10 +78,10 @@ public class EmailFragment extends Fragment {
 
         next_layout = (RelativeLayout)rootView.findViewById(R.id.next_layout);
         already_layout = (TextView)rootView.findViewById(R.id.already_layout);
-        View next = rootView.findViewById(R.id.next);
         next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                next_layout.setEnabled(false);
                 verify();
                 //BusProvider.getInstance().post(new EmailCheckEvent(mEmail.getText().toString()));
             }
@@ -105,7 +105,7 @@ public class EmailFragment extends Fragment {
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 mProgressBar.setVisibility(View.GONE);
                 try {
-                    Log.i("Server res", response.toString());
+                    //Log.i("Server res", response.toString());
                     if (response.getBoolean("result")) {
                         mResult.setImageResource(R.drawable.tick);
                         mResult.setVisibility(View.VISIBLE);
@@ -118,11 +118,13 @@ public class EmailFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                next_layout.setEnabled(true);
             }
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
                 mProgressBar.setVisibility(View.GONE);
+                next_layout.setEnabled(true);
                 // see if internet is not available
             }
         });
@@ -144,10 +146,12 @@ public class EmailFragment extends Fragment {
     @Subscribe
     public void onLoginFragmentChangeEvent(LoginFragmentChangeEvent event) {
         mResult.setVisibility(View.GONE);
+        next_layout.setEnabled(true);
     }
 
     @Subscribe
     public void onSignupFragmentChangeEvent(SignupFragmentChangeEvent event) {
         mResult.setVisibility(View.GONE);
+        next_layout.setEnabled(true);
     }
 }

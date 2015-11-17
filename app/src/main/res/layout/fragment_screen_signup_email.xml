@@ -100,11 +100,9 @@
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/cross_imageView"
+                    android:layout_toRightOf="@+id/crossImageView"
+                    android:layout_marginLeft="20dp"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="5dp"
-                    android:visibility="gone"
                     style="?android:attr/android:progressBarStyleSmall"/>
 
                 <ImageView
