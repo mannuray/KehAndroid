@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ public class TrendingFragment extends Fragment {
     private VideoAdapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
+    private int mCurrentPage = 0;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -64,10 +64,10 @@ public class TrendingFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 //add progress item
-                ArrayList<VideoListItem> a = new ArrayList();
+                ArrayList<VideoListItem> a = new ArrayList<>();
                 a.add(null);
                 mAdapter.addData(a);
-                BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
+                BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCurrentPage++));
             }
         });
 
