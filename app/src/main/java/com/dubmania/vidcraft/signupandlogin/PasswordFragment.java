@@ -19,8 +19,6 @@ import com.dubmania.vidcraft.utils.ClearableEditBox;
 public class PasswordFragment extends Fragment {
 
     EditText mPassword;
-    private ProgressBar mProgressBar;
-    private ImageView mResult;
     RelativeLayout next_layout;
 
     @Override
@@ -30,8 +28,8 @@ public class PasswordFragment extends Fragment {
                 R.layout.fragment_screen_signup_password, container, false);
         TextView next = (TextView) rootView.findViewById(R.id.next);
         mPassword = (EditText) rootView.findViewById(R.id.enter_password);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar); // set progress bar for password verifier
-        mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
+        ProgressBar mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        ImageView mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
         next_layout=(RelativeLayout)rootView.findViewById(R.id.next_layout);
         ClearableEditBox mEmailEdit = new ClearableEditBox(mPassword, (ImageView) rootView.findViewById(R.id.crossImageView));
 

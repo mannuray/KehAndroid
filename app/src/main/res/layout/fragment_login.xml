@@ -1,65 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <TableLayout
+        android:id="@+id/your_email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:id="@+id/your_email"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_alignParentTop="true">
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            android:gravity="center_horizontal">
 
             <ImageView
                 android:id="@+id/mail_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
                 android:src="@drawable/user_icon" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.030"
+            android:gravity="center_horizontal">
 
             <TextView
                 android:id="@+id/whats_your_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mail_logo"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="Login to Dubsmania"
                 android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.040"
+            android:gravity="center_horizontal">
 
             <TextView
-                android:id="@+id/login_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/whats_your_email"
-                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="Please enter your Dubsmania username or email and password below "
                 android:textSize="12sp" />
-        </RelativeLayout>
+        </TableRow>
 
-        <RelativeLayout
-            android:id="@+id/informationBox"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/your_email">
+            android:layout_height="0dp"
+            android:layout_weight="0.40"
+            android:gravity="center_horizontal">
 
             <RelativeLayout
+                android:id="@+id/informationBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/your_email">
 
                 <RelativeLayout
                     android:id="@+id/editText"
@@ -125,7 +130,7 @@
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="15dp"
                         android:clickable="true"
                         android:text="Reset"
                         android:textColor="@color/wallet_highlighted_text_holo_light"
@@ -133,28 +138,25 @@
 
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/progressBarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:indeterminate="false"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/progressBarView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:indeterminate="false"
-                    android:visibility="gone"/>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-        </RelativeLayout>
-    </ScrollView>
-
+        </TableRow>
+    </TableLayout>
 
     <RelativeLayout
         android:id="@+id/next_layout"

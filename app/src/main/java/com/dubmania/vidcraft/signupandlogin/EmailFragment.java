@@ -38,12 +38,11 @@ import org.json.JSONException;
 
 public class EmailFragment extends Fragment {
 
-    private View next;
     private EditText mEmail;
     private ProgressBar mProgressBar;
     private ImageView mResult;
     RelativeLayout next_layout;
-    RelativeLayout already_layout;
+    TextView already_layout;
     Typeface tf;
     TextView expose_msg;
 
@@ -77,9 +76,9 @@ public class EmailFragment extends Fragment {
             Log.i("Exception", "Exception:" + exception);
         }
 
-        next_layout=(RelativeLayout)rootView.findViewById(R.id.next_layout);
-        already_layout=(RelativeLayout)rootView.findViewById(R.id.already_layout);
-        next = rootView.findViewById(R.id.next);
+        next_layout = (RelativeLayout)rootView.findViewById(R.id.next_layout);
+        already_layout = (TextView)rootView.findViewById(R.id.already_layout);
+        View next = rootView.findViewById(R.id.next);
         next_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

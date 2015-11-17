@@ -5,118 +5,140 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <TableLayout
         android:id="@+id/your_email"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true">
 
-        <ImageView
-            android:id="@+id/mail_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/mail_icon" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.02"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/whats_your_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mail_logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="What's your email?"
-            android:textSize="18sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/mail_icon" />
+        </TableRow>
 
-        <TextView
-            android:id="@+id/expose_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/whats_your_email"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:lines="2"
-            android:text="we will not expose your email address to other users on Dubsmash "
-            android:textSize="16sp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
-    </RelativeLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            android:gravity="center_horizontal">
 
-    <RelativeLayout
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/your_email">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="What's your email?"
+                android:textSize="18sp" />
+        </TableRow>
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="#00000000"
-            android:singleLine="true"
-            android:layout_marginTop="55dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            android:gravity="center_horizontal">
 
-        </EditText>
+            <TextView
+                android:id="@+id/expose_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:lines="2"
+                android:text="we will not expose your email address to other users on Dubsmash "
+                android:textSize="16sp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:id="@+id/crossImageView"
-            android:layout_toRightOf="@+id/email"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/cross"
-            />
+        </TableRow>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/cross_imageView"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:visibility="gone"
-            style="?android:attr/android:progressBarStyleSmall"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.02"
+            android:gravity="center_horizontal">
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:id="@+id/resultImageView"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/cross_imageView"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/tick"
-            android:visibility="gone"
-            />
+            <RelativeLayout
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </RelativeLayout>
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00000000"
+                    android:singleLine="true"
+                    android:layout_marginTop="55dp">
 
-    <RelativeLayout
-        android:id="@+id/already_layout"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/editText">
+                </EditText>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:text="Already have an account? Login"
-            android:textColor="@color/wallet_highlighted_text_holo_light"/>
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/crossImageView"
+                    android:layout_toRightOf="@+id/email"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/cross"
+                    />
 
-    </RelativeLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cross_imageView"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:visibility="gone"
+                    style="?android:attr/android:progressBarStyleSmall"/>
 
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/resultImageView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/cross_imageView"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/tick"
+                    android:visibility="gone"
+                    />
 
+            </RelativeLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.70"
+            android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/already_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Already have an account? Login"
+                    android:textColor="@color/wallet_highlighted_text_holo_light"/>
+
+        </TableRow>
+
+    </TableLayout>
 
     <RelativeLayout
         android:id="@+id/next_layout"

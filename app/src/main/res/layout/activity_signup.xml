@@ -6,9 +6,9 @@
     android:orientation="vertical"
     tools:context="com.dubmania.vidcraft.signupandlogin.SignupAndLoginActivity" >
 
-    <com.dubmania.vidcraft.utils.NonSwipeableViewPager
-        android:id="@+id/loginAndSignupViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <com.dubmania.vidcraft.utils.NonSwipeableViewPager
+            android:id="@+id/loginAndSignupViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 </RelativeLayout>
