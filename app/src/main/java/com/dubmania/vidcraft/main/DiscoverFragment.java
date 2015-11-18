@@ -26,6 +26,7 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
+import com.dubmania.vidcraft.utils.DiscoverVideoLoader;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -77,23 +78,7 @@ public class DiscoverFragment extends Fragment {
         }
         else
         {
-            Gson gson = new GsonBuilder().create();
-            try {
-                JSONArray contacts =  new JSONArray(savedValue);
-                mItemList = new ArrayList<>();
-
-                for (int i = 0; i < contacts.length(); i++) {
-                    JSONObject c = contacts.getJSONObject(i);
-                    if(c.getString("mType").equals("video")) {
-                        mItemList.add(gson.fromJson(c.toString(), VideoListItem.class));
-                    }
-                    else if (c.getString("mType").equals("board")) {
-                        mItemList.add(gson.fromJson(c.toString(), VideoBoardListItem.class));
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            mItemList = DiscoverVideoLoader.getListItem();
             mVisibleFirstTime = false;
         }
     }

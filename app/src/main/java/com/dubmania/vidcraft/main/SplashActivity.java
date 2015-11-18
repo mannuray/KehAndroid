@@ -15,6 +15,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.misc.AddLanguageActivity;
 import com.dubmania.vidcraft.utils.AvailableLanguage;
+import com.dubmania.vidcraft.utils.DiscoverVideoLoader;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,17 @@ public class SplashActivity extends AppCompatActivity {
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
+        String savedValue = sharedPreferences.getString("discover_list", "");
+        if(savedValue != null && !savedValue.equals("")) {
+
+            new Runnable() {
+
+                @Override
+                public void run() {
+                    DiscoverVideoLoader.loadListFromSharedPreference();
+                }
+            }.run();
+        }
 
         boolean dataBaseInitialized = sharedPreferences
                 .getBoolean("dataBaseInitialized", false);

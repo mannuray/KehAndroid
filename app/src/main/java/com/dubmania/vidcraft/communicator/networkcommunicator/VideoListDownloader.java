@@ -21,12 +21,11 @@ import java.util.ArrayList;
 public class VideoListDownloader {
     private VideoListDownloaderCallback mCallback;
 
-    public void downloadTrendingVideos(Integer start, Integer end, Long user_id, ArrayList<Long> languages, VideoListDownloaderCallback callback){
+    public void downloadTrendingVideos(Integer page, Long user_id, ArrayList<Long> languages, VideoListDownloaderCallback callback){
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_START, String.valueOf(start));
-        params.add(ConstantsStore.PARAM_END, String.valueOf(end));
+        params.add(ConstantsStore.PARAM_PAGE, String.valueOf(page));
 
-        params.add(ConstantsStore.PARAM_USER_ID, String .valueOf(user_id));
+        params.add(ConstantsStore.PARAM_USER_ID, String.valueOf(user_id));
         JSONArray LanguageArray = new JSONArray();
         for (Long language: languages) {
             try {

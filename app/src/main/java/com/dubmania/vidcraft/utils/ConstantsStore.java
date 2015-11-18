@@ -109,7 +109,7 @@ public class ConstantsStore {
     public final static String PARAM_RESULT = "result";
     public final static String PARAM_PAGE = "page";
 
-    public final static String PARAM_LANGUAGE = "language";
+    public final static String PARAM_LANGUAGE = "languages";
     public final static String PARAM_LANGUAGE_ID = "id";
     public final static String PARAM_LANGUAGE_TEXT = "language";
     public final static String PARAM_LANGUAGE_LIST = "list"; // change this later
