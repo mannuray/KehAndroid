@@ -10,6 +10,10 @@ public abstract class ListItem implements Parcelable {
     public enum ListType {video, board}
     private ListType mType;
 
+    public ListItem() {
+        this.mType = null;
+    }
+
     public ListItem(ListType mType) {
         this.mType = mType;
     }

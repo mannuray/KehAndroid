@@ -202,7 +202,6 @@ public class VideoBoardFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("Visible", " in pause ");
         if(mFloatingMenu != null && mFloatingMenu.isOpen())
             mFloatingMenu.close(true);
     }

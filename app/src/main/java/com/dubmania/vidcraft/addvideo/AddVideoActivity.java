@@ -206,7 +206,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
         try {
-            Log.i("Video Trimmer", "Staring trimmer");
+            //Log.i("Video Trimmer", "Staring trimmer");
 
             final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());

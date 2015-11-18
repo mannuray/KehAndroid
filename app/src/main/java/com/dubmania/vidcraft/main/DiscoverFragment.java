@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoAndBoardAdapter;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
+import com.dubmania.vidcraft.Adapters.VideoListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
@@ -30,6 +31,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
@@ -59,29 +64,38 @@ public class DiscoverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String savedValue = prefs.getString("discover_list", "");
-        if (savedValue.equals("")) {
-            mItemList = new ArrayList<>();
-            mItemList.add(null);
-        } else {
-            //mItemList = savedInstanceState.getParcelableArrayList("discover_list");
-            Gson gson = new GsonBuilder().create();
-            Type type = new TypeToken<ArrayList<ListItem>>(){}.getType();
-            mItemList = gson.fromJson(savedValue, type);
-            mVisibleFirstTime = false;
-        }*/
-
 
         if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mItemList = savedInstanceState.getParcelableArrayList("discover_list");
             mVisibleFirstTime = false;
         }
-        else {
+        else if (savedValue != null && savedValue.equals("")) {
             mItemList = new ArrayList<>();
             mItemList.add(null);
         }
+        else
+        {
+            Gson gson = new GsonBuilder().create();
+            try {
+                JSONArray contacts =  new JSONArray(savedValue);
+                mItemList = new ArrayList<>();
 
+                for (int i = 0; i < contacts.length(); i++) {
+                    JSONObject c = contacts.getJSONObject(i);
+                    if(c.getString("mType").equals("video")) {
+                        mItemList.add(gson.fromJson(c.toString(), VideoListItem.class));
+                    }
+                    else if (c.getString("mType").equals("board")) {
+                        mItemList.add(gson.fromJson(c.toString(), VideoBoardListItem.class));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mVisibleFirstTime = false;
+        }
     }
 
     @Override
@@ -106,18 +120,6 @@ public class DiscoverFragment extends Fragment {
         outState.putParcelableArrayList("discover_list", mItemList);
     }
 
-    /*
-    @Override public void onResume() {
-        super.onResume();
-    }
-
-    @Override public void onPause() {
-        super.onPause();
-        Gson gson = new GsonBuilder().create();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.edit().putString("discover_list", gson.toJson(mItemList)).commit();
-    }*/
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -140,6 +142,16 @@ public class DiscoverFragment extends Fragment {
 
     @Subscribe
     public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
+        new Runnable() {
+
+            @Override
+            public void run() {
+                Gson gson = new GsonBuilder().create();
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                prefs.edit().putString("discover_list", gson.toJson(mItemList)).apply();
+            }
+        }.run();
+
         if(mItemList != null) {
             mAdapter.addData(event.mItemList);
         }
@@ -155,26 +167,4 @@ public class DiscoverFragment extends Fragment {
             }
         }
     }
-
-    /*
-    boolean doubleBackToExitPressedOnce = false;
-
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            getActivity().onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(getActivity(), "Press again to close Vidcraft..", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-    }
-    */
 }
