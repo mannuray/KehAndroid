@@ -14,7 +14,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
-import com.dubmania.vidcraft.utils.AvailableLanguage;
+import com.dubmania.vidcraft.utils.database.AvailableLanguage;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

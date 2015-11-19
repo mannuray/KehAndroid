@@ -17,7 +17,7 @@ import com.dubmania.vidcraft.Adapters.MyVideoListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.utils.EmptyRecyclerView;
-import com.dubmania.vidcraft.utils.SavedDubsData;
+import com.dubmania.vidcraft.utils.database.SavedDubsData;
 
 import java.util.ArrayList;
 

@@ -50,14 +50,14 @@ public class LanguageListDownloader {
                 ArrayList<LanguageAndCountryDataHandler.Language> mLanguages = new ArrayList<>();
                 for( int i = 0; i < languageList.length(); i++ ){
                     JSONObject language = languageList.optJSONObject(i);
-                    Log.i("Langage", " langugage is " + language.optString(ConstantsStore.PARAM_LANGUAGE_TEXT));
+                    //Log.i("Langage", " langugage is " + language.optString(ConstantsStore.PARAM_LANGUAGE_TEXT));
                     LanguageAndCountryDataHandler.Language mLanguage = new LanguageAndCountryDataHandler.Language(language.optLong(ConstantsStore.PARAM_LANGUAGE_ID),
                                                     language.optString(ConstantsStore.PARAM_LANGUAGE_TEXT));
                     if(processCountries) {
                         JSONArray countryList = language.optJSONArray("countries");
                         for( int j = 0; j < countryList.length(); j++ ) {
                             JSONObject country = countryList.optJSONObject(j);
-                            Log.i("Langage", " country is " + country.optString(ConstantsStore.PARAM_COUNTRY_TEXT));
+                            //Log.i("Langage", " country is " + country.optString(ConstantsStore.PARAM_COUNTRY_TEXT));
                             mLanguage.addCountry(new LanguageAndCountryDataHandler.Country(country.optLong(ConstantsStore.PARAM_COUNTRY_ID), country.optString(ConstantsStore.PARAM_COUNTRY_TEXT)));
                         }
                     }

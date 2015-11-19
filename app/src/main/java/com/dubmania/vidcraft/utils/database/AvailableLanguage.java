@@ -1,4 +1,4 @@
-package com.dubmania.vidcraft.utils;
+package com.dubmania.vidcraft.utils.database;
 
 import io.realm.RealmObject;
 

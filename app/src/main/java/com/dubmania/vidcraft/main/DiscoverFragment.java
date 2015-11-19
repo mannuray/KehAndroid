@@ -2,20 +2,17 @@ package com.dubmania.vidcraft.main;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoAndBoardAdapter;
@@ -26,21 +23,17 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.RecyclerViewScrollEndedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
-import com.dubmania.vidcraft.utils.DiscoverVideoLoader;
-import com.dubmania.vidcraft.utils.SessionManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.dubmania.vidcraft.utils.VidCraftApplication;
+import com.dubmania.vidcraft.utils.database.VideoBoardRealmObject;
+import com.dubmania.vidcraft.utils.database.VideoRealmObject;
+import com.loopj.android.http.Base64;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A fragment representing a list of Items.
@@ -66,20 +59,35 @@ public class DiscoverFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String savedValue = prefs.getString("discover_list", "");
+        Boolean discoverListAvailable = prefs.getBoolean("discover_list_available", false);
 
         if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mItemList = savedInstanceState.getParcelableArrayList("discover_list");
             mVisibleFirstTime = false;
         }
-        else if (savedValue != null && savedValue.equals("")) {
+        else if (!discoverListAvailable) {
             mItemList = new ArrayList<>();
             mItemList.add(null);
         }
         else
         {
-            mItemList = DiscoverVideoLoader.getListItem();
-            mVisibleFirstTime = false;
+            mItemList = new ArrayList<>();
+            Realm realm = Realm.getInstance(VidCraftApplication.getContext());
+            RealmResults<VideoRealmObject> videos = realm.allObjects(VideoRealmObject.class).where().findAll();
+            for(VideoRealmObject video: videos) {
+                String thumbnailString = video.getThumbnail();
+                byte[] thumbnailByte = Base64.decode(thumbnailString, 0);
+                Bitmap thumbnail = BitmapFactory.decodeByteArray(thumbnailByte, 0, thumbnailByte.length);
+                mItemList.add(new VideoListItem(video.getId(), video.getName(), video.getUser(), video.isFavourite(), thumbnail));
+                mVisibleFirstTime = false;
+            }
+
+            RealmResults<VideoBoardRealmObject> boards = realm.allObjects(VideoBoardRealmObject.class).where().findAll();
+            for(VideoBoardRealmObject board: boards) {
+                mItemList.add(new VideoBoardListItem(board.getId(), board.getName(), board.getUser(), board.getIcon()));
+                mVisibleFirstTime = false;
+            }
+
         }
     }
 
@@ -94,6 +102,9 @@ public class DiscoverFragment extends Fragment {
 
         mAdapter = new VideoAndBoardAdapter(mItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+
+        if(mVisibleFirstTime)
+            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(0, 0));
 
         return view;
 
@@ -117,25 +128,45 @@ public class DiscoverFragment extends Fragment {
         BusProvider.getInstance().unregister(this);
     }
 
-    @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new RecyclerViewScrollEndedEvent(0, 0));
-        }
-    }
-
     @Subscribe
-    public void onAddDiscoverVideoItemListEvent(AddDiscoverItemListEvent event) {
-        new Runnable() {
-
+    public void onAddDiscoverVideoItemListEvent(final AddDiscoverItemListEvent event) {
+        new Thread() {
             @Override
             public void run() {
-                Gson gson = new GsonBuilder().create();
+                Realm realm = Realm.getInstance(VidCraftApplication.getContext());
+                realm.beginTransaction();
+                for(int i = 0; i < event.mItemList.size(); i++) {
+                    ListItem item = event.mItemList.get(i);
+                    if(item.getType() == ListItem.ListType.video) {
+                        VideoRealmObject video = realm.createObject( VideoRealmObject.class );
+                        VideoListItem vitem = (VideoListItem) item;
+                        video.setId(vitem.getId());
+                        video.setName(vitem.getName());
+                        video.setUser(vitem.getUser());
+                        video.setFavourite(vitem.isFavourite());
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        vitem.getThumbnail().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] thumbnail = stream.toByteArray();
+                        String imageEncoded = Base64.encodeToString(thumbnail, Base64.DEFAULT);
+                        video.setThumbnail(imageEncoded);
+                    }
+                    else if(item.getType() == ListItem.ListType.board) {
+                        VideoBoardRealmObject board = realm.createObject( VideoBoardRealmObject.class );
+                        VideoBoardListItem vBoard = (VideoBoardListItem) item;
+                        board.setId(vBoard.getId());
+                        board.setName(vBoard.getName());
+                        board.setUser(vBoard.getUser());
+                        board.setIcon(vBoard.getIcon());
+                    }
+
+                }
+                realm.commitTransaction();
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                prefs.edit().putString("discover_list", gson.toJson(mItemList)).apply();
+                prefs.edit().putBoolean("discover_list_available", true).apply();
+
             }
-        }.run();
+        }.start();
 
         if(mItemList != null) {
             mAdapter.addData(event.mItemList);

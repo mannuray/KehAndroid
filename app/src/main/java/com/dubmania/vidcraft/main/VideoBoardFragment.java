@@ -128,6 +128,8 @@ public class VideoBoardFragment extends Fragment {
 
         mAdapter = new VideoBoardAdapter(mVideoBoardItemList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+        if(mVisibleFirstTime)
+            BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
 
         return view;
     }
@@ -177,11 +179,6 @@ public class VideoBoardFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
-            //presentShowcaseView(1000);
-            mVisibleFirstTime = false;
-        }
 
         if(!isVisibleToUser && mFloatingMenu != null && mFloatingMenu.isOpen())
             mFloatingMenu.close(true);
@@ -208,8 +205,10 @@ public class VideoBoardFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoBoardListEvent(AddVideoBoardListEvent event) {
-        if(mAdapter != null)
+        if(mAdapter != null) {
             mAdapter.addData(event.getVideoBoard());
+            mVisibleFirstTime = false;
+        }
     }
 
     @Subscribe

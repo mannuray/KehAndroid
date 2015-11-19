@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.utils.InstalledLanguage;
+import com.dubmania.vidcraft.utils.database.InstalledLanguage;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

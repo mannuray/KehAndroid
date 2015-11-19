@@ -41,6 +41,7 @@ public class TrendingFragment extends Fragment {
 
         if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mVideoItemList = savedInstanceState.getParcelableArrayList("trending_list");
+            mCurrentPage = savedInstanceState.getInt("trending_current_page");
             mVisibleFirstTime = false;
         }
         else {
@@ -71,21 +72,17 @@ public class TrendingFragment extends Fragment {
             }
         });
 
-        return view;
-    }
+        if(mVisibleFirstTime)
+            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCurrentPage++));
 
-    @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible && mVisibleFirstTime) {
-            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, 0));
-        }
+        return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("trending_list", mVideoItemList);
+        outState.putInt("trending_current_page", mCurrentPage);
     }
 
     @Override

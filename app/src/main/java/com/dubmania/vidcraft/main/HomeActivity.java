@@ -51,7 +51,7 @@ import com.dubmania.vidcraft.misc.SearchActivity;
 import com.dubmania.vidcraft.misc.VideoBoardActivity;
 import com.dubmania.vidcraft.utils.ActivityStarter;
 import com.dubmania.vidcraft.utils.ConstantsStore;
-import com.dubmania.vidcraft.utils.InstalledLanguage;
+import com.dubmania.vidcraft.utils.database.InstalledLanguage;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.VideoSharer;
 import com.loopj.android.http.PersistentCookieStore;
@@ -303,7 +303,6 @@ public class HomeActivity extends AppCompatActivity {
     @Subscribe
     public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
         // TO DO get user name
-        Log.i("PAGE", "and curretn page is " + event.getCurrent_page());
         new VideoListDownloader().downloadTrendingVideos(event.getCurrent_page(), new SessionManager(this).getId(), languages, new VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {

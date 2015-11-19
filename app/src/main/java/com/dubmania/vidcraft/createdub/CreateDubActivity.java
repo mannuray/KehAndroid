@@ -9,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,7 +23,7 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
-import com.dubmania.vidcraft.utils.SavedDubsData;
+import com.dubmania.vidcraft.utils.database.SavedDubsData;
 import com.dubmania.vidcraft.utils.VideoSharer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
 import com.google.android.gms.analytics.HitBuilders;
@@ -32,7 +31,6 @@ import com.google.android.gms.analytics.Tracker;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 

@@ -8,14 +8,12 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.WindowManager;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
 import com.dubmania.vidcraft.misc.AddLanguageActivity;
-import com.dubmania.vidcraft.utils.AvailableLanguage;
-import com.dubmania.vidcraft.utils.DiscoverVideoLoader;
+import com.dubmania.vidcraft.utils.database.AvailableLanguage;
 
 import java.util.ArrayList;
 
@@ -23,7 +21,7 @@ import io.realm.Realm;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static long SPLASH_TIME = 2000; // origiran time 2000
+    private static long SPLASH_TIME = 4000; // origiran time 2000
 
     SharedPreferences mPref;
 
@@ -34,17 +32,6 @@ public class SplashActivity extends AppCompatActivity {
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        String savedValue = sharedPreferences.getString("discover_list", "");
-        if(savedValue != null && !savedValue.equals("")) {
-
-            new Runnable() {
-
-                @Override
-                public void run() {
-                    DiscoverVideoLoader.loadListFromSharedPreference();
-                }
-            }.run();
-        }
 
         boolean dataBaseInitialized = sharedPreferences
                 .getBoolean("dataBaseInitialized", false);
