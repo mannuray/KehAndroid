@@ -65,6 +65,9 @@ public class TrendingFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 //add progress item
+                if(mCursor.equals("end"))
+                    return;
+
                 ArrayList<VideoListItem> a = new ArrayList<>();
                 a.add(null);
                 mAdapter.addData(a);
