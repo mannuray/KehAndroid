@@ -106,8 +106,10 @@ public class ConstantsStore {
     public final static String PARAM_START = "start";
     public final static String PARAM_END = "end";
     public final static String PARAM_REGION = "region";
+    public final static String PARAM_DISCOVER_VERSION = "version";
     public final static String PARAM_RESULT = "result";
-    public final static String PARAM_PAGE = "page";
+    public final static String PARAM_TRENDING_CURSOR = "trending_cursor";
+    public final static String PARAM_NEXT_CURSOR = "next_cursor";
 
     public final static String PARAM_LANGUAGE = "languages";
     public final static String PARAM_LANGUAGE_ID = "id";

@@ -135,7 +135,7 @@ public class VideoBoardActivity extends AppCompatActivity {
         new VideoListDownloader().downloadBoardVideo(mBoardId, new SessionManager(this).getId(), new VideoListDownloaderCallback() {
 
             @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
                 mAdapter.addData(videos);
             }
 

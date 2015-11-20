@@ -40,9 +40,9 @@ public class VideoAndBoardDownloader {
         downloadVideoAndBoard(ConstantsStore.URL_SEARCH_VIDEOS, params, callback);
     }
 
-    public void discover(int page, Long user, ArrayList<Long> languages, VideoAndBoardDownloaderCallback callback) {
+    public void discover(int version, Long user, ArrayList<Long> languages, VideoAndBoardDownloaderCallback callback) {
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_PAGE, String.valueOf(page));
+        params.add(ConstantsStore.PARAM_DISCOVER_VERSION, String.valueOf(version));
         params.add(ConstantsStore.PARAM_USER_ID, String.valueOf(user));
 
 

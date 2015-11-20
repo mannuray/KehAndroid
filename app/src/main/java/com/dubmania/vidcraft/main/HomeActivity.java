@@ -303,17 +303,17 @@ public class HomeActivity extends AppCompatActivity {
     @Subscribe
     public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
         // TO DO get user name
-        new VideoListDownloader().downloadTrendingVideos(event.getCurrent_page(), new SessionManager(this).getId(), languages, new VideoListDownloaderCallback() {
+        new VideoListDownloader().downloadTrendingVideos(event.getCursor(), new SessionManager(this).getId(), languages, new VideoListDownloaderCallback() {
             @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos) {
-                BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos));
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
+                BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos, cursor));
             }
 
             @Override
             public void onVideosDownloadFailure() {}
         });
 
-        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getCurrent_page()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getCursor()), Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe

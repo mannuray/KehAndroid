@@ -9,6 +9,6 @@ import java.util.ArrayList;
  */
 public abstract class VideoListDownloaderCallback {
 
-    abstract public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos);
+    abstract public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor);
     abstract public void onVideosDownloadFailure();
 }

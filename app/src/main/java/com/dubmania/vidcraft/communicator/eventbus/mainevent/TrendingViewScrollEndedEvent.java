@@ -5,18 +5,18 @@ package com.dubmania.vidcraft.communicator.eventbus.mainevent;
  */
 public class TrendingViewScrollEndedEvent {
     private int mId;
-    private int current_page;
+    private String cursor;
 
-    public TrendingViewScrollEndedEvent(int mId, int current_page) {
+    public TrendingViewScrollEndedEvent(int mId, String cursor) {
         this.mId = mId;
-        this.current_page = current_page;
+        this.cursor = cursor;
     }
 
     public int getmId() {
         return mId;
     }
 
-    public int getCurrent_page() {
-        return current_page;
+    public String getCursor() {
+        return cursor;
     }
 }

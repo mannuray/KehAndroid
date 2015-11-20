@@ -26,7 +26,7 @@ public class TrendingFragment extends Fragment {
     private VideoAdapter mAdapter;
     private ArrayList<VideoListItem> mVideoItemList;
     private boolean mVisibleFirstTime = true;
-    private int mCurrentPage = 0;
+    private String mCursor = "";
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,7 +41,7 @@ public class TrendingFragment extends Fragment {
 
         if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mVideoItemList = savedInstanceState.getParcelableArrayList("trending_list");
-            mCurrentPage = savedInstanceState.getInt("trending_current_page");
+            mCursor = savedInstanceState.getString("trending_cursor");
             mVisibleFirstTime = false;
         }
         else {
@@ -68,12 +68,12 @@ public class TrendingFragment extends Fragment {
                 ArrayList<VideoListItem> a = new ArrayList<>();
                 a.add(null);
                 mAdapter.addData(a);
-                BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCurrentPage++));
+                BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCursor));
             }
         });
 
         if(mVisibleFirstTime)
-            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCurrentPage++));
+            BusProvider.getInstance().post(new TrendingViewScrollEndedEvent(0, mCursor));
 
         return view;
     }
@@ -82,7 +82,7 @@ public class TrendingFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("trending_list", mVideoItemList);
-        outState.putInt("trending_current_page", mCurrentPage);
+        outState.putString("trending_cursor", mCursor);
     }
 
     @Override
@@ -100,6 +100,7 @@ public class TrendingFragment extends Fragment {
     @Subscribe
     public void onAddTrendingVideoListEvent(AddTrendingVideoListEvent event) {
         mAdapter.addData(event.mVideoItemList);
+        mCursor = event.getCursor();
         mVisibleFirstTime = false;
     }
 }

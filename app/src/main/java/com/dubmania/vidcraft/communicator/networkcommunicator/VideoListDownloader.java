@@ -21,9 +21,9 @@ import java.util.ArrayList;
 public class VideoListDownloader {
     private VideoListDownloaderCallback mCallback;
 
-    public void downloadTrendingVideos(Integer page, Long user_id, ArrayList<Long> languages, VideoListDownloaderCallback callback){
+    public void downloadTrendingVideos(String cursor, Long user_id, ArrayList<Long> languages, VideoListDownloaderCallback callback){
         RequestParams params = new RequestParams();
-        params.add(ConstantsStore.PARAM_PAGE, String.valueOf(page));
+        params.add(ConstantsStore.PARAM_TRENDING_CURSOR, cursor);
 
         params.add(ConstantsStore.PARAM_USER_ID, String.valueOf(user_id));
         JSONArray LanguageArray = new JSONArray();
@@ -61,6 +61,7 @@ public class VideoListDownloader {
                     mCallback.onVideosDownloadFailure();
                     return;
                 }
+                String cursor = response.getString(ConstantsStore.PARAM_NEXT_CURSOR);
 
                 JSONArray videoList = response.getJSONArray(ConstantsStore.PARAM_VIDEO_LIST);
                 ArrayList <VideoListItem> mVideoItemList = new ArrayList<>();
@@ -74,7 +75,7 @@ public class VideoListDownloader {
                             video.getString(ConstantsStore.PARAM_USER_NAME),
                             video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV), thumbnail));
                 }
-                mCallback.onVideosDownloadSuccess(mVideoItemList);
+                mCallback.onVideosDownloadSuccess(mVideoItemList, cursor);
             } catch (JSONException e) {
                 e.printStackTrace();
                 mCallback.onVideosDownloadFailure();
