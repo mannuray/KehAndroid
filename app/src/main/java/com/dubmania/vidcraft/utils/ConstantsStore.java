@@ -5,7 +5,7 @@ package com.dubmania.vidcraft.utils;
  */
 public class ConstantsStore {
 
-    public static final String BASE_URL = "http://kehbackend.appspot.com/";
+    public static final String BASE_URL = "http://kehbackend.appspot.com/v1/";
 
     public final static String VIDEO_BOARD_FRAGMENT_BUTTON_LEARNED = "com.monkeybusiness.vidscraft.videoboardfragment.button.learned";
 
