@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Login to Dubsmania"
+                android:text="Login to Vidcraft"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -50,7 +50,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:gravity="center"
-                android:text="Please enter your Dubsmania username or email and password below "
+                android:text="Please enter your Vidcraft username or email and password below "
                 android:textSize="12sp" />
         </TableRow>
 

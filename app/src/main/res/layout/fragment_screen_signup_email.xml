@@ -52,7 +52,7 @@
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:lines="2"
-                android:text="we will not expose your email address to other users on Dubsmash "
+                android:text="we will not expose your email address to other users on Vidcraft "
                 android:textSize="16sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
