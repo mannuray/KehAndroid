@@ -9,10 +9,11 @@
 
     <color name="black_overlay">#66000000</color>
 
-    <color name="ColorPrimary">#00897B</color>
-    <color name="ColorPrimaryDark">#00695C</color>
+    <color name="ColorPrimary">#00CF71</color>
+    <color name="ColorPrimaryDark">#00A45A</color>
     <color name="accent">#03A9F4</color>
-    <color name="tabsScrollColor">#004D40</color>
+    <color name="tabsScrollColor">#00A45A</color>
+    <color name="talSelectedColor">#FFF14B</color>
 
     <!-- App Main Palette -->
     <color name="primary">@color/green_500</color>
@@ -29,7 +30,7 @@
 
     <color name="text_white_text_icons_100">#FFFFFF</color>
     <color name="text_white_secondary_70">#B3FFFFFF</color>
-    <color name="text_white_disabled_hint_30">#4DFFFFFF</color>
+    <color name="text_white_disabled_hint_30">#FFFFFF</color>
     <color name="text_white_divider_12">#1FFFFFFF</color>
 
     <!-- NavigationDrawer -->

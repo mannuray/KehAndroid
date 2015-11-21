@@ -58,6 +58,8 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -249,6 +251,8 @@ public class HomeActivity extends AppCompatActivity {
 
         mActionBarDrawerToggle.syncState();
         getSupportActionBar().setTitle("VidCraft");
+       // getSupportActionBar().setBackgroundDrawable(getResources().getDimension(R.drawable.app_logo));
+
     }
 
     private void changeFragment(Fragment fragment, String title) {
@@ -266,6 +270,8 @@ public class HomeActivity extends AppCompatActivity {
         for(InstalledLanguage language: installedLanguages) {
             languages.add(language.getLanguageId());
         }
+
+
     }
 
     public void pushNotification(View v) {

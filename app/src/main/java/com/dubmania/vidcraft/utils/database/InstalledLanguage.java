@@ -1,5 +1,7 @@
 package com.dubmania.vidcraft.utils.database;
 
+import java.util.Comparator;
+
 import io.realm.RealmObject;
 
 /**
@@ -8,7 +10,7 @@ import io.realm.RealmObject;
 
 // just need to differentiate it from Avalable  languages
 
-public class InstalledLanguage extends RealmObject {
+public class InstalledLanguage extends RealmObject{
     private long languageId;
     private long countryId;
     private String language;
@@ -45,4 +47,7 @@ public class InstalledLanguage extends RealmObject {
     public void setCountry(String country) {
         this.country = country;
     }
+
+
+
 }

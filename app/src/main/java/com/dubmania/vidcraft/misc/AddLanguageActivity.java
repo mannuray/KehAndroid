@@ -59,7 +59,7 @@ public class AddLanguageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Realm realm = Realm.getInstance(getApplicationContext());
                 realm.beginTransaction();
-                InstalledLanguage installedLanguage = realm.createObject( InstalledLanguage.class );
+                InstalledLanguage installedLanguage = realm.createObject( InstalledLanguage.class);
                 LanguageAndCountryDataHandler.Language lan = mLanguageData.getLanguage(mLanguagePosition);
                 installedLanguage.setLanguageId(lan.getId());
                 installedLanguage.setLanguage(lan.getLanguage());
