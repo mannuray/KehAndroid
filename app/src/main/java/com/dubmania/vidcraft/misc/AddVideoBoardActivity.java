@@ -95,6 +95,15 @@ public class AddVideoBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAdd.setEnabled(false); // user should not be able to press it twice
+                if(mBoardName.getText().toString().equals("")) {
+                    mAdd.setEnabled(true);
+                    SnackFactory.createSnackbar(
+                            AddVideoBoardActivity.this,
+                            mLayoutRoot,
+                            "Please add a name for the video board"
+                    ).show();
+                    return;
+                }
                 new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
                     @Override
                     public void onVideoBoardCreateSuccess(Long boardId) {
