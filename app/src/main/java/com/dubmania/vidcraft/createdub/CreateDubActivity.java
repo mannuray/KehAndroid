@@ -18,6 +18,7 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.CreateDubShareEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
@@ -38,7 +39,6 @@ import io.realm.Realm;
 
 public class CreateDubActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     private ViewPager mPager;
     PagerAdapter mPagerAdapter;
     Long id;
@@ -52,7 +52,7 @@ public class CreateDubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_dub);
 
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(mToolbar);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -167,12 +167,12 @@ public class CreateDubActivity extends AppCompatActivity {
 
             @Override
             public void onVideosDownloadFailure() {
-
+                // Toast unable to download video
             }
 
             @Override
             public void onProgress(int mPercentage) {
-
+                BusProvider.getInstance().post(new SetDownloadPercentage(mPercentage));
             }
         });
     }
@@ -220,7 +220,6 @@ public class CreateDubActivity extends AppCompatActivity {
                 .setAction("CreateDub")
                 .setLabel(String.valueOf(id));
 
-        VidCraftApplication application = new VidCraftApplication();
         Tracker mTracker = VidCraftApplication.tracker();
         mTracker.send(builder.build());
 

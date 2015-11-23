@@ -61,20 +61,6 @@ public class AudioManager {
     }
 
     public void recordFrom(int position) throws IOException {
-        /*
-        if(mRecordingPosition < mAudioFlileList.size()) {
-            // remove all previos records
-            if(mRecordingPosition == 0) {
-                mAudioFlileList.clear();
-                isRecordingAvailable = false;
-                isPlayRecordingIntilized = false;
-            }
-            else {
-                for (int i = mAudioFlileList.size() - 1; i > mRecordingPosition; i--) {
-                    mAudioFlileList.remove(i);
-                }
-            }
-        }*/
         for (int i = mAudioFlileList.size() - 1; i > position - 1; i--) {
             Log.i("Maker", "size of file list is " + mAudioFlileList.size());
             mAudioFlileList.remove(i);

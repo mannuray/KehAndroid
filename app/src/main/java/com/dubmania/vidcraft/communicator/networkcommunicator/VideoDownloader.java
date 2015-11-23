@@ -52,5 +52,10 @@ public class VideoDownloader {
         public void onSuccess(int statusCode, Header[] headers, File response) {
             mCallback.onVideosDownloadSuccess(response);
         }
+
+        @Override
+        public void onProgress(long byteWritten, long totalSize) {
+            mCallback.onProgress((int)(byteWritten/totalSize)/100);
+        }
     }
 }

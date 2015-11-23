@@ -59,7 +59,7 @@ public class EmailFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_screen_signup_email, container, false);
         mEmail = (EditText) rootView.findViewById(R.id.email);
-        expose_msg=(TextView)rootView.findViewById(R.id.expose_msg);
+        expose_msg =(TextView)rootView.findViewById(R.id.expose_msg);
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         mResult = (ImageView) rootView.findViewById(R.id.resultImageView);
@@ -67,8 +67,7 @@ public class EmailFragment extends Fragment {
 
         try {
             Account[] accounts = AccountManager.get(getActivity()).getAccountsByType("com.google");
-            for (int i = 0, accountsLength = accounts.length; i < accountsLength; i++) {
-                Account account = accounts[i];
+            for (Account account : accounts) {
                 mEmail.setText(account.name);
                 break;
             }

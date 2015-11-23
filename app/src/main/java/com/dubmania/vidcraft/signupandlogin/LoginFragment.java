@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class LoginFragment extends Fragment {
     private EditText mPassword;
     RelativeLayout next_layout;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
-    CoordinatorLayout mLayoutRoot;
+    private CoordinatorLayout mLayoutRoot;
 
 
 
@@ -56,7 +57,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        mLayoutRoot= (CoordinatorLayout) getActivity().findViewById(R.id.snackbar_layout);
+        mLayoutRoot = (CoordinatorLayout) view.findViewById(R.id.snackbar_layout);
 
         mInfoBox = view.findViewById(R.id.informationBox);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -161,7 +162,15 @@ public class LoginFragment extends Fragment {
                 mInfoBox.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
                 next_layout.setEnabled(true);
-                Toast.makeText(getActivity().getApplicationContext(), "Unable to Login user", Toast.LENGTH_LONG).show();
+                showFailureSnack();
+            }
+
+            private void showFailureSnack()  {
+                SnackFactory.createSnackbar(
+                        getActivity(),
+                        mLayoutRoot,
+                        "unable to Login"
+                ).show();
             }
         });
     }
@@ -176,16 +185,17 @@ public class LoginFragment extends Fragment {
                     if (!json.getBoolean("result")) {
                         showFailureSnack();
                     }
+                    else {
+                        SnackFactory.createSnackbar(
+                                getActivity(),
+                                mLayoutRoot,
+                                "Your reset link have been sent to mail, please use that to reset your password"
+                        ).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     showFailureSnack();
                 }
-
-                SnackFactory.createSnackbar(
-                        getActivity(),
-                        mLayoutRoot,
-                        "Your reset link have been sent to mail, please use that to reset your password"
-                ).show();
             }
 
             @Override

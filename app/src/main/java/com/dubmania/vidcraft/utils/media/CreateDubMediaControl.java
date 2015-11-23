@@ -25,6 +25,7 @@ public class CreateDubMediaControl extends LinearLayout {
     private View mRoot;
     private boolean mRecordingAvailable = false;
     private RecordMarkerBar<Integer> mMarkerBar;
+    private OnRecordingCompleteCallback mCallback;
 
     private ImageButton mPlayOriginal;
 
@@ -61,6 +62,10 @@ public class CreateDubMediaControl extends LinearLayout {
         this.mVideoManager.setOnCompletionListener(mCompletion);
         this.mVideoManager.setOnPrepareListener(mPrepare);
         this.mAudioManager.setOnCompletionListener(mAudioCompletionListner, mTrackChangeListner);
+    }
+
+    public void setOnRecordingCompleteListner(OnRecordingCompleteCallback mListener) {
+        mCallback = mListener;
     }
 
     public void setAnchorView(View view) {
@@ -121,6 +126,8 @@ public class CreateDubMediaControl extends LinearLayout {
                     mMarkerBar.addMarker(mVideoManager.getPos());
                     mSelectedMarker++;
                     mNumberOfAudioSegment++;
+                    if(mCallback != null)
+                        mCallback.onRecordingComplete(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -313,6 +320,8 @@ public class CreateDubMediaControl extends LinearLayout {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(mCallback != null)
+                mCallback.onRecordingComplete(false);
         }
     };
 
@@ -391,5 +400,9 @@ public class CreateDubMediaControl extends LinearLayout {
                 }
             }
         }
+    }
+
+    public static abstract class OnRecordingCompleteCallback {
+        public abstract void onRecordingComplete(boolean status);
     }
 }

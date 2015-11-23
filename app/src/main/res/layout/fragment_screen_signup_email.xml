@@ -103,6 +103,7 @@
                     android:layout_toRightOf="@+id/crossImageView"
                     android:layout_marginLeft="20dp"
                     android:layout_centerVertical="true"
+                    android:visibility="gone"
                     style="?android:attr/android:progressBarStyleSmall"/>
 
                 <ImageView

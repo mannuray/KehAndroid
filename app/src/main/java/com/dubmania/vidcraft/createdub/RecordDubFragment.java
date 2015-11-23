@@ -17,6 +17,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.utils.media.AudioManager;
 import com.dubmania.vidcraft.utils.media.CreateDubMediaControl;
@@ -33,6 +34,7 @@ public class RecordDubFragment extends Fragment {
 
     private AudioManager mAudioManager;
     private VideoManager mVideoManager = null;
+    private MenuItem mShare;
 
     public RecordDubFragment() {
         // Required empty public constructor
@@ -52,6 +54,19 @@ public class RecordDubFragment extends Fragment {
         mMediaControl = (CreateDubMediaControl) view.findViewById(R.id.mediaControl);
         mMediaControl.setAnchorView(view);
         mMediaControl.setEnable(false);
+        mMediaControl.setOnRecordingCompleteListner(new CreateDubMediaControl.OnRecordingCompleteCallback() {
+            @Override
+            public void onRecordingComplete(boolean status) {
+                if(status) {
+                    mShare.setEnabled(true);
+                    mShare.setVisible(true);
+                }
+                else {
+                    mShare.setEnabled(false);
+                    mShare.setVisible(false);
+                }
+            }
+        });
         mAudioManager = new AudioManager(getActivity().getApplicationContext());
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
@@ -64,6 +79,9 @@ public class RecordDubFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_create_dub, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        mShare = menu.findItem(R.id.action_create_dub);
+        mShare.setEnabled(false);
+        mShare.setVisible(false);
     }
 
     @Override
@@ -101,5 +119,10 @@ public class RecordDubFragment extends Fragment {
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
         mMediaControl.setEnable(true);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onSetDownloadPercentage(SetDownloadPercentage event) {
+        //set the progress bar
     }
 }
