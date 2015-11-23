@@ -22,9 +22,8 @@ import java.io.IOException;
 public class CreateDubMediaControl extends LinearLayout {
 
     private Context mContext;
-    private ViewGroup mAnchor;
     private View mRoot;
-    private boolean mShowing;
+    private boolean mRecordingAvailable = false;
     private RecordMarkerBar<Integer> mMarkerBar;
 
     private ImageButton mPlayOriginal;
@@ -223,6 +222,9 @@ public class CreateDubMediaControl extends LinearLayout {
 
     private OnClickListener mPlayRecordedListener = new OnClickListener() {
         public void onClick(View v) {
+            if(!mRecordingAvailable)
+                return;
+
             if(!(mState == State.pausePlayOriginal || mState == State.pausePlayRecording || mState == State.posChanged ||
                     mState == State.pauseRecording || mState == State.initial || mState == State.playingRecorded)) {
                 return;
@@ -286,6 +288,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
                 enableAllButton();
                 mState = State.pauseRecording;
+                mRecordingAvailable = true;
                 return;
             }
 
@@ -329,6 +332,23 @@ public class CreateDubMediaControl extends LinearLayout {
         mNext.setEnabled(false);
 
         button.setEnabled(true);
+    }
+
+    public void setEnable(Boolean enable) {
+        if(!enable) {
+            mPlayOriginal.setEnabled(false);
+            mPrevious.setEnabled(false);
+            mPlayRecorded.setEnabled(false);
+            mRecord.setEnabled(false);
+            mNext.setEnabled(false);
+        }
+        else {
+            mPlayOriginal.setEnabled(true);
+            mPrevious.setEnabled(false);
+            mPlayRecorded.setEnabled(false);
+            mRecord.setEnabled(true);
+            mNext.setEnabled(false);
+        }
     }
 
     private OnClickListener mNextListener = new OnClickListener() {

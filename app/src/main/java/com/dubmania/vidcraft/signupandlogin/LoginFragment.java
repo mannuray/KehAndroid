@@ -3,12 +3,12 @@ package com.dubmania.vidcraft.signupandlogin;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,6 +23,7 @@ import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginSetE
 import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
 import com.dubmania.vidcraft.utils.ClearableEditBox;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.SnackFactory;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -41,6 +42,7 @@ public class LoginFragment extends Fragment {
     private EditText mPassword;
     RelativeLayout next_layout;
     private String mStoreEmail; // need to store email as view will not created when signupinfo event will be recived
+    CoordinatorLayout mLayoutRoot;
 
 
 
@@ -54,6 +56,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        mLayoutRoot= (CoordinatorLayout) getActivity().findViewById(R.id.snackbar_layout);
 
         mInfoBox = view.findViewById(R.id.informationBox);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -142,12 +145,14 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "password or user invalid", Toast.LENGTH_LONG).show();
                         mInfoBox.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
+                        next_layout.setEnabled(true);
                     } else {
                         BusProvider.getInstance().post(new LoginEvent(response.getLong(ConstantsStore.PARAM_USER_ID), response.getString(ConstantsStore.PARAM_USER_NAME),
                                 response.getString(ConstantsStore.PARAM_USER_EMAIL)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    next_layout.setEnabled(true);
                 }
             }
 
@@ -169,15 +174,31 @@ public class LoginFragment extends Fragment {
                     //Toast.makeText(getActivity().getApplicationContext(), "email check event " + new String(responseBody), Toast.LENGTH_LONG).show();
                     JSONObject json = new JSONObject(new String(responseBody));
                     if (!json.getBoolean("result")) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Unable to reset password", Toast.LENGTH_LONG).show();
+                        showFailureSnack();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    showFailureSnack();
                 }
+
+                SnackFactory.createSnackbar(
+                        getActivity(),
+                        mLayoutRoot,
+                        "Your reset link have been sent to mail, please use that to reset your password"
+                ).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                showFailureSnack();
+            }
+
+            private void showFailureSnack()  {
+                SnackFactory.createSnackbar(
+                        getActivity(),
+                        mLayoutRoot,
+                        "unable to reset password"
+                ).show();
             }
         });
     }

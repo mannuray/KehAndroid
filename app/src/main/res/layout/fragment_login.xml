@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snackbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <TableLayout
         android:id="@+id/your_email"
         android:layout_width="match_parent"
@@ -177,5 +182,5 @@
 
     </RelativeLayout>
 
-
+    </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

@@ -42,6 +42,7 @@ public class VideoBoardFragment extends Fragment {
     private VideoBoardAdapter mAdapter = null;
     private ArrayList<VideoBoardListItem> mVideoBoardItemList;
     private boolean mVisibleFirstTime = true;
+    private boolean mLoggedState;
     private CoordinatorLayout mLayoutRoot;
     private FloatingActionMenu mFloatingMenu;
     public static FloatingActionButton actionButton = null;
@@ -69,6 +70,9 @@ public class VideoBoardFragment extends Fragment {
             mVideoBoardItemList.add(null);
             mBoardIcons.recycle();
         }
+
+        SessionManager manager = new SessionManager(getActivity());
+        mLoggedState = manager.isLoggedIn();
     }
 
     @Override
@@ -174,6 +178,9 @@ public class VideoBoardFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("board_list", mVideoBoardItemList);
+
+        SessionManager manager = new SessionManager(getActivity());
+        outState.putBoolean("logged_state", manager.isLoggedIn());
     }
 
     @Override
@@ -201,6 +208,21 @@ public class VideoBoardFragment extends Fragment {
         super.onPause();
         if(mFloatingMenu != null && mFloatingMenu.isOpen())
             mFloatingMenu.close(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SessionManager manager = new SessionManager(getActivity());
+        if(mLoggedState != manager.isLoggedIn()) {
+            if (manager.isLoggedIn()) {
+                BusProvider.getInstance().post(new VideoBoardScrollEndedEvent(0, 0));
+            } else {
+                mVideoBoardItemList.clear();
+                mAdapter.notifyDataSetChanged();
+            }
+            mLoggedState = manager.isLoggedIn();
+        }
     }
 
     @Subscribe

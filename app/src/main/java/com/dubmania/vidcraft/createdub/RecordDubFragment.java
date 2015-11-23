@@ -51,6 +51,7 @@ public class RecordDubFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_record_dub, container, false);
         mMediaControl = (CreateDubMediaControl) view.findViewById(R.id.mediaControl);
         mMediaControl.setAnchorView(view);
+        mMediaControl.setEnable(false);
         mAudioManager = new AudioManager(getActivity().getApplicationContext());
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
@@ -98,6 +99,7 @@ public class RecordDubFragment extends Fragment {
     public void onSetRecordFilesEvent(SetRecordFilesEvent event) {
         mVideoManager.setVideoFilePath(event.getVideoFile());
         mMediaControl.setMediaControllers(mAudioManager, mVideoManager);
+        mMediaControl.setEnable(true);
         mProgressBar.setVisibility(View.GONE);
     }
 }
