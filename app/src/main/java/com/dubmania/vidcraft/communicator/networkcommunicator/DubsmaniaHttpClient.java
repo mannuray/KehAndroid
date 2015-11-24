@@ -5,6 +5,7 @@ import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -17,12 +18,12 @@ public class DubsmaniaHttpClient {
         mClient.setCookieStore(cookieStore);
     }
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        mClient.get(getAbsoluteUrl(url), params, responseHandler);
+    public static RequestHandle get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        return mClient.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        mClient.post(getAbsoluteUrl(url), params, responseHandler);
+    public static RequestHandle post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        return mClient.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
     public static void postAbsolute(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {

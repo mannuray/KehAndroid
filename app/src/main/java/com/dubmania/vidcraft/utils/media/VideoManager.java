@@ -63,7 +63,9 @@ public class VideoManager {
 
     // for test see if we may neeed it further on too
     public int getPos() {
-        return  mVideoPlayer.getCurrentPosition();
+        if(mVideoPlayer != null)
+            return  mVideoPlayer.getCurrentPosition();
+        return 0;
     }
 
     public void start(boolean mute) {

@@ -48,6 +48,7 @@ public class AddVideoActivity extends AppCompatActivity {
     private VideoInfo mVideoInfo;
     private Bitmap mWaterMark;
     private CancelableThread overlayerThread;
+    private double mTotalFrame = 1;
 
 
     @Override
@@ -190,7 +191,7 @@ public class AddVideoActivity extends AppCompatActivity {
 
     @Subscribe
     public void onSearchVideoItemListEvent(SearchVideoItemListEvent event) {
-        Log.i("Change", "Staring trimmer");
+        //Log.i("Change", "Staring trimmer");
         mVideoInfo.setFilePath(event.getFilePath());
         BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(1));
@@ -209,7 +210,7 @@ public class AddVideoActivity extends AppCompatActivity {
             //Log.i("Video Trimmer", "Staring trimmer");
 
             final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
-            VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
+            mTotalFrame = VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
             // ok we got the trim video on enode water mark.
             overlayerThread = new CancelableThread() {
 
@@ -219,6 +220,11 @@ public class AddVideoActivity extends AppCompatActivity {
                     th = new ImageOverlayer(VidCraftApplication.getContext().getExternalCacheDir(),dst.getAbsolutePath());
                     th.overLay(new WaterMarkPositionCalculator(mWaterMark),
                             new ImageOverlayer.Callback() {
+                                @Override
+                                public void onProgressUpdated(double done) {
+
+                                }
+
                                 @Override
                                 public void onConversionCompleted(String h264Track, int fps) {
                                     try {

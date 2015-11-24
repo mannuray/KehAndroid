@@ -66,7 +66,7 @@ public class ImageOverlayer {
     }
 
     /**
-     * Wraps extractMpegFrames().  This is necessary because SurfaceTexture will try to use
+     * Wraps ovelayImage().  This is necessary because SurfaceTexture will try to use
      * the looper in the current thread if one exists, and the CTS tests create one on the
      * test thread.
      *
@@ -84,7 +84,7 @@ public class ImageOverlayer {
         @Override
         public void run() {
             try {
-                mTest.extractMpegFrames();
+                mTest.ovelayImage();
             } catch (Throwable th) {
                 mThrowable = th;
             }
@@ -114,7 +114,7 @@ public class ImageOverlayer {
      * it by adjusting the GL viewport to get letterboxing or pillarboxing, but generally if
      * you're extracting frames you don't want black bars.
      */
-    private void extractMpegFrames() throws IOException {
+    private void ovelayImage() throws IOException {
         MediaCodec decoder = null;
         MediaCodec encoder = null;
         CodecOutputSurface outputSurface = null;
@@ -176,7 +176,7 @@ public class ImageOverlayer {
             encoder.configure(encoderFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             encoder.start();
 
-            doExtract(extractor, trackIndex, decoder, encoder, outputSurface, colorFormat, saveWidth, saveHeight);
+            overlay(extractor, trackIndex, decoder, encoder, outputSurface, colorFormat, saveWidth, saveHeight);
             // see if we can detect fps
             float fps = 0;
             long lastFramePTS = -1;
@@ -190,7 +190,7 @@ public class ImageOverlayer {
             }
             fps *= (lastFramePTS / 1000000f);
             fps = Math.round(fps);
-            Log.i(TAG, "Detected FPS is " + fps);
+            //Log.i(TAG, "Detected FPS is " + fps);
 
             mCallback.onConversionCompleted(mCacheDir.getAbsolutePath() + "/temp.h264", (int)fps);
 
@@ -249,12 +249,13 @@ public class ImageOverlayer {
     /**
      * Work loop.
      */
-    public void doExtract(MediaExtractor extractor, int trackIndex, MediaCodec decoder, MediaCodec encoder,
-                          CodecOutputSurface outputSurface, int colorFormat, int saveWidth, int saveHeight) throws IOException {
+    public void overlay(MediaExtractor extractor, int trackIndex, MediaCodec decoder, MediaCodec encoder,
+                        CodecOutputSurface outputSurface, int colorFormat, int saveWidth, int saveHeight) throws IOException {
         final int TIMEOUT_USEC = 10000;
         ByteBuffer[] decoderInputBuffers = decoder.getInputBuffers();
         ByteBuffer[] encoderInputBuffers = encoder.getInputBuffers();
         ByteBuffer[] encoderOutputBuffers = encoder.getOutputBuffers();
+        double frameProcessed = 0;
 
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
         BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(mCacheDir, "temp.h264")));
@@ -331,6 +332,10 @@ public class ImageOverlayer {
 
                             encoder.releaseOutputBuffer(encoderOutputBufferIndex, false);
                             encoderOutputBufferIndex = encoder.dequeueOutputBuffer(bufferInfo, 0);
+                            frameProcessed++;
+                            if(frameProcessed%100 == 0 && mCallback != null) {
+                                mCallback.onProgressUpdated(frameProcessed);
+                            }
                         }
                     }
                 }
@@ -1011,7 +1016,7 @@ public class ImageOverlayer {
     }
 
     public interface Callback {
-        //public void onProgressUpdated(int done, int total);
+        void onProgressUpdated(double done);
 
         void onConversionCompleted(String h264Track, int fps);
 

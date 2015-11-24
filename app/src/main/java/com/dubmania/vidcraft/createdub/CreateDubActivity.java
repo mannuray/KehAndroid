@@ -47,6 +47,8 @@ public class CreateDubActivity extends AppCompatActivity {
     private File mOutputFile;
     private String mTitle;
 
+    private VideoDownloader mVideoDownloader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +85,8 @@ public class CreateDubActivity extends AppCompatActivity {
     public void onBackPressed() {
         int position = mPager.getCurrentItem();
         if (position == 0 || (position == mPagerAdapter.getCount() - 1)) {
+            if(position == 0)
+                mVideoDownloader.cancelDownload();
             finish();
         }
         mPager.setCurrentItem(position - 1);
@@ -157,7 +161,7 @@ public class CreateDubActivity extends AppCompatActivity {
 
     @Subscribe
     public void onRequestVideoEvent(RequestVideoEvent event) {
-        VideoDownloader mVideoDownloader = new VideoDownloader();
+        mVideoDownloader = new VideoDownloader();
         mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, new VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
@@ -167,12 +171,14 @@ public class CreateDubActivity extends AppCompatActivity {
 
             @Override
             public void onVideosDownloadFailure() {
-                // Toast unable to download video
+                // show toast
+                finish();
             }
 
             @Override
             public void onProgress(int mPercentage) {
-                BusProvider.getInstance().post(new SetDownloadPercentage(mPercentage));
+                //BusProvider.getInstance().post(new SetDownloadPercentage(mPercentage));
+                //unusable as google app enginge do not provide content length
             }
         });
     }

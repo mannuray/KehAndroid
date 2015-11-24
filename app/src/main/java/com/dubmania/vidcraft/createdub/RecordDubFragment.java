@@ -123,6 +123,6 @@ public class RecordDubFragment extends Fragment {
 
     @Subscribe
     public void onSetDownloadPercentage(SetDownloadPercentage event) {
-        //set the progress bar
+        mProgressBar.setProgress(event.getPercentage());
     }
 }

@@ -21,9 +21,10 @@ import java.util.List;
  * Created by rat on 9/11/2015.
  */
 public class VideoTrimmer {
-    public static void startTrim(File src, File dst, int startMs, int endMs) throws IOException {
+    public static double startTrim(File src, File dst, int startMs, int endMs) throws IOException {
         //RandomAccessFile randomAccessFile = new RandomAccessFile(src, "r");
         Movie movie = MovieCreator.build(src.getAbsolutePath());
+        double videoFrameCount = 1;
         // remove all tracks we will create new tracks from the old
         List<Track> tracks = movie.getTracks();
         movie.setTracks(new LinkedList<Track>());
@@ -34,7 +35,7 @@ public class VideoTrimmer {
         // at such a sample we SHOULD make sure that the start of the new fragment is exactly
         // such a frame
         for (Track track : tracks) {
-            Log.i("Video Trimmer", "duraton track " + String.valueOf(track.getDuration()));
+            //Log.i("Video Trimmer", "duraton track " + String.valueOf(track.getDuration()));
             if (track.getSyncSamples() != null && track.getSyncSamples().length > 0) {
                 if (timeCorrected) {
                     // This exception here could be a false positive in case we have multiple tracks
@@ -44,7 +45,7 @@ public class VideoTrimmer {
                 }
                 startTime = correctTimeToSyncSample(track, startTime, false);
                 endTime = correctTimeToSyncSample(track, endTime, true);
-                Log.i("Video Trimmer", "satrt and etst befor " + String.valueOf(startTime) + " " + String.valueOf(endTime));
+                //Log.i("Video Trimmer", "satrt and etst befor " + String.valueOf(startTime) + " " + String.valueOf(endTime));
                 timeCorrected = true;
             }
         }
@@ -72,6 +73,9 @@ public class VideoTrimmer {
                 currentSample++;
             }
             movie.addTrack(new CroppedTrack(track, startSample, endSample));
+            if(track.getHandler().equals("vide")) {
+                videoFrameCount = currentSample;
+            }
         }
 
         Container mContainer =  new DefaultMp4Builder().build(movie);
@@ -80,6 +84,7 @@ public class VideoTrimmer {
         }
         WritableByteChannel wbc = new FileOutputStream(dst).getChannel();
         mContainer.writeContainer(wbc);
+        return videoFrameCount;
     }
 
     /*
