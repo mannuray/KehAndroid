@@ -20,6 +20,7 @@ import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneE
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.VideoPrepareDoneEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -212,6 +213,7 @@ public class CreateDubActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "unable to prepare video", Toast.LENGTH_LONG).show();
             return;
         }
+        BusProvider.getInstance().post(new VideoPrepareDoneEvent());
 
         Realm realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();

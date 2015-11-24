@@ -19,6 +19,7 @@ import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneE
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.VideoPrepareDoneEvent;
 import com.dubmania.vidcraft.utils.media.AudioManager;
 import com.dubmania.vidcraft.utils.media.CreateDubMediaControl;
 import com.dubmania.vidcraft.utils.media.VideoManager;
@@ -95,6 +96,7 @@ public class RecordDubFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_create_dub) {
             BusProvider.getInstance().post(new RecordingDoneEvent(mAudioManager.prepareAudio()));
+            mProgressBar.setVisibility(View.VISIBLE);
             return true;
         }
 
@@ -124,5 +126,10 @@ public class RecordDubFragment extends Fragment {
     @Subscribe
     public void onSetDownloadPercentage(SetDownloadPercentage event) {
         mProgressBar.setProgress(event.getPercentage());
+    }
+
+    @Subscribe
+    public void onVideoPrepareDoneEvent(VideoPrepareDoneEvent event) {
+        mProgressBar.setVisibility(View.GONE);
     }
 }
