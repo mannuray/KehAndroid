@@ -14,12 +14,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoEditEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
 import com.dubmania.vidcraft.utils.RangeSeekBar;
 import com.squareup.otto.Subscribe;
 
@@ -30,6 +33,7 @@ public class EditVideoFragment extends Fragment {
     private VideoView mVideoView;
     private RangeSeekBar<Integer> mTrimmer;
     private MenuItem next;
+    private ProgressBar mProgressBar;
 
     public EditVideoFragment() {
         // Required empty public constructor
@@ -56,6 +60,7 @@ public class EditVideoFragment extends Fragment {
             }
         });
         mTrimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         mVideoView.setOnTouchListener(new onVideoViewTouchListner());
         return view;
@@ -74,7 +79,10 @@ public class EditVideoFragment extends Fragment {
         if( id == R.id.action_edit_video) {
             item.setEnabled(false);
             item.setVisible(false);
-            BusProvider.getInstance().post(new AddVideoEditEvent(mTrimmer.getSelectedMinValue(), mTrimmer.getSelectedMaxValue())); //mUri.getPath())); // this is rendundat now but will be of use later
+            mProgressBar.setVisibility(View.VISIBLE);
+            mTrimmer.setEnabled(false);
+            mVideoView.setEnabled(false);
+            BusProvider.getInstance().post(new AddVideoEditEvent(mTrimmer.getSelectedMinValue(), mTrimmer.getSelectedMaxValue())); //mUri.getPath())); // this is rendundat now but will be of use late
         }
         return true;
     }
@@ -159,5 +167,22 @@ public class EditVideoFragment extends Fragment {
         /*if(next != null)
             next.setEnabled(true);*/
         isVideoUriSet = true;
+    }
+
+    @Subscribe
+    public void onSetProgressBarValue(SetProgressBarValue event) {
+        //Log.i("Progress", "updating progress value  " + event.getPercentage());
+        mProgressBar.setProgress(event.getPercentage());
+    }
+
+    @Subscribe
+    public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
+        if(event.getPosition() == 2) {
+            // we got changed from here
+            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setProgress(0);
+            mTrimmer.setEnabled(true);
+            mVideoView.setEnabled(true);
+        }
     }
 }

@@ -74,7 +74,7 @@ public class VideoTrimmer {
             }
             movie.addTrack(new CroppedTrack(track, startSample, endSample));
             if(track.getHandler().equals("vide")) {
-                videoFrameCount = currentSample;
+                videoFrameCount = endSample-startSample;
             }
         }
 

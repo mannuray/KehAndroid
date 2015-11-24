@@ -24,6 +24,7 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEve
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallback;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -207,10 +208,11 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
         try {
-            //Log.i("Video Trimmer", "Staring trimmer");
+            Log.i("Video Trimmer", "Staring trimmer");
 
             final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             mTotalFrame = VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
+            //Log.i("Progress", "total frame is " + mTotalFrame);
             // ok we got the trim video on enode water mark.
             overlayerThread = new CancelableThread() {
 
@@ -222,7 +224,8 @@ public class AddVideoActivity extends AppCompatActivity {
                             new ImageOverlayer.Callback() {
                                 @Override
                                 public void onProgressUpdated(double done) {
-
+                                    //Log.i("Progress", "progress updated " + done);
+                                    BusProvider.getInstance().post(new SetProgressBarValue((int)((done*100)/mTotalFrame)));
                                 }
 
                                 @Override

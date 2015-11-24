@@ -333,7 +333,7 @@ public class ImageOverlayer {
                             encoder.releaseOutputBuffer(encoderOutputBufferIndex, false);
                             encoderOutputBufferIndex = encoder.dequeueOutputBuffer(bufferInfo, 0);
                             frameProcessed++;
-                            if(frameProcessed%100 == 0 && mCallback != null) {
+                            if(frameProcessed%10 == 0 && mCallback != null) {
                                 mCallback.onProgressUpdated(frameProcessed);
                             }
                         }
