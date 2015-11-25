@@ -16,8 +16,10 @@ import android.widget.RelativeLayout;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
+import com.dubmania.vidcraft.communicator.networkcommunicator.AccountLanguageHandler;
+import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
+import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.database.InstalledLanguage;
 
 import io.realm.Realm;
@@ -57,22 +59,42 @@ public class AddLanguageActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm realm = Realm.getInstance(getApplicationContext());
-                realm.beginTransaction();
-                InstalledLanguage installedLanguage = realm.createObject( InstalledLanguage.class);
-                LanguageAndCountryDataHandler.Language lan = mLanguageData.getLanguage(mLanguagePosition);
-                installedLanguage.setLanguageId(lan.getId());
-                installedLanguage.setLanguage(lan.getLanguage());
-                LanguageAndCountryDataHandler.Country con = lan.getCountry(mCountryPosition);
-                installedLanguage.setCountryId(con.getId());
-                installedLanguage.setCountry(con.getCountry());
-                realm.commitTransaction();
+                final LanguageAndCountryDataHandler.Language lan = mLanguageData.getLanguage(mLanguagePosition);;
+                if(new SessionManager(AddLanguageActivity.this).isLoggedIn()) {
+                    new AccountLanguageHandler().putUserLanguage(lan.getId(), new AccountLanguageHandler.PutLanguageCallback() {
 
-                Intent intent = new Intent(AddLanguageActivity.this, LanguageActivity.class);
-                intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE, lan.getLanguage());
-                intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, lan.getId());
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                        @Override
+                        public void onPutLanguageCallbackSuccess() {
+                            Intent intent = new Intent(AddLanguageActivity.this, LanguageActivity.class);
+                            intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE, lan.getLanguage());
+                            intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, lan.getId());
+                            setResult(Activity.RESULT_OK, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onPutLanguageCallbackFailure() {
+                            // toast unbale to set activity
+                        }
+                    });
+                }
+                else {
+                    Realm realm = Realm.getInstance(getApplicationContext());
+                    realm.beginTransaction();
+                    InstalledLanguage installedLanguage = realm.createObject(InstalledLanguage.class);
+                    installedLanguage.setLanguageId(lan.getId());
+                    installedLanguage.setLanguage(lan.getLanguage());
+                    LanguageAndCountryDataHandler.Country con = lan.getCountry(mCountryPosition);
+                    installedLanguage.setCountryId(con.getId());
+                    installedLanguage.setCountry(con.getCountry());
+                    realm.commitTransaction();
+
+                    Intent intent = new Intent(AddLanguageActivity.this, LanguageActivity.class);
+                    intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE, lan.getLanguage());
+                    intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, lan.getId());
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
             }
         });
         start.setEnabled(false);
@@ -134,7 +156,7 @@ public class AddLanguageActivity extends AppCompatActivity {
     }
 
     private void populateData() {
-        new LanguageListDownloader().downloadLanguageAndCountry(new LanguageListDownloader.LanguageListDownloadCallback() {
+        new LanguageHandler().downloadLanguageAndCountry(new LanguageHandler.LanguageListDownloadCallback() {
             @Override
             public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
                 mLanguageData = mData;

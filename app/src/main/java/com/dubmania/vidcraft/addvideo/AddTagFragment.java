@@ -14,7 +14,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,15 +25,13 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.Adapters.TagListAdapter;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddTagsEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.TagsDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.TagsDownloaderCallback;
+import com.dubmania.vidcraft.communicator.networkcommunicator.TagsHandler;
 
 import java.util.ArrayList;
 
@@ -44,7 +41,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     private TextView mTagsView;
     private ArrayList<Tag> mTags;
     private ArrayList<Tag> mAddedTags;
-    private TagsDownloader mTagsDownloader;
+    private TagsHandler mTagsDownloader;
     private MenuItem next;
     private ImageView mCross;
 
@@ -60,7 +57,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mTagsDownloader = new TagsDownloader();
+        mTagsDownloader = new TagsHandler();
         mTags = new ArrayList<>();
         mAddedTags = new ArrayList<>();
 
@@ -159,7 +156,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         BusProvider.getInstance().unregister(this);
     }
 
-    private class OnTextWatcherListener extends TagsDownloaderCallback {
+    private class OnTextWatcherListener extends TagsHandler.TagsDownloaderCallback {
 
         @Override
         public void onTagsDownloadSuccess(ArrayList<Tag> tags) {

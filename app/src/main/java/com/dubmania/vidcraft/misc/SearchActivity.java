@@ -21,7 +21,6 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -68,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
                 mItemList.clear();
                 mItemList.add(null);
                 mAdapter.notifyDataSetChanged();
-                new VideoAndBoardDownloader(getApplicationContext()).search(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoAndBoardDownloaderCallback() {
+                new VideoAndBoardDownloader(getApplicationContext()).search(mSearch.getText().toString(), new SessionManager(SearchActivity.this).getId(), new VideoAndBoardDownloader.VideoAndBoardDownloaderCallback() {
                     @Override
                     public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> items) {
                         mAdapter.addData(items);

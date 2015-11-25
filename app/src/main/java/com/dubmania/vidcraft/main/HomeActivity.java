@@ -36,14 +36,11 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEv
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardHandler;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardVideoHandler;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardDownloaderCallback;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardsDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarker;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
+import com.dubmania.vidcraft.communicator.networkcommunicator.FavoriteHandler;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.misc.MyAccountActivity;
 import com.dubmania.vidcraft.misc.PlayVideoActivity;
@@ -288,7 +285,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onRecyclerViewScrollEndedEvent(RecyclerViewScrollEndedEvent event) {
-        new VideoAndBoardDownloader(getApplicationContext()).discover(event.getCurrent_page(), new SessionManager(this).getId(), languages, new VideoAndBoardDownloaderCallback() {
+        new VideoAndBoardDownloader(getApplicationContext()).discover(event.getCurrent_page(), new SessionManager(this).getId(), languages, new VideoAndBoardDownloader.VideoAndBoardDownloaderCallback() {
             @Override
             public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> videos) {
                 BusProvider.getInstance().post(new AddDiscoverItemListEvent(videos));
@@ -307,7 +304,7 @@ public class HomeActivity extends AppCompatActivity {
     @Subscribe
     public void onTrendingViewScrollEndedEvent(TrendingViewScrollEndedEvent event) {
         // TO DO get user name
-        new VideoListDownloader().downloadTrendingVideos(event.getCursor(), new SessionManager(this).getId(), languages, new VideoListDownloaderCallback() {
+        new VideoBoardVideoHandler().downloadTrendingVideos(event.getCursor(), new SessionManager(this).getId(), languages, new VideoBoardVideoHandler.VideoListDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos, cursor));
@@ -330,7 +327,7 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
-        new VideoBoardsDownloader(getApplicationContext()).getUserBoards(manager.getUser(), new VideoBoardDownloaderCallback() {
+        new VideoBoardHandler(getApplicationContext()).getUserBoards(manager.getUser(), new VideoBoardHandler.VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
@@ -350,7 +347,11 @@ public class HomeActivity extends AppCompatActivity {
 
     @Subscribe
     public void onnVideoFavriouteChangedEvent(VideoFavoriteChangedEvent event) {
-        new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
+        FavoriteHandler f = new FavoriteHandler();
+        if(event.ismFavrioute())
+            f.markFavorite(event.getId());
+        else
+            f.deleteFavorite(event.getId());
     }
 
     @Subscribe

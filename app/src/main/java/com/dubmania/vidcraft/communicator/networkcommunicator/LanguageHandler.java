@@ -7,6 +7,7 @@ import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by rat on 9/24/2015.
  */
-public class LanguageListDownloader {
+public class LanguageHandler {
 
     private LanguageListDownloadCallback mCallback;
 
@@ -71,6 +72,12 @@ public class LanguageListDownloader {
 
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+            mCallback.onLanguageListDownloadFailure();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+            //Log.d("json error", response);
             mCallback.onLanguageListDownloadFailure();
         }
     }

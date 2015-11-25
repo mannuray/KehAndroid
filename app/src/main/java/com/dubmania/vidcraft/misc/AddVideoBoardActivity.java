@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +16,7 @@ import android.widget.GridView;
 
 import com.dubmania.vidcraft.Adapters.ImageAdapter;
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreaterCallback;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardCreator;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
@@ -104,7 +101,7 @@ public class AddVideoBoardActivity extends AppCompatActivity {
                     ).show();
                     return;
                 }
-                new VideoBoardCreator().addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardCreaterCallback() {
+                new VideoBoardHandler(AddVideoBoardActivity.this).addVideoBoard(mBoardName.getText().toString(), mIconId, new VideoBoardHandler.VideoBoardCreateCallback() {
                     @Override
                     public void onVideoBoardCreateSuccess(Long boardId) {
                         Intent intent = new Intent();

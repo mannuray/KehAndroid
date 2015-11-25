@@ -3,7 +3,6 @@ package com.dubmania.vidcraft.misc;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +19,9 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.CreateDubEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoDeletedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoBoard;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoFavoriteMarker;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoListDownloaderCallback;
+import com.dubmania.vidcraft.communicator.networkcommunicator.FavoriteHandler;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardHandler;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardVideoHandler;
 import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.utils.ConstantsStore;
@@ -32,8 +30,6 @@ import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
@@ -110,7 +106,7 @@ public class VideoBoardActivity extends AppCompatActivity {
         }
 
         if(id == R.id.action_delete_board) {
-            new DeleteVideoBoard().deleteVideoBoard(mBoardId, new DeleteVideoBoard.DeleteVideoBoardCallback() {
+            new VideoBoardHandler(this).deleteVideoBoard(mBoardId, new VideoBoardHandler.DeleteVideoBoardCallback() {
                 @Override
                 public void onDeleteVideoBoardSuccess() {
                     Intent intent = new Intent();
@@ -132,7 +128,7 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     private void populateData() {
 
-        new VideoListDownloader().downloadBoardVideo(mBoardId, new SessionManager(this).getId(), new VideoListDownloaderCallback() {
+        new VideoBoardVideoHandler().downloadBoardVideo(mBoardId, new SessionManager(this).getId(), new VideoBoardVideoHandler.VideoListDownloaderCallback() {
 
             @Override
             public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
@@ -162,7 +158,11 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoFavoriteChangedEvent(VideoFavoriteChangedEvent event) {
-        new VideoFavoriteMarker().markFavorite(event.getId(), event.ismFavrioute());
+        FavoriteHandler f = new FavoriteHandler();
+        if(event.ismFavrioute())
+            f.markFavorite(event.getId());
+        else
+            f.deleteFavorite(event.getId());
     }
 
     @Subscribe

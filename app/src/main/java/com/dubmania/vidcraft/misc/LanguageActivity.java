@@ -16,8 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
+import com.dubmania.vidcraft.communicator.networkcommunicator.AccountLanguageHandler;
+import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.database.InstalledLanguage;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -27,6 +32,7 @@ public class LanguageActivity extends AppCompatActivity {
     private ArrayAdapter mAdapter;
     private Realm realm;
     private RealmResults<InstalledLanguage> languages;
+    private ArrayList<LanguageAndCountryDataHandler.Language> slanguages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,28 @@ public class LanguageActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        realm = Realm.getInstance(getApplicationContext());
-        languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+        if(new SessionManager(this).isLoggedIn()) {
+            slanguages = new ArrayList<>();
+            mAdapter = new LanguageListServerArrayAdapter(this, slanguages);
+            new AccountLanguageHandler().getUserLanguage(new AccountLanguageHandler.GetLanguageCallback() {
+                @Override
+                public void onGetLanguageCallbackSuccess(ArrayList<LanguageAndCountryDataHandler.Language> mLanguageList) {
+                    slanguages = mLanguageList;
+                    mAdapter.notifyDataSetChanged();
+                }
 
-        mAdapter = new LanguageListArrayAdapter(this, languages);
+                @Override
+                public void onGetLanguageCallbackFailure() {
+                    // show toast
+                }
+            });
+        }
+        else {
+            realm = Realm.getInstance(getApplicationContext());
+            languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+
+            mAdapter = new LanguageListInstalledArrayAdapter(this, languages);
+        }
 
         AbsListView mListView = (AbsListView) findViewById(R.id.language_list);
         mListView.setAdapter(mAdapter);
@@ -83,23 +107,16 @@ public class LanguageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            /*String language = data.getStringExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE);
-            Long id = data.getLongExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, 0);
-            realm.beginTransaction();
-            InstalledLanguage installLanguage = realm.createObject(InstalledLanguage.class);
-            installLanguage.setLanguage(language);
-            installLanguage.setLanguageId(id);
-            realm.commitTransaction();*/
             languages = realm.allObjects(InstalledLanguage.class).where().findAll();
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    class LanguageListArrayAdapter extends ArrayAdapter<InstalledLanguage> {
+    class LanguageListInstalledArrayAdapter extends ArrayAdapter<InstalledLanguage> {
         private final Context context;
         private RealmResults<InstalledLanguage> values;
 
-        public LanguageListArrayAdapter(Context context, RealmResults<InstalledLanguage> languages) {
+        public LanguageListInstalledArrayAdapter(Context context, RealmResults<InstalledLanguage> languages) {
             super(context, R.layout.language_list_layout, languages);
             this.values = languages;
             this.context = context;
@@ -124,6 +141,57 @@ public class LanguageActivity extends AppCompatActivity {
                         languages.remove(mPosition);
                         realm.commitTransaction();
                         languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+                        notifyDataSetChanged();
+                    }
+
+                    private View.OnClickListener position(int position) {
+                        mPosition = position;
+                        return this;
+                    }
+                }.position(position));
+            }
+
+            return rowView;
+        }
+    }
+
+    class LanguageListServerArrayAdapter extends ArrayAdapter<LanguageAndCountryDataHandler.Language> {
+        private final Context context;
+        private ArrayList<LanguageAndCountryDataHandler.Language> values;
+
+        public LanguageListServerArrayAdapter(Context context, ArrayList<LanguageAndCountryDataHandler.Language> languages) {
+            super(context, R.layout.language_list_layout, languages);
+            this.values = languages;
+            this.context = context;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.language_list_layout, parent, false);
+            TextView textView = (TextView) rowView.findViewById(R.id.label);
+            textView.setText(values.get(position).getLanguage());
+
+            if(this.values.size() > 1 ) {
+                ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+                imageView.setImageResource(android.R.drawable.ic_delete);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    int mPosition;
+                    @Override
+                    public void onClick(View view) {
+                        new AccountLanguageHandler().deleteUserLanguage(values.get(position).getId(), new AccountLanguageHandler.DeleteLanguageCallback() {
+                            @Override
+                            public void onDeleteLanguageCallbackSuccess() {
+
+                            }
+
+                            @Override
+                            public void onDeleteLanguageCallbackFailure() {
+
+                            }
+                        });
+                        values.remove(position);
                         notifyDataSetChanged();
                     }
 

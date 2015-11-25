@@ -18,11 +18,9 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.CreateDubShareEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
-import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.VideoPrepareDoneEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoDownloaderCallback;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
 import com.dubmania.vidcraft.utils.database.SavedDubsData;
@@ -48,7 +46,7 @@ public class CreateDubActivity extends AppCompatActivity {
     private File mOutputFile;
     private String mTitle;
 
-    private VideoDownloader mVideoDownloader;
+    private VideoHandler mVideoDownloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,8 +160,8 @@ public class CreateDubActivity extends AppCompatActivity {
 
     @Subscribe
     public void onRequestVideoEvent(RequestVideoEvent event) {
-        mVideoDownloader = new VideoDownloader();
-        mVideoDownloader.downloadVideo(ConstantsStore.URL_DOWNLOAD_VIDEO, id, new VideoDownloaderCallback() {
+        mVideoDownloader = new VideoHandler();
+        mVideoDownloader.downloadVideo(ConstantsStore.URL_VIDEO, id, new VideoHandler.VideoDownloaderCallback() {
             @Override
             public void onVideosDownloadSuccess(File mFile) {
                 mVideoFile = mFile;

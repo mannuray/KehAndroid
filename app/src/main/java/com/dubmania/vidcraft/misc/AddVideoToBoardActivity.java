@@ -14,10 +14,8 @@ import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.AddVideoToBoard;
-import com.dubmania.vidcraft.communicator.networkcommunicator.AddVideoToBoardCallback;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardDownloaderCallback;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardsDownloader;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardVideoHandler;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.squareup.otto.Subscribe;
@@ -88,7 +86,7 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVideoBoardClickedEvent(VideoBoardClickedEvent event) {
-        new AddVideoToBoard().addVideoToBoard(event.getId(), mVideoId, new AddVideoToBoardCallback() {
+        new VideoBoardVideoHandler().addVideoToBoard(event.getId(), mVideoId, new VideoBoardVideoHandler.AddVideoToBoardCallback() {
             @Override
             public void onAddVideoToBoardSuccess() {
                 finish();
@@ -103,7 +101,7 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
 
     private void populateData() {
         String user = new SessionManager(this).getUser();
-        new VideoBoardsDownloader(getApplicationContext()).getUserBoards(user, new VideoBoardDownloaderCallback() {
+        new VideoBoardHandler(getApplicationContext()).getUserBoards(user, new VideoBoardHandler.VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 mAdapter.addData(boards);

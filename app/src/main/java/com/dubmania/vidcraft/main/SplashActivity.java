@@ -11,7 +11,7 @@ import android.os.Bundle;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageListDownloader;
+import com.dubmania.vidcraft.communicator.networkcommunicator.LanguageHandler;
 import com.dubmania.vidcraft.misc.AddLanguageActivity;
 import com.dubmania.vidcraft.utils.database.AvailableLanguage;
 
@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
 
         //Log.i("realm", " i is " + dataBaseInitialized);
         if(!dataBaseInitialized) {
-            new LanguageListDownloader().downloadLanguage(new LanguageListDownloader.LanguageListDownloadCallback() {
+            new LanguageHandler().downloadLanguage(new LanguageHandler.LanguageListDownloadCallback() {
                 @Override
                 public void onLanguageListDownloadSuccess(LanguageAndCountryDataHandler mData) {
                     ArrayList<LanguageAndCountryDataHandler.Language> languages = mData.getLanguagesArray();

@@ -25,8 +25,7 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordD
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploader;
-import com.dubmania.vidcraft.communicator.networkcommunicator.VideoUploaderCallback;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.MiscFunction;
 import com.dubmania.vidcraft.utils.SessionManager;
@@ -277,7 +276,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
         // change it to dst file path once file is modified
-        new VideoUploader().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoUploaderCallback() {
+        new VideoHandler().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoHandler.VideoUploaderCallback() {
             @Override
             public void onVideosUploadSuccess(long mId) {
                 HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()

@@ -117,4 +117,9 @@ public class VideoAndBoardDownloader {
             mCallback.onVideoAndBoardDownloaderFailure();
         }
     }
+
+    public abstract static class VideoAndBoardDownloaderCallback {
+        abstract public void onVideoAndBoardDownloaderSuccess(ArrayList<ListItem> mList);
+        abstract public void onVideoAndBoardDownloaderFailure();
+    }
 }

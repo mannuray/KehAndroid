@@ -16,11 +16,11 @@ import java.util.ArrayList;
 /**
  * Created by rat on 8/14/2015.
  */
-public class TagsDownloader {
+public class TagsHandler {
     private TagsDownloaderCallback mCallback;
 
     public void downloadTags(String mTag, TagsDownloaderCallback callback) {
-        downloadTags(ConstantsStore.URL_GET_TAGS, new RequestParams(ConstantsStore.PARAM_TAG_NAME, mTag),callback);
+        downloadTags(ConstantsStore.URL_TAGS, new RequestParams(ConstantsStore.PARAM_TAG_NAME, mTag),callback);
     }
 
     public void downloadTags(String mUrl, RequestParams params, TagsDownloaderCallback callback) {
@@ -49,5 +49,10 @@ public class TagsDownloader {
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
             mCallback.onTagsDownloadFailure();
         }
+    }
+
+    public abstract static class TagsDownloaderCallback {
+        abstract public void onTagsDownloadSuccess(ArrayList<Tag> mTags);
+        abstract public void onTagsDownloadFailure();
     }
 }

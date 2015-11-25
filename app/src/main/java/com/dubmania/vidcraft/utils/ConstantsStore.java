@@ -52,21 +52,17 @@ public class ConstantsStore {
     public final static String URL_RESET_PASSWORD =     ACCOUNT + "forgot";
     public final static String URL_VERIFY_USER =        ACCOUNT + "verify/user";
     public final static String URL_VERIFY_EMAIL =       ACCOUNT + "verify/email";
+    public final static String URL_USER_LANGUAGES =       ACCOUNT + "languages";
 
     public final static String URL_GET_LANGUAGES = "language";
 
 
-    public final static String URL_ADD_VIDEO =          VIDEO + "add";
-    public final static String URL_DOWNLOAD_VIDEO =     VIDEO + "download";
-    public final static String URL_MARK_FAVORIT =       VIDEO + "favorite/mark";
-    public final static String URL_GET_TAGS =           VIDEO + "tags";
+    public final static String URL_VIDEO =          VIDEO + "video";
+    public final static String URL_FAVORITE =       VIDEO + "favorite";
+    public final static String URL_TAGS =           VIDEO + "tags";
 
-    public final static String URL_GET_BOARDS =         BOARD + "get";
-    public final static String URL_ADD_BOARD =          BOARD + "add";
-    public final static String URL_DELETE_BOARD =          BOARD + "delete";
-    public final static String URL_ADD_VIDEO_TO_BOARD = BOARD + "addvideo";
-    public final static String URL_DELETE_VIDEO_FROM_BOARD = BOARD + "deletevideo";
-    public final static String URL_GET_BOARD_VIDEOS =   BOARD + "getvideos";
+    public final static String URL_BOARD =          BOARD + "board";
+    public final static String URL_BOARD_VIDEO = BOARD + "video";
 
     public final static String URL_REPORT =             FEEDBACK + "report";
     public final static String URL_IMPROVE =            FEEDBACK + "improve";
@@ -87,11 +83,9 @@ public class ConstantsStore {
     public final static String PARAM_BOARD_ICON = "icon";
 
 
-    public final static String PARAM_FAVORIT = "favorite";
     public final static String PARAM_VIDEO = "video";
     public final static String PARAM_VIDEO_ID = "id";
     public final static String PARAM_VIDEO_TITLE = "title";
-    public final static String PARAM_VIDEO_FILE = "video";
     public final static String PARAM_VIDEO_FAV = "favorite";
     public final static String PARAM_VIDEO_THUMBNAIL = "thumbnail";
     public final static String PARAM_VIDEO_COUNTRY = "country";

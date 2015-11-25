@@ -11,12 +11,11 @@ import android.view.View;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoDeletedEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoFromBoard;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardVideoHandler;
 import com.dubmania.vidcraft.misc.AddVideoToBoardActivity;
 import com.dubmania.vidcraft.report.FeedbackActivity;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 
-import static com.dubmania.vidcraft.communicator.networkcommunicator.DeleteVideoFromBoard.*;
 
 /**
  * Created by rat on 8/2/2015.
@@ -72,7 +71,7 @@ public class VideoItemPopupMenu {
     }
 
     private void removeFromVideoBoard() {
-        new DeleteVideoFromBoard().deleteVideoFromBoard(mBoardId, mVideoId, new DeleteVideoFromBoardCallback() {
+        new VideoBoardVideoHandler().deleteVideoFromBoard(mBoardId, mVideoId, new VideoBoardVideoHandler.DeleteVideoFromBoardCallback() {
             @Override
             public void onDeleteVideoFromBoardSuccess() {
                 BusProvider.getInstance().post(new VideoDeletedEvent(mVideoId));
