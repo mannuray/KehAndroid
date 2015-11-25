@@ -10,7 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SetUserna
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupPasswordEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -224,7 +223,7 @@ public class SignupAndLoginActivity extends AppCompatActivity {
         params.add(ConstantsStore.PARAM_USER_EMAIL, signUpInfo.getEmail());
         params.add(ConstantsStore.PARAM_PASSWORD, signUpInfo.getPassword());
         params.add(ConstantsStore.PARAM_DOB, signUpInfo.getDob());
-        DubsmaniaHttpClient.post(ConstantsStore.URL_REGISTER, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_REGISTER, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, @SuppressWarnings("deprecation") Header[] headers, org.json.JSONObject response) {
                 try {

@@ -21,7 +21,7 @@ import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SetUserna
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.UserNameExistEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ClearableEditBox;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -96,7 +96,7 @@ public class UserNameFragment extends Fragment {
     private void verify() {
         mProgressBar.setVisibility(View.VISIBLE);
         //Toast.makeText(getActivity().getApplicationContext(), "user name " + mUsername.getText().toString(), Toast.LENGTH_LONG).show();
-        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER_NAME, mUsername.getText().toString()), new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_VERIFY_USER, new RequestParams(ConstantsStore.PARAM_USER_NAME, mUsername.getText().toString()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 mProgressBar.setVisibility(View.GONE);

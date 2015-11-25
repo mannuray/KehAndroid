@@ -61,7 +61,7 @@ public class VideoAndBoardDownloader {
 
     public void downloadVideoAndBoard(String url, RequestParams params, VideoAndBoardDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        DubsmaniaHttpClient.post(url, params, new VideoAndBoardDownloadHandler());
+        VidsCraftHttpClient.post(url, params, new VideoAndBoardDownloadHandler());
     }
 
     private class VideoAndBoardDownloadHandler extends JsonHttpResponseHandler {

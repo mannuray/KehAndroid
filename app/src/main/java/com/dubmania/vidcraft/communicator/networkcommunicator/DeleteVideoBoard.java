@@ -2,14 +2,11 @@ package com.dubmania.vidcraft.communicator.networkcommunicator;
 
 import android.util.Log;
 
-import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
-
-import java.util.ArrayList;
 
 /**
  * Created by mannuk on 10/6/15.
@@ -22,9 +19,9 @@ public class DeleteVideoBoard {
         mCallback = callback;
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(mBoardId));
-        DubsmaniaHttpClient.post(ConstantsStore.URL_DELETE_BOARD, params, new JsonHttpResponseHandler(){
+        VidsCraftHttpClient.post(ConstantsStore.URL_DELETE_BOARD, params, new JsonHttpResponseHandler() {
             @Override
-            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
                     Log.d("json error", response.toString());
                     if (response.getBoolean("result")) {

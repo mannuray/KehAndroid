@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +24,7 @@ import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.FragmentC
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginFragmentChangeEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupFragmentChangeEvent;
-import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.SignupInfoEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ClearableEditBox;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -99,7 +96,7 @@ public class EmailFragment extends Fragment {
 
     private void verify() {
         mProgressBar.setVisibility(View.VISIBLE);
-        DubsmaniaHttpClient.post(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString()), new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_VERIFY_EMAIL, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 mProgressBar.setVisibility(View.GONE);

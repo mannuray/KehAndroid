@@ -30,7 +30,7 @@ public class VideoBoardsDownloader {
 
     public void getVideoBoards(String url, RequestParams params, VideoBoardDownloaderCallback callback) {
         mCallback = callback;
-        DubsmaniaHttpClient.post(url, params, new VideoBoardDownloaderHandler());
+        VidsCraftHttpClient.post(url, params, new VideoBoardDownloaderHandler());
     }
 
     public void getUserBoards(String user, VideoBoardDownloaderCallback callback) {

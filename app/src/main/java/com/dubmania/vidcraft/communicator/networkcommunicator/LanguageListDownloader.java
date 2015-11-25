@@ -3,7 +3,6 @@ package com.dubmania.vidcraft.communicator.networkcommunicator;
 import android.util.Log;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
-import com.dubmania.vidcraft.addvideo.Tag;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -31,7 +30,7 @@ public class LanguageListDownloader {
 
     public void downloadLanguage(String mUrl, RequestParams params, LanguageListDownloadCallback callback) {
         this.mCallback = callback;
-        DubsmaniaHttpClient.get(mUrl, params, new LanguageAndCountriesDownloaderHandler());
+        VidsCraftHttpClient.get(mUrl, params, new LanguageAndCountriesDownloaderHandler());
     }
 
     private class LanguageAndCountriesDownloaderHandler extends JsonHttpResponseHandler {

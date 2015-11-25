@@ -58,7 +58,7 @@ public class VideoUploader {
         params.put(ConstantsStore.PARAM_VIDEO_LANGUAGE, language);
 
         Log.i("URL", "ule is " + ConstantsStore.URL_ADD_VIDEO);
-        DubsmaniaHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_ADD_VIDEO, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
@@ -68,7 +68,7 @@ public class VideoUploader {
                     RequestParams requestParams = new RequestParams();
                     requestParams.put("file", mVideoFile);
                     requestParams.setForceMultipartEntityContentType(true);
-                    DubsmaniaHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id));
+                    VidsCraftHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

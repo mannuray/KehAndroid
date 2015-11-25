@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dubmania.vidcraft.R;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -62,7 +62,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     public void onLogoutClick(View v) {
-        DubsmaniaHttpClient.get(ConstantsStore.URL_USER_LOGOUT, new RequestParams(), new AsyncHttpResponseHandler() {
+        VidsCraftHttpClient.get(ConstantsStore.URL_USER_LOGOUT, new RequestParams(), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 new SessionManager(MyAccountActivity.this).logoutUser();

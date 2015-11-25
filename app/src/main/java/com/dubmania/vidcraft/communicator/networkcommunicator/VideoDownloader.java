@@ -1,9 +1,5 @@
 package com.dubmania.vidcraft.communicator.networkcommunicator;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.FileCache;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
@@ -41,7 +37,7 @@ public class VideoDownloader {
         } catch (IOException e) {
             mDownloading = true;
             mCurrentFile = mCache.getTempFile(String.valueOf(id));
-            mHandle = DubsmaniaHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDataDownloaderHandler(mCurrentFile));
+            mHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDataDownloaderHandler(mCurrentFile));
         }
     }
 

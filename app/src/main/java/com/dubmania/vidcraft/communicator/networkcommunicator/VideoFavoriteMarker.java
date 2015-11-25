@@ -13,7 +13,7 @@ public class VideoFavoriteMarker {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(mId));
         params.add(ConstantsStore.PARAM_FAVORIT,String.valueOf(value));
-        DubsmaniaHttpClient.post(ConstantsStore.URL_MARK_FAVORIT, params, new JsonHttpResponseHandler());
+        VidsCraftHttpClient.post(ConstantsStore.URL_MARK_FAVORIT, params, new JsonHttpResponseHandler());
     }
 
 }

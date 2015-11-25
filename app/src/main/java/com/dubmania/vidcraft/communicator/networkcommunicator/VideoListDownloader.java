@@ -49,7 +49,7 @@ public class VideoListDownloader {
 
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
         this.mCallback = mCallback;
-        DubsmaniaHttpClient.post(url, params, new VideoDataDownloaderHandler());
+        VidsCraftHttpClient.post(url, params, new VideoDataDownloaderHandler());
     }
 
     private class VideoDataDownloaderHandler extends JsonHttpResponseHandler {

@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.feedbackevent.FragmentFeedbackCreateEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -133,7 +133,7 @@ public class ImproveFragment extends Fragment {
             params.add(ConstantsStore.PARAM_IMPROVE_SAID, "Hindi"); // modify to pick from spinner
         }
 
-        DubsmaniaHttpClient.post(ConstantsStore.URL_IMPROVE, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_IMPROVE, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {

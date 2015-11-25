@@ -36,7 +36,7 @@ import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardClickedEv
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoBoardDeletedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoFavoriteChangedEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoItemMenuEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloader;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoAndBoardDownloaderCallback;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardDownloaderCallback;
@@ -58,8 +58,6 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -81,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
-        DubsmaniaHttpClient.setCookieStore(myCookieStore);
+        VidsCraftHttpClient.setCookieStore(myCookieStore);
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);

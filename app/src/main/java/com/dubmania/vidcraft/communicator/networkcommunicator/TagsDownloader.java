@@ -25,7 +25,7 @@ public class TagsDownloader {
 
     public void downloadTags(String mUrl, RequestParams params, TagsDownloaderCallback callback) {
         this.mCallback = callback;
-        DubsmaniaHttpClient.post(mUrl, params, new TagsDownloaderHandler());
+        VidsCraftHttpClient.post(mUrl, params, new TagsDownloaderHandler());
     }
 
     private class TagsDownloaderHandler extends JsonHttpResponseHandler {

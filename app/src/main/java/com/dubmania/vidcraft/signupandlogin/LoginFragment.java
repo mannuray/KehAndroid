@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginEvent;
 import com.dubmania.vidcraft.communicator.eventbus.loginandsignupevent.LoginSetEmailEvent;
-import com.dubmania.vidcraft.communicator.networkcommunicator.DubsmaniaHttpClient;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.ClearableEditBox;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SnackFactory;
@@ -137,7 +136,7 @@ public class LoginFragment extends Fragment {
         params.add(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString());
         params.add(ConstantsStore.PARAM_PASSWORD, mPassword.getText().toString());
 
-        DubsmaniaHttpClient.post(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_LOGIN, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
                 try {
@@ -165,7 +164,7 @@ public class LoginFragment extends Fragment {
                 showFailureSnack();
             }
 
-            private void showFailureSnack()  {
+            private void showFailureSnack() {
                 SnackFactory.createSnackbar(
                         getActivity(),
                         mLayoutRoot,
@@ -176,7 +175,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void resetPassword() {
-        DubsmaniaHttpClient.post(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString()), new AsyncHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_RESET_PASSWORD, new RequestParams(ConstantsStore.PARAM_USER_EMAIL, mEmail.getText().toString()), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -184,8 +183,7 @@ public class LoginFragment extends Fragment {
                     JSONObject json = new JSONObject(new String(responseBody));
                     if (!json.getBoolean("result")) {
                         showFailureSnack();
-                    }
-                    else {
+                    } else {
                         SnackFactory.createSnackbar(
                                 getActivity(),
                                 mLayoutRoot,
@@ -203,7 +201,7 @@ public class LoginFragment extends Fragment {
                 showFailureSnack();
             }
 
-            private void showFailureSnack()  {
+            private void showFailureSnack() {
                 SnackFactory.createSnackbar(
                         getActivity(),
                         mLayoutRoot,
