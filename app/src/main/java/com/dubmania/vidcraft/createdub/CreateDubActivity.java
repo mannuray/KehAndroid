@@ -18,6 +18,8 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.CreateDubShareEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetProgressType;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.VideoPrepareDoneEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.VideoHandler;
@@ -28,6 +30,7 @@ import com.dubmania.vidcraft.utils.VideoSharer;
 import com.dubmania.vidcraft.utils.media.VideoPreparer;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -159,9 +162,12 @@ public class CreateDubActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onRequestVideoEvent(RequestVideoEvent event) {
+    public void onRequestVideoEvent(final RequestVideoEvent event) {
         mVideoDownloader = new VideoHandler();
         mVideoDownloader.downloadVideo(ConstantsStore.URL_VIDEO, id, new VideoHandler.VideoDownloaderCallback() {
+
+            private boolean mProgressType = false;
+
             @Override
             public void onVideosDownloadSuccess(File mFile) {
                 mVideoFile = mFile;
@@ -176,8 +182,14 @@ public class CreateDubActivity extends AppCompatActivity {
 
             @Override
             public void onProgress(int mPercentage) {
-                //BusProvider.getInstance().post(new SetDownloadPercentage(mPercentage));
-                //unusable as google app enginge do not provide content length
+                if(!mProgressType)
+                    BusProvider.getInstance().post(new SetDownloadPercentage(mPercentage));
+            }
+
+            @Override
+            public void onSetProgressType(boolean type) {
+                mProgressType = type;
+                BusProvider.getInstance().post(new SetProgressType(type));
             }
         });
     }

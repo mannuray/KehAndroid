@@ -18,6 +18,7 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RecordingDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.RequestVideoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetDownloadPercentage;
+import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetProgressType;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.SetRecordFilesEvent;
 import com.dubmania.vidcraft.communicator.eventbus.createdubevent.VideoPrepareDoneEvent;
 import com.dubmania.vidcraft.utils.media.AudioManager;
@@ -58,11 +59,10 @@ public class RecordDubFragment extends Fragment {
         mMediaControl.setOnRecordingCompleteListner(new CreateDubMediaControl.OnRecordingCompleteCallback() {
             @Override
             public void onRecordingComplete(boolean status) {
-                if(status) {
+                if (status) {
                     mShare.setEnabled(true);
                     mShare.setVisible(true);
-                }
-                else {
+                } else {
                     mShare.setEnabled(false);
                     mShare.setVisible(false);
                 }
@@ -72,6 +72,7 @@ public class RecordDubFragment extends Fragment {
         mVideoManager = new VideoManager((VideoView) view.findViewById(R.id.videoView));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
         BusProvider.getInstance().post(new RequestVideoEvent());
         return view;
     }
@@ -131,5 +132,11 @@ public class RecordDubFragment extends Fragment {
     @Subscribe
     public void onVideoPrepareDoneEvent(VideoPrepareDoneEvent event) {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onSetProgressType(SetProgressType event) {
+        Log.i("HEAD"," setting progress typ e" + event.getProgressType());
+        mProgressBar.setIndeterminate(event.getProgressType());
     }
 }

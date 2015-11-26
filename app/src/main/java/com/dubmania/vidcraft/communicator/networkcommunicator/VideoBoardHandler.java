@@ -32,7 +32,7 @@ public class VideoBoardHandler {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_NAME, boardName);
         params.add(ConstantsStore.PARAM_BOARD_ICON, String.valueOf(iconId));
-        VidsCraftHttpClient.post(ConstantsStore.URL_BOARD, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.put(ConstantsStore.URL_BOARD, params, new JsonHttpResponseHandler() {
 
             private VideoBoardCreateCallback mCallback;
 
@@ -70,7 +70,7 @@ public class VideoBoardHandler {
     }
 
     public void getVideoBoards(String url, RequestParams params, VideoBoardDownloaderCallback callback) {
-        VidsCraftHttpClient.get(url, params, new VideoBoardDownloaderHandler().init(callback));
+        VidsCraftHttpClient.post(url, params, new VideoBoardDownloaderHandler().init(callback));
     }
 
     public void getUserBoards(String user, VideoBoardDownloaderCallback callback) {
@@ -123,6 +123,7 @@ public class VideoBoardHandler {
     }
 
     public void deleteVideoBoard(Long mBoardId, DeleteVideoBoardCallback callback) {
+        Log.i("Board", "delete called");
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(mBoardId));
         VidsCraftHttpClient.delete(ConstantsStore.URL_BOARD, params, new JsonHttpResponseHandler() {
@@ -132,9 +133,8 @@ public class VideoBoardHandler {
             @Override
             public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                 try {
-                    Log.d("json error", response.toString());
+                    //Log.d("json error", response.toString());
                     if (response.getBoolean("result")) {
-                        Log.d("got it ", String.valueOf(statusCode));
                         mCallback.onDeleteVideoBoardSuccess();
                     }
 

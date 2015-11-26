@@ -74,6 +74,7 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     @Override public void onResume() {
         super.onResume();
+
         BusProvider.getInstance().register(this);
     }
 

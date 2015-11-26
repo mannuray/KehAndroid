@@ -30,12 +30,16 @@ public class VidsCraftHttpClient {
         return mClient.post(url, params, responseHandler);
     }
 
-    public static void delete(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        mClient.delete(url, params, responseHandler);
+    public static RequestHandle head(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        return mClient.head(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static RequestHandle head(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        return mClient.head(url, params, responseHandler);
+    public static RequestHandle put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        return mClient.put(getAbsoluteUrl(url), params, responseHandler);
+    }
+
+    public static void delete(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        mClient.delete(getAbsoluteUrl(url), params, responseHandler);
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {

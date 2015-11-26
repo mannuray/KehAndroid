@@ -49,7 +49,7 @@ public class VideoBoardVideoHandler {
     }
 
     public void downloadVideos(String url, RequestParams params, VideoListDownloaderCallback mCallback) {
-        VidsCraftHttpClient.get(url, params, new VideoListDownloaderHandler().init(mCallback));
+        VidsCraftHttpClient.post(url, params, new VideoListDownloaderHandler().init(mCallback));
     }
 
     private class VideoListDownloaderHandler extends JsonHttpResponseHandler {

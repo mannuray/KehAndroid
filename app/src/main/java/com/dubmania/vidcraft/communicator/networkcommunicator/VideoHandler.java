@@ -9,15 +9,14 @@ import com.dubmania.vidcraft.addvideo.Tag;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.FileCache;
 import com.dubmania.vidcraft.utils.VidCraftApplication;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.Base64;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +42,7 @@ public class VideoHandler {
         this.mCache = new FileCache(VidCraftApplication.getContext().getExternalCacheDir());
     }
 
-    public void downloadVideo(String url, Long id, final VideoDownloaderCallback mCallback) {
+    public void downloadVideo(final String url, final Long id, final VideoDownloaderCallback mCallback) {
         try {
             final File f = mCache.getFile(String.valueOf(id));
             mCallback.onVideosDownloadSuccess(f);
@@ -51,7 +50,49 @@ public class VideoHandler {
         } catch (IOException e) {
             mDownloading = true;
             mCurrentFile = mCache.getTempFile(String.valueOf(id));
-            mHandle = VidsCraftHttpClient.get(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile).init(mCallback));
+            VidsCraftHttpClient.get(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new JsonHttpResponseHandler() {
+
+                VideoDownloaderCallback mCallback;
+
+                @Override
+                public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+                    long fileSize = 1;
+                    try {
+                        if(response.getBoolean("result")) {
+                            fileSize = response.getLong("size");
+                            mCallback.onSetProgressType(false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mCallback.onSetProgressType(true);
+                    }
+                    startFileDownload(fileSize);
+                }
+
+                @Override
+                public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
+                    Log.i("URL", "head failed first");
+                    mCallback.onSetProgressType(true);
+                    startFileDownload(1);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                    Log.i("URL", " status code is " + String.valueOf(statusCode) + " respos " + response);
+                    mCallback.onSetProgressType(true);
+                    startFileDownload(1);
+
+                }
+
+                public AsyncHttpResponseHandler init(VideoDownloaderCallback mCallback) {
+                    this.mCallback = mCallback;
+                    return this;
+                }
+
+                private void startFileDownload(long fileSize) {
+                    mHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile, fileSize, mCallback));
+                }
+            }.init(mCallback));
         }
     }
 
@@ -67,11 +108,13 @@ public class VideoHandler {
 
     private class VideoDownloaderHandler extends FileAsyncHttpResponseHandler {
 
-        private long fileSize = 1;
-        VideoDownloaderCallback mCallback;
+        private long fileSize;
+        private VideoDownloaderCallback mCallback;
 
-        public VideoDownloaderHandler(File file) {
+        public VideoDownloaderHandler(File file, long fileSize, VideoDownloaderCallback mCallback) {
             super(file);
+            this.fileSize = fileSize;
+            this.mCallback = mCallback;
         }
 
         @Override
@@ -83,8 +126,7 @@ public class VideoHandler {
 
         @Override
         public void onProgress(long byteWritten, long totalSize) {
-            mCallback.onProgress((int) (byteWritten / fileSize) * 100);
-            //Log.i("Progress", "progress called " + byteWritten + " " + fileSize);
+            mCallback.onProgress((int) ((byteWritten *100) / fileSize));
         }
 
         @Override
@@ -95,26 +137,6 @@ public class VideoHandler {
                 mCurrentFile.delete();
             mCurrentFile = null;
             mCallback.onVideosDownloadFailure();
-        }
-
-        @Override
-        public void onPreProcessResponse(ResponseHandlerInterface instance, HttpResponse response) {
-            super.onPreProcessResponse(instance, response);
-            //Log.i("Progress", "pre process progress called " );
-            Header[] headers = response.getAllHeaders();
-            for (Header header : headers) {
-                //Log.i("Progress", " hedar is " + header.getName() + " " + header.getValue());
-                if (header.getName().equalsIgnoreCase("content-length")) {
-                    String value = header.getValue();
-                    fileSize = Long.valueOf(value);
-                    //Log.i("Progress", "pre process progress called " + fileSize);
-                }
-            }
-        }
-
-        public FileAsyncHttpResponseHandler init(VideoDownloaderCallback mCallback) {
-            this.mCallback = mCallback;
-            return this;
         }
     }
 
@@ -148,7 +170,7 @@ public class VideoHandler {
         params.put(ConstantsStore.PARAM_VIDEO_LANGUAGE, language);
 
         Log.i("URL", "ule is " + ConstantsStore.URL_VIDEO);
-        VidsCraftHttpClient.post(ConstantsStore.URL_VIDEO, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.put(ConstantsStore.URL_VIDEO, params, new JsonHttpResponseHandler() {
 
             private VideoUploaderCallback mCallback;
 
@@ -163,10 +185,9 @@ public class VideoHandler {
                     requestParams.setForceMultipartEntityContentType(true);
                     VidsCraftHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id, mCallback));
 
-                } catch (JSONException e) {
+                } catch (JSONException | FileNotFoundException e) {
                     e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    mCallback.onVideosUploadFailure();
                 }
             }
 
@@ -221,7 +242,14 @@ public class VideoHandler {
         @Override
         public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
             Log.i("URL", " status code is " + String.valueOf(statusCode) + " respos " + response);
+            mCallback.onVideosUploadFailure();
 
+        }
+
+        @Override
+        public void onProgress(long byteWritten, long totalSize) {
+            ///mCallback.onProgress((int) (byteWritten / fileSize) * 100);
+            //Log.i("Progress", "progress called " + byteWritten + " " + fileSize);
         }
     }
 
@@ -229,6 +257,7 @@ public class VideoHandler {
         abstract public void onVideosDownloadSuccess(File mFile);
         abstract public void onVideosDownloadFailure();
         abstract public void onProgress(int mPercentage);
+        abstract public void onSetProgressType(boolean type);
     }
 
     public abstract static class VideoUploaderCallback {

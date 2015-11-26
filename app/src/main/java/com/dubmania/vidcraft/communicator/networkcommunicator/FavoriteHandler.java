@@ -12,7 +12,7 @@ public class FavoriteHandler {
     public void markFavorite(Long mId) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(mId));
-        VidsCraftHttpClient.post(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler());
+        VidsCraftHttpClient.put(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler());
     }
 
     public void deleteFavorite(Long mId) {
