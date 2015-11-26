@@ -35,7 +35,9 @@ import java.util.ArrayList;
 public class VideoHandler {
     private FileCache mCache;
     private boolean mDownloading = false;
-    private RequestHandle mHandle;
+    private boolean mUploading = false;
+    private RequestHandle mDownloadHandle;
+    private RequestHandle mUploadHandle;
     private File mCurrentFile;
 
     public VideoHandler() {
@@ -58,7 +60,7 @@ public class VideoHandler {
                 public void onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
                     long fileSize = 1;
                     try {
-                        if(response.getBoolean("result")) {
+                        if (response.getBoolean("result")) {
                             fileSize = response.getLong("size");
                             mCallback.onSetProgressType(false);
                         }
@@ -90,7 +92,7 @@ public class VideoHandler {
                 }
 
                 private void startFileDownload(long fileSize) {
-                    mHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile, fileSize, mCallback));
+                    mDownloadHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile, fileSize, mCallback));
                 }
             }.init(mCallback));
         }
@@ -99,7 +101,7 @@ public class VideoHandler {
     public void cancelDownload() {
         //Log.i("Progress", "cancel called");
         if (mDownloading) {
-            mHandle.cancel(true);
+            mDownloadHandle.cancel(true);
             if(mCurrentFile != null)
                 mCurrentFile.delete();
             mCurrentFile = null;
@@ -126,7 +128,7 @@ public class VideoHandler {
 
         @Override
         public void onProgress(long byteWritten, long totalSize) {
-            mCallback.onProgress((int) ((byteWritten *100) / fileSize));
+            mCallback.onProgress((int) ((byteWritten * 100) / fileSize));
         }
 
         @Override
@@ -183,7 +185,8 @@ public class VideoHandler {
                     RequestParams requestParams = new RequestParams();
                     requestParams.put("file", mVideoFile);
                     requestParams.setForceMultipartEntityContentType(true);
-                    VidsCraftHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id, mCallback));
+                    mUploadHandle = VidsCraftHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id, mCallback));
+                    mUploading = true;
 
                 } catch (JSONException | FileNotFoundException e) {
                     e.printStackTrace();
@@ -210,6 +213,13 @@ public class VideoHandler {
         }.init(callback));
     }
 
+    public void cancelUpload() {
+        if(mUploading && mUploadHandle != null) {
+            mUploadHandle.cancel(true);
+            mUploading = false;
+        }
+    }
+
     private class VideoUploadHandler extends JsonHttpResponseHandler {
         private long mId;
         private VideoUploaderCallback mCallback;
@@ -221,6 +231,7 @@ public class VideoHandler {
 
         @Override
         public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+            mUploading = false;
             try {
                 if(response.getBoolean("result")) {
                     mCallback.onVideosUploadSuccess(mId);
@@ -235,12 +246,14 @@ public class VideoHandler {
         @Override
         public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable throwable, org.json.JSONObject errorResponse) {
             // add code to remove upload failue see how it can be handled
+            mUploading = false;
             mCallback.onVideosUploadFailure();
             Log.i("URL", "file upload failed");
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+            mUploading = false;
             Log.i("URL", " status code is " + String.valueOf(statusCode) + " respos " + response);
             mCallback.onVideosUploadFailure();
 
@@ -248,8 +261,7 @@ public class VideoHandler {
 
         @Override
         public void onProgress(long byteWritten, long totalSize) {
-            ///mCallback.onProgress((int) (byteWritten / fileSize) * 100);
-            //Log.i("Progress", "progress called " + byteWritten + " " + fileSize);
+            mCallback.onProgress((int) ((byteWritten * 100)/ totalSize));
         }
     }
 
@@ -263,5 +275,6 @@ public class VideoHandler {
     public abstract static class VideoUploaderCallback {
         abstract public void onVideosUploadSuccess(long mId);
         abstract public void onVideosUploadFailure();
+        abstract public void onProgress(int mPercentage);
     }
 }

@@ -3,17 +3,23 @@ package com.dubmania.vidcraft.addvideo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoUploadFailed;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
+import com.dubmania.vidcraft.communicator.networkcommunicator.VidsCraftHttpClient;
 import com.dubmania.vidcraft.utils.database.AvailableLanguage;
 import com.squareup.otto.Subscribe;
 
@@ -27,6 +33,8 @@ public class AddFinishFragment extends Fragment {
     private EditText mVideoTitle;
     private String[] mLanguages;
     private String mLanguage;
+    private Button mAddVideo;
+    private ProgressBar mProgressBar;
     RealmResults<AvailableLanguage> mRealmResults;
 
     public AddFinishFragment() {
@@ -69,21 +77,26 @@ public class AddFinishFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.addVideo).setOnClickListener(new View.OnClickListener() {
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        mAddVideo = (Button) view.findViewById(R.id.addVideo);
+        mAddVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               long id = 0;
-                if(mVideoTitle.getText().toString().equals("")) {
+                mAddVideo.setEnabled(false);
+                long id = 0;
+                if (mVideoTitle.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please give a title", Toast.LENGTH_SHORT).show();
                     return;
                 }
-               for(AvailableLanguage language: mRealmResults) {
-                    if(language.getLanguage().equals(mLanguage)){
+                for (AvailableLanguage language : mRealmResults) {
+                    if (language.getLanguage().equals(mLanguage)) {
                         id = language.getLanguageId();
                         break;
                     }
                 }
                 BusProvider.getInstance().post(new AddVideoFinishEvent(mVideoTitle.getText().toString(), id));
+                mProgressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -105,5 +118,17 @@ public class AddFinishFragment extends Fragment {
     @Subscribe
     public void onAddVideoInfoEvent(AddVideoInfoEvent event) {
         mVideoTitle.setText(event.getTitle());
+    }
+
+    @Subscribe
+    public void onSetProgressBarValue(SetProgressBarValue event) {
+        mProgressBar.setProgress(event.getPercentage());
+    }
+
+    @Subscribe
+    public void onAddVideoUploadFailed(AddVideoUploadFailed event) {
+        mAddVideo.setEnabled(true);
+        mProgressBar.setProgress(0);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

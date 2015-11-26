@@ -22,6 +22,7 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoEditEve
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoUploadFailed;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
@@ -207,7 +208,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddVideoEditEvent(AddVideoEditEvent event) {
         try {
-            Log.i("Video Trimmer", "Staring trimmer");
+            //Log.i("Video Trimmer", "Staring trimmer");
 
             final File dst = File.createTempFile(MiscFunction.getRandomFileName("Video"), ".mp4", getApplicationContext().getCacheDir());
             mTotalFrame = VideoTrimmer.startTrim(new File(mVideoInfo.getSrcFilePath()), dst, event.getStartPos(), event.getEndPos());
@@ -293,6 +294,12 @@ public class AddVideoActivity extends AppCompatActivity {
             @Override
             public void onVideosUploadFailure() {
                 Toast.makeText(getApplicationContext(), " unable to add video", Toast.LENGTH_LONG).show();
+                BusProvider.getInstance().post(new AddVideoUploadFailed());
+            }
+
+            @Override
+            public void onProgress(int mPercentage) {
+                BusProvider.getInstance().post(new SetProgressBarValue(mPercentage));
             }
         });
     }
