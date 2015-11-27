@@ -101,7 +101,7 @@ public class AddVideoToBoardActivity extends AppCompatActivity {
 
     private void populateData() {
         String user = new SessionManager(this).getUser();
-        new VideoBoardHandler(getApplicationContext()).getUserBoards(user, new VideoBoardHandler.VideoBoardDownloaderCallback() {
+        new VideoBoardHandler(getApplicationContext()).getUserBoards(new VideoBoardHandler.VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 mAdapter.addData(boards);

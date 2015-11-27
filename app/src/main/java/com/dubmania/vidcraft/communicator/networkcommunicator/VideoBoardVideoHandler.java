@@ -40,10 +40,9 @@ public class VideoBoardVideoHandler {
         downloadVideos(ConstantsStore.URL_TRENDING, params, callback);
     }
 
-    public void downloadBoardVideo(Long id, Long user_id, VideoListDownloaderCallback callback) {
+    public void downloadBoardVideo(Long id, VideoListDownloaderCallback callback) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_BOARD_ID, String.valueOf(id));
-        params.add(ConstantsStore.PARAM_USER, String.valueOf(user_id));
 
         downloadVideos(ConstantsStore.URL_BOARD_VIDEO, params, callback);
     }
@@ -78,7 +77,7 @@ public class VideoBoardVideoHandler {
                             video.getString(ConstantsStore.PARAM_USER_NAME),
                             video.getBoolean(ConstantsStore.PARAM_VIDEO_FAV), thumbnail));
                 }
-                mCallback.onVideosDownloadSuccess(mVideoItemList, cursor);
+                mCallback.onVideosDownloadSuccess(mVideoItemList, response.getBoolean(ConstantsStore.PARAM_BOARD_USER),cursor);
             } catch (JSONException e) {
                 e.printStackTrace();
                 mCallback.onVideosDownloadFailure();
@@ -168,7 +167,7 @@ public class VideoBoardVideoHandler {
     }
 
     public abstract static class VideoListDownloaderCallback {
-        abstract public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor);
+        abstract public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, boolean user, String cursor);
         abstract public void onVideosDownloadFailure();
     }
 

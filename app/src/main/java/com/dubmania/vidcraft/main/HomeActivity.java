@@ -297,7 +297,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getmId()), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -306,7 +306,7 @@ public class HomeActivity extends AppCompatActivity {
         // TO DO get user name
         new VideoBoardVideoHandler().downloadTrendingVideos(event.getCursor(), new SessionManager(this).getId(), languages, new VideoBoardVideoHandler.VideoListDownloaderCallback() {
             @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, boolean user_board, String cursor) {
                 BusProvider.getInstance().post(new AddTrendingVideoListEvent(videos, cursor));
             }
 
@@ -314,7 +314,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onVideosDownloadFailure() {}
         });
 
-        Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getCursor()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getCursor()), Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
@@ -327,7 +327,7 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
-        new VideoBoardHandler(getApplicationContext()).getUserBoards(manager.getUser(), new VideoBoardHandler.VideoBoardDownloaderCallback() {
+        new VideoBoardHandler(getApplicationContext()).getUserBoards(new VideoBoardHandler.VideoBoardDownloaderCallback() {
             @Override
             public void onVideoBoardsDownloadSuccess(ArrayList<VideoBoardListItem> boards) {
                 BusProvider.getInstance().post(new AddVideoBoardListEvent(boards));
@@ -363,11 +363,6 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra(ConstantsStore.INTENT_BOARD_ICON, event.getIcon());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        String userName = new SessionManager(this).getUser();
-        if(userName.equals(event.getBoardUsername()))
-            intent.putExtra(ConstantsStore.INTENT_BOARD_USER, true);
-        else
-            intent.putExtra(ConstantsStore.INTENT_BOARD_USER, false);
         startActivityForResult(intent, 1);
     }
 

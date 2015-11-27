@@ -81,6 +81,7 @@ public class ConstantsStore {
     public final static String PARAM_BOARD_LIST = "board_list";
     public final static String PARAM_BOARD_ID = "id";
     public final static String PARAM_BOARD_ICON = "icon";
+    public final static String PARAM_BOARD_USER = "user_board";
 
 
     public final static String PARAM_VIDEO = "video";

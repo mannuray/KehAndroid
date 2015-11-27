@@ -73,8 +73,8 @@ public class VideoBoardHandler {
         VidsCraftHttpClient.post(url, params, new VideoBoardDownloaderHandler().init(callback));
     }
 
-    public void getUserBoards(String user, VideoBoardDownloaderCallback callback) {
-        getVideoBoards(ConstantsStore.URL_BOARD, new RequestParams(ConstantsStore.PARAM_USER, user), callback);
+    public void getUserBoards(VideoBoardDownloaderCallback callback) {
+        getVideoBoards(ConstantsStore.URL_BOARD, new RequestParams(), callback);
     }
 
     private class VideoBoardDownloaderHandler extends JsonHttpResponseHandler {

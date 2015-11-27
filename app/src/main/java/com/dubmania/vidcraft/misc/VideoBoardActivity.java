@@ -25,7 +25,6 @@ import com.dubmania.vidcraft.communicator.networkcommunicator.VideoBoardVideoHan
 import com.dubmania.vidcraft.createdub.CreateDubActivity;
 import com.dubmania.vidcraft.dialogs.VideoItemPopupMenu;
 import com.dubmania.vidcraft.utils.ConstantsStore;
-import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.SnackFactory;
 import com.squareup.otto.Subscribe;
 
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 public class VideoBoardActivity extends AppCompatActivity {
     private ArrayList<VideoListItem> mVideoItemList;
     private VideoAdapter mAdapter;
+    private Menu mMenu;
 
     private Long mBoardId;
     private boolean mUserBoard;
@@ -56,7 +56,6 @@ public class VideoBoardActivity extends AppCompatActivity {
         String mBoardName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_NAME); // set it in action bar
         String mUserName = intent.getStringExtra(ConstantsStore.INTENT_BOARD_USER_NAME); // set it in action bar
         int icon = intent.getIntExtra(ConstantsStore.INTENT_BOARD_ICON, 0); // set it in action bar
-        mUserBoard = intent.getBooleanExtra(ConstantsStore.INTENT_BOARD_USER, false);
 
         getSupportActionBar().setTitle(mBoardName);
         mToolbar.setSubtitle("Uploaded by " + mUserName);
@@ -86,10 +85,9 @@ public class VideoBoardActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(mUserBoard)
-            getMenuInflater().inflate(R.menu.menu_video_board, menu);
-        else
-            getMenuInflater().inflate(R.menu.menu_empty, menu);
+        mMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_video_board, menu);
+        mMenu.setGroupVisible(R.id.deleteBoardMenu, false);
         return true;
     }
 
@@ -129,10 +127,12 @@ public class VideoBoardActivity extends AppCompatActivity {
 
     private void populateData() {
 
-        new VideoBoardVideoHandler().downloadBoardVideo(mBoardId, new SessionManager(this).getId(), new VideoBoardVideoHandler.VideoListDownloaderCallback() {
+        new VideoBoardVideoHandler().downloadBoardVideo(mBoardId, new VideoBoardVideoHandler.VideoListDownloaderCallback() {
 
             @Override
-            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, String cursor) {
+            public void onVideosDownloadSuccess(ArrayList<VideoListItem> videos, boolean userBoard, String cursor) {
+                mMenu.setGroupVisible(R.id.deleteBoardMenu, userBoard);
+                mUserBoard = userBoard;
                 mAdapter.addData(videos);
             }
 
