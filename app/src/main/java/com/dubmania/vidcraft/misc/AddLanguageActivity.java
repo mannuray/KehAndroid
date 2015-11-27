@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
@@ -46,9 +48,6 @@ public class AddLanguageActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-       /* actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);*/
-
 
         mLanguagePicker = (NumberPicker) findViewById(R.id.language_picker);
         mCountryPicker = (NumberPicker) findViewById(R.id.country_picker);
@@ -59,6 +58,7 @@ public class AddLanguageActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                start.setEnabled(false);
                 final LanguageAndCountryDataHandler.Language lan = mLanguageData.getLanguage(mLanguagePosition);;
                 if(new SessionManager(AddLanguageActivity.this).isLoggedIn()) {
                     new AccountLanguageHandler().putUserLanguage(lan.getId(), new AccountLanguageHandler.PutLanguageCallback() {
@@ -69,12 +69,12 @@ public class AddLanguageActivity extends AppCompatActivity {
                             intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE, lan.getLanguage());
                             intent.putExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, lan.getId());
                             setResult(Activity.RESULT_OK, intent);
-                            finish();
+                            AddLanguageActivity.this.finish();
                         }
 
                         @Override
                         public void onPutLanguageCallbackFailure() {
-                            // toast unbale to set activity
+                            start.setEnabled(true);
                         }
                     });
                 }
@@ -168,7 +168,8 @@ public class AddLanguageActivity extends AppCompatActivity {
 
             @Override
             public void onLanguageListDownloadFailure() {
-
+                //Toast.makeText(this, "Unable to download list ", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }

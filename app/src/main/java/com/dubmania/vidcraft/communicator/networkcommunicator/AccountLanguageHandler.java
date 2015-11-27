@@ -1,5 +1,7 @@
 package com.dubmania.vidcraft.communicator.networkcommunicator;
 
+import android.util.Log;
+
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -19,14 +21,14 @@ public class AccountLanguageHandler {
 
     public void getUserLanguage(GetLanguageCallback callback) {
         RequestParams params = new RequestParams();
-        VidsCraftHttpClient.get(ConstantsStore.URL_USER_LANGUAGES, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.post(ConstantsStore.URL_USER_LANGUAGES, params, new JsonHttpResponseHandler() {
             private GetLanguageCallback mCallback;
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 try {
-                    if(!response.getBoolean("result")) {
+                    if (!response.getBoolean("result")) {
                         mCallback.onGetLanguageCallbackFailure();
                         return;
                     }
@@ -34,10 +36,10 @@ public class AccountLanguageHandler {
                     //Log.d("json error", "add to video to board " + response.toString());
                     JSONArray languagesList = response.getJSONArray(ConstantsStore.PARAM_LANGUAGE_LIST);
                     ArrayList<LanguageAndCountryDataHandler.Language> mLanguageList = new ArrayList<>();
-                    for( int i = 0; i < languagesList.length(); i++ ){
+                    for (int i = 0; i < languagesList.length(); i++) {
                         JSONObject language = languagesList.getJSONObject(i);
                         mLanguageList.add(new LanguageAndCountryDataHandler.Language(language.getLong(ConstantsStore.PARAM_LANGUAGE_ID),
-                                language.getString(ConstantsStore.PARAM_LANGUAGE)));
+                                language.getString(ConstantsStore.PARAM_LANGUAGE_TEXT)));
                     }
                     mCallback.onGetLanguageCallbackSuccess(mLanguageList);
                 } catch (JSONException e) {
@@ -68,7 +70,7 @@ public class AccountLanguageHandler {
     public void putUserLanguage(Long id, PutLanguageCallback callback) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_LANGUAGE_ID, String.valueOf(id));
-        VidsCraftHttpClient.post(ConstantsStore.URL_USER_LANGUAGES, params, new JsonHttpResponseHandler() {
+        VidsCraftHttpClient.put(ConstantsStore.URL_USER_LANGUAGES, params, new JsonHttpResponseHandler() {
             private PutLanguageCallback mCallback;
 
             @Override

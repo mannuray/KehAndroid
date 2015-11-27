@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.Adapters.LanguageAndCountryDataHandler;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.networkcommunicator.AccountLanguageHandler;
+import com.dubmania.vidcraft.utils.ConstantsStore;
 import com.dubmania.vidcraft.utils.SessionManager;
 import com.dubmania.vidcraft.utils.database.InstalledLanguage;
 
@@ -33,6 +36,7 @@ public class LanguageActivity extends AppCompatActivity {
     private Realm realm;
     private RealmResults<InstalledLanguage> languages;
     private ArrayList<LanguageAndCountryDataHandler.Language> slanguages;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,27 +48,34 @@ public class LanguageActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
+
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        realm = Realm.getInstance(getApplicationContext());
+
         if(new SessionManager(this).isLoggedIn()) {
+            mProgressBar.setVisibility(View.VISIBLE);
             slanguages = new ArrayList<>();
             mAdapter = new LanguageListServerArrayAdapter(this, slanguages);
             new AccountLanguageHandler().getUserLanguage(new AccountLanguageHandler.GetLanguageCallback() {
                 @Override
                 public void onGetLanguageCallbackSuccess(ArrayList<LanguageAndCountryDataHandler.Language> mLanguageList) {
-                    slanguages = mLanguageList;
+                    mProgressBar.setVisibility(View.GONE);
+                    slanguages.addAll(mLanguageList);
                     mAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onGetLanguageCallbackFailure() {
+                    mProgressBar.setVisibility(View.GONE);
                     // show toast
                 }
             });
         }
         else {
-            realm = Realm.getInstance(getApplicationContext());
             languages = realm.allObjects(InstalledLanguage.class).where().findAll();
 
             mAdapter = new LanguageListInstalledArrayAdapter(this, languages);
@@ -107,7 +118,13 @@ public class LanguageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+            if(data.getLongExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, 0l) != 0) {
+                slanguages.add(new LanguageAndCountryDataHandler.Language(data.getLongExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE_ID, 0l),
+                        data.getStringExtra(ConstantsStore.INTENT_INSTALL_LANGUAGE)));
+            }
+            else {
+                languages = realm.allObjects(InstalledLanguage.class).where().findAll();
+            }
             mAdapter.notifyDataSetChanged();
         }
     }
