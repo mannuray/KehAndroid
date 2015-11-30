@@ -40,6 +40,8 @@ public class ConstantsStore {
     private final static String VIDEO = "video/";
     private final static String BOARD = "board/";
     private final static String FEEDBACK = "feedback/";
+    private final static String USER = "user/";
+    private final static String CONFIG = "config/";
 
     public final static String URL_SEARCH_VIDEOS = "search";
     public final static String URL_TRENDING = "trending";
@@ -52,7 +54,7 @@ public class ConstantsStore {
     public final static String URL_RESET_PASSWORD =     ACCOUNT + "forgot";
     public final static String URL_VERIFY_USER =        ACCOUNT + "verify/user";
     public final static String URL_VERIFY_EMAIL =       ACCOUNT + "verify/email";
-    public final static String URL_USER_LANGUAGES =       ACCOUNT + "languages";
+    public final static String URL_USER_LANGUAGES =     USER + CONFIG + "languages";
 
     public final static String URL_GET_LANGUAGES = "language";
 

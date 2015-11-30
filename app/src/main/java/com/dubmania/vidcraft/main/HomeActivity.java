@@ -311,7 +311,9 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onVideosDownloadFailure() {}
+            public void onVideosDownloadFailure() {
+                BusProvider.getInstance().post(new AddTrendingVideoListEvent(new ArrayList<VideoListItem>(), "end"));
+            }
         });
 
         //Toast.makeText(getApplicationContext(), "scroll end message recived " + String.valueOf(event.getCursor()), Toast.LENGTH_SHORT).show();

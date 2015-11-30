@@ -87,6 +87,7 @@ public class AddFinishFragment extends Fragment {
                 long id = 0;
                 if (mVideoTitle.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please give a title", Toast.LENGTH_SHORT).show();
+                    mAddVideo.setEnabled(true);
                     return;
                 }
                 for (AvailableLanguage language : mRealmResults) {
