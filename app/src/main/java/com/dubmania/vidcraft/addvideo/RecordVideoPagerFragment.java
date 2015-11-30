@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoUpload;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.squareup.otto.Subscribe;
 
@@ -102,6 +103,9 @@ public class RecordVideoPagerFragment extends Fragment {
             }
             if (position == 1) { // someone pressed back from watermarking thread
                 BusProvider.getInstance().post(new CancelVideoWaterMarking());
+            }
+            else if(position == 3) {
+                BusProvider.getInstance().post(new CancelVideoUpload());
             }
             mPager.setCurrentItem(position - 1);
             return;

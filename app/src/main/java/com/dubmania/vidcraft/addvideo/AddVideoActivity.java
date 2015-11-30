@@ -23,6 +23,7 @@ import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoFinishE
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoInfoEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoRecordDoneEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoUploadFailed;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoUpload;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SearchVideoItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.SetProgressBarValue;
@@ -49,6 +50,7 @@ public class AddVideoActivity extends AppCompatActivity {
     private VideoInfo mVideoInfo;
     private Bitmap mWaterMark;
     private CancelableThread overlayerThread;
+    private VideoHandler mVideoHandler;
     private double mTotalFrame = 1;
 
 
@@ -75,6 +77,8 @@ public class AddVideoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        mVideoHandler = new VideoHandler();
 
         Intent intent = getIntent();
         changeFragment(intent.getIntExtra(ConstantsStore.INTENT_ADD_VIDEO_ACTION, ConstantsStore.INTENT_ADD_VIDEO_RECORD));
@@ -277,7 +281,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddVideoFinishEvent(AddVideoFinishEvent event) {
         // change it to dst file path once file is modified
-        new VideoHandler().addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoHandler.VideoUploaderCallback() {
+        mVideoHandler.addVideo(mVideoInfo.getDstFilePath(), event.getTitle(), mVideoInfo.getTags(), event.getLanguage(), new VideoHandler.VideoUploaderCallback() {
             @Override
             public void onVideosUploadSuccess(long mId) {
                 HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
@@ -302,6 +306,12 @@ public class AddVideoActivity extends AppCompatActivity {
                 BusProvider.getInstance().post(new SetProgressBarValue(mPercentage));
             }
         });
+    }
+
+    @Subscribe
+    public void onCancelVideoUpload(CancelVideoUpload event) {
+        if(mVideoHandler != null)
+            mVideoHandler.cancelUpload();
     }
 
     class CancelableThread extends Thread {

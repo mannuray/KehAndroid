@@ -50,7 +50,8 @@ public class VideoHandler {
             mCallback.onVideosDownloadSuccess(f);
 
         } catch (IOException e) {
-            VidsCraftHttpClient.get(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new JsonHttpResponseHandler() {
+            mDownloading = true;
+            mDownloadHandle = VidsCraftHttpClient.get(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new JsonHttpResponseHandler() {
 
                 VideoDownloaderCallback mCallback;
 
@@ -84,13 +85,17 @@ public class VideoHandler {
 
                 }
 
+                @Override
+                public void onCancel() {
+                    Log.i("Progress", "cancel called inner called");
+                }
+
                 public AsyncHttpResponseHandler init(VideoDownloaderCallback mCallback) {
                     this.mCallback = mCallback;
                     return this;
                 }
 
                 private void startFileDownload(long fileSize) {
-                    mDownloading = true;
                     mCurrentFile = mCache.getTempFile(String.valueOf(id));
                     mDownloadHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile, fileSize, mCallback));
                 }
@@ -102,10 +107,6 @@ public class VideoHandler {
         Log.i("Progress", "cancel called");
         if (mDownloading ) {
             mDownloadHandle.cancel(true);
-            Log.i("Progress", "status of download handle" + mDownloadHandle.isCancelled());
-            if(mCurrentFile != null)
-                mCurrentFile.delete();
-            mCurrentFile = null;
         }
     }
 
@@ -135,6 +136,23 @@ public class VideoHandler {
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
             //Log.i("Progress", "failure called");
+            mDownloading = false;
+            if(mCurrentFile != null)
+                mCurrentFile.delete();
+            mCurrentFile = null;
+            mCallback.onVideosDownloadFailure();
+        }
+
+        /*
+        @Override
+        public void onFinish() {
+            mDownloading = false;
+            mCurrentFile = null;
+        }*/
+
+        @Override
+        public void onCancel() {
+            Log.i("Progress", "on cancel called");
             mDownloading = false;
             if(mCurrentFile != null)
                 mCurrentFile.delete();
@@ -173,7 +191,8 @@ public class VideoHandler {
         params.put(ConstantsStore.PARAM_VIDEO_LANGUAGE, language);
 
         Log.i("URL", "ule is " + ConstantsStore.URL_VIDEO);
-        VidsCraftHttpClient.put(ConstantsStore.URL_VIDEO, params, new JsonHttpResponseHandler() {
+        mUploading = true;
+        mUploadHandle = VidsCraftHttpClient.put(ConstantsStore.URL_VIDEO, params, new JsonHttpResponseHandler() {
 
             private VideoUploaderCallback mCallback;
 
@@ -187,8 +206,6 @@ public class VideoHandler {
                     requestParams.put("file", mVideoFile);
                     requestParams.setForceMultipartEntityContentType(true);
                     mUploadHandle = VidsCraftHttpClient.postAbsolute(uploadURL, requestParams, new VideoUploadHandler(id, mCallback));
-                    mUploading = true;
-
                 } catch (JSONException | FileNotFoundException e) {
                     e.printStackTrace();
                     mCallback.onVideosUploadFailure();
