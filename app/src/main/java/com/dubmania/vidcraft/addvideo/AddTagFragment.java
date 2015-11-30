@@ -25,6 +25,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dubmania.vidcraft.Adapters.TagListAdapter;
@@ -44,6 +45,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
     private TagsHandler mTagsDownloader;
     private MenuItem next;
     private ImageView mCross;
+    private ProgressBar mProgressBar;
 
     public AddTagFragment() {
         // Required empty public constructor
@@ -90,10 +92,12 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (search.getText().toString().equals("")) {
                     mCross.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
                 }
                 else {
                     mTagsDownloader.downloadTags(s.toString(), new OnTextWatcherListener());
                     mCross.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -101,6 +105,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
             public void afterTextChanged(Editable s) {
             }
         });
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         return view;
     }
 
@@ -160,6 +165,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
         @Override
         public void onTagsDownloadSuccess(ArrayList<Tag> tags) {
+            mProgressBar.setVisibility(View.GONE);
             mTags.clear();
             mTags.addAll(tags);
             mAdapter.notifyDataSetChanged();
@@ -167,6 +173,7 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
 
         @Override
         public void onTagsDownloadFailure() {
+            mProgressBar.setVisibility(View.GONE);
             // show toast
         }
     }

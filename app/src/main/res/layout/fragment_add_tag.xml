@@ -64,6 +64,7 @@
 
         <ProgressBar
             android:id="@+id/progressBar"
+            style="?android:attr/android:progressBarStyleSmall"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"

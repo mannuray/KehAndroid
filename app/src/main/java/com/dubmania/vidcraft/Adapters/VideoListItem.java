@@ -59,6 +59,10 @@ public class VideoListItem extends ListItem implements Parcelable {
         return favourite;
     }
 
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
     public Bitmap getThumbnail() {
         return thumbnail;
     }

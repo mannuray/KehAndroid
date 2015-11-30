@@ -63,8 +63,14 @@ public class VideoManager {
 
     // for test see if we may neeed it further on too
     public int getPos() {
-        if(mVideoPlayer != null)
-            return  mVideoPlayer.getCurrentPosition();
+        if(mVideoPlayer != null) {
+            try {
+                return mVideoPlayer.getCurrentPosition();
+            }
+            catch (IllegalStateException e){
+                e.printStackTrace();
+            }
+        }
         return 0;
     }
 

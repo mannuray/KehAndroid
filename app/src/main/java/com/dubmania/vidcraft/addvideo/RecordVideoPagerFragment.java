@@ -21,9 +21,11 @@ import com.squareup.otto.Subscribe;
 
 public class RecordVideoPagerFragment extends Fragment {
     private ViewPager mPager;
+    private boolean mType = true;
 
     public RecordVideoPagerFragment() {
         // Required empty public constructor
+        mType = true;
     }
 
     @Override

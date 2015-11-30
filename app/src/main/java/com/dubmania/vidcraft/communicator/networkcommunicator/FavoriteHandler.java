@@ -12,13 +12,23 @@ public class FavoriteHandler {
     public void markFavorite(Long mId) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(mId));
-        VidsCraftHttpClient.put(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler());
+        VidsCraftHttpClient.put(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler(){
+            @Override
+            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+
+            }
+        });
     }
 
     public void deleteFavorite(Long mId) {
         RequestParams params = new RequestParams();
         params.add(ConstantsStore.PARAM_VIDEO_ID, String.valueOf(mId));
-        VidsCraftHttpClient.delete(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler());
+        VidsCraftHttpClient.delete(ConstantsStore.URL_FAVORITE, params, new JsonHttpResponseHandler() {
+            @Override
+            public void  onSuccess(int statusCode, org.apache.http.Header[] headers, org.json.JSONObject response) {
+
+            }
+        });
     }
 
 }

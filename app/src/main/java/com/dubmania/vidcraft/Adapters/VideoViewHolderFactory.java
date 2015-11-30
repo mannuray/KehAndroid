@@ -18,6 +18,7 @@ public class VideoViewHolderFactory {
         VideoViewHolder videoHolder = (VideoViewHolder) holder;
         videoHolder.mVideoName.setText(item.getName());
         videoHolder.mVideoUserName.setText("Uploaded by " + item.getUser());
+        videoHolder.mFavourite.setOnCheckedChangeListener(null);
         videoHolder.mFavourite.setChecked(item.isFavourite());
         videoHolder.mVideoThumbnail.setImageBitmap(item.getThumbnail());
 
@@ -27,6 +28,7 @@ public class VideoViewHolderFactory {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 BusProvider.getInstance().post(new VideoFavoriteChangedEvent(isChecked, item.getId()));
+                item.setFavourite(isChecked);
             }
         });
     }

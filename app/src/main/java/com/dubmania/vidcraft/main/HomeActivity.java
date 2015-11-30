@@ -293,7 +293,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onVideoAndBoardDownloaderFailure() {
-
+                BusProvider.getInstance().post(new AddDiscoverItemListEvent(new ArrayList<ListItem>()));
             }
         });
 

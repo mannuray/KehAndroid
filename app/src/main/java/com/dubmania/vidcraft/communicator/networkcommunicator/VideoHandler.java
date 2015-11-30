@@ -50,8 +50,6 @@ public class VideoHandler {
             mCallback.onVideosDownloadSuccess(f);
 
         } catch (IOException e) {
-            mDownloading = true;
-            mCurrentFile = mCache.getTempFile(String.valueOf(id));
             VidsCraftHttpClient.get(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new JsonHttpResponseHandler() {
 
                 VideoDownloaderCallback mCallback;
@@ -92,6 +90,8 @@ public class VideoHandler {
                 }
 
                 private void startFileDownload(long fileSize) {
+                    mDownloading = true;
+                    mCurrentFile = mCache.getTempFile(String.valueOf(id));
                     mDownloadHandle = VidsCraftHttpClient.post(url, new RequestParams(ConstantsStore.PARAM_VIDEO_ID, id.toString()), new VideoDownloaderHandler(mCurrentFile, fileSize, mCallback));
                 }
             }.init(mCallback));
@@ -99,9 +99,10 @@ public class VideoHandler {
     }
 
     public void cancelDownload() {
-        //Log.i("Progress", "cancel called");
-        if (mDownloading) {
+        Log.i("Progress", "cancel called");
+        if (mDownloading ) {
             mDownloadHandle.cancel(true);
+            Log.i("Progress", "status of download handle" + mDownloadHandle.isCancelled());
             if(mCurrentFile != null)
                 mCurrentFile.delete();
             mCurrentFile = null;
