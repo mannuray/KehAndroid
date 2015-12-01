@@ -1,8 +1,10 @@
 package com.dubmania.vidcraft.utils.media;
 
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -46,6 +48,10 @@ public class VideoManager {
             e.printStackTrace();
         }
         mVideoView.requestFocus();
+    }
+
+    public void setOnTouchListener(View.OnTouchListener l) {
+        mVideoView.setOnTouchListener(l);
     }
 
     public void play(boolean mute) {

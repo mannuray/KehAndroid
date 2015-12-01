@@ -5,11 +5,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.utils.RecordMarkerBar;
@@ -43,6 +43,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
     enum State {initial, playingOriginal, playingRecorded, recording, pausePlayOriginal, pausePlayRecording, pauseRecording, posChanged}
     State mState = State.initial;
+    State mActiveState = State.initial;
 
     public CreateDubMediaControl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -61,6 +62,7 @@ public class CreateDubMediaControl extends LinearLayout {
         this.mVideoManager = mVideoManager;
         this.mVideoManager.setOnCompletionListener(mCompletion);
         this.mVideoManager.setOnPrepareListener(mPrepare);
+        this.mVideoManager.setOnTouchListener(mVideoViewClickListener);
         this.mAudioManager.setOnCompletionListener(mAudioCompletionListner, mTrackChangeListner);
     }
 
@@ -169,6 +171,28 @@ public class CreateDubMediaControl extends LinearLayout {
         }
     };
 
+    private OnTouchListener mVideoViewClickListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch (mActiveState) {
+                case initial:
+                case playingOriginal:
+                case pausePlayOriginal:
+                    mPlayOriginalListener.onClick(view);
+                    break;
+                case playingRecorded:
+                case pausePlayRecording:
+                    mPlayRecordedListener.onClick(view);
+                    break;
+                case recording:
+                case pauseRecording:
+                    mRecordListener.onClick(view);
+                    break;
+            }
+            return false;
+        }
+    };
+
     private AudioManager.OnTrackChangeCallback mTrackChangeListner = new AudioManager.OnTrackChangeCallback() {
 
         @Override
@@ -194,6 +218,7 @@ public class CreateDubMediaControl extends LinearLayout {
                 mRecordView.setEnabled(true);
                 mVideoManager.pause();
                 mState = State.pausePlayOriginal;
+                mActiveState = State.pausePlayOriginal;
                 return;
             }
 
@@ -211,6 +236,7 @@ public class CreateDubMediaControl extends LinearLayout {
             mRecordView.setEnabled(false);
             videoPlay(false);
             mState = State.playingOriginal;
+            mActiveState = State.playingOriginal;
         }
     };
 
@@ -248,6 +274,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
                 enableAllButton();
                 mState = State.pausePlayRecording;
+                mActiveState = State.pausePlayRecording;
                 return;
             }
 
@@ -270,6 +297,7 @@ public class CreateDubMediaControl extends LinearLayout {
             mPlayRecorded.setImageResource(R.drawable.pause);
             disableAllBut(mPlayRecorded);
             mState = State.playingRecorded;
+            mActiveState = State.playingRecorded;
 
         }
     };
@@ -295,6 +323,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
                 enableAllButton();
                 mState = State.pauseRecording;
+                mActiveState = State.pauseRecording;
                 mRecordingAvailable = true;
                 return;
             }
@@ -312,6 +341,7 @@ public class CreateDubMediaControl extends LinearLayout {
 
             disableAllBut(mRecord);
             mState = State.recording;
+            mActiveState = State.recording;
             try {
                 mMarkerBar.removeMarkersFrom(mSelectedMarker);
                 videoPlay(true);

@@ -32,7 +32,9 @@ import com.dubmania.vidcraft.Adapters.TagListAdapter;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddTagsEvent;
+import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
 import com.dubmania.vidcraft.communicator.networkcommunicator.TagsHandler;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -251,5 +253,11 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         Bitmap viewBmp = cacheBmp.copy(Bitmap.Config.ARGB_8888, true);
         view.destroyDrawingCache();
         return new BitmapDrawable(getResources(), viewBmp);
+    }
+
+    @Subscribe
+    public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
+        if(event.getPosition() == 3)
+            next.setEnabled(true);
     }
 }
