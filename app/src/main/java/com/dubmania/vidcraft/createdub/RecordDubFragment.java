@@ -56,6 +56,7 @@ public class RecordDubFragment extends Fragment {
         mMediaControl = (CreateDubMediaControl) view.findViewById(R.id.mediaControl);
         mMediaControl.setAnchorView(view);
         mMediaControl.setEnable(false);
+        //mMediaControl.setEnabled(true); // so that touch may work
         mMediaControl.setOnRecordingCompleteListner(new CreateDubMediaControl.OnRecordingCompleteCallback() {
             @Override
             public void onRecordingComplete(boolean status) {

@@ -19,6 +19,7 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.dubmania.vidcraft.R;
+import com.google.common.collect.Iterables;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     private double normalizedProgressValue = 0d;
     private ArrayList<Double> mMarkers;
     private int selectedMarker = 0;
+    private OnRecordMarkerBarTouchListener<T> listener;
+
     /**
      * Default color of a {@link RecordMarkerBar}, #FF33B5E5. This is also known as "Ice Cream Sandwich" blue.
      */
@@ -61,7 +64,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
     // with API < 8 "Froyo".
     public static final int ACTION_POINTER_UP = 0x6, ACTION_POINTER_INDEX_MASK = 0x0000ff00, ACTION_POINTER_INDEX_SHIFT = 8;
 
-    private int mActivePointerId = INVALID_POINTER_ID;
+    //private int mActivePointerId = INVALID_POINTER_ID;
 
     private int mScaledTouchSlop;
 
@@ -238,6 +241,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         } else {
             setNormalizedProgressValue(valueToNormalized(value));
         }
+        invalidate();
     }
 
     /**
@@ -247,6 +251,49 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
      */
     public T getCurrentProgressValue() {
         return normalizedToValue(normalizedProgressValue);
+    }
+
+    /**
+     * Registers given listener callback to notify about changed selected values.
+     *
+     * @param listener The listener to notify about changed selected values.
+     */
+    public void setOnRecordBarTouchListener(OnRecordMarkerBarTouchListener<T> listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * Handles thumb selection and movement. Notifies listener callback on certain events.
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if (!isEnabled()) {
+            return false;
+        }
+
+        final int action = event.getAction();
+        switch (action & MotionEvent.ACTION_MASK) {
+
+            case MotionEvent.ACTION_UP:
+                if (listener != null) {
+                    //final int pointerIndex = event.findPointerIndex(mActivePointerId);
+                    final float x = event.getX(); //event.getX(pointerIndex);
+                    double mSelectedPos = screenToNormalized(x);
+                    int mRecordPos = -1;
+                    Double mLastRecordPos = Iterables.getLast(mMarkers);
+                    for(double marker: mMarkers) {
+                        //Log.i("Click", "marker pos is " + marker);
+                        if(mSelectedPos >= marker - 0.05 && mSelectedPos <= marker + 0.05) {
+                            mRecordPos = mMarkers.indexOf(marker);
+                        }
+                    }
+                    listener.onOnRecordMarkerBarTouch(mSelectedPos, mRecordPos, mLastRecordPos);
+                }
+                invalidate();
+                break;
+        }
+        return true;
     }
 
     /**
@@ -283,7 +330,7 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         // draw seek bar background line
         mRect.left = padding;
         mRect.right = getWidth() - padding;
-        canvas.drawRect(mRect, paint);
+        canvas.drawRoundRect(mRect, 7, 7, paint);
 
         int colorToUseForButtonsAndHighlightedLine = DEFAULT_COLOR; //non default, filter is active
 
@@ -292,16 +339,17 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
         mRect.right = normalizedToScreen(normalizedMaxValue);
 
         paint.setColor(colorToUseForButtonsAndHighlightedLine);
-        canvas.drawRect(mRect, paint);
+        canvas.drawRoundRect(mRect, 7, 7, paint);
 
         // draw seek bar progress range line
         mRect.left = normalizedToScreen(0);
         mRect.right = normalizedToScreen(normalizedProgressValue);
 
+        Log.i("Drawing ", "drawing progress bar");
         paint.setColor(Color.RED); // change it make it configurable
-        canvas.drawRect(mRect, paint);
+        canvas.drawRoundRect(mRect, 7, 7, paint);
 
-        Log.i("marker", " siez selec " + mMarkers.size() + " " + selectedMarker);
+        //Log.i("marker", " siez selec " + mMarkers.size() + " " + selectedMarker);
         for(double marker: mMarkers) {
             if(marker ==  mMarkers.get(selectedMarker))
                 canvas.drawBitmap(thumbImageSelected, normalizedToScreen(marker) - thumbHalfWidth,
@@ -353,7 +401,6 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
      */
     private void setNormalizedProgressValue(double value) {
         normalizedProgressValue = Math.max(0d, Math.min(normalizedMaxValue, Math.max(value, 0)));
-        invalidate();
     }
 
     /**
@@ -408,6 +455,17 @@ public class RecordMarkerBar<T extends Number> extends ImageView {
             double result = (screenCoord - padding) / (width - 2 * padding);
             return Math.min(1d, Math.max(0d, result));
         }
+    }
+
+    /**
+     * Callback listener interface to notify about changed range values.
+     *
+     * @param <T> The Number type the RangeSeekBar has been declared with.
+     * @author Stephan Tittel (stephan.tittel@kom.tu-darmstadt.de)
+     */
+    public interface OnRecordMarkerBarTouchListener<T> {
+
+        void onOnRecordMarkerBarTouch(double touchPosition, int mRecordPos, double lastRecordPos);
     }
 
     /**

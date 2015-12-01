@@ -111,6 +111,8 @@ public class CreateDubMediaControl extends LinearLayout {
 
         mNext = (ImageButton) v.findViewById(R.id.next);
         mNext.setOnClickListener(mNextListener);
+
+        mMarkerBar.setOnRecordBarTouchListener(mMarkerBarListener);
     }
 
     private VideoManager.OnCompletionCallback mCompletion = new VideoManager.OnCompletionCallback() {
@@ -190,6 +192,21 @@ public class CreateDubMediaControl extends LinearLayout {
                     break;
             }
             return false;
+        }
+    };
+
+    private RecordMarkerBar.OnRecordMarkerBarTouchListener mMarkerBarListener = new RecordMarkerBar.OnRecordMarkerBarTouchListener() {
+        @Override
+        public void onOnRecordMarkerBarTouch(double touchPosition, int mRecordPos, double lastRecordPos) {
+            Log.i("Click", " touc pos " + touchPosition + " mRecord " + mRecordPos + " last record pos " + lastRecordPos);
+            if(mState == State.playingOriginal) {
+                //mVideoManager.pause();
+                mVideoManager.setProgress(touchPosition);
+            }
+            else if(mState == State.pausePlayOriginal) {
+                mVideoManager.setProgress(touchPosition);
+                mMarkerBar.setCurrentProgressValue(mVideoManager.getPos());
+            }
         }
     };
 
@@ -380,6 +397,7 @@ public class CreateDubMediaControl extends LinearLayout {
             mPlayRecorded.setEnabled(false);
             mRecord.setEnabled(false);
             mNext.setEnabled(false);
+            mMarkerBar.setEnabled(false);
         }
         else {
             mPlayOriginal.setEnabled(true);
@@ -387,6 +405,7 @@ public class CreateDubMediaControl extends LinearLayout {
             mPlayRecorded.setEnabled(false);
             mRecord.setEnabled(true);
             mNext.setEnabled(false);
+            mMarkerBar.setEnabled(true);
         }
     }
 

@@ -94,6 +94,15 @@ public class VideoManager {
         mVideoView.seekTo(pos);
     }
 
+    public void setProgress(double progress) {
+        if(mVideoFile == null)
+            return;
+
+        int duration = mVideoView.getDuration();
+        Log.i("Click ", "total duration " + duration + " pos is " + (int)(duration * progress));
+        mVideoView.seekTo((int)(duration * progress));
+    }
+
     public int getDuration() {
         if(mVideoFile == null)
             return 0;
