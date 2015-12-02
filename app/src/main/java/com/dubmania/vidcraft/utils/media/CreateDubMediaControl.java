@@ -214,6 +214,12 @@ public class CreateDubMediaControl extends LinearLayout {
                     mState = State.posChanged;
                 }
             }
+            else if(mState == State.playingRecorded) {
+                if(touchPosition < lastRecordPos) {
+                    mVideoManager.setProgress(touchPosition);
+                    mAudioManager.setProgress(mVideoManager.getPos());
+                }
+            }
         }
     };
 

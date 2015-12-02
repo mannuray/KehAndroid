@@ -62,7 +62,7 @@ public class AudioManager {
 
     public void recordFrom(int position) throws IOException {
         for (int i = mAudioFlileList.size() - 1; i > position - 1; i--) {
-            Log.i("Maker", "size of file list is " + mAudioFlileList.size());
+            //Log.i("Maker", "size of file list is " + mAudioFlileList.size());
             mAudioFlileList.remove(i);
         }
 
@@ -91,6 +91,18 @@ public class AudioManager {
         if(!(pos < 0 || pos >= mAudioFlileList.size())) {
             mPlayingPosition = pos;
             isPlayRecordingIntilized = false;
+        }
+    }
+
+    public void setProgress(int position) {
+        for(Audio audio: mAudioFlileList) {
+            if(position >= audio.getStartTime() && position <= audio.getEndTime()) { // ok this is the record we are interested in
+                mPlayingPosition = mAudioFlileList.indexOf(audio);
+                playFrom(mPlayingPosition);
+                //mAudioPlayer.pause();
+                mAudioPlayer.seekTo((int) (position - audio.getStartTime()));
+                break;
+            }
         }
     }
 
