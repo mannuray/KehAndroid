@@ -207,6 +207,13 @@ public class CreateDubMediaControl extends LinearLayout {
                 mVideoManager.setProgress(touchPosition);
                 mMarkerBar.setCurrentProgressValue(mVideoManager.getPos());
             }
+            else if(mState == State.pausePlayRecording || mState == State.pauseRecording || mState == State.posChanged) {
+                if(mRecordPos >= 0) {
+                    mSelectedMarker = mRecordPos;
+                    mMarkerBar.setSelectedMarker(mSelectedMarker);
+                    mState = State.posChanged;
+                }
+            }
         }
     };
 
@@ -261,9 +268,9 @@ public class CreateDubMediaControl extends LinearLayout {
         public void onClick(View v) {
             if(mState == State.pausePlayOriginal || mState == State.pausePlayRecording ||
                     mState == State.pauseRecording || mState == State.posChanged || mState == State.initial) {
-                Log.i("position", "back button before" + mSelectedMarker);
+                //Log.i("position", "back button before" + mSelectedMarker);
                 mSelectedMarker = Math.max(0, --mSelectedMarker);
-                Log.i("position", "back button " + mSelectedMarker);
+                //Log.i("position", "back button " + mSelectedMarker);
                 mMarkerBar.setSelectedMarker(mSelectedMarker);
                 mState = State.posChanged;
             }
