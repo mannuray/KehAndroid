@@ -29,11 +29,20 @@ import com.squareup.otto.Subscribe;
 public class EditVideoFragment extends Fragment {
     private boolean isPlaying = false;
     private boolean isVideoUriSet = false;
-    private Uri mUri;
+    private Uri mUri = null;
     private VideoView mVideoView;
     private RangeSeekBar<Integer> mTrimmer;
     private MenuItem next;
     private ProgressBar mProgressBar;
+
+    private static final String VIDEO_URI = "video_uri";
+    private static final String MARKER_BAR_START = "marker_bar_start";
+    private static final String MARKER_BAR_END = "marker_bar_end";
+
+    /*private int start;
+    private int end;
+    private boolean fromSavedInstance = false;*/
+
 
     public EditVideoFragment() {
         // Required empty public constructor
@@ -45,24 +54,78 @@ public class EditVideoFragment extends Fragment {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setHasOptionsMenu(true);
+        /*if(savedInstanceState != null && !savedInstanceState.isEmpty()) {
+
+            start = savedInstanceState.getInt(MARKER_BAR_START);
+            end = savedInstanceState.getInt(MARKER_BAR_END);
+            fromSavedInstance = true;
+
+            mUri = Uri.parse(savedInstanceState.getString(VIDEO_URI));
+            Log.i("click", "urin is " + savedInstanceState.getString(VIDEO_URI) + " start is " + start + " end is " + end);
+        }*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_video, container, false);
+
         mVideoView = (VideoView) view.findViewById(R.id.videoView);
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mTrimmer.setRangeValues(0, mVideoView.getDuration());
-                mTrimmer.resetSelectedValues();
+                //mTrimmer.resetSelectedValues();
+                mVideoView.seekTo(Math.max(100, mTrimmer.getSelectedMinValue()));
             }
         });
         mTrimmer = (RangeSeekBar<Integer>) view.findViewById(R.id.trimmer);
+        mTrimmer.setNotifyWhileDragging(true);
+        mTrimmer.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer touchValue, Integer minValue, Integer maxValue) {
+                if(mVideoView != null) {
+                    if(touchValue != -1) {
+                        if(touchValue >= minValue && touchValue <= maxValue) {
+                            mVideoView.seekTo(touchValue);
+                            mTrimmer.setCurrentProgressValue(touchValue);
+                        }
+                    }
+                    else {
+                        mVideoView.seekTo(minValue);
+                    }
+                }
+            }
+        });
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         mVideoView.setOnTouchListener(new onVideoViewTouchListner());
+        /*if(fromSavedInstance) {
+
+            final int markerStart = start;
+            final int markerEnd = end;
+
+            mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mTrimmer.setRangeValues(0, mVideoView.getDuration());
+                    mTrimmer.resetSelectedValues();
+                    mTrimmer.setSelectedMaxValue(markerEnd);
+                    mTrimmer.setSelectedMinValue(markerStart);
+
+                }
+            });
+
+            mVideoView.setVideoURI(mUri);
+            mVideoView.seekTo(markerStart);
+        /*if(next != null)
+            next.setEnabled(true);//
+            isVideoUriSet = true;
+        }*/
+
+        if(mUri != null) {
+            mVideoView.setVideoURI(mUri);
+        }
         return view;
     }
 
@@ -100,6 +163,19 @@ public class EditVideoFragment extends Fragment {
         }
     }
 
+    /*@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mUri != null) {
+            outState.putString(VIDEO_URI, mUri.toString());
+            start = mTrimmer.getSelectedMinValue();
+            end = mTrimmer.getSelectedMaxValue();
+            outState.putInt(MARKER_BAR_START, start);
+            outState.putInt(MARKER_BAR_END, end);
+            Log.i("click", "on save state urin is " + mUri.toString() + " start is " + mTrimmer.getSelectedMinValue() + " end is " + mTrimmer.getSelectedMaxValue());
+        }
+    }*/
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -123,7 +199,7 @@ public class EditVideoFragment extends Fragment {
             }
 
             if (!isPlaying) {
-                mVideoView.seekTo(mTrimmer.getSelectedMinValue());
+                //mVideoView.seekTo(mTrimmer.getSelectedMinValue());
                 mVideoView.start();
                 isPlaying = true;
                 new TimeUpdater().start();
@@ -161,9 +237,11 @@ public class EditVideoFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoInfoEvent(AddVideoInfoEvent event) {
+        //Log.i("click ", "add event recived" + event.getFilePath());
         mUri = Uri.parse(event.getFilePath());
         mVideoView.setVideoURI(mUri);
-        mVideoView.seekTo(100);
+        //mVideoView.seekTo(100);
+        mTrimmer.resetSelectedValues();
         /*if(next != null)
             next.setEnabled(true);*/
         isVideoUriSet = true;
@@ -179,6 +257,7 @@ public class EditVideoFragment extends Fragment {
     public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
         if(event.getPosition() == 2) {
             // we got changed from here
+            //Log.i("click ", "on chaneg fragmetn back " + start + " " + end);
             mProgressBar.setVisibility(View.GONE);
             mProgressBar.setProgress(0);
             mTrimmer.setEnabled(true);

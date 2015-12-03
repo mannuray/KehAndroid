@@ -17,12 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.Adapters.ListItem;
 import com.dubmania.vidcraft.Adapters.VideoBoardListItem;
 import com.dubmania.vidcraft.Adapters.VideoListItem;
-import com.dubmania.vidcraft.Adapters.VideoPlayEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoPlayEvent;
 import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddDiscoverItemListEvent;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.AddTrendingVideoListEvent;

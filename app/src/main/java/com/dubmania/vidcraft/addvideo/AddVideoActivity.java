@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -142,11 +141,11 @@ public class AddVideoActivity extends AppCompatActivity {
 
         switch (position) {
             case 0:
-                return new RecordVideoPagerFragment();
+                return new AddVideoPagerFragment().init(false);
             case 1:
-                return new ImportVideoPagerFragment();
+                return new AddVideoPagerFragment().init(true);
         }
-        return new RecordVideoPagerFragment();
+        return new AddVideoPagerFragment().init(false);
     }
 
     private class VideoInfo {
@@ -274,7 +273,7 @@ public class AddVideoActivity extends AppCompatActivity {
     @Subscribe
     public void onAddTagsEvent(AddTagsEvent event) {
         mVideoInfo.setTags(event.getTags());
-        BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
+        //BusProvider.getInstance().post(new AddVideoInfoEvent(mVideoInfo.getSrcFilePath(), mVideoInfo.getTags(), mVideoInfo.getTitle(), mVideoInfo.getLanguage()));
         BusProvider.getInstance().post(new AddVideoChangeFragmentEvent(3));
     }
 

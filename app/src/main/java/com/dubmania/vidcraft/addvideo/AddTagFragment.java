@@ -137,8 +137,10 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         inflater.inflate(R.menu.menu_add_tag, menu);
         super.onCreateOptionsMenu(menu, inflater);
         next = menu.getItem(0);
-        next.setEnabled(false);
-        next.setVisible(false);
+        if((mAddedTags == null) || (mAddedTags != null && mAddedTags.size() < 3)) {
+            next.setEnabled(false);
+            next.setVisible(false);
+        }
     }
 
     @Override
@@ -253,11 +255,5 @@ public class AddTagFragment extends Fragment implements AbsListView.OnItemClickL
         Bitmap viewBmp = cacheBmp.copy(Bitmap.Config.ARGB_8888, true);
         view.destroyDrawingCache();
         return new BitmapDrawable(getResources(), viewBmp);
-    }
-
-    @Subscribe
-    public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
-        if(event.getPosition() == 3)
-            next.setEnabled(true);
     }
 }

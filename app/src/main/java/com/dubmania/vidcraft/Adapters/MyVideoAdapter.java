@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.dubmania.vidcraft.R;
 import com.dubmania.vidcraft.communicator.eventbus.mainevent.MyVideoItemShareEvent;
 import com.dubmania.vidcraft.communicator.eventbus.miscevent.OnClickListnerEvent;
+import com.dubmania.vidcraft.communicator.eventbus.miscevent.VideoPlayEvent;
 
 import java.util.ArrayList;
 

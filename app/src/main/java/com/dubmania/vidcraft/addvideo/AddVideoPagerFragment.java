@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,22 @@ import com.dubmania.vidcraft.communicator.eventbus.BusProvider;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.AddVideoChangeFragmentEvent;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoUpload;
 import com.dubmania.vidcraft.communicator.eventbus.addvideoevent.CancelVideoWaterMarking;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-public class RecordVideoPagerFragment extends Fragment {
+
+public class AddVideoPagerFragment extends Fragment {
     private ViewPager mPager;
     private boolean mType = true;
 
-    public RecordVideoPagerFragment() {
+
+    public AddVideoPagerFragment() {
         // Required empty public constructor
-        mType = true;
+    }
+
+    public Fragment init(boolean type) {
+        mType = type;
+        return this;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class RecordVideoPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_record_video_pager, container, false);
+        View view =  inflater.inflate(R.layout.fragment_import_video_pager, container, false);
         PagerAdapter mPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.viewPager);
         mPager.setAdapter(mPagerAdapter);
@@ -57,6 +63,7 @@ public class RecordVideoPagerFragment extends Fragment {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
     }
+
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
         TypedArray title = getResources()
@@ -71,6 +78,8 @@ public class RecordVideoPagerFragment extends Fragment {
 
             switch (i) {
                 case 0:
+                    if(mType)
+                        return new SearchVideoFragment();
                     return new RecordVideoFragment();
                 case 1:
                     return new EditVideoFragment();
@@ -79,7 +88,7 @@ public class RecordVideoPagerFragment extends Fragment {
                 case 3:
                     return new AddFinishFragment();
             }
-            return new RecordVideoFragment();
+            return new SearchVideoFragment();
         }
 
         @Override
@@ -95,7 +104,6 @@ public class RecordVideoPagerFragment extends Fragment {
 
     @Subscribe
     public void onAddVideoChangeFragmentEvent(AddVideoChangeFragmentEvent event) {
-        Log.i("Change", " fragment change event");
         if (event.getPosition() == -1){
             int position = mPager.getCurrentItem();
             if (position == 0) {

@@ -1,4 +1,4 @@
-package com.dubmania.vidcraft.Adapters;
+package com.dubmania.vidcraft.communicator.eventbus.miscevent;
 
 /**
  * Created by rat on 8/12/2015.

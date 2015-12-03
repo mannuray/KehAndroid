@@ -3,6 +3,7 @@ package com.dubmania.vidcraft.Adapters;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,8 +45,8 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
         holder.mVideoName.setText(visibleObjects.get(position).mTitle);
         holder.mArtist.setText(visibleObjects.get(position).mArtist);
 
-        Log.i("File ",visibleObjects.get(position).mFilePath);
-        holder.mVideoName.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mFilePath)));
+        //Log.i("File ",visibleObjects.get(position).mFilePath);
+        holder.mCardView.setOnClickListener(new OnClickListnerEvent<>(new SearchVideoItemListEvent(visibleObjects.get(position).mFilePath)));
 
     }
 
@@ -76,12 +77,14 @@ public class ImportVideoAdapter extends RecyclerView.Adapter<ImportVideoAdapter.
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
+        public CardView mCardView;
         public TextView mVideoName;
         public TextView mArtist;
         public ImageView mImageIcon;
 
         public ViewHolder(View v) {
             super(v);
+            mCardView = (CardView) v.findViewById(R.id.card_view);
             mImageIcon = (ImageView) v.findViewById(R.id.import_video_icon);
             mVideoName = (TextView) v.findViewById(R.id.import_video_name);
             mArtist = (TextView) v.findViewById(R.id.import_video_uri);

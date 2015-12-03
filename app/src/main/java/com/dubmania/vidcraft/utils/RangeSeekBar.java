@@ -269,15 +269,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param value The Number value to set the maximum value to. Will be clamped to given absolute minimum/maximum range.
      */
     public void setCurrentProgressValue(T value) {
-        Log.i("Range", "set before " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
+        //Log.i("Range", "set before " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
         // in case absoluteMinValue == absoluteMaxValue, avoid division by zero when normalizing.
         if (0 == (absoluteMaxValuePrim - absoluteMinValuePrim)) {
             setNormalizedProgressValue(1d);
         } else {
-            Log.i("Range", "in value " + String.valueOf(valueToNormalized(value)));
+            //Log.i("Range", "in value " + String.valueOf(valueToNormalized(value)));
             setNormalizedProgressValue(valueToNormalized(value));
         }
-        Log.i("Range", "set after " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
+        //Log.i("Range", "set after " + value +  " sep "+ String.valueOf(normalizedProgressValue) + " " + String.valueOf(normalizedMinValue) + " " + String .valueOf(normalizedMaxValue));
     }
 
     /**
@@ -323,7 +323,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
                 // Only handle thumb presses.
                 if (pressedThumb == null) {
-                    return super.onTouchEvent(event);
+                    return true; //super.onTouchEvent(event);
                 }
 
                 setPressed(true);
@@ -353,7 +353,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                     }
 
                     if (notifyWhileDragging && listener != null) {
-                        listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue());
+                        listener.onRangeSeekBarValuesChanged(this, (T) numberType.toNumber(-1), getSelectedMinValue(), getSelectedMaxValue());
                     }
                 }
                 break;
@@ -373,7 +373,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 pressedThumb = null;
                 invalidate();
                 if (listener != null) {
-                    listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue());
+                    final int pointerIndex1 = event.findPointerIndex(mActivePointerId);
+                    final float x = event.getX(pointerIndex1);
+                    //Log.i("click", "on up clicked " + normalizedToValue(screenToNormalized(x)) + " " + x + " " + getSelectedMinValue() + " " + getSelectedMaxValue());
+
+                    listener.onRangeSeekBarValuesChanged(this, normalizedToValue(screenToNormalized(x)), getSelectedMinValue(), getSelectedMaxValue());
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN: {
@@ -491,7 +495,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 DEFAULT_COLOR; //non default, filter is active
 
         // draw seek bar active range line
-        Log.i("Drawing", " main bar " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedMaxValue));
+        //Log.i("Drawing", " main bar " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedMaxValue));
         mRect.left = normalizedToScreen(normalizedMinValue);
         mRect.right = normalizedToScreen(normalizedMaxValue);
 
@@ -499,7 +503,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         canvas.drawRect(mRect, paint);
 
         // draw seek bar progress range line
-        Log.i("Drawing", " main bar progres " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedProgressValue));
+        //Log.i("Drawing", " main bar progres " + String.valueOf(normalizedMinValue) + " " + String.valueOf(normalizedProgressValue));
         mRect.left = normalizedToScreen(normalizedMinValue);
         mRect.right = normalizedToScreen(normalizedProgressValue);
 
@@ -702,7 +706,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     public interface OnRangeSeekBarChangeListener<T> {
 
-        void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue);
+        void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T touchValue, T minValue, T maxValue);
     }
 
     /**
